@@ -568,7 +568,10 @@ class _BadukGameState extends State<BadukGame> {
     });
   }
 
-  // ============ 강화된 AI ============
+  // ============ 고급 AI ============
+
+  // 영향력 맵 캐시
+  late List<List<double>> _influenceMap;
 
   List<int>? _findBestMove() {
     List<List<int>> validMoves = [];
@@ -583,6 +586,17 @@ class _BadukGameState extends State<BadukGame> {
 
     if (validMoves.isEmpty) return null;
 
+    // 영향력 맵 계산
+    _calculateInfluenceMap();
+
+    // 초반 정석 체크
+    int stoneCount = _countStones();
+    if (stoneCount < 12) {
+      List<int>? openingMove = _getOpeningMove(validMoves);
+      if (openingMove != null) return openingMove;
+    }
+
+    // 우선순위 1: 많은 돌을 잡을 수 있는 수 (2개 이상)
     int maxCaptures = 0;
     List<int>? captureMove;
     for (var move in validMoves) {
@@ -594,21 +608,519 @@ class _BadukGameState extends State<BadukGame> {
     }
     if (maxCaptures >= 2) return captureMove;
 
+    // 우선순위 2: 단수인 자기 그룹 구하기 (중요 그룹)
     List<int>? saveMove = _findSaveMove(validMoves);
     if (saveMove != null) return saveMove;
 
+    // 우선순위 3: 사활 - 상대 그룹 죽이기
+    List<int>? killMove = _findKillMove(validMoves);
+    if (killMove != null) return killMove;
+
+    // 우선순위 4: 사다리 공격
+    List<int>? ladderMove = _findLadderAttack(validMoves);
+    if (ladderMove != null) return ladderMove;
+
+    // 우선순위 5: 상대 그룹을 단수로 만들기 (큰 그룹)
     List<int>? atariMove = _findAtariMove(validMoves);
     if (atariMove != null) return atariMove;
 
+    // 우선순위 6: 1개라도 잡기
     if (captureMove != null) return captureMove;
 
+    // 우선순위 7: 상대 공격 방어
     List<int>? blockMove = _findBlockMove(validMoves);
     if (blockMove != null) return blockMove;
 
+    // 우선순위 8: 끊기 수 (상대 연결 차단)
+    List<int>? cutMove = _findCutMove(validMoves);
+    if (cutMove != null) return cutMove;
+
+    // 우선순위 9: 압박 수
     List<int>? pressureMove = _findPressureMove(validMoves);
     if (pressureMove != null) return pressureMove;
 
-    return _findBestScoredMove(validMoves);
+    // 우선순위 10: 몬테카를로 시뮬레이션 기반 최적 수
+    return _findBestMoveWithMonteCarlo(validMoves);
+  }
+
+  // 초반 정석 수
+  List<int>? _getOpeningMove(List<List<int>> validMoves) {
+    int stoneCount = _countStones();
+
+    // 첫 수: 화점 또는 소목
+    if (stoneCount == 0) {
+      List<List<int>> goodOpenings = [];
+      if (boardSize == 19) {
+        goodOpenings = [[3, 3], [3, 15], [15, 3], [15, 15], [3, 4], [4, 3], [15, 4], [16, 3]];
+      } else if (boardSize == 13) {
+        goodOpenings = [[3, 3], [3, 9], [9, 3], [9, 9], [6, 6]];
+      } else {
+        goodOpenings = [[2, 2], [2, 6], [6, 2], [6, 6], [4, 4]];
+      }
+      for (var move in goodOpenings) {
+        if (validMoves.any((m) => m[0] == move[0] && m[1] == move[1])) {
+          return move;
+        }
+      }
+    }
+
+    // 코너 접근
+    if (stoneCount < 8) {
+      List<int>? cornerApproach = _findCornerApproach(validMoves);
+      if (cornerApproach != null) return cornerApproach;
+    }
+
+    return null;
+  }
+
+  // 코너 접근 수
+  List<int>? _findCornerApproach(List<List<int>> validMoves) {
+    // 상대 코너 돌에 접근
+    List<List<int>> corners = boardSize == 19
+        ? [[3, 3], [3, 15], [15, 3], [15, 15]]
+        : boardSize == 13
+            ? [[3, 3], [3, 9], [9, 3], [9, 9]]
+            : [[2, 2], [2, 6], [6, 2], [6, 6]];
+
+    for (var corner in corners) {
+      if (board[corner[0]][corner[1]] == widget.playerColor) {
+        // 접근 수 찾기
+        List<List<int>> approaches = _getApproachMoves(corner[0], corner[1]);
+        for (var approach in approaches) {
+          if (validMoves.any((m) => m[0] == approach[0] && m[1] == approach[1])) {
+            return approach;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  List<List<int>> _getApproachMoves(int row, int col) {
+    List<List<int>> approaches = [];
+    int offset = boardSize == 19 ? 3 : 2;
+
+    // 한 칸 날일자, 두 칸 벌림 등
+    List<List<int>> offsets = [
+      [-offset, 1], [-offset, -1], [offset, 1], [offset, -1],
+      [1, -offset], [-1, -offset], [1, offset], [-1, offset],
+      [-offset + 1, 0], [offset - 1, 0], [0, -offset + 1], [0, offset - 1],
+    ];
+
+    for (var off in offsets) {
+      int nr = row + off[0];
+      int nc = col + off[1];
+      if (_isValidPosition(nr, nc) && board[nr][nc] == Stone.none) {
+        approaches.add([nr, nc]);
+      }
+    }
+    return approaches;
+  }
+
+  // 사활: 상대 그룹 죽이기
+  List<int>? _findKillMove(List<List<int>> validMoves) {
+    for (var move in validMoves) {
+      board[move[0]][move[1]] = aiColor;
+
+      // 인접한 상대 그룹 확인
+      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        int nr = move[0] + dir[0];
+        int nc = move[1] + dir[1];
+        if (_isValidPosition(nr, nc) && board[nr][nc] == widget.playerColor) {
+          var group = _getGroup(nr, nc);
+          var liberties = _getLiberties(group);
+
+          // 활로가 1-2개이고 눈이 없는 그룹
+          if (liberties.length <= 2 && group.length >= 3 && !_hasEyeSpace(group)) {
+            board[move[0]][move[1]] = Stone.none;
+            return move;
+          }
+        }
+      }
+      board[move[0]][move[1]] = Stone.none;
+    }
+    return null;
+  }
+
+  // 눈 공간이 있는지 확인
+  bool _hasEyeSpace(List<List<int>> group) {
+    Set<String> groupSet = {};
+    for (var stone in group) {
+      groupSet.add('${stone[0]},${stone[1]}');
+    }
+
+    int potentialEyes = 0;
+    Set<String> checkedEmpty = {};
+
+    for (var stone in group) {
+      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        int nr = stone[0] + dir[0];
+        int nc = stone[1] + dir[1];
+        String key = '$nr,$nc';
+
+        if (!checkedEmpty.contains(key) && _isValidPosition(nr, nc) && board[nr][nc] == Stone.none) {
+          checkedEmpty.add(key);
+
+          // 이 빈 점이 눈이 될 수 있는지 확인
+          int surroundingOwn = 0;
+          int surroundingEdge = 0;
+          for (var d in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+            int nnr = nr + d[0];
+            int nnc = nc + d[1];
+            if (!_isValidPosition(nnr, nnc)) {
+              surroundingEdge++;
+            } else if (groupSet.contains('$nnr,$nnc')) {
+              surroundingOwn++;
+            }
+          }
+
+          if (surroundingOwn + surroundingEdge >= 3) {
+            potentialEyes++;
+          }
+        }
+      }
+    }
+
+    return potentialEyes >= 2;
+  }
+
+  // 사다리 공격
+  List<int>? _findLadderAttack(List<List<int>> validMoves) {
+    for (var move in validMoves) {
+      board[move[0]][move[1]] = aiColor;
+
+      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        int nr = move[0] + dir[0];
+        int nc = move[1] + dir[1];
+        if (_isValidPosition(nr, nc) && board[nr][nc] == widget.playerColor) {
+          var group = _getGroup(nr, nc);
+          if (group.length <= 2) {
+            var liberties = _getLiberties(group);
+            if (liberties.length == 1) {
+              // 사다리 성공 여부 확인
+              if (_isLadderWorking(group, 0)) {
+                board[move[0]][move[1]] = Stone.none;
+                return move;
+              }
+            }
+          }
+        }
+      }
+      board[move[0]][move[1]] = Stone.none;
+    }
+    return null;
+  }
+
+  // 사다리가 성공하는지 확인 (재귀적)
+  bool _isLadderWorking(List<List<int>> group, int depth) {
+    if (depth > 15) return false; // 깊이 제한
+
+    var liberties = _getLiberties(group);
+    if (liberties.isEmpty) return true; // 잡힘
+    if (liberties.length >= 2) return false; // 탈출
+
+    // 상대가 도망가는 수
+    String libKey = liberties.first;
+    var parts = libKey.split(',');
+    int escapeRow = int.parse(parts[0]);
+    int escapeCol = int.parse(parts[1]);
+
+    if (!_isValidMove(escapeRow, escapeCol, widget.playerColor)) {
+      return true; // 도망갈 수 없음
+    }
+
+    board[escapeRow][escapeCol] = widget.playerColor;
+    var newGroup = _getGroup(escapeRow, escapeCol);
+    var newLiberties = _getLiberties(newGroup);
+
+    if (newLiberties.length >= 3) {
+      board[escapeRow][escapeCol] = Stone.none;
+      return false; // 탈출 성공
+    }
+
+    // AI가 쫓는 수
+    for (String lib in newLiberties) {
+      var p = lib.split(',');
+      int chaseRow = int.parse(p[0]);
+      int chaseCol = int.parse(p[1]);
+
+      if (_isValidMove(chaseRow, chaseCol, aiColor)) {
+        board[chaseRow][chaseCol] = aiColor;
+        bool works = _isLadderWorking(newGroup, depth + 1);
+        board[chaseRow][chaseCol] = Stone.none;
+
+        if (works) {
+          board[escapeRow][escapeCol] = Stone.none;
+          return true;
+        }
+      }
+    }
+
+    board[escapeRow][escapeCol] = Stone.none;
+    return false;
+  }
+
+  // 끊기 수
+  List<int>? _findCutMove(List<List<int>> validMoves) {
+    int bestScore = 0;
+    List<int>? bestMove;
+
+    for (var move in validMoves) {
+      int score = 0;
+
+      // 대각선 방향으로 상대 돌이 있는지 확인
+      List<List<int>> diagonals = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+      int opponentDiagonals = 0;
+
+      for (var diag in diagonals) {
+        int dr = move[0] + diag[0];
+        int dc = move[1] + diag[1];
+        if (_isValidPosition(dr, dc) && board[dr][dc] == widget.playerColor) {
+          opponentDiagonals++;
+        }
+      }
+
+      // 직선 방향 빈 점 또는 자기 돌
+      int emptyOrOwn = 0;
+      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        int nr = move[0] + dir[0];
+        int nc = move[1] + dir[1];
+        if (_isValidPosition(nr, nc) && board[nr][nc] != widget.playerColor) {
+          emptyOrOwn++;
+        }
+      }
+
+      // 끊기가 효과적인 경우
+      if (opponentDiagonals >= 2 && emptyOrOwn >= 2) {
+        board[move[0]][move[1]] = aiColor;
+
+        // 끊은 후 두 그룹의 크기 확인
+        Set<String> counted = {};
+        int minGroupSize = 100;
+
+        for (var diag in diagonals) {
+          int dr = move[0] + diag[0];
+          int dc = move[1] + diag[1];
+          String key = '$dr,$dc';
+          if (_isValidPosition(dr, dc) && board[dr][dc] == widget.playerColor && !counted.contains(key)) {
+            var group = _getGroup(dr, dc);
+            for (var g in group) {
+              counted.add('${g[0]},${g[1]}');
+            }
+            if (group.length < minGroupSize) {
+              minGroupSize = group.length;
+            }
+          }
+        }
+
+        score = opponentDiagonals * 10 + minGroupSize * 5;
+        board[move[0]][move[1]] = Stone.none;
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = move;
+      }
+    }
+
+    if (bestScore >= 25) return bestMove;
+    return null;
+  }
+
+  // 영향력 맵 계산
+  void _calculateInfluenceMap() {
+    _influenceMap = List.generate(boardSize, (_) => List.filled(boardSize, 0.0));
+
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] != Stone.none) {
+          double value = board[i][j] == aiColor ? 1.0 : -1.0;
+
+          // 주변으로 영향력 전파
+          for (int di = -4; di <= 4; di++) {
+            for (int dj = -4; dj <= 4; dj++) {
+              int ni = i + di;
+              int nj = j + dj;
+              if (_isValidPosition(ni, nj)) {
+                double dist = sqrt(di * di + dj * dj);
+                if (dist > 0) {
+                  _influenceMap[ni][nj] += value / (dist * dist);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 몬테카를로 시뮬레이션 기반 최적 수
+  List<int>? _findBestMoveWithMonteCarlo(List<List<int>> validMoves) {
+    if (validMoves.isEmpty) return null;
+
+    // 상위 후보만 시뮬레이션
+    List<MapEntry<List<int>, int>> scored = [];
+    for (var move in validMoves) {
+      int score = _evaluateMoveAdvanced(move[0], move[1]);
+      scored.add(MapEntry(move, score));
+    }
+    scored.sort((a, b) => b.value.compareTo(a.value));
+
+    // 상위 10개만 몬테카를로
+    int candidateCount = min(10, scored.length);
+    List<int>? bestMove;
+    double bestWinRate = -1;
+
+    for (int i = 0; i < candidateCount; i++) {
+      var move = scored[i].key;
+      double winRate = _monteCarloSimulation(move[0], move[1], 30);
+
+      // 기본 점수 + 승률 조합
+      double combinedScore = scored[i].value * 0.3 + winRate * 100;
+
+      if (combinedScore > bestWinRate) {
+        bestWinRate = combinedScore;
+        bestMove = move;
+      }
+    }
+
+    return bestMove ?? scored.first.key;
+  }
+
+  // 몬테카를로 시뮬레이션
+  double _monteCarloSimulation(int row, int col, int simulations) {
+    int wins = 0;
+
+    // 현재 보드 저장
+    List<List<Stone>> originalBoard = List.generate(
+      boardSize, (i) => List.from(board[i])
+    );
+
+    for (int sim = 0; sim < simulations; sim++) {
+      // 보드 복원
+      for (int i = 0; i < boardSize; i++) {
+        for (int j = 0; j < boardSize; j++) {
+          board[i][j] = originalBoard[i][j];
+        }
+      }
+
+      // 첫 수 두기
+      board[row][col] = aiColor;
+      Stone currentSim = widget.playerColor;
+
+      // 랜덤 플레이아웃
+      int moves = 0;
+      int maxMoves = boardSize * boardSize ~/ 2;
+      int passes = 0;
+
+      while (moves < maxMoves && passes < 2) {
+        List<List<int>> simMoves = [];
+        for (int i = 0; i < boardSize; i++) {
+          for (int j = 0; j < boardSize; j++) {
+            if (board[i][j] == Stone.none && _isValidMoveSimple(i, j, currentSim)) {
+              simMoves.add([i, j]);
+            }
+          }
+        }
+
+        if (simMoves.isEmpty) {
+          passes++;
+        } else {
+          passes = 0;
+          var randomMove = simMoves[_random.nextInt(simMoves.length)];
+          board[randomMove[0]][randomMove[1]] = currentSim;
+          _removeCapturedStones(randomMove[0], randomMove[1], currentSim);
+        }
+
+        currentSim = currentSim.opponent;
+        moves++;
+      }
+
+      // 결과 평가
+      int aiTerritory = _countTerritory(aiColor);
+      int playerTerritory = _countTerritory(widget.playerColor);
+
+      if (aiTerritory > playerTerritory) wins++;
+    }
+
+    // 보드 복원
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        board[i][j] = originalBoard[i][j];
+      }
+    }
+
+    return wins / simulations;
+  }
+
+  // 간단한 유효 수 확인 (시뮬레이션용)
+  bool _isValidMoveSimple(int row, int col, Stone stone) {
+    if (board[row][col] != Stone.none) return false;
+
+    board[row][col] = stone;
+
+    // 자충수 확인
+    var group = _getGroup(row, col);
+    var liberties = _getLiberties(group);
+
+    if (liberties.isEmpty) {
+      // 상대를 잡을 수 있는지 확인
+      bool canCapture = false;
+      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        int nr = row + dir[0];
+        int nc = col + dir[1];
+        if (_isValidPosition(nr, nc) && board[nr][nc] == stone.opponent) {
+          var oppGroup = _getGroup(nr, nc);
+          if (_getLiberties(oppGroup).isEmpty) {
+            canCapture = true;
+            break;
+          }
+        }
+      }
+      if (!canCapture) {
+        board[row][col] = Stone.none;
+        return false;
+      }
+    }
+
+    board[row][col] = Stone.none;
+    return true;
+  }
+
+  // 잡힌 돌 제거 (시뮬레이션용)
+  void _removeCapturedStones(int row, int col, Stone stone) {
+    for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      int nr = row + dir[0];
+      int nc = col + dir[1];
+      if (_isValidPosition(nr, nc) && board[nr][nc] == stone.opponent) {
+        var group = _getGroup(nr, nc);
+        if (_getLiberties(group).isEmpty) {
+          for (var s in group) {
+            board[s[0]][s[1]] = Stone.none;
+          }
+        }
+      }
+    }
+  }
+
+  // 영역 계산 (시뮬레이션용)
+  int _countTerritory(Stone stone) {
+    int territory = 0;
+    Set<String> visited = {};
+
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == stone) {
+          territory++;
+        } else if (board[i][j] == Stone.none && !visited.contains('$i,$j')) {
+          var result = _floodFillTerritory(i, j, visited);
+          if (result['owner'] == stone) {
+            territory += result['count'] as int;
+          }
+        }
+      }
+    }
+    return territory;
   }
 
   List<int>? _findSaveMove(List<List<int>> validMoves) {
@@ -770,26 +1282,54 @@ class _BadukGameState extends State<BadukGame> {
   int _evaluateMoveAdvanced(int row, int col) {
     int score = 0;
 
-    score += _calculateInfluence(row, col) * 5;
+    // 1. 영향력 맵 활용
+    score += (_influenceMap[row][col] * 15).round();
+
+    // 2. 연결성 평가
     score += _calculateConnectivity(row, col, aiColor) * 8;
+
+    // 3. 공격 잠재력
     score += _calculateAttackPotential(row, col) * 6;
-    score += _calculateEyePotential(row, col) * 10;
+
+    // 4. 눈 형성 가능성
+    score += _calculateEyePotential(row, col) * 12;
+
+    // 5. 전략적 위치
     score += _calculateStrategicValue(row, col);
 
+    // 6. 활로 확보
     board[row][col] = aiColor;
-    var liberties = _getLiberties(_getGroup(row, col));
+    var group = _getGroup(row, col);
+    var liberties = _getLiberties(group);
     board[row][col] = Stone.none;
-    score += liberties.length * 4;
+    score += liberties.length * 5;
 
-    score += _strengthenWeakGroups(row, col) * 7;
-    score += _blockOpponentExpansion(row, col) * 5;
+    // 7. 약한 그룹 강화
+    score += _strengthenWeakGroups(row, col) * 8;
+
+    // 8. 상대 확장 차단
+    score += _blockOpponentExpansion(row, col) * 6;
+
+    // 9. 영역 확장 가치
+    score += _calculateTerritoryValue(row, col) * 7;
+
+    // 10. 모양 평가 (호구, 빈삼각형 등 나쁜 모양 피하기)
+    score += _evaluateShape(row, col) * 10;
+
+    // 11. 약간의 랜덤성
     score += _random.nextInt(3);
 
     return score;
   }
 
-  int _calculateInfluence(int row, int col) {
-    int influence = 0;
+  // 영역 확장 가치 평가
+  int _calculateTerritoryValue(int row, int col) {
+    int value = 0;
+
+    // 비어있는 영역에서의 가치
+    int emptyNearby = 0;
+    int ownNearby = 0;
+    int oppNearby = 0;
 
     for (int dr = -2; dr <= 2; dr++) {
       for (int dc = -2; dc <= 2; dc++) {
@@ -797,16 +1337,89 @@ class _BadukGameState extends State<BadukGame> {
         int nc = col + dc;
         if (_isValidPosition(nr, nc)) {
           if (board[nr][nc] == Stone.none) {
-            int dist = dr.abs() + dc.abs();
-            influence += (5 - dist);
+            emptyNearby++;
           } else if (board[nr][nc] == aiColor) {
-            influence += 2;
+            ownNearby++;
+          } else {
+            oppNearby++;
           }
         }
       }
     }
 
-    return influence;
+    // 자기 돌 근처의 빈 공간 확장
+    if (ownNearby > 0 && emptyNearby > oppNearby) {
+      value += emptyNearby * 2;
+    }
+
+    // 경계 지역에서의 가치
+    if (ownNearby > 0 && oppNearby > 0) {
+      value += 5;
+    }
+
+    return value;
+  }
+
+  // 모양 평가
+  int _evaluateShape(int row, int col) {
+    int value = 0;
+
+    board[row][col] = aiColor;
+
+    // 빈삼각형 피하기 (나쁜 모양)
+    List<List<List<int>>> trianglePatterns = [
+      [[-1, 0], [0, -1], [-1, -1]],
+      [[-1, 0], [0, 1], [-1, 1]],
+      [[1, 0], [0, -1], [1, -1]],
+      [[1, 0], [0, 1], [1, 1]],
+    ];
+
+    for (var pattern in trianglePatterns) {
+      int ownCount = 0;
+      int emptyCorner = 0;
+      for (int i = 0; i < 3; i++) {
+        int nr = row + pattern[i][0];
+        int nc = col + pattern[i][1];
+        if (_isValidPosition(nr, nc)) {
+          if (board[nr][nc] == aiColor) {
+            ownCount++;
+          } else if (i == 2 && board[nr][nc] == Stone.none) {
+            emptyCorner = 1;
+          }
+        }
+      }
+      // 빈삼각형: 2점이 자기 돌이고 대각선이 비어있음
+      if (ownCount == 2 && emptyCorner == 1) {
+        value -= 8; // 페널티
+      }
+    }
+
+    // 호구 (좋은 모양)
+    int directNeighbors = 0;
+    for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      int nr = row + dir[0];
+      int nc = col + dir[1];
+      if (_isValidPosition(nr, nc) && board[nr][nc] == aiColor) {
+        directNeighbors++;
+      }
+    }
+
+    // 한 점에 연결하면서 활로가 많으면 좋음
+    if (directNeighbors == 1) {
+      var group = _getGroup(row, col);
+      var liberties = _getLiberties(group);
+      if (liberties.length >= 4) {
+        value += 5;
+      }
+    }
+
+    board[row][col] = Stone.none;
+    return value;
+  }
+
+  int _calculateInfluence(int row, int col) {
+    // 영향력 맵 사용
+    return (_influenceMap[row][col] * 10).round();
   }
 
   int _calculateConnectivity(int row, int col, Stone stone) {
