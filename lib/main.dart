@@ -6,147 +6,335 @@ void main() {
   runApp(const BadukApp());
 }
 
-class BadukApp extends StatelessWidget {
+// 언어 설정
+enum GameLanguage { korean, english, japanese, chinese }
+
+class L10n {
+  static final Map<GameLanguage, Map<String, String>> _strings = {
+    GameLanguage.korean: {
+      'appTitle': '바둑',
+      'vsAI': '바둑 - vs AI',
+      'twoPlayer': '바둑 - 2인 대국',
+      'playAsBlack': '컴퓨터와 대국 (흑)',
+      'playAsWhite': '컴퓨터와 대국 (백)',
+      'twoPlayerMode': '2인 대국',
+      'boardSize': '보드 크기',
+      'newGame': '새 게임',
+      'pass': '패스',
+      'black': '흑',
+      'white': '백',
+      'blackTurn': '흑의 차례입니다',
+      'whiteTurn': '백의 차례입니다',
+      'yourTurn': '당신의 차례입니다',
+      'aiThinking': 'AI가 생각 중...',
+      'aiPass': 'AI 패스',
+      'blackPass': '흑 패스',
+      'whitePass': '백 패스',
+      'congratsWin': '축하합니다! 승리!',
+      'aiWin': 'AI 승리!',
+      'blackWin': '흑 승리!',
+      'whiteWin': '백 승리!',
+      'draw': '무승부!',
+      'me': '나',
+      'ai': 'AI',
+      'captures': '따낸 돌',
+      'koViolation': '패 규칙 위반입니다!',
+      'beginner': '입문',
+      'intermediate': '중급',
+      'expert': '정식',
+      'language': '언어',
+    },
+    GameLanguage.english: {
+      'appTitle': 'Go',
+      'vsAI': 'Go - vs AI',
+      'twoPlayer': 'Go - 2 Players',
+      'playAsBlack': 'Play as Black',
+      'playAsWhite': 'Play as White',
+      'twoPlayerMode': '2 Players',
+      'boardSize': 'Board Size',
+      'newGame': 'New Game',
+      'pass': 'Pass',
+      'black': 'Black',
+      'white': 'White',
+      'blackTurn': "Black's turn",
+      'whiteTurn': "White's turn",
+      'yourTurn': 'Your turn',
+      'aiThinking': 'AI thinking...',
+      'aiPass': 'AI passed',
+      'blackPass': 'Black passed',
+      'whitePass': 'White passed',
+      'congratsWin': 'Congratulations! You win!',
+      'aiWin': 'AI wins!',
+      'blackWin': 'Black wins!',
+      'whiteWin': 'White wins!',
+      'draw': 'Draw!',
+      'me': 'Me',
+      'ai': 'AI',
+      'captures': 'Captures',
+      'koViolation': 'Ko rule violation!',
+      'beginner': 'Beginner',
+      'intermediate': 'Intermediate',
+      'expert': 'Expert',
+      'language': 'Language',
+    },
+    GameLanguage.japanese: {
+      'appTitle': '囲碁',
+      'vsAI': '囲碁 - vs AI',
+      'twoPlayer': '囲碁 - 対人戦',
+      'playAsBlack': '黒で対局',
+      'playAsWhite': '白で対局',
+      'twoPlayerMode': '対人戦',
+      'boardSize': '盤面サイズ',
+      'newGame': '新規対局',
+      'pass': 'パス',
+      'black': '黒',
+      'white': '白',
+      'blackTurn': '黒の番です',
+      'whiteTurn': '白の番です',
+      'yourTurn': 'あなたの番です',
+      'aiThinking': 'AI思考中...',
+      'aiPass': 'AIパス',
+      'blackPass': '黒パス',
+      'whitePass': '白パス',
+      'congratsWin': 'おめでとう！勝利！',
+      'aiWin': 'AI勝利！',
+      'blackWin': '黒勝利！',
+      'whiteWin': '白勝利！',
+      'draw': '引き分け！',
+      'me': '自分',
+      'ai': 'AI',
+      'captures': 'アゲハマ',
+      'koViolation': 'コウ違反です！',
+      'beginner': '入門',
+      'intermediate': '中級',
+      'expert': '上級',
+      'language': '言語',
+    },
+    GameLanguage.chinese: {
+      'appTitle': '围棋',
+      'vsAI': '围棋 - vs AI',
+      'twoPlayer': '围棋 - 双人对战',
+      'playAsBlack': '执黑对局',
+      'playAsWhite': '执白对局',
+      'twoPlayerMode': '双人对战',
+      'boardSize': '棋盘大小',
+      'newGame': '新对局',
+      'pass': '跳过',
+      'black': '黑',
+      'white': '白',
+      'blackTurn': '黑方回合',
+      'whiteTurn': '白方回合',
+      'yourTurn': '你的回合',
+      'aiThinking': 'AI思考中...',
+      'aiPass': 'AI跳过',
+      'blackPass': '黑方跳过',
+      'whitePass': '白方跳过',
+      'congratsWin': '恭喜！你赢了！',
+      'aiWin': 'AI获胜！',
+      'blackWin': '黑方获胜！',
+      'whiteWin': '白方获胜！',
+      'draw': '平局！',
+      'me': '我',
+      'ai': 'AI',
+      'captures': '提子',
+      'koViolation': '违反劫争规则！',
+      'beginner': '入门',
+      'intermediate': '中级',
+      'expert': '高级',
+      'language': '语言',
+    },
+  };
+
+  static String get(GameLanguage lang, String key) {
+    return _strings[lang]?[key] ?? key;
+  }
+
+  static String getLanguageName(GameLanguage lang) {
+    switch (lang) {
+      case GameLanguage.korean:
+        return '한국어';
+      case GameLanguage.english:
+        return 'English';
+      case GameLanguage.japanese:
+        return '日本語';
+      case GameLanguage.chinese:
+        return '中文';
+    }
+  }
+}
+
+class BadukApp extends StatefulWidget {
   const BadukApp({super.key});
+
+  @override
+  State<BadukApp> createState() => _BadukAppState();
+}
+
+class _BadukAppState extends State<BadukApp> {
+  GameLanguage _language = GameLanguage.korean;
+
+  void _setLanguage(GameLanguage lang) {
+    setState(() {
+      _language = lang;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '바둑',
+      title: L10n.get(_language, 'appTitle'),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
         useMaterial3: true,
       ),
-      home: const GameModeSelector(),
+      home: GameModeSelector(
+        language: _language,
+        onLanguageChanged: _setLanguage,
+      ),
     );
   }
 }
 
 class GameModeSelector extends StatelessWidget {
-  const GameModeSelector({super.key});
+  final GameLanguage language;
+  final Function(GameLanguage) onLanguageChanged;
 
-  void _showColorSelection(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('돌 색상 선택'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.black,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: 4,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                ),
-              ),
-              title: const Text('흑 (선공)', style: TextStyle(fontSize: 18)),
-              subtitle: const Text('먼저 착수합니다'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const BadukGame(
-                      vsAI: true,
-                      playerColor: Stone.black,
-                    ),
-                  ),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: 4,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                ),
-              ),
-              title: const Text('백 (후공)', style: TextStyle(fontSize: 18)),
-              subtitle: const Text('AI가 먼저 착수합니다'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const BadukGame(
-                      vsAI: true,
-                      playerColor: Stone.white,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('취소'),
-          ),
-        ],
-      ),
-    );
-  }
+  const GameModeSelector({
+    super.key,
+    required this.language,
+    required this.onLanguageChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('바둑'),
+        title: Text(L10n.get(language, 'appTitle')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          PopupMenuButton<GameLanguage>(
+            icon: const Icon(Icons.language),
+            tooltip: L10n.get(language, 'language'),
+            onSelected: onLanguageChanged,
+            itemBuilder: (context) => GameLanguage.values.map((lang) {
+              return PopupMenuItem(
+                value: lang,
+                child: Row(
+                  children: [
+                    if (lang == language)
+                      const Icon(Icons.check, size: 18)
+                    else
+                      const SizedBox(width: 18),
+                    const SizedBox(width: 8),
+                    Text(L10n.getLanguageName(lang)),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              '바둑',
-              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+            Text(
+              L10n.get(language, 'appTitle'),
+              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 48),
-            ElevatedButton.icon(
-              onPressed: () => _showColorSelection(context),
-              icon: const Icon(Icons.computer, size: 32),
-              label: const Text('컴퓨터와 대국', style: TextStyle(fontSize: 20)),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
+            // 컴퓨터와 대국 (흑)
+            ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BadukGame(vsAI: false),
+                    builder: (context) => BadukGame(
+                      vsAI: true,
+                      playerColor: Stone.black,
+                      language: language,
+                    ),
                   ),
                 );
               },
-              icon: const Icon(Icons.people, size: 32),
-              label: const Text('2인 대국', style: TextStyle(fontSize: 20)),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(L10n.get(language, 'playAsBlack'), style: const TextStyle(fontSize: 18)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            // 컴퓨터와 대국 (백)
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BadukGame(
+                      vsAI: true,
+                      playerColor: Stone.white,
+                      language: language,
+                    ),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey, width: 2),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(L10n.get(language, 'playAsWhite'), style: const TextStyle(fontSize: 18)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            // 2인 대국
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BadukGame(
+                      vsAI: false,
+                      language: language,
+                    ),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.people, size: 28),
+                  const SizedBox(width: 12),
+                  Text(L10n.get(language, 'twoPlayerMode'), style: const TextStyle(fontSize: 18)),
+                ],
               ),
             ),
           ],
@@ -174,11 +362,13 @@ extension StoneExtension on Stone {
 class BadukGame extends StatefulWidget {
   final bool vsAI;
   final Stone playerColor;
+  final GameLanguage language;
 
   const BadukGame({
     super.key,
     required this.vsAI,
     this.playerColor = Stone.black,
+    required this.language,
   });
 
   @override
@@ -186,11 +376,11 @@ class BadukGame extends StatefulWidget {
 }
 
 class _BadukGameState extends State<BadukGame> {
-  int boardSize = 9;
+  late int boardSize;
   late List<List<Stone>> board;
   Stone currentPlayer = Stone.black;
   bool gameOver = false;
-  String gameMessage = '흑의 차례입니다';
+  String gameMessage = '';
   int blackCaptures = 0;
   int whiteCaptures = 0;
   int consecutivePasses = 0;
@@ -201,13 +391,15 @@ class _BadukGameState extends State<BadukGame> {
   bool isAIThinking = false;
   final Random _random = Random();
 
+  String tr(String key) => L10n.get(widget.language, key);
+
   Stone get aiColor => widget.playerColor.opponent;
 
   @override
   void initState() {
     super.initState();
+    boardSize = 19;
     _initBoard();
-    // AI가 흑(선공)이면 AI가 먼저 착수
     if (widget.vsAI && aiColor == Stone.black) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _aiMove();
@@ -223,14 +415,14 @@ class _BadukGameState extends State<BadukGame> {
     currentPlayer = Stone.black;
     gameOver = false;
     if (widget.vsAI) {
-      String colorName = widget.playerColor == Stone.black ? '흑' : '백';
+      String colorName = widget.playerColor == Stone.black ? tr('black') : tr('white');
       if (aiColor == Stone.black) {
-        gameMessage = 'AI가 생각 중...';
+        gameMessage = tr('aiThinking');
       } else {
-        gameMessage = '당신의 차례입니다 ($colorName)';
+        gameMessage = '${tr('yourTurn')} ($colorName)';
       }
     } else {
-      gameMessage = '흑의 차례입니다';
+      gameMessage = tr('blackTurn');
     }
     blackCaptures = 0;
     whiteCaptures = 0;
@@ -246,7 +438,6 @@ class _BadukGameState extends State<BadukGame> {
     setState(() {
       _initBoard();
     });
-    // AI가 흑(선공)이면 AI가 먼저 착수
     if (widget.vsAI && aiColor == Stone.black) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _aiMove();
@@ -305,7 +496,7 @@ class _BadukGameState extends State<BadukGame> {
       }
       if (!isAI) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('패 규칙 위반입니다!')),
+          SnackBar(content: Text(tr('koViolation'))),
         );
       }
       return false;
@@ -332,7 +523,6 @@ class _BadukGameState extends State<BadukGame> {
   void _placeStone(int row, int col) {
     if (!_tryPlaceStone(row, col)) return;
 
-    // AI 차례인지 확인
     if (widget.vsAI && currentPlayer == aiColor && !gameOver) {
       _aiMove();
     }
@@ -340,21 +530,21 @@ class _BadukGameState extends State<BadukGame> {
 
   void _updateMessage() {
     if (widget.vsAI) {
-      String colorName = widget.playerColor == Stone.black ? '흑' : '백';
+      String colorName = widget.playerColor == Stone.black ? tr('black') : tr('white');
       if (currentPlayer == widget.playerColor) {
-        gameMessage = '당신의 차례입니다 ($colorName)';
+        gameMessage = '${tr('yourTurn')} ($colorName)';
       } else {
-        gameMessage = 'AI가 생각 중...';
+        gameMessage = tr('aiThinking');
       }
     } else {
-      gameMessage = currentPlayer == Stone.black ? '흑의 차례입니다' : '백의 차례입니다';
+      gameMessage = currentPlayer == Stone.black ? tr('blackTurn') : tr('whiteTurn');
     }
   }
 
   void _aiMove() {
     setState(() {
       isAIThinking = true;
-      gameMessage = 'AI가 생각 중...';
+      gameMessage = tr('aiThinking');
     });
 
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -371,8 +561,8 @@ class _BadukGameState extends State<BadukGame> {
       setState(() {
         isAIThinking = false;
         if (!gameOver) {
-          String colorName = widget.playerColor == Stone.black ? '흑' : '백';
-          gameMessage = '당신의 차례입니다 ($colorName)';
+          String colorName = widget.playerColor == Stone.black ? tr('black') : tr('white');
+          gameMessage = '${tr('yourTurn')} ($colorName)';
         }
       });
     });
@@ -393,7 +583,6 @@ class _BadukGameState extends State<BadukGame> {
 
     if (validMoves.isEmpty) return null;
 
-    // 우선순위 1: 많은 돌을 잡을 수 있는 수
     int maxCaptures = 0;
     List<int>? captureMove;
     for (var move in validMoves) {
@@ -405,31 +594,24 @@ class _BadukGameState extends State<BadukGame> {
     }
     if (maxCaptures >= 2) return captureMove;
 
-    // 우선순위 2: 단수(활로 1)인 자기 그룹 구하기
     List<int>? saveMove = _findSaveMove(validMoves);
     if (saveMove != null) return saveMove;
 
-    // 우선순위 3: 상대 그룹을 단수로 만들기
     List<int>? atariMove = _findAtariMove(validMoves);
     if (atariMove != null) return atariMove;
 
-    // 우선순위 4: 1개라도 잡을 수 있으면 잡기
     if (captureMove != null) return captureMove;
 
-    // 우선순위 5: 상대가 다음에 잡을 수 있는 곳 방어
     List<int>? blockMove = _findBlockMove(validMoves);
     if (blockMove != null) return blockMove;
 
-    // 우선순위 6: 상대 그룹의 활로 줄이기 (활로 2인 그룹 공격)
     List<int>? pressureMove = _findPressureMove(validMoves);
     if (pressureMove != null) return pressureMove;
 
-    // 우선순위 7: 종합 점수 기반 최적의 수
     return _findBestScoredMove(validMoves);
   }
 
   List<int>? _findSaveMove(List<List<int>> validMoves) {
-    // 활로가 1인 자기 그룹 찾기
     Set<String> groupsInAtari = {};
     for (int i = 0; i < boardSize; i++) {
       for (int j = 0; j < boardSize; j++) {
@@ -439,12 +621,10 @@ class _BadukGameState extends State<BadukGame> {
             var group = _getGroup(i, j);
             var liberties = _getLiberties(group);
             if (liberties.length == 1) {
-              // 이 그룹을 구할 수 있는 수 찾기
               for (var stone in group) {
                 groupsInAtari.add('${stone[0]},${stone[1]}');
               }
 
-              // 활로를 늘릴 수 있는 수 찾기
               for (var move in validMoves) {
                 board[move[0]][move[1]] = aiColor;
                 var newGroup = _getGroup(i, j);
@@ -452,17 +632,14 @@ class _BadukGameState extends State<BadukGame> {
                 board[move[0]][move[1]] = Stone.none;
 
                 if (newLiberties.length >= 2) {
-                  // 이 수가 그룹을 구하는지 확인
                   return move;
                 }
               }
 
-              // 도망치거나 상대를 잡아서 구하기
               for (var move in validMoves) {
                 int captures = _countCaptures(move[0], move[1], aiColor);
                 if (captures > 0) {
                   board[move[0]][move[1]] = aiColor;
-                  // 잡힌 돌 제거 시뮬레이션
                   List<List<int>> captured = [];
                   for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
                     int nr = move[0] + dir[0];
@@ -480,7 +657,6 @@ class _BadukGameState extends State<BadukGame> {
 
                   var newLiberties = _getLiberties(_getGroup(i, j));
 
-                  // 복구
                   for (var c in captured) {
                     board[c[0]][c[1]] = widget.playerColor;
                   }
@@ -500,7 +676,6 @@ class _BadukGameState extends State<BadukGame> {
   }
 
   List<int>? _findAtariMove(List<List<int>> validMoves) {
-    // 상대 그룹을 단수로 만들 수 있는 수 찾기
     int bestGroupSize = 0;
     List<int>? bestMove;
 
@@ -528,7 +703,6 @@ class _BadukGameState extends State<BadukGame> {
   }
 
   List<int>? _findBlockMove(List<List<int>> validMoves) {
-    // 상대가 이 위치에 두면 우리 돌을 잡을 수 있는 곳 방어
     int maxThreat = 0;
     List<int>? bestBlock;
 
@@ -545,7 +719,6 @@ class _BadukGameState extends State<BadukGame> {
   }
 
   List<int>? _findPressureMove(List<List<int>> validMoves) {
-    // 활로가 2인 상대 그룹 공격
     int bestScore = 0;
     List<int>? bestMove;
 
@@ -597,34 +770,19 @@ class _BadukGameState extends State<BadukGame> {
   int _evaluateMoveAdvanced(int row, int col) {
     int score = 0;
 
-    // 1. 영향력 (주변 빈 점 통제)
     score += _calculateInfluence(row, col) * 5;
-
-    // 2. 연결성 (자기 돌과 연결)
     score += _calculateConnectivity(row, col, aiColor) * 8;
-
-    // 3. 상대 돌 분리/공격
     score += _calculateAttackPotential(row, col) * 6;
-
-    // 4. 눈 형성 가능성
     score += _calculateEyePotential(row, col) * 10;
-
-    // 5. 전략적 위치 (초반: 코너/변, 중반: 중앙)
     score += _calculateStrategicValue(row, col);
 
-    // 6. 활로 확보
     board[row][col] = aiColor;
     var liberties = _getLiberties(_getGroup(row, col));
     board[row][col] = Stone.none;
     score += liberties.length * 4;
 
-    // 7. 약한 그룹 강화
     score += _strengthenWeakGroups(row, col) * 7;
-
-    // 8. 상대 확장 차단
     score += _blockOpponentExpansion(row, col) * 5;
-
-    // 9. 약간의 랜덤성 (같은 점수일 때 다양성)
     score += _random.nextInt(3);
 
     return score;
@@ -633,7 +791,6 @@ class _BadukGameState extends State<BadukGame> {
   int _calculateInfluence(int row, int col) {
     int influence = 0;
 
-    // 3x3 영역의 빈 점 개수
     for (int dr = -2; dr <= 2; dr++) {
       for (int dc = -2; dc <= 2; dc++) {
         int nr = row + dr;
@@ -655,19 +812,16 @@ class _BadukGameState extends State<BadukGame> {
   int _calculateConnectivity(int row, int col, Stone stone) {
     int connectivity = 0;
 
-    // 직접 연결
     for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
       int nr = row + dir[0];
       int nc = col + dir[1];
       if (_isValidPosition(nr, nc) && board[nr][nc] == stone) {
         connectivity += 5;
-        // 연결되는 그룹의 크기 보너스
         var group = _getGroup(nr, nc);
         connectivity += group.length;
       }
     }
 
-    // 대각선 연결 (약한 연결)
     for (var dir in [[-1, -1], [-1, 1], [1, -1], [1, 1]]) {
       int nr = row + dir[0];
       int nc = col + dir[1];
@@ -676,7 +830,6 @@ class _BadukGameState extends State<BadukGame> {
       }
     }
 
-    // 한 칸 띄어서 연결 가능
     for (var dir in [[-2, 0], [2, 0], [0, -2], [0, 2]]) {
       int nr = row + dir[0];
       int nc = col + dir[1];
@@ -704,7 +857,6 @@ class _BadukGameState extends State<BadukGame> {
         var group = _getGroup(nr, nc);
         var liberties = _getLiberties(group);
 
-        // 활로가 적을수록 공격 가치 높음
         if (liberties.length <= 2) {
           attack += (4 - liberties.length) * group.length * 3;
         } else if (liberties.length <= 4) {
@@ -721,7 +873,6 @@ class _BadukGameState extends State<BadukGame> {
   int _calculateEyePotential(int row, int col) {
     int eyePotential = 0;
 
-    // 코너에서 눈 형성 가능성
     int adjacentOwn = 0;
     int adjacentEmpty = 0;
     int adjacentEdge = 0;
@@ -738,11 +889,9 @@ class _BadukGameState extends State<BadukGame> {
       }
     }
 
-    // 3면이 자기 돌이고 1면이 비어있으면 눈 형성 가능
     if (adjacentOwn >= 3 && adjacentEmpty == 1) {
       eyePotential += 15;
     }
-    // 변에서 눈 형성
     if (adjacentEdge >= 1 && adjacentOwn >= 2) {
       eyePotential += 10;
     }
@@ -754,32 +903,22 @@ class _BadukGameState extends State<BadukGame> {
     int stoneCount = _countStones();
     int value = 0;
 
-    // 화점
     if (_isStarPoint(row, col)) {
       value += 25;
     }
 
-    // 초반 (돌이 적을 때)
     if (stoneCount < boardSize) {
-      // 3-3, 3-4, 4-4 포인트 선호
       int edgeDist = _getEdgeDistance(row, col);
       if (edgeDist >= 2 && edgeDist <= 4) {
         value += 20;
       }
-      // 코너 근처 선호
       if (_isCornerApproach(row, col)) {
         value += 15;
       }
-    }
-    // 중반
-    else if (stoneCount < boardSize * 3) {
-      // 중앙 쪽 가치 증가
+    } else if (stoneCount < boardSize * 3) {
       int centerDist = (row - boardSize ~/ 2).abs() + (col - boardSize ~/ 2).abs();
       value += (boardSize - centerDist) * 2;
-    }
-    // 종반
-    else {
-      // 영역 경계에서의 수
+    } else {
       value += _getBoundaryValue(row, col) * 3;
     }
 
@@ -803,7 +942,6 @@ class _BadukGameState extends State<BadukGame> {
   int _getBoundaryValue(int row, int col) {
     int value = 0;
 
-    // 주변에 자기 돌과 상대 돌이 모두 있는 경계 지역
     bool hasOwn = false;
     bool hasOpponent = false;
 
@@ -828,7 +966,6 @@ class _BadukGameState extends State<BadukGame> {
   int _strengthenWeakGroups(int row, int col) {
     int value = 0;
 
-    // 활로가 적은 자기 그룹 근처에 두기
     for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
       int nr = row + dir[0];
       int nc = col + dir[1];
@@ -836,7 +973,6 @@ class _BadukGameState extends State<BadukGame> {
         var group = _getGroup(nr, nc);
         var liberties = _getLiberties(group);
         if (liberties.length <= 3) {
-          // 이 수로 활로가 늘어나는지 확인
           board[row][col] = aiColor;
           var newLiberties = _getLiberties(_getGroup(nr, nc));
           board[row][col] = Stone.none;
@@ -854,7 +990,6 @@ class _BadukGameState extends State<BadukGame> {
   int _blockOpponentExpansion(int row, int col) {
     int value = 0;
 
-    // 상대 돌 근처에서 확장 차단
     for (int dr = -2; dr <= 2; dr++) {
       for (int dc = -2; dc <= 2; dc++) {
         int nr = row + dr;
@@ -978,34 +1113,34 @@ class _BadukGameState extends State<BadukGame> {
           int playerScore = widget.playerColor == Stone.black ? blackScore : whiteScore;
           int aiScore = widget.playerColor == Stone.black ? whiteScore : blackScore;
           if (playerScore > aiScore) {
-            gameMessage = '축하합니다! 승리! (흑: $blackScore, 백: $whiteScore)';
+            gameMessage = '${tr('congratsWin')} (${tr('black')}: $blackScore, ${tr('white')}: $whiteScore)';
           } else if (aiScore > playerScore) {
-            gameMessage = 'AI 승리! (흑: $blackScore, 백: $whiteScore)';
+            gameMessage = '${tr('aiWin')} (${tr('black')}: $blackScore, ${tr('white')}: $whiteScore)';
           } else {
-            gameMessage = '무승부! (흑: $blackScore, 백: $whiteScore)';
+            gameMessage = '${tr('draw')} (${tr('black')}: $blackScore, ${tr('white')}: $whiteScore)';
           }
         } else {
           if (blackScore > whiteScore) {
-            gameMessage = '흑 승리! (흑: $blackScore, 백: $whiteScore)';
+            gameMessage = '${tr('blackWin')} (${tr('black')}: $blackScore, ${tr('white')}: $whiteScore)';
           } else if (whiteScore > blackScore) {
-            gameMessage = '백 승리! (흑: $blackScore, 백: $whiteScore)';
+            gameMessage = '${tr('whiteWin')} (${tr('black')}: $blackScore, ${tr('white')}: $whiteScore)';
           } else {
-            gameMessage = '무승부! (흑: $blackScore, 백: $whiteScore)';
+            gameMessage = '${tr('draw')} (${tr('black')}: $blackScore, ${tr('white')}: $whiteScore)';
           }
         }
       } else {
         currentPlayer = currentPlayer.opponent;
         if (widget.vsAI) {
-          String colorName = widget.playerColor == Stone.black ? '흑' : '백';
+          String colorName = widget.playerColor == Stone.black ? tr('black') : tr('white');
           if (currentPlayer == widget.playerColor) {
-            gameMessage = '당신의 차례입니다 ($colorName) - AI 패스';
+            gameMessage = '${tr('yourTurn')} ($colorName) - ${tr('aiPass')}';
           } else {
-            gameMessage = 'AI가 생각 중...';
+            gameMessage = tr('aiThinking');
           }
         } else {
           gameMessage = currentPlayer == Stone.black
-              ? '흑의 차례입니다 (백 패스)'
-              : '백의 차례입니다 (흑 패스)';
+              ? '${tr('blackTurn')} (${tr('whitePass')})'
+              : '${tr('whiteTurn')} (${tr('blackPass')})';
         }
       }
     });
@@ -1130,23 +1265,24 @@ class _BadukGameState extends State<BadukGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.vsAI ? '바둑 - vs AI' : '바둑 - 2인 대국'),
+        title: Text(widget.vsAI ? tr('vsAI') : tr('twoPlayer')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
-          PopupMenuButton<int>(
-            icon: const Icon(Icons.grid_on),
-            tooltip: '보드 크기',
-            onSelected: _changeBoardSize,
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: 9, child: Text('9x9 (입문)')),
-              const PopupMenuItem(value: 13, child: Text('13x13 (중급)')),
-              const PopupMenuItem(value: 19, child: Text('19x19 (정식)')),
-            ],
-          ),
+          if (widget.vsAI)
+            PopupMenuButton<int>(
+              icon: const Icon(Icons.grid_on),
+              tooltip: tr('boardSize'),
+              onSelected: _changeBoardSize,
+              itemBuilder: (context) => [
+                PopupMenuItem(value: 9, child: Text('9x9 (${tr('beginner')})')),
+                PopupMenuItem(value: 13, child: Text('13x13 (${tr('intermediate')})')),
+                PopupMenuItem(value: 19, child: Text('19x19 (${tr('expert')})')),
+              ],
+            ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _resetGame,
-            tooltip: '새 게임',
+            tooltip: tr('newGame'),
           ),
         ],
       ),
@@ -1160,7 +1296,7 @@ class _BadukGameState extends State<BadukGame> {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: gameOver
-                    ? (gameMessage.contains('축하') ? Colors.green : Colors.blue)
+                    ? (gameMessage.contains(tr('congratsWin')) ? Colors.green : Colors.blue)
                     : (isAIThinking ? Colors.orange : Colors.black),
               ),
             ),
@@ -1172,16 +1308,16 @@ class _BadukGameState extends State<BadukGame> {
               children: [
                 _buildScoreCard(
                   widget.vsAI
-                    ? (widget.playerColor == Stone.black ? '나 (흑)' : 'AI (흑)')
-                    : '흑',
+                    ? (widget.playerColor == Stone.black ? '${tr('me')} (${tr('black')})' : '${tr('ai')} (${tr('black')})')
+                    : tr('black'),
                   blackCaptures,
                   Colors.black
                 ),
                 Text('$boardSize x $boardSize', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 _buildScoreCard(
                   widget.vsAI
-                    ? (widget.playerColor == Stone.white ? '나 (백)' : 'AI (백)')
-                    : '백',
+                    ? (widget.playerColor == Stone.white ? '${tr('me')} (${tr('white')})' : '${tr('ai')} (${tr('white')})')
+                    : tr('white'),
                   whiteCaptures,
                   Colors.white
                 ),
@@ -1262,7 +1398,7 @@ class _BadukGameState extends State<BadukGame> {
                 ElevatedButton.icon(
                   onPressed: (gameOver || isAIThinking) ? null : () => _pass(),
                   icon: const Icon(Icons.skip_next),
-                  label: const Text('패스'),
+                  label: Text(tr('pass')),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
@@ -1271,7 +1407,7 @@ class _BadukGameState extends State<BadukGame> {
                 ElevatedButton.icon(
                   onPressed: _resetGame,
                   icon: const Icon(Icons.replay),
-                  label: const Text('새 게임'),
+                  label: Text(tr('newGame')),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
@@ -1302,7 +1438,7 @@ class _BadukGameState extends State<BadukGame> {
             ),
           ),
           Text(
-            '따낸 돌: $captures',
+            '${tr('captures')}: $captures',
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
