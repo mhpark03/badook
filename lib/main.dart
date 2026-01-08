@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:collection';
 import 'dart:math';
 import 'dart:convert';
@@ -183,6 +184,18 @@ class L10n {
       'version': '버전',
       'developer': '개발자',
       'contact': '문의',
+      // 유튜브 관련
+      'watchYoutube': '유튜브로 배우기',
+      'selectProblemType': '배우고 싶은 유형을 선택하세요',
+      'youtubeBasics': '바둑 입문',
+      'youtubeCapture': '돌 잡기 기초',
+      'youtubeLifeDeath': '사활 기초',
+      'youtube3Space': '3궁도 (직삼궁/곡삼궁)',
+      'youtube4Space': '4궁도 (직사궁/곡사궁/꽃사궁)',
+      'youtube5Space': '5궁도 (오궁도화)',
+      'youtubeCorner': '귀 사활 (귀곡사)',
+      'youtubeThrowIn': '환격 (던져넣기)',
+      'youtubeCapturingRace': '수상전 (활로싸움)',
     },
     GameLanguage.english: {
       'appTitle': 'Go',
@@ -294,6 +307,18 @@ class L10n {
       'version': 'Version',
       'developer': 'Developer',
       'contact': 'Contact',
+      // YouTube
+      'watchYoutube': 'Learn on YouTube',
+      'selectProblemType': 'Select a topic to learn',
+      'youtubeBasics': 'Go Basics',
+      'youtubeCapture': 'Capturing Stones',
+      'youtubeLifeDeath': 'Life & Death Basics',
+      'youtube3Space': '3-Space (Straight/Bent Three)',
+      'youtube4Space': '4-Space (Four in a Row)',
+      'youtube5Space': '5-Space Eye',
+      'youtubeCorner': 'Corner Life & Death',
+      'youtubeThrowIn': 'Throw-in Technique',
+      'youtubeCapturingRace': 'Capturing Race',
     },
     GameLanguage.japanese: {
       'appTitle': '囲碁',
@@ -405,6 +430,18 @@ class L10n {
       'version': 'バージョン',
       'developer': '開発者',
       'contact': 'お問い合わせ',
+      // YouTube
+      'watchYoutube': 'YouTubeで学ぶ',
+      'selectProblemType': '学びたいテーマを選んでください',
+      'youtubeBasics': '囲碁入門',
+      'youtubeCapture': '石の取り方',
+      'youtubeLifeDeath': '詰碁の基礎',
+      'youtube3Space': '三目型（直三/曲三）',
+      'youtube4Space': '四目型（直四/曲四）',
+      'youtube5Space': '五目型',
+      'youtubeCorner': '隅の死活',
+      'youtubeThrowIn': 'ホウリコミ',
+      'youtubeCapturingRace': '攻め合い',
     },
     GameLanguage.chinese: {
       'appTitle': '围棋',
@@ -516,6 +553,18 @@ class L10n {
       'version': '版本',
       'developer': '开发者',
       'contact': '联系方式',
+      // YouTube
+      'watchYoutube': '在YouTube上学习',
+      'selectProblemType': '选择想学习的主题',
+      'youtubeBasics': '围棋入门',
+      'youtubeCapture': '吃子基础',
+      'youtubeLifeDeath': '死活基础',
+      'youtube3Space': '三目型（直三/曲三）',
+      'youtube4Space': '四目型（直四/曲四）',
+      'youtube5Space': '五目型',
+      'youtubeCorner': '角部死活',
+      'youtubeThrowIn': '投入技巧',
+      'youtubeCapturingRace': '对杀',
     },
   };
 
@@ -1548,6 +1597,86 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
     }
   }
 
+  void _showYoutubeDialog(BuildContext context) {
+    final youtubeTopics = [
+      {'key': 'youtubeBasics', 'search': '바둑 입문 강좌'},
+      {'key': 'youtubeCapture', 'search': '바둑 돌 잡기 기초'},
+      {'key': 'youtubeLifeDeath', 'search': '바둑 사활 기초'},
+      {'key': 'youtube3Space', 'search': '바둑 직삼궁 곡삼궁'},
+      {'key': 'youtube4Space', 'search': '바둑 직사궁 곡사궁 꽃사궁'},
+      {'key': 'youtube5Space', 'search': '바둑 오궁도화'},
+      {'key': 'youtubeCorner', 'search': '바둑 귀곡사'},
+      {'key': 'youtubeThrowIn', 'search': '바둑 환격 던져넣기'},
+      {'key': 'youtubeCapturingRace', 'search': '바둑 수상전 활로싸움'},
+    ];
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            const Icon(Icons.play_circle_outline, color: Colors.red),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                L10n.get(widget.language, 'watchYoutube'),
+                style: const TextStyle(fontSize: 18),
+              ),
+            ),
+          ],
+        ),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                L10n.get(widget.language, 'selectProblemType'),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+              ),
+              const SizedBox(height: 12),
+              Flexible(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: youtubeTopics.length,
+                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  itemBuilder: (context, index) {
+                    final topic = youtubeTopics[index];
+                    return ListTile(
+                      leading: const Icon(Icons.play_arrow, color: Colors.red),
+                      title: Text(L10n.get(widget.language, topic['key']!)),
+                      trailing: const Icon(Icons.open_in_new, size: 18),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _openYoutubeSearch(topic['search']!);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(L10n.get(widget.language, 'cancel')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openYoutubeSearch(String query) async {
+    final encodedQuery = Uri.encodeComponent(query);
+    final url = 'https://www.youtube.com/results?search_query=$encodedQuery';
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final problems = LifeDeathProblems.getByDifficulty(_selectedDifficulty);
@@ -1624,6 +1753,24 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
                   minHeight: 8,
                 ).expand(),
               ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          // 유튜브로 배우기 버튼
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => _showYoutubeDialog(context),
+                icon: const Icon(Icons.play_circle_outline, color: Colors.red),
+                label: Text(L10n.get(widget.language, 'watchYoutube')),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  side: const BorderSide(color: Colors.red),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 16),
