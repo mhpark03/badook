@@ -1395,7 +1395,7 @@ class LifeDeathProblems {
       explanation: '수상전(手相戰)은 서로 잡으려는 활로 싸움입니다. "바깥 공배부터 메우라"는 격언처럼, 바깥쪽 활로를 먼저 줄여야 이길 수 있습니다.',
     ),
 
-    // 3-7: 변의 궁도 (왼쪽 패턴)
+    // 3-7: 변의 궁도 (변에서 백 잡기)
     LifeDeathProblem(
       id: 19,
       name: '3-7: 변의 궁도',
@@ -1403,10 +1403,10 @@ class LifeDeathProblems {
       type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 7,
-      blackStones: [[0, 2], [1, 2], [2, 3], [3, 3]],
-      whiteStones: [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0], [2, 2], [3, 2]],
-      correctMoves: [[2, 1]],
-      explanation: '변에서 백의 눈 모양을 깨는 급소입니다. 이 자리에 착점하면 백은 한 눈밖에 만들 수 없습니다.',
+      blackStones: [[0, 5], [1, 4], [2, 0], [2, 1], [2, 2], [2, 3]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 0], [1, 1]],
+      correctMoves: [[1, 2]],
+      explanation: '변에서 백의 눈 모양을 깨는 급소입니다. 이 자리에 치중하면 백은 두 눈을 만들 수 없어 죽습니다.',
     ),
 
     // 3-8: 귀의 복잡한 사활 (오른쪽 위 패턴)
