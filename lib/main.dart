@@ -1633,79 +1633,110 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
         title: Text(L10n.get(widget.language, 'lifeDeathProblems')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: _categories.length,
-        itemBuilder: (context, index) {
-          final category = _categories[index];
-          final categoryKey = category['key']!;
-          final searchQuery = category['search']!;
-          final problems = LifeDeathProblems.getByCategory(categoryKey);
-          final solvedCount = _getSolvedCount(categoryKey);
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(8),
+        child: Table(
+          columnWidths: const {
+            0: FlexColumnWidth(2.5),
+            1: FlexColumnWidth(1),
+            2: FlexColumnWidth(1),
+            3: FlexColumnWidth(1),
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: [
+            // 헤더
+            TableRow(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+              ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                  child: Text('유형', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                  child: Text('진행', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                  child: Text('영상', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                  child: Text('문제', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                ),
+              ],
+            ),
+            // 데이터 행
+            ..._categories.asMap().entries.map((entry) {
+              final index = entry.key;
+              final category = entry.value;
+              final categoryKey = category['key']!;
+              final searchQuery = category['search']!;
+              final problems = LifeDeathProblems.getByCategory(categoryKey);
+              final solvedCount = _getSolvedCount(categoryKey);
+              final isEven = index % 2 == 0;
 
-          return Card(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return TableRow(
+                decoration: BoxDecoration(
+                  color: isEven ? Colors.white : Colors.grey.shade50,
+                ),
                 children: [
-                  // 유형 제목
-                  Text(
-                    L10n.get(widget.language, categoryKey),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  // 유형 이름
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    child: Text(
+                      L10n.get(widget.language, categoryKey),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
-                  const SizedBox(height: 8),
                   // 진행 상황
-                  if (problems.isNotEmpty)
-                    Text(
-                      '${L10n.get(widget.language, 'solvedCount')}: $solvedCount/${problems.length}',
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    child: Text(
+                      problems.isEmpty ? '-' : '$solvedCount/${problems.length}',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
+                        fontSize: 13,
+                        color: solvedCount == problems.length && problems.isNotEmpty
+                            ? Colors.green
+                            : Colors.black87,
+                        fontWeight: solvedCount == problems.length && problems.isNotEmpty
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
-                  const SizedBox(height: 12),
-                  // 버튼들
-                  Row(
-                    children: [
-                      // 유튜브 보기 버튼
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => _openYoutubeSearch(searchQuery),
-                          icon: const Icon(Icons.play_circle_outline, color: Colors.red, size: 20),
-                          label: Text(L10n.get(widget.language, 'watchYoutube')),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.red,
-                            side: const BorderSide(color: Colors.red),
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                          ),
+                  ),
+                  // 유튜브 버튼
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                    child: IconButton(
+                      onPressed: () => _openYoutubeSearch(searchQuery),
+                      icon: const Icon(Icons.play_circle_fill, color: Colors.red),
+                      tooltip: L10n.get(widget.language, 'watchYoutube'),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ),
+                  // 문제 풀기 버튼
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                    child: problems.isEmpty
+                      ? const Icon(Icons.remove, color: Colors.grey)
+                      : IconButton(
+                          onPressed: () => _openProblemList(categoryKey),
+                          icon: const Icon(Icons.edit_note, color: Colors.blue),
+                          tooltip: L10n.get(widget.language, 'solveProblem'),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      // 문제 풀기 버튼
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: problems.isEmpty ? null : () => _openProblemList(categoryKey),
-                          icon: const Icon(Icons.edit, size: 20),
-                          label: Text('${L10n.get(widget.language, 'solveProblem')} (${problems.length})'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
-              ),
-            ),
-          );
-        },
+              );
+            }).toList(),
+          ],
+        ),
       ),
     );
   }
