@@ -3912,34 +3912,27 @@ class _BadukGameState extends State<BadukGame> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildScoreCard(
-                  widget.vsAI
-                    ? (widget.playerColor == Stone.black ? '${tr('me')} (${tr('black')})' : '${tr('ai')} (${tr('black')})')
-                    : tr('black'),
-                  blackCaptures,
-                  Colors.black
-                ),
-                _buildScoreCard(
-                  widget.vsAI
-                    ? (widget.playerColor == Stone.white ? '${tr('me')} (${tr('white')})' : '${tr('ai')} (${tr('white')})')
-                    : tr('white'),
-                  whiteCaptures,
-                  Colors.white
-                ),
-              ],
-            ),
-          ),
           Expanded(
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  margin: const EdgeInsets.all(4),
+            child: Row(
+              children: [
+                // 왼쪽: 흑돌 점수
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: _buildScoreCard(
+                      widget.vsAI
+                        ? (widget.playerColor == Stone.black ? tr('me') : tr('ai'))
+                        : tr('black'),
+                      blackCaptures,
+                      Colors.black
+                    ),
+                  ),
+                ),
+                // 중앙: 바둑판
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    margin: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: const Color(0xFFDEB887),
                     borderRadius: BorderRadius.circular(8),
@@ -3996,7 +3989,21 @@ class _BadukGameState extends State<BadukGame> {
                     ),
                   ),
                 ),
-              ),
+                ),
+                // 오른쪽: 백돌 점수
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: _buildScoreCard(
+                      widget.vsAI
+                        ? (widget.playerColor == Stone.white ? tr('me') : tr('ai'))
+                        : tr('white'),
+                      whiteCaptures,
+                      Colors.white
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
@@ -4041,25 +4048,39 @@ class _BadukGameState extends State<BadukGame> {
 
   Widget _buildScoreCard(String label, int captures, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
         color: color == Colors.black ? Colors.grey[800] : Colors.grey[200],
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey, width: 2),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
+          // 돌 아이콘
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color,
+              border: Border.all(color: Colors.grey.shade600, width: 1),
+            ),
+          ),
+          const SizedBox(height: 8),
           Text(
             label,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
               color: color == Colors.black ? Colors.white : Colors.black,
             ),
           ),
+          const SizedBox(height: 4),
           Text(
-            '${tr('captures')}: $captures',
+            '$captures',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: color == Colors.black ? Colors.white : Colors.black,
             ),
