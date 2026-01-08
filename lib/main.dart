@@ -65,6 +65,15 @@ class L10n {
       'savedGameInfo': '저장된 게임',
       'saveDate': '저장 시간',
       'moveCount': '수',
+      'selectDifficulty': '난이도 선택',
+      'selectColor': '돌 색상 선택',
+      'firstMove': '선공',
+      'secondMove': '후공',
+      'startGame': '게임 시작',
+      'aiEasyDesc': '바둑을 처음 배우는 분께 추천',
+      'aiNormalDesc': '기본적인 전략을 사용',
+      'aiHardDesc': '고급 전략과 정석 사용',
+      'aiExpertDesc': '최고 수준의 AI',
     },
     GameLanguage.english: {
       'appTitle': 'Go',
@@ -115,6 +124,15 @@ class L10n {
       'savedGameInfo': 'Saved Game',
       'saveDate': 'Save Time',
       'moveCount': 'Moves',
+      'selectDifficulty': 'Select Difficulty',
+      'selectColor': 'Select Color',
+      'firstMove': 'First',
+      'secondMove': 'Second',
+      'startGame': 'Start Game',
+      'aiEasyDesc': 'Recommended for beginners',
+      'aiNormalDesc': 'Uses basic strategies',
+      'aiHardDesc': 'Advanced strategies and joseki',
+      'aiExpertDesc': 'Strongest AI level',
     },
     GameLanguage.japanese: {
       'appTitle': '囲碁',
@@ -165,6 +183,15 @@ class L10n {
       'savedGameInfo': '保存されたゲーム',
       'saveDate': '保存時間',
       'moveCount': '手数',
+      'selectDifficulty': '難易度を選択',
+      'selectColor': '石の色を選択',
+      'firstMove': '先手',
+      'secondMove': '後手',
+      'startGame': 'ゲーム開始',
+      'aiEasyDesc': '初心者向け',
+      'aiNormalDesc': '基本的な戦略を使用',
+      'aiHardDesc': '高度な戦略と定石を使用',
+      'aiExpertDesc': '最強レベルのAI',
     },
     GameLanguage.chinese: {
       'appTitle': '围棋',
@@ -215,6 +242,15 @@ class L10n {
       'savedGameInfo': '已保存的游戏',
       'saveDate': '保存时间',
       'moveCount': '手数',
+      'selectDifficulty': '选择难度',
+      'selectColor': '选择棋子颜色',
+      'firstMove': '先手',
+      'secondMove': '后手',
+      'startGame': '开始游戏',
+      'aiEasyDesc': '推荐给初学者',
+      'aiNormalDesc': '使用基本策略',
+      'aiHardDesc': '使用高级策略和定式',
+      'aiExpertDesc': '最强AI级别',
     },
   };
 
@@ -283,7 +319,6 @@ class GameModeSelector extends StatefulWidget {
 }
 
 class _GameModeSelectorState extends State<GameModeSelector> {
-  AIDifficulty _selectedDifficulty = AIDifficulty.intermediate;
   Map<String, dynamic>? _savedGameInfo;
 
   @override
@@ -298,19 +333,6 @@ class _GameModeSelectorState extends State<GameModeSelector> {
       setState(() {
         _savedGameInfo = info;
       });
-    }
-  }
-
-  String _getDifficultyName(AIDifficulty difficulty) {
-    switch (difficulty) {
-      case AIDifficulty.beginner:
-        return L10n.get(widget.language, 'aiEasy');
-      case AIDifficulty.intermediate:
-        return L10n.get(widget.language, 'aiNormal');
-      case AIDifficulty.advanced:
-        return L10n.get(widget.language, 'aiHard');
-      case AIDifficulty.expert:
-        return L10n.get(widget.language, 'aiExpert');
     }
   }
 
@@ -351,119 +373,32 @@ class _GameModeSelectorState extends State<GameModeSelector> {
               L10n.get(widget.language, 'appTitle'),
               style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 32),
-            // AI 난이도 선택
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.brown.shade100,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.brown.shade300),
+            const SizedBox(height: 48),
+            // AI 대국
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AIDifficultySelector(
+                      language: widget.language,
+                    ),
+                  ),
+                ).then((_) => _checkSavedGame());
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                backgroundColor: Colors.brown.shade100,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.psychology, color: Colors.brown),
-                  const SizedBox(width: 8),
+                  const Icon(Icons.smart_toy, size: 28, color: Colors.brown),
+                  const SizedBox(width: 12),
                   Text(
-                    '${L10n.get(widget.language, 'aiLevel')}: ',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    L10n.get(widget.language, 'vsAI'),
+                    style: const TextStyle(fontSize: 18, color: Colors.brown),
                   ),
-                  DropdownButton<AIDifficulty>(
-                    value: _selectedDifficulty,
-                    underline: const SizedBox(),
-                    items: AIDifficulty.values.map((difficulty) {
-                      return DropdownMenuItem(
-                        value: difficulty,
-                        child: Text(
-                          _getDifficultyName(difficulty),
-                          style: TextStyle(
-                            fontWeight: difficulty == _selectedDifficulty
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          _selectedDifficulty = value;
-                        });
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            // 컴퓨터와 대국 (흑)
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BadukGame(
-                      vsAI: true,
-                      playerColor: Stone.black,
-                      language: widget.language,
-                      aiDifficulty: _selectedDifficulty,
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(L10n.get(widget.language, 'playAsBlack'), style: const TextStyle(fontSize: 18)),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // 컴퓨터와 대국 (백)
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BadukGame(
-                      vsAI: true,
-                      playerColor: Stone.white,
-                      language: widget.language,
-                      aiDifficulty: _selectedDifficulty,
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey, width: 2),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(L10n.get(widget.language, 'playAsWhite'), style: const TextStyle(fontSize: 18)),
                 ],
               ),
             ),
@@ -603,6 +538,239 @@ class _GameModeSelectorState extends State<GameModeSelector> {
           ),
         ),
       ],
+    );
+  }
+}
+
+// AI 난이도 선택 화면
+class AIDifficultySelector extends StatefulWidget {
+  final GameLanguage language;
+
+  const AIDifficultySelector({
+    super.key,
+    required this.language,
+  });
+
+  @override
+  State<AIDifficultySelector> createState() => _AIDifficultySelectorState();
+}
+
+class _AIDifficultySelectorState extends State<AIDifficultySelector> {
+  AIDifficulty _selectedDifficulty = AIDifficulty.intermediate;
+  Stone _selectedColor = Stone.black;
+
+  String _getDifficultyName(AIDifficulty difficulty) {
+    switch (difficulty) {
+      case AIDifficulty.beginner:
+        return L10n.get(widget.language, 'aiEasy');
+      case AIDifficulty.intermediate:
+        return L10n.get(widget.language, 'aiNormal');
+      case AIDifficulty.advanced:
+        return L10n.get(widget.language, 'aiHard');
+      case AIDifficulty.expert:
+        return L10n.get(widget.language, 'aiExpert');
+    }
+  }
+
+  String _getDifficultyDescription(AIDifficulty difficulty) {
+    switch (difficulty) {
+      case AIDifficulty.beginner:
+        return L10n.get(widget.language, 'aiEasyDesc');
+      case AIDifficulty.intermediate:
+        return L10n.get(widget.language, 'aiNormalDesc');
+      case AIDifficulty.advanced:
+        return L10n.get(widget.language, 'aiHardDesc');
+      case AIDifficulty.expert:
+        return L10n.get(widget.language, 'aiExpertDesc');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.get(widget.language, 'vsAI')),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // 난이도 선택
+              Text(
+                L10n.get(widget.language, 'selectDifficulty'),
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              // 난이도 버튼들
+              ...AIDifficulty.values.map((difficulty) {
+                bool isSelected = difficulty == _selectedDifficulty;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: SizedBox(
+                    width: 280,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedDifficulty = difficulty;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        backgroundColor: isSelected ? Colors.brown.shade200 : null,
+                        side: isSelected ? BorderSide(color: Colors.brown.shade600, width: 2) : null,
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            _getDifficultyName(difficulty),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            _getDifficultyDescription(difficulty),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 32),
+              // 돌 색상 선택
+              Text(
+                L10n.get(widget.language, 'selectColor'),
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 흑돌 선택
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedColor = Stone.black;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: _selectedColor == Stone.black ? Colors.brown.shade100 : null,
+                        borderRadius: BorderRadius.circular(12),
+                        border: _selectedColor == Stone.black
+                            ? Border.all(color: Colors.brown.shade600, width: 2)
+                            : Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            L10n.get(widget.language, 'black'),
+                            style: TextStyle(
+                              fontWeight: _selectedColor == Stone.black ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
+                          Text(
+                            L10n.get(widget.language, 'firstMove'),
+                            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 24),
+                  // 백돌 선택
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedColor = Stone.white;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: _selectedColor == Stone.white ? Colors.brown.shade100 : null,
+                        borderRadius: BorderRadius.circular(12),
+                        border: _selectedColor == Stone.white
+                            ? Border.all(color: Colors.brown.shade600, width: 2)
+                            : Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(color: Colors.grey, width: 2),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            L10n.get(widget.language, 'white'),
+                            style: TextStyle(
+                              fontWeight: _selectedColor == Stone.white ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
+                          Text(
+                            L10n.get(widget.language, 'secondMove'),
+                            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 48),
+              // 게임 시작 버튼
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BadukGame(
+                        vsAI: true,
+                        playerColor: _selectedColor,
+                        language: widget.language,
+                        aiDifficulty: _selectedDifficulty,
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
+                  backgroundColor: Colors.brown,
+                  foregroundColor: Colors.white,
+                ),
+                child: Text(
+                  L10n.get(widget.language, 'startGame'),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -3598,17 +3766,6 @@ class _BadukGameState extends State<BadukGame> {
         title: Text(widget.vsAI ? tr('vsAI') : tr('twoPlayer')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
-          if (widget.vsAI)
-            PopupMenuButton<int>(
-              icon: const Icon(Icons.grid_on),
-              tooltip: tr('boardSize'),
-              onSelected: _changeBoardSize,
-              itemBuilder: (context) => [
-                PopupMenuItem(value: 9, child: Text('9x9 (${tr('beginner')})')),
-                PopupMenuItem(value: 13, child: Text('13x13 (${tr('intermediate')})')),
-                PopupMenuItem(value: 19, child: Text('19x19 (${tr('expert')})')),
-              ],
-            ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _resetGame,
