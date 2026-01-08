@@ -1997,52 +1997,29 @@ class ProblemBoardPainter extends CustomPainter {
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
 
-    // 세로선 - 왼쪽 귀 바둑판처럼 그리기
+    final padding = cellSize / 2;
+
+    // 세로선 - 왼쪽 위 귀 바둑판
+    // 모든 세로선은 첫 번째 가로줄(위쪽 변)에서 시작하여 아래쪽 끝까지 연장
     for (int i = 0; i < boardSize; i++) {
-      final x = cellSize / 2 + i * cellSize;
-      // 첫 번째 세로선(i=0)은 맨 위에서 시작 (왼쪽 변)
-      final startY = (i == 0) ? cellSize / 2 : 0.0;
-      // 모든 세로선은 아래쪽 끝까지 연장
-      final endY = size.height;
+      final x = padding + i * cellSize;
       canvas.drawLine(
-        Offset(x, startY),
-        Offset(x, endY),
+        Offset(x, padding),  // 위쪽 변에서 시작
+        Offset(x, size.height),  // 아래쪽 끝까지 연장
         paint,
       );
     }
 
-    // 가로선 - 위쪽 귀 바둑판처럼 그리기
+    // 가로선 - 왼쪽 위 귀 바둑판
+    // 모든 가로선은 첫 번째 세로줄(왼쪽 변)에서 시작하여 오른쪽 끝까지 연장
     for (int i = 0; i < boardSize; i++) {
-      final y = cellSize / 2 + i * cellSize;
-      // 첫 번째 가로선(i=0)은 맨 왼쪽에서 시작 (위쪽 변)
-      final startX = (i == 0) ? cellSize / 2 : 0.0;
-      // 모든 가로선은 오른쪽 끝까지 연장
-      final endX = size.width;
+      final y = padding + i * cellSize;
       canvas.drawLine(
-        Offset(startX, y),
-        Offset(endX, y),
+        Offset(padding, y),  // 왼쪽 변에서 시작
+        Offset(size.width, y),  // 오른쪽 끝까지 연장
         paint,
       );
     }
-
-    // 바둑판 테두리 (왼쪽 변과 위쪽 변)
-    final borderPaint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke;
-
-    // 왼쪽 변
-    canvas.drawLine(
-      Offset(cellSize / 2, cellSize / 2),
-      Offset(cellSize / 2, size.height),
-      borderPaint,
-    );
-    // 위쪽 변
-    canvas.drawLine(
-      Offset(cellSize / 2, cellSize / 2),
-      Offset(size.width, cellSize / 2),
-      borderPaint,
-    );
 
     // 화점 (3x3 위치에만)
     if (boardSize >= 7) {
@@ -2053,7 +2030,7 @@ class ProblemBoardPainter extends CustomPainter {
 
       // 귀 화점
       canvas.drawCircle(
-        Offset(cellSize / 2 + 2 * cellSize, cellSize / 2 + 2 * cellSize),
+        Offset(padding + 2 * cellSize, padding + 2 * cellSize),
         dotRadius,
         dotPaint,
       );
