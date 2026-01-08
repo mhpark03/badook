@@ -51,6 +51,9 @@ class L10n {
       'aiNormal': '보통',
       'aiHard': '어려움',
       'aiExpert': '최강',
+      'hint': '힌트',
+      'hintMessage': '추천 위치가 표시되었습니다',
+      'noHint': '추천할 수 없습니다',
     },
     GameLanguage.english: {
       'appTitle': 'Go',
@@ -89,6 +92,9 @@ class L10n {
       'aiNormal': 'Normal',
       'aiHard': 'Hard',
       'aiExpert': 'Expert',
+      'hint': 'Hint',
+      'hintMessage': 'Recommended move shown',
+      'noHint': 'No suggestion available',
     },
     GameLanguage.japanese: {
       'appTitle': '囲碁',
@@ -127,6 +133,9 @@ class L10n {
       'aiNormal': '普通',
       'aiHard': '難しい',
       'aiExpert': '最強',
+      'hint': 'ヒント',
+      'hintMessage': 'おすすめの手を表示しました',
+      'noHint': '提案できません',
     },
     GameLanguage.chinese: {
       'appTitle': '围棋',
@@ -165,6 +174,9 @@ class L10n {
       'aiNormal': '普通',
       'aiHard': '困难',
       'aiExpert': '最强',
+      'hint': '提示',
+      'hintMessage': '已显示推荐位置',
+      'noHint': '无法提供建议',
     },
   };
 
@@ -595,6 +607,10 @@ class _BadukGameState extends State<BadukGame> {
   final Random _random = Random();
   late AISettings _aiSettings;
 
+  // 힌트 관련 변수
+  List<int>? hintMove;
+  bool showHint = false;
+
   // 패턴 데이터베이스
   final Map<String, List<List<int>>> _josekiDatabase = {};
 
@@ -682,6 +698,8 @@ class _BadukGameState extends State<BadukGame> {
     showTerritory = false;
     territoryCount = {'black': 0, 'white': 0};
     isAIThinking = false;
+    hintMove = null;
+    showHint = false;
   }
 
   void _resetGame() {
@@ -773,9 +791,196 @@ class _BadukGameState extends State<BadukGame> {
   void _placeStone(int row, int col) {
     if (!_tryPlaceStone(row, col)) return;
 
+    // 힌트 숨기기
+    setState(() {
+      showHint = false;
+      hintMove = null;
+    });
+
     if (widget.vsAI && currentPlayer == aiColor && !gameOver) {
       _aiMove();
     }
+  }
+
+  // 힌트 기능: 플레이어에게 추천 수를 보여줌
+  void _showHint() {
+    if (gameOver || isAIThinking) return;
+
+    // vs AI 모드에서만, 플레이어 차례일 때만
+    if (widget.vsAI && currentPlayer != widget.playerColor) return;
+
+    setState(() {
+      isAIThinking = true;
+      gameMessage = tr('aiThinking');
+    });
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      List<int>? hint = _findHintMove();
+
+      setState(() {
+        isAIThinking = false;
+        if (hint != null) {
+          hintMove = hint;
+          showHint = true;
+          gameMessage = tr('hintMessage');
+        } else {
+          hintMove = null;
+          showHint = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(tr('noHint'))),
+          );
+          _updateMessage();
+        }
+      });
+    });
+  }
+
+  // 힌트용 최적 수 찾기 (플레이어 관점)
+  List<int>? _findHintMove() {
+    Stone playerColor = widget.vsAI ? widget.playerColor : currentPlayer;
+
+    List<List<int>> validMoves = [];
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == Stone.none && _isValidMove(i, j, playerColor)) {
+          validMoves.add([i, j]);
+        }
+      }
+    }
+
+    if (validMoves.isEmpty) return null;
+
+    // 영향력 맵 계산
+    _calculateInfluenceMap();
+
+    // 우선순위 기반 수 찾기 (플레이어 관점)
+    Stone opponent = playerColor.opponent;
+
+    // 1. 많은 돌 잡기
+    int maxCaptures = 0;
+    List<int>? captureMove;
+    for (var move in validMoves) {
+      int captures = _countCaptures(move[0], move[1], playerColor);
+      if (captures > maxCaptures) {
+        maxCaptures = captures;
+        captureMove = move;
+      }
+    }
+    if (maxCaptures >= 2) return captureMove;
+
+    // 2. 위험한 그룹 구하기
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == playerColor) {
+          var group = _getGroup(i, j);
+          var liberties = _getLiberties(group);
+          if (liberties.length == 1) {
+            // 단수 그룹 구하기
+            for (var move in validMoves) {
+              board[move[0]][move[1]] = playerColor;
+              var newLiberties = _getLiberties(_getGroup(i, j));
+              board[move[0]][move[1]] = Stone.none;
+              if (newLiberties.length >= 2) {
+                return move;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 3. 상대 위협 방어
+    for (var move in validMoves) {
+      int threat = _countCaptures(move[0], move[1], opponent);
+      if (threat >= 2) {
+        return move;
+      }
+    }
+
+    // 4. 1개라도 잡기
+    if (captureMove != null) return captureMove;
+
+    // 5. 상대 단수 만들기
+    for (var move in validMoves) {
+      board[move[0]][move[1]] = playerColor;
+      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        int nr = move[0] + dir[0];
+        int nc = move[1] + dir[1];
+        if (_isValidPosition(nr, nc) && board[nr][nc] == opponent) {
+          var group = _getGroup(nr, nc);
+          var liberties = _getLiberties(group);
+          if (liberties.length == 1 && group.length >= 2) {
+            board[move[0]][move[1]] = Stone.none;
+            return move;
+          }
+        }
+      }
+      board[move[0]][move[1]] = Stone.none;
+    }
+
+    // 6. 전략적 평가 기반 최적 수
+    int bestScore = -100000;
+    List<int>? bestMove;
+    for (var move in validMoves) {
+      int score = _evaluateHintMove(move[0], move[1], playerColor);
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = move;
+      }
+    }
+
+    return bestMove;
+  }
+
+  // 힌트용 수 평가 (플레이어 관점)
+  int _evaluateHintMove(int row, int col, Stone player) {
+    int score = 0;
+
+    // 영향력
+    double influence = _influenceMap[row][col];
+    if (player == aiColor) {
+      score += (influence * 10).round();
+    } else {
+      score -= (influence * 10).round();
+    }
+
+    // 연결성
+    int connections = 0;
+    for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      int nr = row + dir[0];
+      int nc = col + dir[1];
+      if (_isValidPosition(nr, nc) && board[nr][nc] == player) {
+        connections++;
+      }
+    }
+    score += connections * 8;
+
+    // 활로 확보
+    board[row][col] = player;
+    var group = _getGroup(row, col);
+    var liberties = _getLiberties(group);
+    board[row][col] = Stone.none;
+    score += liberties.length * 5;
+
+    // 전략적 위치
+    score += _calculateStrategicValue(row, col);
+
+    // 공격 잠재력
+    board[row][col] = player;
+    for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      int nr = row + dir[0];
+      int nc = col + dir[1];
+      if (_isValidPosition(nr, nc) && board[nr][nc] == player.opponent) {
+        var oppGroup = _getGroup(nr, nc);
+        var oppLiberties = _getLiberties(oppGroup);
+        if (oppLiberties.length <= 2) {
+          score += (4 - oppLiberties.length) * oppGroup.length * 3;
+        }
+      }
+    }
+    board[row][col] = Stone.none;
+
+    return score;
   }
 
   void _updateMessage() {
@@ -2760,16 +2965,26 @@ class _BadukGameState extends State<BadukGame> {
                   icon: const Icon(Icons.skip_next),
                   label: Text(tr('pass')),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
+                ElevatedButton.icon(
+                  onPressed: (gameOver || isAIThinking) ? null : _showHint,
+                  icon: const Icon(Icons.lightbulb_outline),
+                  label: Text(tr('hint')),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    backgroundColor: showHint ? Colors.amber.shade200 : null,
+                  ),
+                ),
+                const SizedBox(width: 8),
                 ElevatedButton.icon(
                   onPressed: _resetGame,
                   icon: const Icon(Icons.replay),
                   label: Text(tr('newGame')),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                 ),
               ],
@@ -2812,6 +3027,40 @@ class _BadukGameState extends State<BadukGame> {
 
   Widget _buildStone(int row, int col) {
     if (board[row][col] == Stone.none) {
+      // 힌트 위치 표시
+      if (showHint && hintMove != null && hintMove![0] == row && hintMove![1] == col) {
+        double hintSize = boardSize <= 9 ? 26 : (boardSize <= 13 ? 20 : 16);
+        Stone hintColor = widget.vsAI ? widget.playerColor : currentPlayer;
+        return Container(
+          width: hintSize,
+          height: hintSize,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: hintColor == Stone.black
+                ? Colors.black.withValues(alpha: 0.4)
+                : Colors.white.withValues(alpha: 0.7),
+            border: Border.all(
+              color: Colors.amber,
+              width: 3,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.amber.withValues(alpha: 0.6),
+                blurRadius: 8,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: Center(
+            child: Icon(
+              Icons.lightbulb,
+              size: hintSize * 0.6,
+              color: Colors.amber.shade700,
+            ),
+          ),
+        );
+      }
+
       if (showTerritory) {
         Stone? owner = _getTerritoryOwner(row, col);
         if (owner != null) {
