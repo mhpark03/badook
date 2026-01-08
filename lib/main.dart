@@ -144,6 +144,8 @@ class L10n {
       'whiteToPlay': '백 선',
       'killWhite': '백을 잡아라',
       'killBlack': '흑을 잡아라',
+      'cutWhite': '백을 끊어라',
+      'cutBlack': '흑을 끊어라',
       'liveWithBlack': '흑으로 살아라',
       'liveWithWhite': '백으로 살아라',
       'correct': '정답입니다!',
@@ -253,6 +255,8 @@ class L10n {
       'whiteToPlay': 'White to play',
       'killWhite': 'Kill White',
       'killBlack': 'Kill Black',
+      'cutWhite': 'Cut White',
+      'cutBlack': 'Cut Black',
       'liveWithBlack': 'Live with Black',
       'liveWithWhite': 'Live with White',
       'correct': 'Correct!',
@@ -362,6 +366,8 @@ class L10n {
       'whiteToPlay': '白先',
       'killWhite': '白を取れ',
       'killBlack': '黒を取れ',
+      'cutWhite': '白を切れ',
+      'cutBlack': '黒を切れ',
       'liveWithBlack': '黒で生きよ',
       'liveWithWhite': '白で生きよ',
       'correct': '正解！',
@@ -471,6 +477,8 @@ class L10n {
       'whiteToPlay': '白先',
       'killWhite': '杀死白棋',
       'killBlack': '杀死黑棋',
+      'cutWhite': '切断白棋',
+      'cutBlack': '切断黑棋',
       'liveWithBlack': '黑棋做活',
       'liveWithWhite': '白棋做活',
       'correct': '正确！',
@@ -1103,7 +1111,7 @@ enum Stone { none, black, white }
 enum ProblemDifficulty { beginner, intermediate, advanced }
 
 // 문제 유형
-enum ProblemType { kill, live }
+enum ProblemType { kill, live, cut }
 
 // 사활 문제 클래스
 class LifeDeathProblem {
@@ -1435,7 +1443,7 @@ class LifeDeathProblems {
       id: 21,
       name: '3-9: 연결 끊기',
       difficulty: ProblemDifficulty.advanced,
-      type: ProblemType.kill,
+      type: ProblemType.cut,
       playerColor: Stone.white,
       boardSize: 7,
       blackStones: [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5]],
@@ -1685,9 +1693,13 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
                               ? (problem.playerColor == Stone.black
                                   ? L10n.get(widget.language, 'killWhite')
                                   : L10n.get(widget.language, 'killBlack'))
-                              : (problem.playerColor == Stone.black
-                                  ? L10n.get(widget.language, 'liveWithBlack')
-                                  : L10n.get(widget.language, 'liveWithWhite')),
+                              : problem.type == ProblemType.cut
+                                  ? (problem.playerColor == Stone.black
+                                      ? L10n.get(widget.language, 'cutWhite')
+                                      : L10n.get(widget.language, 'cutBlack'))
+                                  : (problem.playerColor == Stone.black
+                                      ? L10n.get(widget.language, 'liveWithBlack')
+                                      : L10n.get(widget.language, 'liveWithWhite')),
                           style: TextStyle(
                             fontSize: 10,
                             color: Colors.grey.shade600,
@@ -1984,9 +1996,13 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
                       ? (widget.problem.playerColor == Stone.black
                           ? L10n.get(widget.language, 'killWhite')
                           : L10n.get(widget.language, 'killBlack'))
-                      : (widget.problem.playerColor == Stone.black
-                          ? L10n.get(widget.language, 'liveWithBlack')
-                          : L10n.get(widget.language, 'liveWithWhite')),
+                      : widget.problem.type == ProblemType.cut
+                          ? (widget.problem.playerColor == Stone.black
+                              ? L10n.get(widget.language, 'cutWhite')
+                              : L10n.get(widget.language, 'cutBlack'))
+                          : (widget.problem.playerColor == Stone.black
+                              ? L10n.get(widget.language, 'liveWithBlack')
+                              : L10n.get(widget.language, 'liveWithWhite')),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
