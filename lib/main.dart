@@ -1089,7 +1089,7 @@ class LifeDeathProblems {
       whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [2, 4]],
       correctMoves: [[0, 2]], // 중간에 눈 만들기
     ),
-    // 중급 - 궁도 (귀 3칸)
+    // 중급 - 환격 (throw-in)
     LifeDeathProblem(
       id: 7,
       name: '2-1',
@@ -1097,10 +1097,11 @@ class LifeDeathProblems {
       type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[1, 0], [1, 1], [1, 2], [1, 3], [0, 3]],
-      whiteStones: [[0, 0], [0, 1]],
-      correctMoves: [[0, 2]], // 급소 - 귀 3칸 사망
+      blackStones: [[0, 2], [1, 1], [2, 0], [2, 1], [2, 2]],
+      whiteStones: [[0, 0], [0, 1], [1, 0]],
+      correctMoves: [[1, 2]], // 환격 - 던져넣기
     ),
+    // 중급 - 촉촉수
     LifeDeathProblem(
       id: 8,
       name: '2-2',
@@ -1108,10 +1109,11 @@ class LifeDeathProblems {
       type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [0, 4]],
-      whiteStones: [[0, 0], [0, 1], [0, 2]],
-      correctMoves: [[0, 3]], // 치중
+      blackStones: [[0, 3], [1, 2], [2, 1], [2, 2], [2, 3]],
+      whiteStones: [[0, 1], [0, 2], [1, 0], [1, 1]],
+      correctMoves: [[0, 0]], // 귀 급소
     ),
+    // 중급 - 빅 (패)
     LifeDeathProblem(
       id: 9,
       name: '2-3',
@@ -1119,10 +1121,11 @@ class LifeDeathProblems {
       type: ProblemType.live,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 4]],
-      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [2, 4]],
-      correctMoves: [[0, 4]], // 확장해서 눈 확보
+      blackStones: [[0, 0], [0, 2], [1, 2], [1, 3]],
+      whiteStones: [[1, 0], [1, 1], [2, 2], [2, 3]],
+      correctMoves: [[0, 1]], // 눈 모양 만들기
     ),
+    // 중급 - 이단젖힘
     LifeDeathProblem(
       id: 10,
       name: '2-4',
@@ -1130,11 +1133,11 @@ class LifeDeathProblems {
       type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [0, 5]],
-      whiteStones: [[0, 0], [0, 1], [0, 3], [0, 4]],
-      correctMoves: [[0, 2]], // 가운데 급소
+      blackStones: [[1, 0], [1, 2], [2, 1], [2, 2], [2, 3], [1, 3]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [1, 1]],
+      correctMoves: [[0, 3]], // 젖히기
     ),
-    // 중급 - 환격 수법
+    // 중급 - 축머리 급소
     LifeDeathProblem(
       id: 11,
       name: '2-5',
@@ -1142,10 +1145,12 @@ class LifeDeathProblems {
       type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[0, 2], [1, 1], [2, 0], [2, 1], [2, 2]],
-      whiteStones: [[0, 0], [0, 1], [1, 0]],
-      correctMoves: [[1, 2]], // 환격
+      blackStones: [[2, 2], [3, 1], [3, 3], [4, 2]],
+      whiteStones: [[2, 3], [3, 2]],
+      correctMoves: [[2, 1]], // 축 급소
+      alternativeMoves: [[1, 2]],
     ),
+    // 중급 - 두 눈 만들기
     LifeDeathProblem(
       id: 12,
       name: '2-6',
@@ -1153,11 +1158,11 @@ class LifeDeathProblems {
       type: ProblemType.live,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 4]],
-      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [2, 4], [2, 3]],
-      correctMoves: [[0, 4]], // 확장
+      blackStones: [[0, 0], [0, 1], [0, 3], [0, 4], [1, 4]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [2, 4]],
+      correctMoves: [[0, 2]], // 중앙에 눈 만들기
     ),
-    // 고급 - 궁도 변형
+    // 고급 - 귀곡사 (귀에서 구부려 죽임)
     LifeDeathProblem(
       id: 13,
       name: '3-1',
@@ -1165,10 +1170,11 @@ class LifeDeathProblems {
       type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [0, 4]],
-      whiteStones: [[0, 0], [0, 1], [0, 2]],
-      correctMoves: [[0, 3]], // 치중
+      blackStones: [[0, 2], [1, 2], [2, 1], [2, 2]],
+      whiteStones: [[0, 0], [0, 1], [1, 0]],
+      correctMoves: [[1, 1]], // 귀곡사
     ),
+    // 고급 - 오궁도 (5칸)
     LifeDeathProblem(
       id: 14,
       name: '3-2',
@@ -1177,9 +1183,10 @@ class LifeDeathProblems {
       playerColor: Stone.black,
       boardSize: 9,
       blackStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [0, 5]],
-      whiteStones: [[0, 0], [0, 1], [0, 2], [0, 3]],
-      correctMoves: [[0, 4]], // 눈 자리 파괴
+      whiteStones: [[0, 0], [0, 1], [0, 3], [0, 4]],
+      correctMoves: [[0, 2]], // 5궁 급소
     ),
+    // 고급 - 복잡한 살기
     LifeDeathProblem(
       id: 15,
       name: '3-3',
@@ -1187,33 +1194,36 @@ class LifeDeathProblems {
       type: ProblemType.live,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [1, 5]],
-      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [2, 5]],
-      correctMoves: [[0, 6]],
+      blackStones: [[0, 0], [0, 2], [0, 4], [1, 4]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [2, 4]],
+      correctMoves: [[0, 1]], // 눈 확보
+      alternativeMoves: [[0, 3]],
     ),
-    // 고급 - 귀의 특수성
+    // 고급 - 쌍활 (서로 살기)
     LifeDeathProblem(
       id: 16,
       name: '3-4',
       difficulty: ProblemDifficulty.advanced,
-      type: ProblemType.kill,
+      type: ProblemType.live,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[1, 0], [1, 1], [1, 2], [1, 3], [0, 3], [2, 0]],
-      whiteStones: [[0, 0], [0, 1]],
-      correctMoves: [[0, 2]], // 귀 3칸 급소
+      blackStones: [[0, 0], [0, 1], [0, 2], [1, 3], [2, 3]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [2, 2], [3, 3]],
+      correctMoves: [[0, 3]], // 확장
     ),
+    // 고급 - 대마불사 급소
     LifeDeathProblem(
       id: 17,
       name: '3-5',
       difficulty: ProblemDifficulty.advanced,
-      type: ProblemType.live,
+      type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 4]],
-      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [2, 0], [2, 1], [2, 4]],
-      correctMoves: [[0, 4]], // 확장해서 살기
+      blackStones: [[1, 0], [1, 1], [1, 3], [2, 2], [2, 3], [2, 4], [1, 4]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [0, 3]],
+      correctMoves: [[1, 2]], // 끊기
     ),
+    // 고급 - 수상전
     LifeDeathProblem(
       id: 18,
       name: '3-6',
@@ -1221,9 +1231,9 @@ class LifeDeathProblems {
       type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 9,
-      blackStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [0, 4], [2, 0]],
-      whiteStones: [[0, 0], [0, 1], [0, 2]],
-      correctMoves: [[0, 3]], // 급소 치중
+      blackStones: [[2, 0], [2, 1], [2, 2], [1, 2], [0, 2]],
+      whiteStones: [[0, 0], [1, 0], [1, 1]],
+      correctMoves: [[0, 1]], // 수상전 급소
     ),
   ];
 
