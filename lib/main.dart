@@ -1610,10 +1610,14 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
   }
 
   void _openProblemList(String categoryKey) {
+    final problems = LifeDeathProblems.getByCategory(categoryKey);
+    if (problems.isEmpty) return;
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CategoryProblemList(
+        builder: (context) => LifeDeathProblemGame(
+          problems: problems,
           language: widget.language,
           categoryKey: categoryKey,
         ),
@@ -1834,19 +1838,18 @@ class _CategoryProblemListState extends State<CategoryProblemList> {
 
                 return GestureDetector(
                   onTap: () async {
-                    final result = await Navigator.push<bool>(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => LifeDeathProblemGame(
-                          problem: problem,
+                          problems: problems,
+                          initialIndex: index,
                           language: widget.language,
+                          categoryKey: widget.categoryKey,
                         ),
                       ),
                     );
-                    if (result == true) {
-                      await _markAsSolved(problem.id);
-                      setState(() {});
-                    }
+                    await _loadSolvedProblems();
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -1912,13 +1915,17 @@ class _CategoryProblemListState extends State<CategoryProblemList> {
 
 // 사활 문제 풀이 화면
 class LifeDeathProblemGame extends StatefulWidget {
-  final LifeDeathProblem problem;
+  final List<LifeDeathProblem> problems;
+  final int initialIndex;
   final GameLanguage language;
+  final String? categoryKey;
 
   const LifeDeathProblemGame({
     super.key,
-    required this.problem,
+    required this.problems,
+    this.initialIndex = 0,
     required this.language,
+    this.categoryKey,
   });
 
   @override
@@ -1928,6 +1935,8 @@ class LifeDeathProblemGame extends StatefulWidget {
 class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   late List<List<Stone>> _board;
   late int _boardSize;
+  late int _currentIndex;
+  late LifeDeathProblem _currentProblem;
   bool _isSolved = false;
   bool _showingAnswer = false;
   List<List<int>> _playerMoves = [];
@@ -1936,29 +1945,59 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   List<int>? _hintMove;
   int _sequenceStep = 0; // 다수 문제에서 현재 단계
   bool _waitingForAI = false; // AI 응수 대기 중
+  Set<int> _solvedProblems = {};
 
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.initialIndex;
+    _currentProblem = widget.problems[_currentIndex];
+    _loadSolvedProblems();
     _initializeBoard();
   }
 
+  Future<void> _loadSolvedProblems() async {
+    final prefs = await SharedPreferences.getInstance();
+    final solved = prefs.getStringList('solvedProblems') ?? [];
+    setState(() {
+      _solvedProblems = solved.map((s) => int.parse(s)).toSet();
+    });
+  }
+
+  Future<void> _markCurrentAsSolved() async {
+    final prefs = await SharedPreferences.getInstance();
+    _solvedProblems.add(_currentProblem.id);
+    await prefs.setStringList(
+      'solvedProblems',
+      _solvedProblems.map((i) => i.toString()).toList(),
+    );
+  }
+
+  void _switchToProblem(int index) {
+    if (index < 0 || index >= widget.problems.length) return;
+    setState(() {
+      _currentIndex = index;
+      _currentProblem = widget.problems[index];
+      _initializeBoard();
+    });
+  }
+
   void _initializeBoard() {
-    _boardSize = widget.problem.boardSize;
+    _boardSize = _currentProblem.boardSize;
     _board = List.generate(
       _boardSize,
       (_) => List.generate(_boardSize, (_) => Stone.none),
     );
 
     // 흑돌 배치
-    for (final pos in widget.problem.blackStones) {
+    for (final pos in _currentProblem.blackStones) {
       if (pos[0] < _boardSize && pos[1] < _boardSize) {
         _board[pos[0]][pos[1]] = Stone.black;
       }
     }
 
     // 백돌 배치
-    for (final pos in widget.problem.whiteStones) {
+    for (final pos in _currentProblem.whiteStones) {
       if (pos[0] < _boardSize && pos[1] < _boardSize) {
         _board[pos[0]][pos[1]] = Stone.white;
       }
@@ -1982,13 +2021,13 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
 
   // 다수 문제인지 확인
   bool get _isMultiMoveProbblem =>
-      widget.problem.moveSequence != null &&
-      widget.problem.moveSequence!.length > 1;
+      _currentProblem.moveSequence != null &&
+      _currentProblem.moveSequence!.length > 1;
 
   // 현재 단계의 정답 확인
   bool _isCorrectMoveForStep(int row, int col, int step) {
     if (_isMultiMoveProbblem) {
-      final sequence = widget.problem.moveSequence!;
+      final sequence = _currentProblem.moveSequence!;
       // step * 2가 사용자의 수 (0, 2, 4, ...)
       final playerMoveIndex = step * 2;
       if (playerMoveIndex < sequence.length) {
@@ -1998,13 +2037,13 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
       return false;
     } else {
       // 기존 한 수 문제
-      for (final correct in widget.problem.correctMoves) {
+      for (final correct in _currentProblem.correctMoves) {
         if (correct[0] == row && correct[1] == col) {
           return true;
         }
       }
-      if (widget.problem.alternativeMoves != null) {
-        for (final alt in widget.problem.alternativeMoves!) {
+      if (_currentProblem.alternativeMoves != null) {
+        for (final alt in _currentProblem.alternativeMoves!) {
           if (alt[0] == row && alt[1] == col) {
             return true;
           }
@@ -2015,7 +2054,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   }
 
   // AI 응수 색상 (사용자 반대)
-  Stone get _aiColor => widget.problem.playerColor == Stone.black
+  Stone get _aiColor => _currentProblem.playerColor == Stone.black
       ? Stone.white
       : Stone.black;
 
@@ -2023,7 +2062,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   void _executeAIResponse() {
     if (!_isMultiMoveProbblem) return;
 
-    final sequence = widget.problem.moveSequence!;
+    final sequence = _currentProblem.moveSequence!;
     // step * 2 + 1이 AI의 수 (1, 3, 5, ...)
     final aiMoveIndex = _sequenceStep * 2 + 1;
 
@@ -2046,7 +2085,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   // 다수 문제의 총 사용자 수 개수
   int get _totalPlayerMoves {
     if (!_isMultiMoveProbblem) return 1;
-    return (widget.problem.moveSequence!.length + 1) ~/ 2;
+    return (_currentProblem.moveSequence!.length + 1) ~/ 2;
   }
 
   void _onTap(int row, int col) {
@@ -2056,13 +2095,13 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     if (_isCorrectMoveForStep(row, col, _sequenceStep)) {
       // 정답
       setState(() {
-        _board[row][col] = widget.problem.playerColor;
+        _board[row][col] = _currentProblem.playerColor;
         _playerMoves.add([row, col]);
         _lastMove = [row, col];
       });
 
       if (_isMultiMoveProbblem) {
-        final sequence = widget.problem.moveSequence!;
+        final sequence = _currentProblem.moveSequence!;
         final aiMoveIndex = _sequenceStep * 2 + 1;
 
         if (aiMoveIndex < sequence.length) {
@@ -2089,7 +2128,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     } else {
       // 오답
       setState(() {
-        _board[row][col] = widget.problem.playerColor;
+        _board[row][col] = _currentProblem.playerColor;
         _lastMove = [row, col];
         _message = L10n.get(widget.language, 'incorrect');
       });
@@ -2113,12 +2152,12 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
       _showingAnswer = true;
       if (_isMultiMoveProbblem) {
         // 다수 문제는 첫 번째 수를 힌트로
-        final sequence = widget.problem.moveSequence!;
+        final sequence = _currentProblem.moveSequence!;
         if (sequence.isNotEmpty) {
           _hintMove = sequence[0];
         }
-      } else if (widget.problem.correctMoves.isNotEmpty) {
-        final answer = widget.problem.correctMoves[0];
+      } else if (_currentProblem.correctMoves.isNotEmpty) {
+        final answer = _currentProblem.correctMoves[0];
         _hintMove = answer;
       }
     });
@@ -2129,13 +2168,13 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     setState(() {
       if (_isMultiMoveProbblem) {
         // 현재 단계의 힌트
-        final sequence = widget.problem.moveSequence!;
+        final sequence = _currentProblem.moveSequence!;
         final playerMoveIndex = _sequenceStep * 2;
         if (playerMoveIndex < sequence.length) {
           _hintMove = sequence[playerMoveIndex];
         }
-      } else if (widget.problem.correctMoves.isNotEmpty) {
-        _hintMove = widget.problem.correctMoves[0];
+      } else if (_currentProblem.correctMoves.isNotEmpty) {
+        _hintMove = _currentProblem.correctMoves[0];
       }
     });
   }
@@ -2144,7 +2183,11 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${L10n.get(widget.language, 'lifeDeathProblems')} ${widget.problem.name}'),
+        title: Text(
+          widget.categoryKey != null
+              ? '${L10n.get(widget.language, widget.categoryKey!)} (${_currentIndex + 1}/${widget.problems.length})'
+              : _currentProblem.name,
+        ),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
@@ -2159,7 +2202,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
           // 문제 설명
           Container(
             padding: const EdgeInsets.all(16),
-            color: widget.problem.playerColor == Stone.black
+            color: _currentProblem.playerColor == Stone.black
                 ? Colors.grey.shade800
                 : Colors.grey.shade200,
             child: Row(
@@ -2170,7 +2213,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: widget.problem.playerColor == Stone.black
+                    color: _currentProblem.playerColor == Stone.black
                         ? Colors.black
                         : Colors.white,
                     border: Border.all(color: Colors.black),
@@ -2178,21 +2221,21 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.problem.type == ProblemType.kill
-                      ? (widget.problem.playerColor == Stone.black
+                  _currentProblem.type == ProblemType.kill
+                      ? (_currentProblem.playerColor == Stone.black
                           ? L10n.get(widget.language, 'killWhite')
                           : L10n.get(widget.language, 'killBlack'))
-                      : widget.problem.type == ProblemType.cut
-                          ? (widget.problem.playerColor == Stone.black
+                      : _currentProblem.type == ProblemType.cut
+                          ? (_currentProblem.playerColor == Stone.black
                               ? L10n.get(widget.language, 'cutWhite')
                               : L10n.get(widget.language, 'cutBlack'))
-                          : (widget.problem.playerColor == Stone.black
+                          : (_currentProblem.playerColor == Stone.black
                               ? L10n.get(widget.language, 'liveWithBlack')
                               : L10n.get(widget.language, 'liveWithWhite')),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: widget.problem.playerColor == Stone.black
+                    color: _currentProblem.playerColor == Stone.black
                         ? Colors.white
                         : Colors.black,
                   ),
@@ -2225,7 +2268,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
               ),
             ),
           // 정답 시 설명 표시
-          if (_isSolved && widget.problem.explanation != null)
+          if (_isSolved && _currentProblem.explanation != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               color: Colors.blue.shade50,
@@ -2236,7 +2279,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      widget.problem.explanation!,
+                      _currentProblem.explanation!,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.blue.shade900,
@@ -2309,42 +2352,87 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
           ),
           // 하단 버튼
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton.icon(
+                IconButton(
                   onPressed: _resetBoard,
                   icon: const Icon(Icons.refresh),
-                  label: Text(L10n.get(widget.language, 'retry')),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
-                    foregroundColor: Colors.white,
-                  ),
+                  tooltip: L10n.get(widget.language, 'retry'),
                 ),
                 if (!_isSolved && !_showingAnswer)
-                  ElevatedButton.icon(
+                  IconButton(
                     onPressed: _showAnswer,
-                    icon: const Icon(Icons.visibility),
-                    label: Text(L10n.get(widget.language, 'showAnswer')),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      foregroundColor: Colors.white,
-                    ),
+                    icon: const Icon(Icons.visibility, color: Colors.orange),
+                    tooltip: L10n.get(widget.language, 'showAnswer'),
                   ),
                 if (_isSolved)
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context, true);
+                  IconButton(
+                    onPressed: () async {
+                      await _markCurrentAsSolved();
+                      // 다음 문제로 자동 이동
+                      if (_currentIndex < widget.problems.length - 1) {
+                        _switchToProblem(_currentIndex + 1);
+                      }
                     },
-                    icon: const Icon(Icons.check),
-                    label: Text(L10n.get(widget.language, 'backToList')),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                    ),
+                    icon: const Icon(Icons.arrow_forward, color: Colors.green),
+                    tooltip: L10n.get(widget.language, 'nextProblem'),
                   ),
               ],
+            ),
+          ),
+          // 문제 번호 선택
+          Container(
+            padding: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(widget.problems.length, (index) {
+                  final problem = widget.problems[index];
+                  final isCurrent = index == _currentIndex;
+                  final isSolved = _solvedProblems.contains(problem.id);
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: InkWell(
+                      onTap: () => _switchToProblem(index),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: isCurrent
+                              ? Colors.blue
+                              : isSolved
+                                  ? Colors.green.shade100
+                                  : Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: isCurrent
+                                ? Colors.blue.shade700
+                                : isSolved
+                                    ? Colors.green
+                                    : Colors.grey.shade400,
+                            width: isCurrent ? 2 : 1,
+                          ),
+                        ),
+                        child: Center(
+                          child: isSolved && !isCurrent
+                              ? const Icon(Icons.check, color: Colors.green, size: 20)
+                              : Text(
+                                  '${index + 1}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: isCurrent ? Colors.white : Colors.black87,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
             ),
           ),
         ],
