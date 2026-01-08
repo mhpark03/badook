@@ -1014,7 +1014,7 @@ class _BadukGameState extends State<BadukGame> {
     });
   }
 
-  // 힌트용 최적 수 찾기 (전문가 레벨 MCTS)
+  // 힌트용 최적 수 찾기 (초반 정석 + 중후반 MCTS)
   List<int>? _findHintMove() {
     Stone playerColor = widget.vsAI ? widget.playerColor : currentPlayer;
 
@@ -1029,11 +1029,20 @@ class _BadukGameState extends State<BadukGame> {
 
     if (validMoves.isEmpty) return null;
 
-    // 전문가 레벨 설정
-    const int hintIterations = 1000;
-    const int hintPlayoutDepth = 150;
+    // 초반 정석 기반 힌트 (빠른 응답)
+    int stoneCount = _countStones();
+    int earlyGameThreshold = boardSize == 19 ? 20 : (boardSize == 13 ? 12 : 8);
+
+    if (stoneCount < earlyGameThreshold) {
+      List<int>? josekiHint = _findHintMoveJoseki(validMoves, playerColor);
+      if (josekiHint != null) return josekiHint;
+    }
+
+    // 중후반: MCTS (반복 횟수 최적화)
+    const int hintIterations = 500;  // 1000 -> 500으로 감소
+    const int hintPlayoutDepth = 100;  // 150 -> 100으로 감소
     const double hintExploration = 1.6;
-    const int hintCandidateCount = 20;
+    const int hintCandidateCount = 15;  // 20 -> 15로 감소
 
     // 보드 상태 저장
     List<List<Stone>> originalBoard = List.generate(
@@ -1127,6 +1136,118 @@ class _BadukGameState extends State<BadukGame> {
 
     // 폴백: 상위 후보 중 첫 번째
     return candidates.isNotEmpty ? candidates.first : null;
+  }
+
+  // 초반 정석 기반 힌트 (플레이어 관점)
+  List<int>? _findHintMoveJoseki(List<List<int>> validMoves, Stone playerColor) {
+    int stoneCount = _countStones();
+    Stone opponent = playerColor.opponent;
+
+    // 첫 수: 화점 또는 소목 추천
+    if (stoneCount == 0) {
+      List<List<int>> openings = [
+        ..._josekiDatabase['corner_33'] ?? [],
+        ..._josekiDatabase['corner_34'] ?? [],
+      ];
+      for (var move in openings) {
+        if (validMoves.any((m) => m[0] == move[0] && m[1] == move[1])) {
+          return move;
+        }
+      }
+    }
+
+    // 빈 코너 차지하기
+    List<List<int>> corners = [
+      ..._josekiDatabase['corner_33'] ?? [],
+      ..._josekiDatabase['corner_34'] ?? [],
+      ..._josekiDatabase['corner_35'] ?? [],
+    ];
+    for (var corner in corners) {
+      if (validMoves.any((m) => m[0] == corner[0] && m[1] == corner[1])) {
+        // 주변에 돌이 없으면 추천
+        bool hasNearbyStone = false;
+        for (int di = -2; di <= 2; di++) {
+          for (int dj = -2; dj <= 2; dj++) {
+            int ni = corner[0] + di;
+            int nj = corner[1] + dj;
+            if (_isValidPosition(ni, nj) && board[ni][nj] != Stone.none) {
+              hasNearbyStone = true;
+              break;
+            }
+          }
+          if (hasNearbyStone) break;
+        }
+        if (!hasNearbyStone) return corner;
+      }
+    }
+
+    // 상대 코너에 협공
+    for (var corner in _josekiDatabase['corner_33'] ?? []) {
+      if (board[corner[0]][corner[1]] == opponent) {
+        List<List<int>> approaches = _josekiDatabase['approach_33'] ?? [];
+        for (var approach in approaches) {
+          if (_isNearCorner(approach, corner) &&
+              validMoves.any((m) => m[0] == approach[0] && m[1] == approach[1])) {
+            return approach;
+          }
+        }
+      }
+    }
+
+    // 자기 돌 근처 날일자 확장
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == playerColor && _isCornerStone(i, j)) {
+          for (var knight in _josekiDatabase['knight_move'] ?? []) {
+            if (_isNearCorner(knight, [i, j]) &&
+                validMoves.any((m) => m[0] == knight[0] && m[1] == knight[1])) {
+              return knight;
+            }
+          }
+          // 두 칸 벌림
+          for (var ext in _josekiDatabase['two_space_extension'] ?? []) {
+            if (_isNearCorner(ext, [i, j]) &&
+                validMoves.any((m) => m[0] == ext[0] && m[1] == ext[1])) {
+              return ext;
+            }
+          }
+        }
+      }
+    }
+
+    // 변 차지하기 (3선 또는 4선)
+    List<List<int>> sidePoints = [];
+    int line3 = boardSize == 19 ? 2 : (boardSize == 13 ? 2 : 2);
+    int line4 = boardSize == 19 ? 3 : (boardSize == 13 ? 3 : 2);
+
+    for (int i = line3; i <= line4; i++) {
+      for (int j = 5; j < boardSize - 5; j += 3) {
+        sidePoints.add([i, j]);
+        sidePoints.add([boardSize - 1 - i, j]);
+        sidePoints.add([j, i]);
+        sidePoints.add([j, boardSize - 1 - i]);
+      }
+    }
+
+    for (var point in sidePoints) {
+      if (validMoves.any((m) => m[0] == point[0] && m[1] == point[1])) {
+        bool hasNearbyStone = false;
+        for (int di = -2; di <= 2; di++) {
+          for (int dj = -2; dj <= 2; dj++) {
+            int ni = point[0] + di;
+            int nj = point[1] + dj;
+            if (_isValidPosition(ni, nj) && board[ni][nj] != Stone.none) {
+              hasNearbyStone = true;
+              break;
+            }
+          }
+          if (hasNearbyStone) break;
+        }
+        if (!hasNearbyStone) return point;
+      }
+    }
+
+    return null;  // 정석 힌트 없음 -> MCTS로 폴백
   }
 
   // 힌트용 수 평가 (플레이어 관점)
