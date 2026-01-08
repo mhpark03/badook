@@ -967,6 +967,9 @@ class _BadukGameState extends State<BadukGame> {
       _updateMessage();
     });
 
+    // 자동 저장
+    _autoSave();
+
     return true;
   }
 
@@ -1471,6 +1474,33 @@ class _BadukGameState extends State<BadukGame> {
         SnackBar(content: Text(tr('gameSaved'))),
       );
     }
+  }
+
+  // 자동 저장 (무음)
+  Future<void> _autoSave() async {
+    // 게임이 끝났으면 저장 안 함
+    if (gameOver) return;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> gameState = {
+      'boardSize': boardSize,
+      'board': board.map((row) => row.map((s) => s.index).toList()).toList(),
+      'currentPlayer': currentPlayer.index,
+      'gameOver': gameOver,
+      'blackCaptures': blackCaptures,
+      'whiteCaptures': whiteCaptures,
+      'consecutivePasses': consecutivePasses,
+      'lastBoardState': lastBoardState,
+      'lastMove': lastMove,
+      'moveHistory': moveHistory,
+      'vsAI': widget.vsAI,
+      'playerColor': widget.playerColor.index,
+      'aiDifficulty': widget.aiDifficulty.index,
+      'saveTime': DateTime.now().toIso8601String(),
+    };
+
+    await prefs.setString('savedGame', jsonEncode(gameState));
   }
 
   // 저장된 게임이 있는지 확인
@@ -3437,6 +3467,13 @@ class _BadukGameState extends State<BadukGame> {
         }
       }
     });
+
+    // 게임 종료 시 저장된 게임 삭제, 진행 중이면 자동 저장
+    if (gameOver) {
+      deleteSavedGame();
+    } else {
+      _autoSave();
+    }
 
     if (!isAI && widget.vsAI && currentPlayer == aiColor && !gameOver) {
       _aiMove();
