@@ -132,6 +132,30 @@ class L10n {
       'aiNormalDesc': '기본적인 전략을 사용',
       'aiHardDesc': '고급 전략과 정석 사용',
       'aiExpertDesc': '최고 수준의 AI',
+      // 사활 문제
+      'lifeDeathProblems': '사활 문제',
+      'problemList': '문제 목록',
+      'problem': '문제',
+      'difficulty': '난이도',
+      'beginner': '입문',
+      'intermediate': '중급',
+      'advanced': '고급',
+      'blackToPlay': '흑 선',
+      'whiteToPlay': '백 선',
+      'killWhite': '백을 잡아라',
+      'killBlack': '흑을 잡아라',
+      'liveWithBlack': '흑으로 살아라',
+      'liveWithWhite': '백으로 살아라',
+      'correct': '정답입니다!',
+      'incorrect': '틀렸습니다. 다시 시도해보세요.',
+      'showAnswer': '정답 보기',
+      'nextProblem': '다음 문제',
+      'prevProblem': '이전 문제',
+      'retry': '다시 시도',
+      'problemSolved': '문제 풀이 완료!',
+      'solvedCount': '해결한 문제',
+      'totalProblems': '전체 문제',
+      'backToList': '목록으로',
     },
     GameLanguage.english: {
       'appTitle': 'Go',
@@ -192,6 +216,30 @@ class L10n {
       'aiNormalDesc': 'Uses basic strategies',
       'aiHardDesc': 'Advanced strategies and joseki',
       'aiExpertDesc': 'Strongest AI level',
+      // Life and Death Problems
+      'lifeDeathProblems': 'Life & Death',
+      'problemList': 'Problem List',
+      'problem': 'Problem',
+      'difficulty': 'Difficulty',
+      'beginner': 'Beginner',
+      'intermediate': 'Intermediate',
+      'advanced': 'Advanced',
+      'blackToPlay': 'Black to play',
+      'whiteToPlay': 'White to play',
+      'killWhite': 'Kill White',
+      'killBlack': 'Kill Black',
+      'liveWithBlack': 'Live with Black',
+      'liveWithWhite': 'Live with White',
+      'correct': 'Correct!',
+      'incorrect': 'Incorrect. Try again.',
+      'showAnswer': 'Show Answer',
+      'nextProblem': 'Next',
+      'prevProblem': 'Previous',
+      'retry': 'Retry',
+      'problemSolved': 'Problem Solved!',
+      'solvedCount': 'Solved',
+      'totalProblems': 'Total',
+      'backToList': 'Back to List',
     },
     GameLanguage.japanese: {
       'appTitle': '囲碁',
@@ -252,6 +300,30 @@ class L10n {
       'aiNormalDesc': '基本的な戦略を使用',
       'aiHardDesc': '高度な戦略と定石を使用',
       'aiExpertDesc': '最強レベルのAI',
+      // 詰碁問題
+      'lifeDeathProblems': '詰碁',
+      'problemList': '問題一覧',
+      'problem': '問題',
+      'difficulty': '難易度',
+      'beginner': '入門',
+      'intermediate': '中級',
+      'advanced': '上級',
+      'blackToPlay': '黒先',
+      'whiteToPlay': '白先',
+      'killWhite': '白を取れ',
+      'killBlack': '黒を取れ',
+      'liveWithBlack': '黒で生きよ',
+      'liveWithWhite': '白で生きよ',
+      'correct': '正解！',
+      'incorrect': '不正解。もう一度。',
+      'showAnswer': '答えを見る',
+      'nextProblem': '次へ',
+      'prevProblem': '前へ',
+      'retry': 'やり直し',
+      'problemSolved': '問題クリア！',
+      'solvedCount': '正解数',
+      'totalProblems': '全問題',
+      'backToList': '一覧に戻る',
     },
     GameLanguage.chinese: {
       'appTitle': '围棋',
@@ -312,6 +384,30 @@ class L10n {
       'aiNormalDesc': '使用基本策略',
       'aiHardDesc': '使用高级策略和定式',
       'aiExpertDesc': '最强AI级别',
+      // 死活题
+      'lifeDeathProblems': '死活题',
+      'problemList': '题目列表',
+      'problem': '题目',
+      'difficulty': '难度',
+      'beginner': '入门',
+      'intermediate': '中级',
+      'advanced': '高级',
+      'blackToPlay': '黑先',
+      'whiteToPlay': '白先',
+      'killWhite': '杀死白棋',
+      'killBlack': '杀死黑棋',
+      'liveWithBlack': '黑棋做活',
+      'liveWithWhite': '白棋做活',
+      'correct': '正确！',
+      'incorrect': '错误，请再试一次。',
+      'showAnswer': '查看答案',
+      'nextProblem': '下一题',
+      'prevProblem': '上一题',
+      'retry': '重试',
+      'problemSolved': '解题成功！',
+      'solvedCount': '已解决',
+      'totalProblems': '总题数',
+      'backToList': '返回列表',
     },
   };
 
@@ -515,6 +611,35 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                   const Icon(Icons.people, size: 28),
                   const SizedBox(width: 12),
                   Text(L10n.get(widget.language, 'twoPlayerMode'), style: const TextStyle(fontSize: 18)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            // 사활 문제
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LifeDeathProblemSelector(
+                      language: widget.language,
+                    ),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                backgroundColor: Colors.green.shade100,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.extension, size: 28, color: Colors.green),
+                  const SizedBox(width: 12),
+                  Text(
+                    L10n.get(widget.language, 'lifeDeathProblems'),
+                    style: const TextStyle(fontSize: 18, color: Colors.green),
+                  ),
                 ],
               ),
             ),
@@ -858,6 +983,937 @@ class _AIDifficultySelectorState extends State<AIDifficultySelector> {
 }
 
 enum Stone { none, black, white }
+
+// 사활 문제 난이도
+enum ProblemDifficulty { beginner, intermediate, advanced }
+
+// 문제 유형
+enum ProblemType { kill, live }
+
+// 사활 문제 클래스
+class LifeDeathProblem {
+  final int id;
+  final String name;
+  final ProblemDifficulty difficulty;
+  final ProblemType type;
+  final Stone playerColor;
+  final int boardSize;
+  final List<List<int>> blackStones;
+  final List<List<int>> whiteStones;
+  final List<List<int>> correctMoves; // 정답 수순
+  final List<List<int>>? alternativeMoves; // 대안 정답
+
+  const LifeDeathProblem({
+    required this.id,
+    required this.name,
+    required this.difficulty,
+    required this.type,
+    required this.playerColor,
+    required this.boardSize,
+    required this.blackStones,
+    required this.whiteStones,
+    required this.correctMoves,
+    this.alternativeMoves,
+  });
+}
+
+// 사활 문제 데이터베이스
+class LifeDeathProblems {
+  static const List<LifeDeathProblem> problems = [
+    // 입문 - 1선 따내기
+    LifeDeathProblem(
+      id: 1,
+      name: '1-1',
+      difficulty: ProblemDifficulty.beginner,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 1], [1, 0], [1, 2], [2, 1]],
+      whiteStones: [[0, 0]],
+      correctMoves: [[0, 0]], // 단수치면 됨 - 이미 단수 상태
+    ),
+    LifeDeathProblem(
+      id: 2,
+      name: '1-2',
+      difficulty: ProblemDifficulty.beginner,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 2], [1, 0], [1, 1], [2, 2]],
+      whiteStones: [[0, 0], [0, 1]],
+      correctMoves: [[1, 2]],
+    ),
+    LifeDeathProblem(
+      id: 3,
+      name: '1-3',
+      difficulty: ProblemDifficulty.beginner,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 3], [1, 0], [1, 1], [1, 2], [2, 3]],
+      whiteStones: [[0, 0], [0, 1], [0, 2]],
+      correctMoves: [[1, 3]],
+    ),
+    // 입문 - 축 (ladder)
+    LifeDeathProblem(
+      id: 4,
+      name: '1-4',
+      difficulty: ProblemDifficulty.beginner,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[2, 2], [3, 3]],
+      whiteStones: [[2, 3], [3, 2]],
+      correctMoves: [[2, 4]],
+    ),
+    LifeDeathProblem(
+      id: 5,
+      name: '1-5',
+      difficulty: ProblemDifficulty.beginner,
+      type: ProblemType.live,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 3]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [2, 3], [2, 2]],
+      correctMoves: [[0, 4]],
+    ),
+    // 입문 - 눈 만들기
+    LifeDeathProblem(
+      id: 6,
+      name: '1-6',
+      difficulty: ProblemDifficulty.beginner,
+      type: ProblemType.live,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 0], [0, 1], [0, 2], [0, 4], [0, 5], [1, 5]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [2, 5]],
+      correctMoves: [[0, 3]],
+    ),
+    // 중급 - 궁도
+    LifeDeathProblem(
+      id: 7,
+      name: '2-1',
+      difficulty: ProblemDifficulty.intermediate,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 3], [1, 0], [1, 1], [1, 2], [1, 3], [2, 0]],
+      whiteStones: [[0, 0], [0, 1], [0, 2]],
+      correctMoves: [[0, 1]], // 급소 - 가운데 치중
+    ),
+    LifeDeathProblem(
+      id: 8,
+      name: '2-2',
+      difficulty: ProblemDifficulty.intermediate,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 4], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [2, 0]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [0, 3]],
+      correctMoves: [[0, 1]],
+      alternativeMoves: [[0, 2]],
+    ),
+    LifeDeathProblem(
+      id: 9,
+      name: '2-3',
+      difficulty: ProblemDifficulty.intermediate,
+      type: ProblemType.live,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 4]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [2, 4], [2, 3]],
+      correctMoves: [[0, 5]],
+    ),
+    LifeDeathProblem(
+      id: 10,
+      name: '2-4',
+      difficulty: ProblemDifficulty.intermediate,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [2, 5], [0, 5]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]],
+      correctMoves: [[0, 2]], // 가운데 급소
+    ),
+    // 중급 - 접바둑 수법
+    LifeDeathProblem(
+      id: 11,
+      name: '2-5',
+      difficulty: ProblemDifficulty.intermediate,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 2], [1, 1], [2, 0], [2, 1], [2, 2]],
+      whiteStones: [[0, 0], [0, 1], [1, 0]],
+      correctMoves: [[1, 2]],
+    ),
+    LifeDeathProblem(
+      id: 12,
+      name: '2-6',
+      difficulty: ProblemDifficulty.intermediate,
+      type: ProblemType.live,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 3], [1, 4]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [2, 3], [2, 4]],
+      correctMoves: [[0, 4]],
+    ),
+    // 고급 - 복잡한 사활
+    LifeDeathProblem(
+      id: 13,
+      name: '3-1',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 4], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [2, 4]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [0, 3]],
+      correctMoves: [[0, 1]],
+    ),
+    LifeDeathProblem(
+      id: 14,
+      name: '3-2',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 5], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [2, 5]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]],
+      correctMoves: [[0, 2]],
+    ),
+    LifeDeathProblem(
+      id: 15,
+      name: '3-3',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.live,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [1, 5]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [2, 5]],
+      correctMoves: [[0, 6]],
+    ),
+    // 고급 - 귀의 특수성
+    LifeDeathProblem(
+      id: 16,
+      name: '3-4',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 2], [1, 2], [2, 0], [2, 1], [2, 2]],
+      whiteStones: [[0, 0], [0, 1], [1, 0], [1, 1]],
+      correctMoves: [[0, 0]], // 귀에서 2x2 잡기
+    ),
+    LifeDeathProblem(
+      id: 17,
+      name: '3-5',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.live,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 3]],
+      whiteStones: [[1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2], [2, 3]],
+      correctMoves: [[0, 4]],
+    ),
+    LifeDeathProblem(
+      id: 18,
+      name: '3-6',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 9,
+      blackStones: [[0, 3], [1, 0], [1, 1], [1, 3], [2, 2], [2, 3]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [1, 2]],
+      correctMoves: [[0, 1]],
+    ),
+  ];
+
+  static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
+    return problems.where((p) => p.difficulty == difficulty).toList();
+  }
+
+  static LifeDeathProblem? getById(int id) {
+    try {
+      return problems.firstWhere((p) => p.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+}
+
+// 사활 문제 선택 화면
+class LifeDeathProblemSelector extends StatefulWidget {
+  final GameLanguage language;
+
+  const LifeDeathProblemSelector({
+    super.key,
+    required this.language,
+  });
+
+  @override
+  State<LifeDeathProblemSelector> createState() => _LifeDeathProblemSelectorState();
+}
+
+class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
+  ProblemDifficulty _selectedDifficulty = ProblemDifficulty.beginner;
+  Set<int> _solvedProblems = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSolvedProblems();
+  }
+
+  Future<void> _loadSolvedProblems() async {
+    final prefs = await SharedPreferences.getInstance();
+    final solved = prefs.getStringList('solvedProblems') ?? [];
+    setState(() {
+      _solvedProblems = solved.map((s) => int.parse(s)).toSet();
+    });
+  }
+
+  Future<void> _markAsSolved(int problemId) async {
+    final prefs = await SharedPreferences.getInstance();
+    _solvedProblems.add(problemId);
+    await prefs.setStringList(
+      'solvedProblems',
+      _solvedProblems.map((i) => i.toString()).toList(),
+    );
+  }
+
+  String _getDifficultyName(ProblemDifficulty difficulty) {
+    switch (difficulty) {
+      case ProblemDifficulty.beginner:
+        return L10n.get(widget.language, 'beginner');
+      case ProblemDifficulty.intermediate:
+        return L10n.get(widget.language, 'intermediate');
+      case ProblemDifficulty.advanced:
+        return L10n.get(widget.language, 'advanced');
+    }
+  }
+
+  Color _getDifficultyColor(ProblemDifficulty difficulty) {
+    switch (difficulty) {
+      case ProblemDifficulty.beginner:
+        return Colors.green;
+      case ProblemDifficulty.intermediate:
+        return Colors.orange;
+      case ProblemDifficulty.advanced:
+        return Colors.red;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final problems = LifeDeathProblems.getByDifficulty(_selectedDifficulty);
+    final solvedCount = problems.where((p) => _solvedProblems.contains(p.id)).length;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.get(widget.language, 'lifeDeathProblems')),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: Column(
+        children: [
+          // 난이도 선택 탭
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: ProblemDifficulty.values.map((difficulty) {
+                final isSelected = difficulty == _selectedDifficulty;
+                final difficultyProblems = LifeDeathProblems.getByDifficulty(difficulty);
+                final difficultySolvedCount = difficultyProblems
+                    .where((p) => _solvedProblems.contains(p.id))
+                    .length;
+
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedDifficulty = difficulty;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isSelected
+                            ? _getDifficultyColor(difficulty)
+                            : Colors.grey.shade200,
+                        foregroundColor: isSelected ? Colors.white : Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _getDifficultyName(difficulty),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '$difficultySolvedCount/${difficultyProblems.length}',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          // 진행 상황
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${L10n.get(widget.language, 'solvedCount')}: $solvedCount/${problems.length}',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                LinearProgressIndicator(
+                  value: problems.isEmpty ? 0 : solvedCount / problems.length,
+                  backgroundColor: Colors.grey.shade300,
+                  valueColor: AlwaysStoppedAnimation(_getDifficultyColor(_selectedDifficulty)),
+                  minHeight: 8,
+                ).expand(),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          // 문제 목록
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+              ),
+              itemCount: problems.length,
+              itemBuilder: (context, index) {
+                final problem = problems[index];
+                final isSolved = _solvedProblems.contains(problem.id);
+
+                return GestureDetector(
+                  onTap: () async {
+                    final result = await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LifeDeathProblemGame(
+                          problem: problem,
+                          language: widget.language,
+                        ),
+                      ),
+                    );
+                    if (result == true) {
+                      await _markAsSolved(problem.id);
+                      setState(() {});
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: isSolved ? Colors.green.shade100 : Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isSolved ? Colors.green : Colors.grey.shade300,
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (isSolved)
+                          const Icon(Icons.check_circle, color: Colors.green, size: 24),
+                        Text(
+                          problem.name,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: isSolved ? Colors.green.shade700 : Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          problem.type == ProblemType.kill
+                              ? (problem.playerColor == Stone.black
+                                  ? L10n.get(widget.language, 'killWhite')
+                                  : L10n.get(widget.language, 'killBlack'))
+                              : (problem.playerColor == Stone.black
+                                  ? L10n.get(widget.language, 'liveWithBlack')
+                                  : L10n.get(widget.language, 'liveWithWhite')),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey.shade600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// LinearProgressIndicator를 Row에서 사용하기 위한 확장
+extension ExpandedWidget on Widget {
+  Widget expand() => Expanded(child: Padding(padding: const EdgeInsets.only(left: 16), child: this));
+}
+
+// 사활 문제 풀이 화면
+class LifeDeathProblemGame extends StatefulWidget {
+  final LifeDeathProblem problem;
+  final GameLanguage language;
+
+  const LifeDeathProblemGame({
+    super.key,
+    required this.problem,
+    required this.language,
+  });
+
+  @override
+  State<LifeDeathProblemGame> createState() => _LifeDeathProblemGameState();
+}
+
+class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
+  late List<List<Stone>> _board;
+  late int _boardSize;
+  bool _isSolved = false;
+  bool _showingAnswer = false;
+  List<List<int>> _playerMoves = [];
+  String _message = '';
+  List<int>? _lastMove;
+  List<int>? _hintMove;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeBoard();
+  }
+
+  void _initializeBoard() {
+    _boardSize = widget.problem.boardSize;
+    _board = List.generate(
+      _boardSize,
+      (_) => List.generate(_boardSize, (_) => Stone.none),
+    );
+
+    // 흑돌 배치
+    for (final pos in widget.problem.blackStones) {
+      if (pos[0] < _boardSize && pos[1] < _boardSize) {
+        _board[pos[0]][pos[1]] = Stone.black;
+      }
+    }
+
+    // 백돌 배치
+    for (final pos in widget.problem.whiteStones) {
+      if (pos[0] < _boardSize && pos[1] < _boardSize) {
+        _board[pos[0]][pos[1]] = Stone.white;
+      }
+    }
+
+    _isSolved = false;
+    _showingAnswer = false;
+    _playerMoves = [];
+    _message = '';
+    _lastMove = null;
+    _hintMove = null;
+  }
+
+  void _resetBoard() {
+    setState(() {
+      _initializeBoard();
+    });
+  }
+
+  bool _isCorrectMove(int row, int col) {
+    // 첫 수가 정답인지 확인
+    for (final correct in widget.problem.correctMoves) {
+      if (correct[0] == row && correct[1] == col) {
+        return true;
+      }
+    }
+    // 대안 정답 확인
+    if (widget.problem.alternativeMoves != null) {
+      for (final alt in widget.problem.alternativeMoves!) {
+        if (alt[0] == row && alt[1] == col) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  void _onTap(int row, int col) {
+    if (_isSolved || _showingAnswer) return;
+    if (_board[row][col] != Stone.none) return;
+
+    // 첫 수만 확인 (간단한 사활 문제)
+    if (_playerMoves.isEmpty) {
+      if (_isCorrectMove(row, col)) {
+        setState(() {
+          _board[row][col] = widget.problem.playerColor;
+          _playerMoves.add([row, col]);
+          _lastMove = [row, col];
+          _isSolved = true;
+          _message = L10n.get(widget.language, 'correct');
+        });
+      } else {
+        setState(() {
+          _board[row][col] = widget.problem.playerColor;
+          _lastMove = [row, col];
+          _message = L10n.get(widget.language, 'incorrect');
+        });
+        // 잠시 후 돌 제거
+        Future.delayed(const Duration(milliseconds: 800), () {
+          if (mounted) {
+            setState(() {
+              _board[row][col] = Stone.none;
+              _lastMove = null;
+              _message = '';
+            });
+          }
+        });
+      }
+    }
+  }
+
+  void _showAnswer() {
+    if (_isSolved) return;
+    setState(() {
+      _showingAnswer = true;
+      if (widget.problem.correctMoves.isNotEmpty) {
+        final answer = widget.problem.correctMoves[0];
+        _hintMove = answer;
+      }
+    });
+  }
+
+  void _showHint() {
+    if (_isSolved || _showingAnswer) return;
+    setState(() {
+      if (widget.problem.correctMoves.isNotEmpty) {
+        _hintMove = widget.problem.correctMoves[0];
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${L10n.get(widget.language, 'problem')} ${widget.problem.name}'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.lightbulb_outline),
+            onPressed: _showHint,
+            tooltip: L10n.get(widget.language, 'hint'),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // 문제 설명
+          Container(
+            padding: const EdgeInsets.all(16),
+            color: widget.problem.playerColor == Stone.black
+                ? Colors.grey.shade800
+                : Colors.grey.shade200,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: widget.problem.playerColor == Stone.black
+                        ? Colors.black
+                        : Colors.white,
+                    border: Border.all(color: Colors.black),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  widget.problem.type == ProblemType.kill
+                      ? (widget.problem.playerColor == Stone.black
+                          ? L10n.get(widget.language, 'killWhite')
+                          : L10n.get(widget.language, 'killBlack'))
+                      : (widget.problem.playerColor == Stone.black
+                          ? L10n.get(widget.language, 'liveWithBlack')
+                          : L10n.get(widget.language, 'liveWithWhite')),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: widget.problem.playerColor == Stone.black
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // 메시지 표시
+          if (_message.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(12),
+              color: _isSolved ? Colors.green : Colors.red.shade100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    _isSolved ? Icons.check_circle : Icons.close,
+                    color: _isSolved ? Colors.white : Colors.red,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    _message,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: _isSolved ? Colors.white : Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          // 바둑판
+          Expanded(
+            child: Center(
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDEB887),
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        // 문제 영역만 표시 (7x7 영역으로 제한)
+                        final displaySize = 7;
+                        final cellSize = constraints.maxWidth / displaySize;
+
+                        return CustomPaint(
+                          painter: ProblemBoardPainter(
+                            boardSize: displaySize,
+                          ),
+                          child: Stack(
+                            children: [
+                              // 돌 및 터치 영역
+                              for (int row = 0; row < displaySize; row++)
+                                for (int col = 0; col < displaySize; col++)
+                                  Positioned(
+                                    left: col * cellSize,
+                                    top: row * cellSize,
+                                    width: cellSize,
+                                    height: cellSize,
+                                    child: GestureDetector(
+                                      onTap: () => _onTap(row, col),
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: Center(
+                                          child: _buildStone(row, col, cellSize),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // 하단 버튼
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: _resetBoard,
+                  icon: const Icon(Icons.refresh),
+                  label: Text(L10n.get(widget.language, 'retry')),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+                if (!_isSolved && !_showingAnswer)
+                  ElevatedButton.icon(
+                    onPressed: _showAnswer,
+                    icon: const Icon(Icons.visibility),
+                    label: Text(L10n.get(widget.language, 'showAnswer')),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                if (_isSolved)
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    icon: const Icon(Icons.check),
+                    label: Text(L10n.get(widget.language, 'backToList')),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStone(int row, int col, double cellSize) {
+    final stone = _board[row][col];
+    final isLastMove = _lastMove != null && _lastMove![0] == row && _lastMove![1] == col;
+    final isHint = _hintMove != null && _hintMove![0] == row && _hintMove![1] == col;
+
+    if (stone == Stone.none) {
+      // 힌트 표시
+      if (isHint) {
+        return Container(
+          width: cellSize * 0.5,
+          height: cellSize * 0.5,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.yellow.withOpacity(0.7),
+            border: Border.all(color: Colors.orange, width: 2),
+          ),
+          child: const Icon(Icons.lightbulb, size: 16, color: Colors.orange),
+        );
+      }
+      return const SizedBox();
+    }
+
+    final stoneSize = cellSize * 0.9;
+    return Container(
+      width: stoneSize,
+      height: stoneSize,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          center: const Alignment(-0.3, -0.3),
+          colors: stone == Stone.black
+              ? [Colors.grey.shade700, Colors.black]
+              : [Colors.white, Colors.grey.shade300],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 3,
+            offset: const Offset(2, 2),
+          ),
+        ],
+        border: stone == Stone.white
+            ? Border.all(color: Colors.grey.shade400, width: 0.5)
+            : null,
+      ),
+      child: isLastMove
+          ? Center(
+              child: Container(
+                width: stoneSize * 0.3,
+                height: stoneSize * 0.3,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: stone == Stone.black ? Colors.white : Colors.black,
+                ),
+              ),
+            )
+          : null,
+    );
+  }
+}
+
+// 문제용 바둑판 페인터
+class ProblemBoardPainter extends CustomPainter {
+  final int boardSize;
+
+  ProblemBoardPainter({required this.boardSize});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cellSize = size.width / boardSize;
+    final paint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    // 세로선
+    for (int i = 0; i < boardSize; i++) {
+      final x = cellSize / 2 + i * cellSize;
+      canvas.drawLine(
+        Offset(x, cellSize / 2),
+        Offset(x, size.height - cellSize / 2),
+        paint,
+      );
+    }
+
+    // 가로선
+    for (int i = 0; i < boardSize; i++) {
+      final y = cellSize / 2 + i * cellSize;
+      canvas.drawLine(
+        Offset(cellSize / 2, y),
+        Offset(size.width - cellSize / 2, y),
+        paint,
+      );
+    }
+
+    // 화점 (3x3 위치에만)
+    if (boardSize >= 7) {
+      final dotPaint = Paint()
+        ..color = Colors.black
+        ..style = PaintingStyle.fill;
+      final dotRadius = cellSize * 0.1;
+
+      // 귀 화점
+      canvas.drawCircle(
+        Offset(cellSize / 2 + 2 * cellSize, cellSize / 2 + 2 * cellSize),
+        dotRadius,
+        dotPaint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant ProblemBoardPainter oldDelegate) {
+    return oldDelegate.boardSize != boardSize;
+  }
+}
 
 // MCTS 노드 클래스
 class MCTSNode {
