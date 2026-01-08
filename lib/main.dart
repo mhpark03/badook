@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:collection';
 import 'dart:math';
 import 'dart:convert';
+import 'dart:async';
 
 void main() {
   runApp(const BadukApp());
@@ -88,6 +89,7 @@ class L10n {
       'whiteTurn': '백의 차례입니다',
       'yourTurn': '당신의 차례입니다',
       'aiThinking': 'AI가 생각 중...',
+      'aiThinkingTime': 'AI가 생각 중... ({time}초)',
       'aiPass': 'AI 패스',
       'blackPass': '흑 패스',
       'whitePass': '백 패스',
@@ -147,6 +149,7 @@ class L10n {
       'whiteTurn': "White's turn",
       'yourTurn': 'Your turn',
       'aiThinking': 'AI thinking...',
+      'aiThinkingTime': 'AI thinking... ({time}s)',
       'aiPass': 'AI passed',
       'blackPass': 'Black passed',
       'whitePass': 'White passed',
@@ -206,6 +209,7 @@ class L10n {
       'whiteTurn': '白の番です',
       'yourTurn': 'あなたの番です',
       'aiThinking': 'AI思考中...',
+      'aiThinkingTime': 'AI思考中... ({time}秒)',
       'aiPass': 'AIパス',
       'blackPass': '黒パス',
       'whitePass': '白パス',
@@ -265,6 +269,7 @@ class L10n {
       'whiteTurn': '白方回合',
       'yourTurn': '你的回合',
       'aiThinking': 'AI思考中...',
+      'aiThinkingTime': 'AI思考中... ({time}秒)',
       'aiPass': 'AI跳过',
       'blackPass': '黑方跳过',
       'whitePass': '白方跳过',
@@ -945,47 +950,48 @@ class AISettings {
 
     switch (difficulty) {
       case AIDifficulty.beginner:
-        baseIterations = 20;
-        baseDepth = 20;
+        baseIterations = 30;
+        baseDepth = 25;
         exploration = 1.414;
         useHeuristics = false;
         randomness = 0.4;
         baseCandidates = 5;
         break;
       case AIDifficulty.intermediate:
-        baseIterations = 50;
-        baseDepth = 30;
+        baseIterations = 100;
+        baseDepth = 50;
         exploration = 1.414;
         useHeuristics = true;
         randomness = 0.2;
         baseCandidates = 8;
         break;
       case AIDifficulty.advanced:
-        baseIterations = 100;
-        baseDepth = 50;
+        baseIterations = 300;
+        baseDepth = 80;
         exploration = 1.5;
         useHeuristics = true;
         randomness = 0.1;
-        baseCandidates = 10;
+        baseCandidates = 12;
         break;
       case AIDifficulty.expert:
-        baseIterations = 150;
-        baseDepth = 60;
+        // 10초 이내 최대 성능 (강한 AI)
+        baseIterations = 600;
+        baseDepth = 100;
         exploration = 1.6;
         useHeuristics = true;
-        randomness = 0.05;
-        baseCandidates = 12;
+        randomness = 0.02;
+        baseCandidates = 15;
         break;
     }
 
     // 디바이스 성능에 따라 조정
     return AISettings(
-      mctsIterations: (baseIterations * multiplier).round().clamp(10, 500),
-      playoutDepth: (baseDepth * multiplier).round().clamp(10, 150),
+      mctsIterations: (baseIterations * multiplier).round().clamp(10, 1500),
+      playoutDepth: (baseDepth * multiplier).round().clamp(10, 200),
       explorationConstant: exploration,
       useHeuristics: useHeuristics,
       randomness: randomness,
-      candidateCount: (baseCandidates * multiplier).round().clamp(3, 20),
+      candidateCount: (baseCandidates * multiplier).round().clamp(3, 25),
     );
   }
 
@@ -1043,6 +1049,11 @@ class _BadukGameState extends State<BadukGame> {
   final Random _random = Random();
   late AISettings _aiSettings;
 
+  // AI 계산 시간 표시
+  Timer? _thinkingTimer;
+  int _thinkingSeconds = 0;
+  Stopwatch? _thinkingStopwatch;
+
   // 힌트 관련 변수
   List<int>? hintMove;
   bool showHint = false;
@@ -1078,6 +1089,32 @@ class _BadukGameState extends State<BadukGame> {
         _aiMove();
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _stopThinkingTimer();
+    super.dispose();
+  }
+
+  // 타이머 시작 (AI 계산 시간 표시)
+  void _startThinkingTimer() {
+    _thinkingSeconds = 0;
+    _thinkingStopwatch = Stopwatch()..start();
+    _thinkingTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _thinkingSeconds = _thinkingStopwatch?.elapsed.inSeconds ?? 0;
+        gameMessage = tr('aiThinkingTime').replaceAll('{time}', '$_thinkingSeconds');
+      });
+    });
+  }
+
+  // 타이머 정지
+  void _stopThinkingTimer() {
+    _thinkingTimer?.cancel();
+    _thinkingTimer = null;
+    _thinkingStopwatch?.stop();
+    _thinkingStopwatch = null;
   }
 
   // 정석 데이터베이스 초기화
@@ -1271,10 +1308,12 @@ class _BadukGameState extends State<BadukGame> {
       isAIThinking = true;
       gameMessage = tr('aiThinking');
     });
+    _startThinkingTimer();
 
     Future.delayed(const Duration(milliseconds: 100), () {
       List<int>? hint = _findHintMove();
 
+      _stopThinkingTimer();
       setState(() {
         isAIThinking = false;
         if (hint != null) {
@@ -1871,9 +1910,13 @@ class _BadukGameState extends State<BadukGame> {
       isAIThinking = true;
       gameMessage = tr('aiThinking');
     });
+    _startThinkingTimer();
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      if (gameOver) return;
+      if (gameOver) {
+        _stopThinkingTimer();
+        return;
+      }
 
       List<int>? bestMove = _findBestMove();
 
@@ -1883,6 +1926,7 @@ class _BadukGameState extends State<BadukGame> {
         _pass(isAI: true);
       }
 
+      _stopThinkingTimer();
       setState(() {
         isAIThinking = false;
         if (!gameOver) {
