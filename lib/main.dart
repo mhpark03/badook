@@ -1117,6 +1117,7 @@ class LifeDeathProblem {
   final List<List<int>> whiteStones;
   final List<List<int>> correctMoves; // 정답 수순
   final List<List<int>>? alternativeMoves; // 대안 정답
+  final String? explanation; // 정답 설명
 
   const LifeDeathProblem({
     required this.id,
@@ -1129,6 +1130,7 @@ class LifeDeathProblem {
     required this.whiteStones,
     required this.correctMoves,
     this.alternativeMoves,
+    this.explanation,
   });
 }
 
@@ -1148,6 +1150,7 @@ class LifeDeathProblems {
       blackStones: [[0, 2], [1, 0]],
       whiteStones: [[0, 0], [0, 1]],
       correctMoves: [[1, 1]],
+      explanation: '단수(單手)란 돌의 활로가 하나만 남은 상태입니다. 백돌의 마지막 활로를 막으면 백돌이 잡힙니다.',
     ),
 
     // 1-2: 단수치기 - 3점 잡기
@@ -1161,6 +1164,7 @@ class LifeDeathProblems {
       blackStones: [[0, 3], [1, 0], [1, 1]],
       whiteStones: [[0, 0], [0, 1], [0, 2]],
       correctMoves: [[1, 2]],
+      explanation: '연결된 돌들은 하나의 그룹으로 활로를 공유합니다. 그룹 전체의 마지막 활로를 막으면 모든 돌이 한꺼번에 잡힙니다.',
     ),
 
     // 1-3: 귀에서 1점 잡기
@@ -1174,6 +1178,7 @@ class LifeDeathProblems {
       blackStones: [[0, 1], [1, 1], [2, 0]],
       whiteStones: [[1, 0]],
       correctMoves: [[0, 0]],
+      explanation: '귀(꼭짓점)에 있는 돌은 활로가 2개뿐입니다. 변에서는 3개, 중앙에서는 4개입니다. 귀의 돌은 잡기 쉽습니다.',
     ),
 
     // 1-4: 귀에서 3점 잡기
@@ -1187,6 +1192,7 @@ class LifeDeathProblems {
       blackStones: [[0, 2], [1, 2], [2, 0], [2, 1]],
       whiteStones: [[0, 0], [1, 0], [1, 1]],
       correctMoves: [[0, 1]],
+      explanation: '귀에서는 돌이 여러 개 연결되어 있어도 변과 귀로 활로가 제한됩니다. 급소를 찾아 단수를 치면 잡을 수 있습니다.',
     ),
 
     // 1-5: 두 눈 만들기 (살기)
@@ -1200,6 +1206,7 @@ class LifeDeathProblems {
       blackStones: [[0, 0], [0, 1], [0, 3], [0, 4]],
       whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [0, 5]],
       correctMoves: [[0, 2]],
+      explanation: '돌이 살려면 반드시 두 개의 눈이 필요합니다. 가운데를 막아 양쪽에 눈을 만들면 절대로 잡히지 않습니다.',
     ),
 
     // 1-6: 늘어서 살기
@@ -1213,6 +1220,7 @@ class LifeDeathProblems {
       blackStones: [[0, 0], [0, 1], [0, 2]],
       whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [0, 4]],
       correctMoves: [[0, 3]],
+      explanation: '공간이 부족하면 확장해서 두 눈을 만들 자리를 확보해야 합니다. 늘어서 영역을 넓히는 것이 살기의 기본입니다.',
     ),
 
     // ===== 중급 (Intermediate) - 3궁도 패턴 =====
@@ -1228,6 +1236,7 @@ class LifeDeathProblems {
       blackStones: [[0, 3], [1, 3], [2, 0], [2, 1], [2, 2], [2, 3]],
       whiteStones: [[1, 0], [1, 1], [1, 2]],
       correctMoves: [[0, 1]],
+      explanation: '직삼궁(直三宮)은 일직선으로 3칸의 공간입니다. 가운데 급소에 치중하면 상대는 한쪽만 막을 수 있어 두 눈을 만들지 못합니다.',
     ),
 
     // 2-2: 곡삼궁 - 꺾인 3궁도 급소
@@ -1241,6 +1250,7 @@ class LifeDeathProblems {
       blackStones: [[0, 2], [1, 2], [2, 1], [3, 0], [3, 1]],
       whiteStones: [[1, 0], [2, 0]],
       correctMoves: [[1, 1]],
+      explanation: '곡삼궁(曲三宮)은 ㄱ자로 꺾인 3칸 공간입니다. 꺾인 부분이 급소이며, 여기에 치중하면 두 눈을 만들 수 없습니다.',
     ),
 
     // 2-3: 직삼궁 살리기 (백선)
@@ -1254,6 +1264,7 @@ class LifeDeathProblems {
       blackStones: [[0, 3], [1, 3], [2, 0], [2, 1], [2, 2], [2, 3]],
       whiteStones: [[1, 0], [1, 1], [1, 2]],
       correctMoves: [[0, 1]],
+      explanation: '3궁도에서 살려면 급소에 먼저 두어야 합니다. 가운데를 먼저 차지하면 양쪽에 눈을 만들어 살 수 있습니다.',
     ),
 
     // 2-4: 2선 급소
@@ -1267,6 +1278,7 @@ class LifeDeathProblems {
       blackStones: [[0, 2], [1, 2], [2, 2], [3, 0], [3, 1], [3, 2]],
       whiteStones: [[1, 0], [2, 0], [2, 1]],
       correctMoves: [[1, 1]],
+      explanation: '2선(변에서 두 번째 줄)의 급소는 사활에서 매우 중요합니다. 이 자리를 차지하면 상대의 눈 공간을 효과적으로 줄일 수 있습니다.',
     ),
 
     // 2-5: 환격 (던져넣기)
@@ -1280,6 +1292,7 @@ class LifeDeathProblems {
       blackStones: [[0, 2], [1, 2], [2, 0], [2, 1]],
       whiteStones: [[0, 0], [1, 0], [1, 1]],
       correctMoves: [[0, 1]],
+      explanation: '환격(還擊)은 상대 집 안에 돌을 던져넣는 수법입니다. 잡히더라도 되잡으면서 상대를 잡을 수 있는 묘수입니다.',
     ),
 
     // 2-6: 눈 자리 축소
@@ -1293,6 +1306,7 @@ class LifeDeathProblems {
       blackStones: [[0, 4], [1, 4], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4]],
       whiteStones: [[0, 0], [1, 0], [1, 1], [1, 2], [1, 3]],
       correctMoves: [[0, 2]],
+      explanation: '궁도가 넓으면 살기 쉽습니다. 잡으려면 궁도를 좁혀 3궁도 이하로 만들어야 합니다. 급소에 치중하여 공간을 줄이세요.',
     ),
 
     // ===== 고급 (Advanced) - 4궁도, 5궁도, 특수형 =====
@@ -1308,6 +1322,7 @@ class LifeDeathProblems {
       blackStones: [[0, 2], [1, 2], [2, 2], [3, 0], [3, 1], [3, 2]],
       whiteStones: [[1, 0], [1, 1], [2, 0], [2, 1]],
       correctMoves: [[0, 1]],
+      explanation: '귀곡사(龜曲四)는 귀에서 ㄱ자로 꺾인 4궁도입니다. 일반적인 4궁도는 살 수 있지만, 귀에서는 특수한 규칙으로 죽는 모양입니다.',
     ),
 
     // 3-2: 직사궁 급소 (4궁도 직선)
@@ -1321,6 +1336,7 @@ class LifeDeathProblems {
       blackStones: [[0, 4], [1, 4], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4]],
       whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3]],
       correctMoves: [[0, 1], [0, 2]],
+      explanation: '직사궁(直四宮)은 일직선 4칸입니다. 보통은 살 수 있지만, 양쪽 2선에 치중하면 3궁도로 줄여서 잡을 수 있습니다.',
     ),
 
     // 3-3: 꽃사궁 (뭉친 4궁도)
@@ -1334,6 +1350,7 @@ class LifeDeathProblems {
       blackStones: [[0, 2], [1, 2], [2, 2], [3, 0], [3, 1], [3, 2]],
       whiteStones: [[1, 0], [2, 0], [2, 1]],
       correctMoves: [[1, 1]],
+      explanation: '꽃사궁은 T자 모양의 4궁도입니다. 가운데 치중 한 수로 3궁도가 되어 죽습니다. 모양이 뭉쳐있어 약한 형태입니다.',
     ),
 
     // 3-4: 오궁도화 (5궁도 급소)
@@ -1347,6 +1364,7 @@ class LifeDeathProblems {
       blackStones: [[0, 5], [1, 5], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5]],
       whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4]],
       correctMoves: [[0, 2]],
+      explanation: '오궁도화(五宮桃花)는 5궁도 중 특수한 죽는 모양입니다. 보통 5궁도는 살지만, 이 모양은 급소에 치중당하면 죽습니다.',
     ),
 
     // 3-5: 복잡한 귀 살기
@@ -1360,6 +1378,7 @@ class LifeDeathProblems {
       blackStones: [[0, 0], [0, 1], [0, 3], [0, 4]],
       whiteStones: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [0, 5]],
       correctMoves: [[0, 2]],
+      explanation: '복잡한 상황에서도 기본 원리는 같습니다. 두 눈을 만들 수 있는 급소를 찾아 먼저 차지하면 살 수 있습니다.',
     ),
 
     // 3-6: 수상전 (활로 싸움)
@@ -1373,6 +1392,7 @@ class LifeDeathProblems {
       blackStones: [[0, 3], [1, 3], [2, 3], [3, 0], [3, 1], [3, 2], [3, 3]],
       whiteStones: [[0, 0], [0, 1], [1, 1], [2, 0], [2, 1], [2, 2]],
       correctMoves: [[1, 2], [0, 2], [1, 0]],
+      explanation: '수상전(手相戰)은 서로 잡으려는 활로 싸움입니다. "바깥 공배부터 메우라"는 격언처럼, 바깥쪽 활로를 먼저 줄여야 이길 수 있습니다.',
     ),
   ];
 
@@ -1836,6 +1856,29 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: _isSolved ? Colors.white : Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          // 정답 시 설명 표시
+          if (_isSolved && widget.problem.explanation != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              color: Colors.blue.shade50,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.info_outline, color: Colors.blue.shade700, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      widget.problem.explanation!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.blue.shade900,
+                        height: 1.4,
+                      ),
                     ),
                   ),
                 ],
