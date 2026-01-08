@@ -1785,7 +1785,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${L10n.get(widget.language, 'problem')} ${widget.problem.name}'),
+        title: Text('${L10n.get(widget.language, 'lifeDeathProblems')} ${widget.problem.name}'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
