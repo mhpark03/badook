@@ -156,6 +156,30 @@ class L10n {
       'solvedCount': '해결한 문제',
       'totalProblems': '전체 문제',
       'backToList': '목록으로',
+      // 정보 페이지
+      'about': '앱 소개',
+      'help': '도움말',
+      'privacyPolicy': '개인정보처리방침',
+      'termsOfService': '이용약관',
+      'info': '정보',
+      'aboutTitle': '바둑 앱 소개',
+      'aboutContent': '이 앱은 바둑을 즐기고 배울 수 있는 무료 앱입니다.\n\n• AI와 대국하기\n• 2인 대국\n• 사활 문제 풀이\n\n바둑은 약 4,000년의 역사를 가진 전략 보드게임입니다. 흑과 백이 번갈아 돌을 놓아 더 많은 영역을 차지하는 것이 목표입니다.',
+      'helpTitle': '게임 방법',
+      'helpRules': '기본 규칙',
+      'helpRulesContent': '• 흑이 먼저 시작합니다\n• 빈 교차점에 돌을 놓습니다\n• 상대 돌을 완전히 둘러싸면 잡을 수 있습니다\n• 더 많은 영역을 차지한 쪽이 승리합니다\n• 백은 6.5점의 덤을 받습니다',
+      'helpCapture': '돌 잡기',
+      'helpCaptureContent': '돌의 활로(빈 인접점)가 모두 막히면 잡힙니다. 연결된 돌은 하나의 그룹으로 취급됩니다.',
+      'helpKo': '패 규칙',
+      'helpKoContent': '직전 상태와 동일한 국면을 만드는 착수는 금지됩니다.',
+      'helpTerritory': '영역 계산',
+      'helpTerritoryContent': '게임 종료 시 자신의 돌로 둘러싼 빈 점이 영역이 됩니다. 영역 + 잡은 돌 수로 승부를 결정합니다.',
+      'privacyPolicyTitle': '개인정보처리방침',
+      'privacyPolicyContent': '1. 수집하는 개인정보\n이 앱은 개인정보를 수집하지 않습니다. 모든 게임 데이터는 사용자의 기기에만 저장됩니다.\n\n2. 데이터 저장\n게임 진행 상황과 설정은 로컬 저장소에만 저장되며, 외부 서버로 전송되지 않습니다.\n\n3. 광고\n이 앱은 Google AdSense를 통해 광고를 표시할 수 있습니다. 광고 제공업체는 자체 개인정보처리방침에 따라 데이터를 수집할 수 있습니다.\n\n4. 문의\n개인정보 관련 문의사항이 있으시면 앱 개발자에게 연락해 주세요.',
+      'termsOfServiceTitle': '이용약관',
+      'termsOfServiceContent': '1. 서비스 이용\n이 앱은 무료로 제공되며, 누구나 자유롭게 사용할 수 있습니다.\n\n2. 면책조항\n이 앱은 "있는 그대로" 제공됩니다. 개발자는 앱 사용으로 인한 어떠한 손해에 대해서도 책임지지 않습니다.\n\n3. 지적재산권\n이 앱의 모든 콘텐츠와 코드는 저작권법의 보호를 받습니다.\n\n4. 약관 변경\n이 약관은 사전 통지 없이 변경될 수 있습니다.\n\n5. 문의\n서비스 관련 문의사항이 있으시면 앱 개발자에게 연락해 주세요.',
+      'version': '버전',
+      'developer': '개발자',
+      'contact': '문의',
     },
     GameLanguage.english: {
       'appTitle': 'Go',
@@ -240,6 +264,30 @@ class L10n {
       'solvedCount': 'Solved',
       'totalProblems': 'Total',
       'backToList': 'Back to List',
+      // Info pages
+      'about': 'About',
+      'help': 'Help',
+      'privacyPolicy': 'Privacy Policy',
+      'termsOfService': 'Terms of Service',
+      'info': 'Info',
+      'aboutTitle': 'About This App',
+      'aboutContent': 'This is a free app to enjoy and learn Go (Baduk/Weiqi).\n\n• Play against AI\n• Two-player mode\n• Life & Death problems\n\nGo is a strategic board game with about 4,000 years of history. Players take turns placing black and white stones to control more territory.',
+      'helpTitle': 'How to Play',
+      'helpRules': 'Basic Rules',
+      'helpRulesContent': '• Black plays first\n• Place stones on empty intersections\n• Surround opponent stones to capture them\n• Control more territory to win\n• White receives 6.5 points komi',
+      'helpCapture': 'Capturing Stones',
+      'helpCaptureContent': 'Stones are captured when all their liberties (empty adjacent points) are filled. Connected stones form a group.',
+      'helpKo': 'Ko Rule',
+      'helpKoContent': 'You cannot make a move that recreates the previous board position.',
+      'helpTerritory': 'Scoring',
+      'helpTerritoryContent': 'At the end of the game, empty points surrounded by your stones are your territory. Score = Territory + Captured stones.',
+      'privacyPolicyTitle': 'Privacy Policy',
+      'privacyPolicyContent': '1. Information We Collect\nThis app does not collect personal information. All game data is stored only on your device.\n\n2. Data Storage\nGame progress and settings are stored locally and are not transmitted to external servers.\n\n3. Advertising\nThis app may display ads through Google AdSense. Ad providers may collect data according to their own privacy policies.\n\n4. Contact\nFor privacy-related inquiries, please contact the app developer.',
+      'termsOfServiceTitle': 'Terms of Service',
+      'termsOfServiceContent': '1. Use of Service\nThis app is provided free of charge and can be used by anyone.\n\n2. Disclaimer\nThis app is provided "as is". The developer is not responsible for any damages resulting from use of the app.\n\n3. Intellectual Property\nAll content and code of this app is protected by copyright law.\n\n4. Changes to Terms\nThese terms may be changed without prior notice.\n\n5. Contact\nFor service-related inquiries, please contact the app developer.',
+      'version': 'Version',
+      'developer': 'Developer',
+      'contact': 'Contact',
     },
     GameLanguage.japanese: {
       'appTitle': '囲碁',
@@ -324,6 +372,30 @@ class L10n {
       'solvedCount': '正解数',
       'totalProblems': '全問題',
       'backToList': '一覧に戻る',
+      // 情報ページ
+      'about': 'アプリについて',
+      'help': 'ヘルプ',
+      'privacyPolicy': 'プライバシーポリシー',
+      'termsOfService': '利用規約',
+      'info': '情報',
+      'aboutTitle': 'アプリ紹介',
+      'aboutContent': 'このアプリは囲碁を楽しみながら学べる無料アプリです。\n\n• AIと対局\n• 二人対局\n• 詰碁問題\n\n囲碁は約4,000年の歴史を持つ戦略ボードゲームです。黒と白が交互に石を置き、より多くの領域を確保することが目標です。',
+      'helpTitle': '遊び方',
+      'helpRules': '基本ルール',
+      'helpRulesContent': '• 黒が先手です\n• 空いている交点に石を置きます\n• 相手の石を完全に囲むと取れます\n• より多くの領域を確保した方が勝ちです\n• 白には6.5目のコミがあります',
+      'helpCapture': '石を取る',
+      'helpCaptureContent': '石の呼吸点（隣接する空点）がすべて塞がれると取られます。連結した石は一つのグループとして扱われます。',
+      'helpKo': 'コウ',
+      'helpKoContent': '直前と同じ局面を作る着手は禁止されています。',
+      'helpTerritory': '地の計算',
+      'helpTerritoryContent': '終局時、自分の石で囲んだ空点が地になります。地＋取った石数で勝敗を決めます。',
+      'privacyPolicyTitle': 'プライバシーポリシー',
+      'privacyPolicyContent': '1. 収集する個人情報\nこのアプリは個人情報を収集しません。すべてのゲームデータはユーザーのデバイスにのみ保存されます。\n\n2. データ保存\nゲームの進行状況と設定はローカルストレージにのみ保存され、外部サーバーには送信されません。\n\n3. 広告\nこのアプリはGoogle AdSenseを通じて広告を表示する場合があります。広告プロバイダーは独自のプライバシーポリシーに従ってデータを収集する場合があります。\n\n4. お問い合わせ\nプライバシーに関するお問い合わせは、アプリ開発者にご連絡ください。',
+      'termsOfServiceTitle': '利用規約',
+      'termsOfServiceContent': '1. サービスの利用\nこのアプリは無料で提供され、誰でも自由に使用できます。\n\n2. 免責事項\nこのアプリは「現状のまま」提供されます。開発者はアプリの使用による損害について責任を負いません。\n\n3. 知的財産権\nこのアプリのすべてのコンテンツとコードは著作権法によって保護されています。\n\n4. 規約の変更\nこの規約は予告なく変更される場合があります。\n\n5. お問い合わせ\nサービスに関するお問い合わせは、アプリ開発者にご連絡ください。',
+      'version': 'バージョン',
+      'developer': '開発者',
+      'contact': 'お問い合わせ',
     },
     GameLanguage.chinese: {
       'appTitle': '围棋',
@@ -408,6 +480,30 @@ class L10n {
       'solvedCount': '已解决',
       'totalProblems': '总题数',
       'backToList': '返回列表',
+      // 信息页面
+      'about': '关于',
+      'help': '帮助',
+      'privacyPolicy': '隐私政策',
+      'termsOfService': '服务条款',
+      'info': '信息',
+      'aboutTitle': '应用介绍',
+      'aboutContent': '这是一款免费的围棋学习应用。\n\n• 与AI对弈\n• 双人对弈\n• 死活题练习\n\n围棋是一种拥有约4000年历史的策略棋盘游戏。黑白双方交替落子，目标是占领更多的领地。',
+      'helpTitle': '游戏方法',
+      'helpRules': '基本规则',
+      'helpRulesContent': '• 黑棋先行\n• 在空的交叉点上落子\n• 完全包围对方的棋子可以提子\n• 占领更多领地者获胜\n• 白棋有6.5目的贴目',
+      'helpCapture': '提子',
+      'helpCaptureContent': '当棋子的所有气（相邻的空点）都被堵住时，棋子被提走。相连的棋子作为一个整体。',
+      'helpKo': '打劫',
+      'helpKoContent': '不能立即提回刚被对方提走的一子，形成无限循环。',
+      'helpTerritory': '计算地盘',
+      'helpTerritoryContent': '终局时，被己方棋子围住的空点是地盘。得分=地盘+提子数。',
+      'privacyPolicyTitle': '隐私政策',
+      'privacyPolicyContent': '1. 收集的个人信息\n本应用不收集个人信息。所有游戏数据仅存储在用户设备上。\n\n2. 数据存储\n游戏进度和设置仅存储在本地，不会传输到外部服务器。\n\n3. 广告\n本应用可能通过Google AdSense展示广告。广告提供商可能根据其隐私政策收集数据。\n\n4. 联系方式\n如有隐私相关问题，请联系应用开发者。',
+      'termsOfServiceTitle': '服务条款',
+      'termsOfServiceContent': '1. 服务使用\n本应用免费提供，任何人都可以自由使用。\n\n2. 免责声明\n本应用按"现状"提供。开发者不对因使用本应用造成的任何损害负责。\n\n3. 知识产权\n本应用的所有内容和代码受版权法保护。\n\n4. 条款变更\n本条款可能在不事先通知的情况下进行更改。\n\n5. 联系方式\n如有服务相关问题，请联系应用开发者。',
+      'version': '版本',
+      'developer': '开发者',
+      'contact': '联系方式',
     },
   };
 
@@ -529,6 +625,21 @@ class _GameModeSelectorState extends State<GameModeSelector> {
         title: Text(L10n.get(widget.language, 'appTitle')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: L10n.get(widget.language, 'info'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InfoMenuPage(
+                    onBack: () => Navigator.pop(context),
+                    language: widget.language,
+                  ),
+                ),
+              );
+            },
+          ),
           PopupMenuButton<GameLanguage>(
             icon: const Icon(Icons.language),
             tooltip: L10n.get(widget.language, 'language'),
@@ -5337,5 +5448,404 @@ class BoardPainter extends CustomPainter {
   bool shouldRepaint(covariant BoardPainter oldDelegate) {
     return oldDelegate.boardSize != boardSize ||
            oldDelegate.showTerritory != showTerritory;
+  }
+}
+
+// 정보 페이지 메뉴
+class InfoMenuPage extends StatelessWidget {
+  final VoidCallback onBack;
+  final GameLanguage language;
+
+  const InfoMenuPage({
+    super.key,
+    required this.onBack,
+    required this.language,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.brown[300]!, Colors.brown[600]!],
+        ),
+      ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: onBack,
+                  ),
+                  Expanded(
+                    child: Text(
+                      L10n.get(language, 'info'),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(width: 48),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  _buildInfoButton(
+                    context,
+                    L10n.get(language, 'about'),
+                    Icons.info_outline,
+                    () => _navigateTo(context, 'about'),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildInfoButton(
+                    context,
+                    L10n.get(language, 'help'),
+                    Icons.help_outline,
+                    () => _navigateTo(context, 'help'),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildInfoButton(
+                    context,
+                    L10n.get(language, 'privacyPolicy'),
+                    Icons.privacy_tip_outlined,
+                    () => _navigateTo(context, 'privacy'),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildInfoButton(
+                    context,
+                    L10n.get(language, 'termsOfService'),
+                    Icons.description_outlined,
+                    () => _navigateTo(context, 'terms'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoButton(BuildContext context, String title, IconData icon, VoidCallback onTap) {
+    return Material(
+      color: Colors.white.withValues(alpha: 0.9),
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Row(
+            children: [
+              Icon(icon, color: Colors.brown[700], size: 28),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.brown[800],
+                  ),
+                ),
+              ),
+              Icon(Icons.chevron_right, color: Colors.brown[400]),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _navigateTo(BuildContext context, String page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          switch (page) {
+            case 'about':
+              return AboutPage(onBack: () => Navigator.pop(context), language: language);
+            case 'help':
+              return HelpPage(onBack: () => Navigator.pop(context), language: language);
+            case 'privacy':
+              return PrivacyPolicyPage(onBack: () => Navigator.pop(context), language: language);
+            case 'terms':
+              return TermsOfServicePage(onBack: () => Navigator.pop(context), language: language);
+            default:
+              return AboutPage(onBack: () => Navigator.pop(context), language: language);
+          }
+        },
+      ),
+    );
+  }
+}
+
+// 앱 소개 페이지
+class AboutPage extends StatelessWidget {
+  final VoidCallback onBack;
+  final GameLanguage language;
+
+  const AboutPage({
+    super.key,
+    required this.onBack,
+    required this.language,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.get(language, 'about')),
+        backgroundColor: Colors.brown[700],
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: onBack,
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.brown[100]!, Colors.brown[200]!],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.brown[700],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.grid_on,
+                    size: 60,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: Text(
+                  L10n.get(language, 'appTitle'),
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown[800],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Center(
+                child: Text(
+                  'Version 1.0.0',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.brown[600],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  L10n.get(language, 'aboutContent'),
+                  style: TextStyle(
+                    fontSize: 16,
+                    height: 1.6,
+                    color: Colors.brown[800],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 도움말 페이지
+class HelpPage extends StatelessWidget {
+  final VoidCallback onBack;
+  final GameLanguage language;
+
+  const HelpPage({
+    super.key,
+    required this.onBack,
+    required this.language,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.get(language, 'help')),
+        backgroundColor: Colors.brown[700],
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: onBack,
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.brown[100]!, Colors.brown[200]!],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              L10n.get(language, 'helpContent'),
+              style: TextStyle(
+                fontSize: 16,
+                height: 1.6,
+                color: Colors.brown[800],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 개인정보처리방침 페이지
+class PrivacyPolicyPage extends StatelessWidget {
+  final VoidCallback onBack;
+  final GameLanguage language;
+
+  const PrivacyPolicyPage({
+    super.key,
+    required this.onBack,
+    required this.language,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.get(language, 'privacyPolicy')),
+        backgroundColor: Colors.brown[700],
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: onBack,
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.brown[100]!, Colors.brown[200]!],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              L10n.get(language, 'privacyPolicyContent'),
+              style: TextStyle(
+                fontSize: 16,
+                height: 1.6,
+                color: Colors.brown[800],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 이용약관 페이지
+class TermsOfServicePage extends StatelessWidget {
+  final VoidCallback onBack;
+  final GameLanguage language;
+
+  const TermsOfServicePage({
+    super.key,
+    required this.onBack,
+    required this.language,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.get(language, 'termsOfService')),
+        backgroundColor: Colors.brown[700],
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: onBack,
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.brown[100]!, Colors.brown[200]!],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              L10n.get(language, 'termsOfServiceContent'),
+              style: TextStyle(
+                fontSize: 16,
+                height: 1.6,
+                color: Colors.brown[800],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
