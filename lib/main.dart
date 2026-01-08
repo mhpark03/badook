@@ -950,48 +950,48 @@ class AISettings {
 
     switch (difficulty) {
       case AIDifficulty.beginner:
-        baseIterations = 30;
-        baseDepth = 25;
+        baseIterations = 100;
+        baseDepth = 30;
         exploration = 1.414;
         useHeuristics = false;
         randomness = 0.4;
         baseCandidates = 5;
         break;
       case AIDifficulty.intermediate:
-        baseIterations = 100;
-        baseDepth = 50;
+        baseIterations = 500;
+        baseDepth = 60;
         exploration = 1.414;
         useHeuristics = true;
         randomness = 0.2;
-        baseCandidates = 8;
+        baseCandidates = 10;
         break;
       case AIDifficulty.advanced:
-        baseIterations = 300;
-        baseDepth = 80;
+        baseIterations = 2000;
+        baseDepth = 100;
         exploration = 1.5;
         useHeuristics = true;
         randomness = 0.1;
-        baseCandidates = 12;
+        baseCandidates = 15;
         break;
       case AIDifficulty.expert:
-        // 10초 이내 최대 성능 (강한 AI)
-        baseIterations = 600;
-        baseDepth = 100;
+        // PC 성능 기준 최대 성능 (강한 AI)
+        baseIterations = 5000;
+        baseDepth = 150;
         exploration = 1.6;
         useHeuristics = true;
-        randomness = 0.02;
-        baseCandidates = 15;
+        randomness = 0.01;
+        baseCandidates = 20;
         break;
     }
 
     // 디바이스 성능에 따라 조정
     return AISettings(
-      mctsIterations: (baseIterations * multiplier).round().clamp(10, 1500),
-      playoutDepth: (baseDepth * multiplier).round().clamp(10, 200),
+      mctsIterations: (baseIterations * multiplier).round().clamp(10, 10000),
+      playoutDepth: (baseDepth * multiplier).round().clamp(10, 300),
       explorationConstant: exploration,
       useHeuristics: useHeuristics,
       randomness: randomness,
-      candidateCount: (baseCandidates * multiplier).round().clamp(3, 25),
+      candidateCount: (baseCandidates * multiplier).round().clamp(3, 30),
     );
   }
 
