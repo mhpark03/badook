@@ -8,6 +8,62 @@ void main() {
   runApp(const BadukApp());
 }
 
+// 디바이스 성능 등급
+enum DevicePerformance { low, medium, high }
+
+// 디바이스 성능 측정 클래스
+class DeviceBenchmark {
+  static DevicePerformance? _cachedPerformance;
+  static double? _benchmarkScore;
+
+  // 벤치마크 실행 (앱 시작 시 한 번만)
+  static Future<DevicePerformance> measurePerformance() async {
+    if (_cachedPerformance != null) return _cachedPerformance!;
+
+    final stopwatch = Stopwatch()..start();
+    final random = Random();
+
+    // 간단한 계산 벤치마크 (MCTS와 유사한 연산)
+    int iterations = 10000;
+    double sum = 0;
+    for (int i = 0; i < iterations; i++) {
+      sum += random.nextDouble() * random.nextDouble();
+      sum = sum % 1000;
+    }
+
+    stopwatch.stop();
+    _benchmarkScore = stopwatch.elapsedMicroseconds / 1000.0; // ms
+
+    // 성능 등급 판정
+    // < 20ms: 고성능, 20-50ms: 중간, > 50ms: 저성능
+    if (_benchmarkScore! < 20) {
+      _cachedPerformance = DevicePerformance.high;
+    } else if (_benchmarkScore! < 50) {
+      _cachedPerformance = DevicePerformance.medium;
+    } else {
+      _cachedPerformance = DevicePerformance.low;
+    }
+
+    debugPrint('Device benchmark: ${_benchmarkScore!.toStringAsFixed(2)}ms -> $_cachedPerformance');
+    return _cachedPerformance!;
+  }
+
+  static DevicePerformance get performance => _cachedPerformance ?? DevicePerformance.medium;
+  static double? get score => _benchmarkScore;
+
+  // 성능에 따른 배율 반환
+  static double get multiplier {
+    switch (performance) {
+      case DevicePerformance.high:
+        return 1.5;  // 고성능: 150%
+      case DevicePerformance.medium:
+        return 1.0;  // 중간: 100%
+      case DevicePerformance.low:
+        return 0.5;  // 저성능: 50%
+    }
+  }
+}
+
 // AI 난이도 설정
 enum AIDifficulty { beginner, intermediate, advanced, expert }
 
@@ -281,6 +337,22 @@ class BadukApp extends StatefulWidget {
 
 class _BadukAppState extends State<BadukApp> {
   GameLanguage _language = GameLanguage.korean;
+  bool _benchmarkDone = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _runBenchmark();
+  }
+
+  Future<void> _runBenchmark() async {
+    await DeviceBenchmark.measurePerformance();
+    if (mounted) {
+      setState(() {
+        _benchmarkDone = true;
+      });
+    }
+  }
 
   void _setLanguage(GameLanguage lang) {
     setState(() {
@@ -296,10 +368,23 @@ class _BadukAppState extends State<BadukApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
         useMaterial3: true,
       ),
-      home: GameModeSelector(
-        language: _language,
-        onLanguageChanged: _setLanguage,
-      ),
+      home: _benchmarkDone
+          ? GameModeSelector(
+              language: _language,
+              onLanguageChanged: _setLanguage,
+            )
+          : const Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('초기화 중...'),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }
@@ -846,46 +931,66 @@ class AISettings {
     required this.candidateCount,
   });
 
+  // 디바이스 성능을 고려한 AI 설정 생성
   static AISettings forDifficulty(AIDifficulty difficulty) {
+    final multiplier = DeviceBenchmark.multiplier;
+
+    // 기본값 (중간 성능 기준)
+    int baseIterations;
+    int baseDepth;
+    double exploration;
+    bool useHeuristics;
+    double randomness;
+    int baseCandidates;
+
     switch (difficulty) {
       case AIDifficulty.beginner:
-        return const AISettings(
-          mctsIterations: 20,
-          playoutDepth: 20,
-          explorationConstant: 1.414,
-          useHeuristics: false,
-          randomness: 0.4,
-          candidateCount: 5,
-        );
+        baseIterations = 20;
+        baseDepth = 20;
+        exploration = 1.414;
+        useHeuristics = false;
+        randomness = 0.4;
+        baseCandidates = 5;
+        break;
       case AIDifficulty.intermediate:
-        return const AISettings(
-          mctsIterations: 50,
-          playoutDepth: 30,
-          explorationConstant: 1.414,
-          useHeuristics: true,
-          randomness: 0.2,
-          candidateCount: 8,
-        );
+        baseIterations = 50;
+        baseDepth = 30;
+        exploration = 1.414;
+        useHeuristics = true;
+        randomness = 0.2;
+        baseCandidates = 8;
+        break;
       case AIDifficulty.advanced:
-        return const AISettings(
-          mctsIterations: 100,
-          playoutDepth: 50,
-          explorationConstant: 1.5,
-          useHeuristics: true,
-          randomness: 0.1,
-          candidateCount: 10,
-        );
+        baseIterations = 100;
+        baseDepth = 50;
+        exploration = 1.5;
+        useHeuristics = true;
+        randomness = 0.1;
+        baseCandidates = 10;
+        break;
       case AIDifficulty.expert:
-        return const AISettings(
-          mctsIterations: 150,
-          playoutDepth: 60,
-          explorationConstant: 1.6,
-          useHeuristics: true,
-          randomness: 0.05,
-          candidateCount: 12,
-        );
+        baseIterations = 150;
+        baseDepth = 60;
+        exploration = 1.6;
+        useHeuristics = true;
+        randomness = 0.05;
+        baseCandidates = 12;
+        break;
     }
+
+    // 디바이스 성능에 따라 조정
+    return AISettings(
+      mctsIterations: (baseIterations * multiplier).round().clamp(10, 500),
+      playoutDepth: (baseDepth * multiplier).round().clamp(10, 150),
+      explorationConstant: exploration,
+      useHeuristics: useHeuristics,
+      randomness: randomness,
+      candidateCount: (baseCandidates * multiplier).round().clamp(3, 20),
+    );
   }
+
+  // 설정 정보 문자열
+  String get info => 'MCTS: $mctsIterations, Depth: $playoutDepth, Candidates: $candidateCount';
 }
 
 extension StoneExtension on Stone {
@@ -1212,11 +1317,12 @@ class _BadukGameState extends State<BadukGame> {
       if (josekiHint != null) return josekiHint;
     }
 
-    // 중후반: MCTS (반복 횟수 최적화)
-    const int hintIterations = 80;  // 모바일 ANR 방지
-    const int hintPlayoutDepth = 40;
+    // 중후반: MCTS (디바이스 성능에 따라 조정)
+    final multiplier = DeviceBenchmark.multiplier;
+    final int hintIterations = (80 * multiplier).round().clamp(30, 200);
+    final int hintPlayoutDepth = (40 * multiplier).round().clamp(20, 100);
     const double hintExploration = 1.6;
-    const int hintCandidateCount = 10;
+    final int hintCandidateCount = (10 * multiplier).round().clamp(5, 20);
 
     // 보드 상태 저장
     List<List<Stone>> originalBoard = List.generate(
