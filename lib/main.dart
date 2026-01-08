@@ -66,7 +66,7 @@ class DeviceBenchmark {
 }
 
 // AI 난이도 설정
-enum AIDifficulty { beginner, intermediate, advanced, expert }
+enum AIDifficulty { advanced, expert }
 
 // 언어 설정
 enum GameLanguage { korean, english, japanese, chinese }
@@ -646,15 +646,11 @@ class AIDifficultySelector extends StatefulWidget {
 }
 
 class _AIDifficultySelectorState extends State<AIDifficultySelector> {
-  AIDifficulty _selectedDifficulty = AIDifficulty.intermediate;
+  AIDifficulty _selectedDifficulty = AIDifficulty.advanced;
   Stone _selectedColor = Stone.black;
 
   String _getDifficultyName(AIDifficulty difficulty) {
     switch (difficulty) {
-      case AIDifficulty.beginner:
-        return L10n.get(widget.language, 'aiEasy');
-      case AIDifficulty.intermediate:
-        return L10n.get(widget.language, 'aiNormal');
       case AIDifficulty.advanced:
         return L10n.get(widget.language, 'aiHard');
       case AIDifficulty.expert:
@@ -664,10 +660,6 @@ class _AIDifficultySelectorState extends State<AIDifficultySelector> {
 
   String _getDifficultyDescription(AIDifficulty difficulty) {
     switch (difficulty) {
-      case AIDifficulty.beginner:
-        return L10n.get(widget.language, 'aiEasyDesc');
-      case AIDifficulty.intermediate:
-        return L10n.get(widget.language, 'aiNormalDesc');
       case AIDifficulty.advanced:
         return L10n.get(widget.language, 'aiHardDesc');
       case AIDifficulty.expert:
@@ -949,32 +941,17 @@ class AISettings {
     int baseCandidates;
 
     switch (difficulty) {
-      case AIDifficulty.beginner:
-        baseIterations = 100;
-        baseDepth = 30;
-        exploration = 1.414;
-        useHeuristics = false;
-        randomness = 0.4;
-        baseCandidates = 5;
-        break;
-      case AIDifficulty.intermediate:
-        baseIterations = 500;
-        baseDepth = 60;
-        exploration = 1.414;
-        useHeuristics = true;
-        randomness = 0.2;
-        baseCandidates = 10;
-        break;
       case AIDifficulty.advanced:
+        // 고급: 강한 AI
         baseIterations = 2000;
         baseDepth = 100;
         exploration = 1.5;
         useHeuristics = true;
-        randomness = 0.1;
+        randomness = 0.05;
         baseCandidates = 15;
         break;
       case AIDifficulty.expert:
-        // PC 성능 기준 최대 성능 (강한 AI)
+        // 전문가: PC 성능 기준 최대 성능
         baseIterations = 5000;
         baseDepth = 150;
         exploration = 1.6;
@@ -1024,7 +1001,7 @@ class BadukGame extends StatefulWidget {
     required this.vsAI,
     this.playerColor = Stone.black,
     required this.language,
-    this.aiDifficulty = AIDifficulty.intermediate,
+    this.aiDifficulty = AIDifficulty.advanced,
     this.loadSavedGame = false,
   });
 
