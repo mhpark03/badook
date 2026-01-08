@@ -850,8 +850,8 @@ class AISettings {
     switch (difficulty) {
       case AIDifficulty.beginner:
         return const AISettings(
-          mctsIterations: 50,
-          playoutDepth: 30,
+          mctsIterations: 20,
+          playoutDepth: 20,
           explorationConstant: 1.414,
           useHeuristics: false,
           randomness: 0.4,
@@ -859,30 +859,30 @@ class AISettings {
         );
       case AIDifficulty.intermediate:
         return const AISettings(
-          mctsIterations: 200,
-          playoutDepth: 60,
+          mctsIterations: 50,
+          playoutDepth: 30,
           explorationConstant: 1.414,
           useHeuristics: true,
           randomness: 0.2,
-          candidateCount: 10,
+          candidateCount: 8,
         );
       case AIDifficulty.advanced:
         return const AISettings(
-          mctsIterations: 500,
-          playoutDepth: 100,
+          mctsIterations: 100,
+          playoutDepth: 50,
           explorationConstant: 1.5,
           useHeuristics: true,
           randomness: 0.1,
-          candidateCount: 15,
+          candidateCount: 10,
         );
       case AIDifficulty.expert:
         return const AISettings(
-          mctsIterations: 1000,
-          playoutDepth: 150,
+          mctsIterations: 150,
+          playoutDepth: 60,
           explorationConstant: 1.6,
           useHeuristics: true,
           randomness: 0.05,
-          candidateCount: 20,
+          candidateCount: 12,
         );
     }
   }
@@ -1213,10 +1213,10 @@ class _BadukGameState extends State<BadukGame> {
     }
 
     // 중후반: MCTS (반복 횟수 최적화)
-    const int hintIterations = 500;  // 1000 -> 500으로 감소
-    const int hintPlayoutDepth = 100;  // 150 -> 100으로 감소
+    const int hintIterations = 80;  // 모바일 ANR 방지
+    const int hintPlayoutDepth = 40;
     const double hintExploration = 1.6;
-    const int hintCandidateCount = 15;  // 20 -> 15로 감소
+    const int hintCandidateCount = 10;
 
     // 보드 상태 저장
     List<List<Stone>> originalBoard = List.generate(
