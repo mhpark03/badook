@@ -1014,7 +1014,7 @@ class _BadukGameState extends State<BadukGame> {
     });
   }
 
-  // 힌트용 최적 수 찾기 (플레이어 관점)
+  // 힌트용 최적 수 찾기 (전문가 레벨 MCTS)
   List<int>? _findHintMove() {
     Stone playerColor = widget.vsAI ? widget.playerColor : currentPlayer;
 
@@ -1029,101 +1029,140 @@ class _BadukGameState extends State<BadukGame> {
 
     if (validMoves.isEmpty) return null;
 
+    // 전문가 레벨 설정
+    const int hintIterations = 1000;
+    const int hintPlayoutDepth = 150;
+    const double hintExploration = 1.6;
+    const int hintCandidateCount = 20;
+
+    // 보드 상태 저장
+    List<List<Stone>> originalBoard = List.generate(
+      boardSize, (i) => List.from(board[i])
+    );
+
     // 영향력 맵 계산
     _calculateInfluenceMap();
 
-    // 우선순위 기반 수 찾기 (플레이어 관점)
-    Stone opponent = playerColor.opponent;
-
-    // 1. 많은 돌 잡기
-    int maxCaptures = 0;
-    List<int>? captureMove;
+    // 후보 수 점수화 (플레이어 관점으로 평가)
+    List<MapEntry<List<int>, int>> scoredMoves = [];
     for (var move in validMoves) {
-      int captures = _countCaptures(move[0], move[1], playerColor);
-      if (captures > maxCaptures) {
-        maxCaptures = captures;
-        captureMove = move;
-      }
+      int score = _evaluateMoveForHint(move[0], move[1], playerColor);
+      scoredMoves.add(MapEntry(move, score));
     }
-    if (maxCaptures >= 2) return captureMove;
+    scoredMoves.sort((a, b) => b.value.compareTo(a.value));
 
-    // 2. 위험한 그룹 구하기
-    for (int i = 0; i < boardSize; i++) {
-      for (int j = 0; j < boardSize; j++) {
-        if (board[i][j] == playerColor) {
-          var group = _getGroup(i, j);
-          var liberties = _getLiberties(group);
-          if (liberties.length == 1) {
-            // 단수 그룹 구하기
-            for (var move in validMoves) {
-              board[move[0]][move[1]] = playerColor;
-              var newLiberties = _getLiberties(_getGroup(i, j));
-              board[move[0]][move[1]] = Stone.none;
-              if (newLiberties.length >= 2) {
-                return move;
-              }
-            }
+    // 상위 후보만 MCTS 수행
+    int candidateCount = min(hintCandidateCount, scoredMoves.length);
+    List<List<int>> candidates = scoredMoves.take(candidateCount).map((e) => e.key).toList();
+
+    // 루트 노드 생성
+    MCTSNode root = MCTSNode(
+      untriedMoves: List.from(candidates),
+      player: playerColor,
+    );
+
+    // MCTS 반복
+    for (int i = 0; i < hintIterations; i++) {
+      // 보드 복원
+      _restoreBoard(originalBoard);
+
+      // Selection & Expansion
+      MCTSNode node = root;
+      Stone currentMCTSPlayer = playerColor;
+
+      // Selection: 트리를 따라 내려가기
+      while (node.isFullyExpanded && node.children.isNotEmpty) {
+        node = node.selectChild(hintExploration);
+        if (node.move != null) {
+          board[node.move![0]][node.move![1]] = currentMCTSPlayer;
+          _removeCapturedStones(node.move![0], node.move![1], currentMCTSPlayer);
+        }
+        currentMCTSPlayer = currentMCTSPlayer.opponent;
+      }
+
+      // Expansion: 새 노드 추가
+      if (node.untriedMoves.isNotEmpty) {
+        var move = node.untriedMoves.removeAt(_random.nextInt(node.untriedMoves.length));
+        if (_isValidMoveSimple(move[0], move[1], currentMCTSPlayer)) {
+          board[move[0]][move[1]] = currentMCTSPlayer;
+          _removeCapturedStones(move[0], move[1], currentMCTSPlayer);
+
+          List<List<int>> nextMoves = _getValidMovesForPlayer(currentMCTSPlayer.opponent);
+          MCTSNode child = MCTSNode(
+            move: move,
+            parent: node,
+            untriedMoves: nextMoves.take(10).toList(),
+            player: currentMCTSPlayer,
+          );
+          node.children.add(child);
+          node = child;
+          currentMCTSPlayer = currentMCTSPlayer.opponent;
+        }
+      }
+
+      // Simulation: 가중치 기반 플레이아웃
+      double result = _hintPlayout(currentMCTSPlayer, playerColor, hintPlayoutDepth);
+
+      // Backpropagation: 결과 전파 (플레이어 관점)
+      while (node.parent != null) {
+        node.visits++;
+        if (node.player == playerColor) {
+          node.wins += result;
+        } else {
+          node.wins += 1.0 - result;
+        }
+        node = node.parent!;
+      }
+      root.visits++;
+    }
+
+    // 보드 복원
+    _restoreBoard(originalBoard);
+
+    // 가장 많이 방문한 수 선택
+    MCTSNode? bestChild = root.getMostVisitedChild();
+    if (bestChild != null && bestChild.move != null) {
+      return bestChild.move;
+    }
+
+    // 폴백: 상위 후보 중 첫 번째
+    return candidates.isNotEmpty ? candidates.first : null;
+  }
+
+  // 힌트용 수 평가 (플레이어 관점)
+  int _evaluateMoveForHint(int row, int col, Stone player) {
+    int score = 0;
+    Stone opponent = player.opponent;
+
+    // 1. 잡을 수 있는 돌
+    int captures = _countCaptures(row, col, player);
+    score += captures * 100;
+
+    // 2. 단수 상태 그룹 구하기
+    for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      int nr = row + dir[0];
+      int nc = col + dir[1];
+      if (_isValidPosition(nr, nc) && board[nr][nc] == player) {
+        var group = _getGroup(nr, nc);
+        var liberties = _getLiberties(group);
+        if (liberties.length == 1) {
+          board[row][col] = player;
+          var newLiberties = _getLiberties(_getGroup(nr, nc));
+          board[row][col] = Stone.none;
+          if (newLiberties.length >= 2) {
+            score += 80 + group.length * 10;
           }
         }
       }
     }
 
     // 3. 상대 위협 방어
-    for (var move in validMoves) {
-      int threat = _countCaptures(move[0], move[1], opponent);
-      if (threat >= 2) {
-        return move;
-      }
+    int threatCaptures = _countCaptures(row, col, opponent);
+    if (threatCaptures >= 1) {
+      score += threatCaptures * 50;
     }
 
-    // 4. 1개라도 잡기
-    if (captureMove != null) return captureMove;
-
-    // 5. 상대 단수 만들기
-    for (var move in validMoves) {
-      board[move[0]][move[1]] = playerColor;
-      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
-        int nr = move[0] + dir[0];
-        int nc = move[1] + dir[1];
-        if (_isValidPosition(nr, nc) && board[nr][nc] == opponent) {
-          var group = _getGroup(nr, nc);
-          var liberties = _getLiberties(group);
-          if (liberties.length == 1 && group.length >= 2) {
-            board[move[0]][move[1]] = Stone.none;
-            return move;
-          }
-        }
-      }
-      board[move[0]][move[1]] = Stone.none;
-    }
-
-    // 6. 전략적 평가 기반 최적 수
-    int bestScore = -100000;
-    List<int>? bestMove;
-    for (var move in validMoves) {
-      int score = _evaluateHintMove(move[0], move[1], playerColor);
-      if (score > bestScore) {
-        bestScore = score;
-        bestMove = move;
-      }
-    }
-
-    return bestMove;
-  }
-
-  // 힌트용 수 평가 (플레이어 관점)
-  int _evaluateHintMove(int row, int col, Stone player) {
-    int score = 0;
-
-    // 영향력
-    double influence = _influenceMap[row][col];
-    if (player == aiColor) {
-      score += (influence * 10).round();
-    } else {
-      score -= (influence * 10).round();
-    }
-
-    // 연결성
+    // 4. 연결성
     int connections = 0;
     for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
       int nr = row + dir[0];
@@ -1132,34 +1171,136 @@ class _BadukGameState extends State<BadukGame> {
         connections++;
       }
     }
-    score += connections * 8;
+    score += connections * 15;
 
-    // 활로 확보
+    // 5. 활로 확보
     board[row][col] = player;
     var group = _getGroup(row, col);
     var liberties = _getLiberties(group);
     board[row][col] = Stone.none;
-    score += liberties.length * 5;
+    score += liberties.length * 8;
 
-    // 전략적 위치
+    // 6. 전략적 위치
     score += _calculateStrategicValue(row, col);
 
-    // 공격 잠재력
+    // 7. 영향력
+    double influence = _influenceMap[row][col];
+    if (player == Stone.black) {
+      score -= (influence * 10).round();
+    } else {
+      score += (influence * 10).round();
+    }
+
+    // 8. 공격 잠재력 (상대 단수 만들기)
     board[row][col] = player;
     for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
       int nr = row + dir[0];
       int nc = col + dir[1];
-      if (_isValidPosition(nr, nc) && board[nr][nc] == player.opponent) {
+      if (_isValidPosition(nr, nc) && board[nr][nc] == opponent) {
         var oppGroup = _getGroup(nr, nc);
         var oppLiberties = _getLiberties(oppGroup);
         if (oppLiberties.length <= 2) {
-          score += (4 - oppLiberties.length) * oppGroup.length * 3;
+          score += (4 - oppLiberties.length) * oppGroup.length * 5;
         }
       }
     }
     board[row][col] = Stone.none;
 
     return score;
+  }
+
+  // 힌트용 플레이아웃 (플레이어 관점 승률 계산)
+  double _hintPlayout(Stone startPlayer, Stone hintPlayer, int maxMoves) {
+    Stone currentSim = startPlayer;
+    int moves = 0;
+    int passes = 0;
+
+    while (moves < maxMoves && passes < 2) {
+      List<List<int>> simMoves = [];
+      List<double> weights = [];
+
+      for (int i = 0; i < boardSize; i++) {
+        for (int j = 0; j < boardSize; j++) {
+          if (board[i][j] == Stone.none && _isValidMoveSimple(i, j, currentSim)) {
+            simMoves.add([i, j]);
+            double weight = _calculateMoveWeight(i, j, currentSim);
+            weights.add(weight);
+          }
+        }
+      }
+
+      if (simMoves.isEmpty) {
+        passes++;
+        currentSim = currentSim.opponent;
+        continue;
+      }
+
+      passes = 0;
+
+      // 가중치 기반 선택
+      double totalWeight = weights.reduce((a, b) => a + b);
+      double r = _random.nextDouble() * totalWeight;
+      int selectedIndex = 0;
+      double cumulative = 0;
+      for (int i = 0; i < weights.length; i++) {
+        cumulative += weights[i];
+        if (r <= cumulative) {
+          selectedIndex = i;
+          break;
+        }
+      }
+
+      var move = simMoves[selectedIndex];
+      board[move[0]][move[1]] = currentSim;
+      _removeCapturedStones(move[0], move[1], currentSim);
+
+      currentSim = currentSim.opponent;
+      moves++;
+    }
+
+    // 점수 계산 (플레이어 관점)
+    int playerScore = 0;
+    int opponentScore = 0;
+    Stone opponent = hintPlayer.opponent;
+
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == hintPlayer) {
+          playerScore++;
+        } else if (board[i][j] == opponent) {
+          opponentScore++;
+        } else {
+          // 영역 추정
+          int playerInfluence = 0;
+          int opponentInfluence = 0;
+          for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+            int nr = i + dir[0];
+            int nc = j + dir[1];
+            if (_isValidPosition(nr, nc)) {
+              if (board[nr][nc] == hintPlayer) playerInfluence++;
+              if (board[nr][nc] == opponent) opponentInfluence++;
+            }
+          }
+          if (playerInfluence > opponentInfluence) playerScore++;
+          else if (opponentInfluence > playerInfluence) opponentScore++;
+        }
+      }
+    }
+
+    // 덤 적용
+    double finalPlayerScore = playerScore.toDouble();
+    double finalOpponentScore = opponentScore + 6.5;
+    if (hintPlayer == Stone.white) {
+      finalPlayerScore = playerScore + 6.5;
+      finalOpponentScore = opponentScore.toDouble();
+    }
+
+    if (finalPlayerScore > finalOpponentScore) {
+      return 1.0;
+    } else if (finalPlayerScore < finalOpponentScore) {
+      return 0.0;
+    }
+    return 0.5;
   }
 
   void _updateMessage() {
