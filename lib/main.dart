@@ -1997,25 +1997,52 @@ class ProblemBoardPainter extends CustomPainter {
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
 
-    // 세로선
+    // 세로선 - 왼쪽 귀 바둑판처럼 그리기
     for (int i = 0; i < boardSize; i++) {
       final x = cellSize / 2 + i * cellSize;
+      // 첫 번째 세로선(i=0)은 맨 위에서 시작 (왼쪽 변)
+      final startY = (i == 0) ? cellSize / 2 : 0.0;
+      // 모든 세로선은 아래쪽 끝까지 연장
+      final endY = size.height;
       canvas.drawLine(
-        Offset(x, cellSize / 2),
-        Offset(x, size.height - cellSize / 2),
+        Offset(x, startY),
+        Offset(x, endY),
         paint,
       );
     }
 
-    // 가로선
+    // 가로선 - 위쪽 귀 바둑판처럼 그리기
     for (int i = 0; i < boardSize; i++) {
       final y = cellSize / 2 + i * cellSize;
+      // 첫 번째 가로선(i=0)은 맨 왼쪽에서 시작 (위쪽 변)
+      final startX = (i == 0) ? cellSize / 2 : 0.0;
+      // 모든 가로선은 오른쪽 끝까지 연장
+      final endX = size.width;
       canvas.drawLine(
-        Offset(cellSize / 2, y),
-        Offset(size.width - cellSize / 2, y),
+        Offset(startX, y),
+        Offset(endX, y),
         paint,
       );
     }
+
+    // 바둑판 테두리 (왼쪽 변과 위쪽 변)
+    final borderPaint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+
+    // 왼쪽 변
+    canvas.drawLine(
+      Offset(cellSize / 2, cellSize / 2),
+      Offset(cellSize / 2, size.height),
+      borderPaint,
+    );
+    // 위쪽 변
+    canvas.drawLine(
+      Offset(cellSize / 2, cellSize / 2),
+      Offset(size.width, cellSize / 2),
+      borderPaint,
+    );
 
     // 화점 (3x3 위치에만)
     if (boardSize >= 7) {
