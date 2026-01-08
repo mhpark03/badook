@@ -1142,7 +1142,7 @@ class LifeDeathProblems {
     // 1-1: 단수치기 - 마지막 활로 막기
     LifeDeathProblem(
       id: 1,
-      name: '1-1',
+      name: '1-1: 단수치기',
       difficulty: ProblemDifficulty.beginner,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1156,7 +1156,7 @@ class LifeDeathProblems {
     // 1-2: 단수치기 - 3점 잡기
     LifeDeathProblem(
       id: 2,
-      name: '1-2',
+      name: '1-2: 단수치기',
       difficulty: ProblemDifficulty.beginner,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1167,10 +1167,10 @@ class LifeDeathProblems {
       explanation: '연결된 돌들은 하나의 그룹으로 활로를 공유합니다. 그룹 전체의 마지막 활로를 막으면 모든 돌이 한꺼번에 잡힙니다.',
     ),
 
-    // 1-3: 귀에서 1점 잡기
+    // 1-3: 단수치기 - 귀에서 1점 잡기
     LifeDeathProblem(
       id: 3,
-      name: '1-3',
+      name: '1-3: 단수치기',
       difficulty: ProblemDifficulty.beginner,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1181,10 +1181,10 @@ class LifeDeathProblems {
       explanation: '귀(꼭짓점)에 있는 돌은 활로가 2개뿐입니다. 변에서는 3개, 중앙에서는 4개입니다. 귀의 돌은 잡기 쉽습니다.',
     ),
 
-    // 1-4: 귀에서 3점 잡기
+    // 1-4: 단수치기 - 귀에서 3점 잡기
     LifeDeathProblem(
       id: 4,
-      name: '1-4',
+      name: '1-4: 단수치기',
       difficulty: ProblemDifficulty.beginner,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1195,10 +1195,10 @@ class LifeDeathProblems {
       explanation: '귀에서는 돌이 여러 개 연결되어 있어도 변과 귀로 활로가 제한됩니다. 급소를 찾아 단수를 치면 잡을 수 있습니다.',
     ),
 
-    // 1-5: 두 눈 만들기 (살기)
+    // 1-5: 기본 살기 - 두 눈 만들기
     LifeDeathProblem(
       id: 5,
-      name: '1-5',
+      name: '1-5: 기본 살기',
       difficulty: ProblemDifficulty.beginner,
       type: ProblemType.live,
       playerColor: Stone.black,
@@ -1209,10 +1209,10 @@ class LifeDeathProblems {
       explanation: '돌이 살려면 반드시 두 개의 눈이 필요합니다. 가운데를 막아 양쪽에 눈을 만들면 절대로 잡히지 않습니다.',
     ),
 
-    // 1-6: 늘어서 살기
+    // 1-6: 기본 살기 - 늘어서 살기
     LifeDeathProblem(
       id: 6,
-      name: '1-6',
+      name: '1-6: 기본 살기',
       difficulty: ProblemDifficulty.beginner,
       type: ProblemType.live,
       playerColor: Stone.black,
@@ -1228,7 +1228,7 @@ class LifeDeathProblems {
     // 2-1: 직삼궁 - 치중 (가운데 급소)
     LifeDeathProblem(
       id: 7,
-      name: '2-1',
+      name: '2-1: 직삼궁',
       difficulty: ProblemDifficulty.intermediate,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1242,7 +1242,7 @@ class LifeDeathProblems {
     // 2-2: 곡삼궁 - 꺾인 3궁도 급소
     LifeDeathProblem(
       id: 8,
-      name: '2-2',
+      name: '2-2: 곡삼궁',
       difficulty: ProblemDifficulty.intermediate,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1256,7 +1256,7 @@ class LifeDeathProblems {
     // 2-3: 직삼궁 살리기 (백선)
     LifeDeathProblem(
       id: 9,
-      name: '2-3',
+      name: '2-3: 직삼궁 살리기',
       difficulty: ProblemDifficulty.intermediate,
       type: ProblemType.live,
       playerColor: Stone.white,
@@ -1270,7 +1270,7 @@ class LifeDeathProblems {
     // 2-4: 2선 급소
     LifeDeathProblem(
       id: 10,
-      name: '2-4',
+      name: '2-4: 2선 급소',
       difficulty: ProblemDifficulty.intermediate,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1284,7 +1284,7 @@ class LifeDeathProblems {
     // 2-5: 환격 (던져넣기)
     LifeDeathProblem(
       id: 11,
-      name: '2-5',
+      name: '2-5: 환격',
       difficulty: ProblemDifficulty.intermediate,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1298,7 +1298,7 @@ class LifeDeathProblems {
     // 2-6: 눈 자리 축소
     LifeDeathProblem(
       id: 12,
-      name: '2-6',
+      name: '2-6: 눈 자리 축소',
       difficulty: ProblemDifficulty.intermediate,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1314,7 +1314,7 @@ class LifeDeathProblems {
     // 3-1: 귀곡사 (귀의 곡사궁)
     LifeDeathProblem(
       id: 13,
-      name: '3-1',
+      name: '3-1: 귀곡사',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1328,7 +1328,7 @@ class LifeDeathProblems {
     // 3-2: 직사궁 급소 (4궁도 직선)
     LifeDeathProblem(
       id: 14,
-      name: '3-2',
+      name: '3-2: 직사궁',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1342,7 +1342,7 @@ class LifeDeathProblems {
     // 3-3: 꽃사궁 (뭉친 4궁도)
     LifeDeathProblem(
       id: 15,
-      name: '3-3',
+      name: '3-3: 꽃사궁',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1356,7 +1356,7 @@ class LifeDeathProblems {
     // 3-4: 오궁도화 (5궁도 급소)
     LifeDeathProblem(
       id: 16,
-      name: '3-4',
+      name: '3-4: 오궁도화',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1367,10 +1367,10 @@ class LifeDeathProblems {
       explanation: '오궁도화(五宮桃花)는 5궁도 중 특수한 죽는 모양입니다. 보통 5궁도는 살지만, 이 모양은 급소에 치중당하면 죽습니다.',
     ),
 
-    // 3-5: 복잡한 귀 살기
+    // 3-5: 복잡한 귀 살리기
     LifeDeathProblem(
       id: 17,
-      name: '3-5',
+      name: '3-5: 귀 살리기',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.live,
       playerColor: Stone.black,
@@ -1384,7 +1384,7 @@ class LifeDeathProblems {
     // 3-6: 수상전 (활로 싸움)
     LifeDeathProblem(
       id: 18,
-      name: '3-6',
+      name: '3-6: 수상전',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1398,7 +1398,7 @@ class LifeDeathProblems {
     // 3-7: 변의 궁도 (왼쪽 패턴)
     LifeDeathProblem(
       id: 19,
-      name: '3-7',
+      name: '3-7: 변의 궁도',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1412,7 +1412,7 @@ class LifeDeathProblems {
     // 3-8: 귀의 복잡한 사활 (오른쪽 위 패턴)
     LifeDeathProblem(
       id: 20,
-      name: '3-8',
+      name: '3-8: 귀의 사활',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.kill,
       playerColor: Stone.black,
@@ -1427,7 +1427,7 @@ class LifeDeathProblems {
     // 3-9: 중앙 연결 끊기 (중앙 패턴)
     LifeDeathProblem(
       id: 21,
-      name: '3-9',
+      name: '3-9: 연결 끊기',
       difficulty: ProblemDifficulty.advanced,
       type: ProblemType.kill,
       playerColor: Stone.white,
