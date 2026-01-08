@@ -133,10 +133,11 @@ class L10n {
       'aiNormalDesc': '기본적인 전략을 사용',
       'aiHardDesc': '고급 전략과 정석 사용',
       'aiExpertDesc': '최고 수준의 AI',
-      // 사활 문제
-      'lifeDeathProblems': '사활 문제',
+      // 사활 배우기
+      'lifeDeathProblems': '사활 배우기',
       'problemList': '문제 목록',
       'problem': '문제',
+      'solveProblem': '문제 풀기',
       'difficulty': '난이도',
       'beginner': '입문',
       'intermediate': '중급',
@@ -256,10 +257,11 @@ class L10n {
       'aiNormalDesc': 'Uses basic strategies',
       'aiHardDesc': 'Advanced strategies and joseki',
       'aiExpertDesc': 'Strongest AI level',
-      // Life and Death Problems
-      'lifeDeathProblems': 'Life & Death',
+      // Life and Death Learning
+      'lifeDeathProblems': 'Learn Life & Death',
       'problemList': 'Problem List',
       'problem': 'Problem',
+      'solveProblem': 'Solve Problems',
       'difficulty': 'Difficulty',
       'beginner': 'Beginner',
       'intermediate': 'Intermediate',
@@ -379,10 +381,11 @@ class L10n {
       'aiNormalDesc': '基本的な戦略を使用',
       'aiHardDesc': '高度な戦略と定石を使用',
       'aiExpertDesc': '最強レベルのAI',
-      // 詰碁問題
-      'lifeDeathProblems': '詰碁',
+      // 詰碁学習
+      'lifeDeathProblems': '詰碁を学ぶ',
       'problemList': '問題一覧',
       'problem': '問題',
+      'solveProblem': '問題を解く',
       'difficulty': '難易度',
       'beginner': '入門',
       'intermediate': '中級',
@@ -502,10 +505,11 @@ class L10n {
       'aiNormalDesc': '使用基本策略',
       'aiHardDesc': '使用高级策略和定式',
       'aiExpertDesc': '最强AI级别',
-      // 死活题
-      'lifeDeathProblems': '死活题',
+      // 死活学习
+      'lifeDeathProblems': '学习死活',
       'problemList': '题目列表',
       'problem': '题目',
+      'solveProblem': '做题',
       'difficulty': '难度',
       'beginner': '入门',
       'intermediate': '中级',
@@ -1533,6 +1537,24 @@ class LifeDeathProblems {
       return null;
     }
   }
+
+  // 유형별 문제 ID 매핑
+  static const Map<String, List<int>> categoryProblems = {
+    'youtubeBasics': [1, 2, 3, 4],           // 바둑 입문 (단수치기)
+    'youtubeCapture': [1, 2, 3, 4],           // 돌 잡기 기초
+    'youtubeLifeDeath': [5, 6, 9, 17],        // 사활 기초 (살기)
+    'youtube3Space': [7, 8, 9],               // 3궁도 (직삼궁/곡삼궁)
+    'youtube4Space': [13, 14, 15],            // 4궁도 (직사궁/곡사궁/꽃사궁)
+    'youtube5Space': [16],                    // 5궁도 (오궁도화)
+    'youtubeCorner': [13, 20, 22],            // 귀 사활 (귀곡사)
+    'youtubeThrowIn': [11],                   // 환격 (던져넣기)
+    'youtubeCapturingRace': [18],             // 수상전 (활로싸움)
+  };
+
+  static List<LifeDeathProblem> getByCategory(String category) {
+    final ids = categoryProblems[category] ?? [];
+    return problems.where((p) => ids.contains(p.id)).toList();
+  }
 }
 
 // 사활 문제 선택 화면
@@ -1549,7 +1571,162 @@ class LifeDeathProblemSelector extends StatefulWidget {
 }
 
 class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
-  ProblemDifficulty _selectedDifficulty = ProblemDifficulty.beginner;
+  Set<int> _solvedProblems = {};
+
+  // 사활 유형 목록
+  final List<Map<String, String>> _categories = [
+    {'key': 'youtubeBasics', 'search': '바둑 입문 강좌'},
+    {'key': 'youtubeCapture', 'search': '바둑 돌 잡기 기초'},
+    {'key': 'youtubeLifeDeath', 'search': '바둑 사활 기초'},
+    {'key': 'youtube3Space', 'search': '바둑 직삼궁 곡삼궁'},
+    {'key': 'youtube4Space', 'search': '바둑 직사궁 곡사궁 꽃사궁'},
+    {'key': 'youtube5Space', 'search': '바둑 오궁도화'},
+    {'key': 'youtubeCorner', 'search': '바둑 귀곡사'},
+    {'key': 'youtubeThrowIn', 'search': '바둑 환격 던져넣기'},
+    {'key': 'youtubeCapturingRace', 'search': '바둑 수상전 활로싸움'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSolvedProblems();
+  }
+
+  Future<void> _loadSolvedProblems() async {
+    final prefs = await SharedPreferences.getInstance();
+    final solved = prefs.getStringList('solvedProblems') ?? [];
+    setState(() {
+      _solvedProblems = solved.map((s) => int.parse(s)).toSet();
+    });
+  }
+
+  void _openYoutubeSearch(String query) async {
+    final encodedQuery = Uri.encodeComponent(query);
+    final url = 'https://www.youtube.com/results?search_query=$encodedQuery';
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  void _openProblemList(String categoryKey) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryProblemList(
+          language: widget.language,
+          categoryKey: categoryKey,
+        ),
+      ),
+    ).then((_) => _loadSolvedProblems());
+  }
+
+  int _getSolvedCount(String categoryKey) {
+    final problems = LifeDeathProblems.getByCategory(categoryKey);
+    return problems.where((p) => _solvedProblems.contains(p.id)).length;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.get(widget.language, 'lifeDeathProblems')),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: _categories.length,
+        itemBuilder: (context, index) {
+          final category = _categories[index];
+          final categoryKey = category['key']!;
+          final searchQuery = category['search']!;
+          final problems = LifeDeathProblems.getByCategory(categoryKey);
+          final solvedCount = _getSolvedCount(categoryKey);
+
+          return Card(
+            margin: const EdgeInsets.only(bottom: 12),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 유형 제목
+                  Text(
+                    L10n.get(widget.language, categoryKey),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // 진행 상황
+                  if (problems.isNotEmpty)
+                    Text(
+                      '${L10n.get(widget.language, 'solvedCount')}: $solvedCount/${problems.length}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  const SizedBox(height: 12),
+                  // 버튼들
+                  Row(
+                    children: [
+                      // 유튜브 보기 버튼
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => _openYoutubeSearch(searchQuery),
+                          icon: const Icon(Icons.play_circle_outline, color: Colors.red, size: 20),
+                          label: Text(L10n.get(widget.language, 'watchYoutube')),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.red,
+                            side: const BorderSide(color: Colors.red),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      // 문제 풀기 버튼
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: problems.isEmpty ? null : () => _openProblemList(categoryKey),
+                          icon: const Icon(Icons.edit, size: 20),
+                          label: Text('${L10n.get(widget.language, 'solveProblem')} (${problems.length})'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// 유형별 문제 목록 화면
+class CategoryProblemList extends StatefulWidget {
+  final GameLanguage language;
+  final String categoryKey;
+
+  const CategoryProblemList({
+    super.key,
+    required this.language,
+    required this.categoryKey,
+  });
+
+  @override
+  State<CategoryProblemList> createState() => _CategoryProblemListState();
+}
+
+class _CategoryProblemListState extends State<CategoryProblemList> {
   Set<int> _solvedProblems = {};
 
   @override
@@ -1575,205 +1752,40 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
     );
   }
 
-  String _getDifficultyName(ProblemDifficulty difficulty) {
-    switch (difficulty) {
-      case ProblemDifficulty.beginner:
-        return L10n.get(widget.language, 'beginner');
-      case ProblemDifficulty.intermediate:
-        return L10n.get(widget.language, 'intermediate');
-      case ProblemDifficulty.advanced:
-        return L10n.get(widget.language, 'advanced');
-    }
-  }
-
-  Color _getDifficultyColor(ProblemDifficulty difficulty) {
-    switch (difficulty) {
-      case ProblemDifficulty.beginner:
-        return Colors.green;
-      case ProblemDifficulty.intermediate:
-        return Colors.orange;
-      case ProblemDifficulty.advanced:
-        return Colors.red;
-    }
-  }
-
-  void _showYoutubeDialog(BuildContext context) {
-    final youtubeTopics = [
-      {'key': 'youtubeBasics', 'search': '바둑 입문 강좌'},
-      {'key': 'youtubeCapture', 'search': '바둑 돌 잡기 기초'},
-      {'key': 'youtubeLifeDeath', 'search': '바둑 사활 기초'},
-      {'key': 'youtube3Space', 'search': '바둑 직삼궁 곡삼궁'},
-      {'key': 'youtube4Space', 'search': '바둑 직사궁 곡사궁 꽃사궁'},
-      {'key': 'youtube5Space', 'search': '바둑 오궁도화'},
-      {'key': 'youtubeCorner', 'search': '바둑 귀곡사'},
-      {'key': 'youtubeThrowIn', 'search': '바둑 환격 던져넣기'},
-      {'key': 'youtubeCapturingRace', 'search': '바둑 수상전 활로싸움'},
-    ];
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            const Icon(Icons.play_circle_outline, color: Colors.red),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                L10n.get(widget.language, 'watchYoutube'),
-                style: const TextStyle(fontSize: 18),
-              ),
-            ),
-          ],
-        ),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                L10n.get(widget.language, 'selectProblemType'),
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-              ),
-              const SizedBox(height: 12),
-              Flexible(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: youtubeTopics.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1),
-                  itemBuilder: (context, index) {
-                    final topic = youtubeTopics[index];
-                    return ListTile(
-                      leading: const Icon(Icons.play_arrow, color: Colors.red),
-                      title: Text(L10n.get(widget.language, topic['key']!)),
-                      trailing: const Icon(Icons.open_in_new, size: 18),
-                      onTap: () {
-                        Navigator.pop(context);
-                        _openYoutubeSearch(topic['search']!);
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(L10n.get(widget.language, 'cancel')),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _openYoutubeSearch(String query) async {
-    final encodedQuery = Uri.encodeComponent(query);
-    final url = 'https://www.youtube.com/results?search_query=$encodedQuery';
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final problems = LifeDeathProblems.getByDifficulty(_selectedDifficulty);
+    final problems = LifeDeathProblems.getByCategory(widget.categoryKey);
     final solvedCount = problems.where((p) => _solvedProblems.contains(p.id)).length;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(L10n.get(widget.language, 'lifeDeathProblems')),
+        title: Text(L10n.get(widget.language, widget.categoryKey)),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Column(
         children: [
-          // 난이도 선택 탭
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: ProblemDifficulty.values.map((difficulty) {
-                final isSelected = difficulty == _selectedDifficulty;
-                final difficultyProblems = LifeDeathProblems.getByDifficulty(difficulty);
-                final difficultySolvedCount = difficultyProblems
-                    .where((p) => _solvedProblems.contains(p.id))
-                    .length;
-
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _selectedDifficulty = difficulty;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isSelected
-                            ? _getDifficultyColor(difficulty)
-                            : Colors.grey.shade200,
-                        foregroundColor: isSelected ? Colors.white : Colors.black,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            _getDifficultyName(difficulty),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '$difficultySolvedCount/${difficultyProblems.length}',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
           // 진행 상황
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   '${L10n.get(widget.language, 'solvedCount')}: $solvedCount/${problems.length}',
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                LinearProgressIndicator(
-                  value: problems.isEmpty ? 0 : solvedCount / problems.length,
-                  backgroundColor: Colors.grey.shade300,
-                  valueColor: AlwaysStoppedAnimation(_getDifficultyColor(_selectedDifficulty)),
-                  minHeight: 8,
-                ).expand(),
+                const Spacer(),
+                SizedBox(
+                  width: 150,
+                  child: LinearProgressIndicator(
+                    value: problems.isEmpty ? 0 : solvedCount / problems.length,
+                    backgroundColor: Colors.grey.shade300,
+                    valueColor: const AlwaysStoppedAnimation(Colors.blue),
+                    minHeight: 8,
+                  ),
+                ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
-          // 유튜브로 배우기 버튼
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: () => _showYoutubeDialog(context),
-                icon: const Icon(Icons.play_circle_outline, color: Colors.red),
-                label: Text(L10n.get(widget.language, 'watchYoutube')),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red,
-                  side: const BorderSide(color: Colors.red),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
           // 문제 목록
           Expanded(
             child: GridView.builder(
@@ -1815,7 +1827,7 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
@@ -1829,10 +1841,11 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
                         Text(
                           problem.name,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: isSolved ? Colors.green.shade700 : Colors.black,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -1848,7 +1861,7 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
                                       ? L10n.get(widget.language, 'liveWithBlack')
                                       : L10n.get(widget.language, 'liveWithWhite')),
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 9,
                             color: Colors.grey.shade600,
                           ),
                           textAlign: TextAlign.center,
@@ -1864,11 +1877,6 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
       ),
     );
   }
-}
-
-// LinearProgressIndicator를 Row에서 사용하기 위한 확장
-extension ExpandedWidget on Widget {
-  Widget expand() => Expanded(child: Padding(padding: const EdgeInsets.only(left: 16), child: this));
 }
 
 // 사활 문제 풀이 화면
