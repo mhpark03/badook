@@ -1115,9 +1115,13 @@ class LifeDeathProblem {
   final int boardSize;
   final List<List<int>> blackStones;
   final List<List<int>> whiteStones;
-  final List<List<int>> correctMoves; // 정답 수순
+  final List<List<int>> correctMoves; // 정답 수순 (한 수 문제용)
   final List<List<int>>? alternativeMoves; // 대안 정답
   final String? explanation; // 정답 설명
+  // 다수 문제용: [사용자1, AI응수1, 사용자2, AI응수2, ...] 형태
+  final List<List<int>>? moveSequence;
+  // 오답시 AI 응수 (틀린 수에 대한 반격)
+  final List<int>? wrongMoveResponse;
 
   const LifeDeathProblem({
     required this.id,
@@ -1131,6 +1135,8 @@ class LifeDeathProblem {
     required this.correctMoves,
     this.alternativeMoves,
     this.explanation,
+    this.moveSequence,
+    this.wrongMoveResponse,
   });
 }
 
@@ -1395,7 +1401,7 @@ class LifeDeathProblems {
       explanation: '수상전(手相戰)은 서로 잡으려는 활로 싸움입니다. "바깥 공배부터 메우라"는 격언처럼, 바깥쪽 활로를 먼저 줄여야 이길 수 있습니다.',
     ),
 
-    // 3-7: 변의 궁도 (왼쪽 패턴)
+    // 3-7: 변의 궁도 (변에서 백 잡기)
     LifeDeathProblem(
       id: 19,
       name: '3-7: 변의 궁도',
@@ -1403,10 +1409,10 @@ class LifeDeathProblems {
       type: ProblemType.kill,
       playerColor: Stone.black,
       boardSize: 7,
-      blackStones: [[0, 2], [1, 2], [2, 3], [3, 3]],
-      whiteStones: [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0], [2, 2], [3, 2]],
-      correctMoves: [[2, 1]],
-      explanation: '변에서 백의 눈 모양을 깨는 급소입니다. 이 자리에 착점하면 백은 한 눈밖에 만들 수 없습니다.',
+      blackStones: [[0, 5], [1, 4], [2, 0], [2, 1], [2, 2], [2, 3]],
+      whiteStones: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 0], [1, 1]],
+      correctMoves: [[1, 2]],
+      explanation: '변에서 백의 눈 모양을 깨는 급소입니다. 이 자리에 치중하면 백은 두 눈을 만들 수 없어 죽습니다.',
     ),
 
     // 3-8: 귀의 복잡한 사활 (오른쪽 위 패턴)
@@ -1437,6 +1443,25 @@ class LifeDeathProblems {
       correctMoves: [[4, 2]],
       alternativeMoves: [[4, 4]],
       explanation: '흑의 돌 연결을 끊는 급소입니다. 이 자리를 차지하면 흑돌을 분단하여 약화시킬 수 있습니다.',
+    ),
+
+    // 3-10: 다수 문제 - 귀에서 3수 잡기
+    LifeDeathProblem(
+      id: 22,
+      name: '3-10: 귀 3수',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [[0, 3], [1, 3], [2, 3], [3, 0], [3, 1], [3, 2], [3, 3]],
+      whiteStones: [[0, 0], [0, 1], [1, 1], [2, 0], [2, 1], [2, 2]],
+      correctMoves: [[1, 2]],
+      moveSequence: [
+        [1, 2],  // 흑1: 급소 치중
+        [0, 2],  // 백2: 저항
+        [1, 0],  // 흑3: 마무리
+      ],
+      explanation: '귀에서 3수 만에 백을 잡는 문제입니다. 흑1로 급소 치중, 백2 저항 후 흑3으로 마무리합니다.',
     ),
   ];
 
@@ -1711,6 +1736,8 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   String _message = '';
   List<int>? _lastMove;
   List<int>? _hintMove;
+  int _sequenceStep = 0; // 다수 문제에서 현재 단계
+  bool _waitingForAI = false; // AI 응수 대기 중
 
   @override
   void initState() {
@@ -1745,6 +1772,8 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     _message = '';
     _lastMove = null;
     _hintMove = null;
+    _sequenceStep = 0;
+    _waitingForAI = false;
   }
 
   void _resetBoard() {
@@ -1753,55 +1782,130 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     });
   }
 
-  bool _isCorrectMove(int row, int col) {
-    // 첫 수가 정답인지 확인
-    for (final correct in widget.problem.correctMoves) {
-      if (correct[0] == row && correct[1] == col) {
-        return true;
+  // 다수 문제인지 확인
+  bool get _isMultiMoveProbblem =>
+      widget.problem.moveSequence != null &&
+      widget.problem.moveSequence!.length > 1;
+
+  // 현재 단계의 정답 확인
+  bool _isCorrectMoveForStep(int row, int col, int step) {
+    if (_isMultiMoveProbblem) {
+      final sequence = widget.problem.moveSequence!;
+      // step * 2가 사용자의 수 (0, 2, 4, ...)
+      final playerMoveIndex = step * 2;
+      if (playerMoveIndex < sequence.length) {
+        final expected = sequence[playerMoveIndex];
+        return expected[0] == row && expected[1] == col;
       }
-    }
-    // 대안 정답 확인
-    if (widget.problem.alternativeMoves != null) {
-      for (final alt in widget.problem.alternativeMoves!) {
-        if (alt[0] == row && alt[1] == col) {
+      return false;
+    } else {
+      // 기존 한 수 문제
+      for (final correct in widget.problem.correctMoves) {
+        if (correct[0] == row && correct[1] == col) {
           return true;
         }
       }
+      if (widget.problem.alternativeMoves != null) {
+        for (final alt in widget.problem.alternativeMoves!) {
+          if (alt[0] == row && alt[1] == col) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
-    return false;
+  }
+
+  // AI 응수 색상 (사용자 반대)
+  Stone get _aiColor => widget.problem.playerColor == Stone.black
+      ? Stone.white
+      : Stone.black;
+
+  // AI 응수 실행
+  void _executeAIResponse() {
+    if (!_isMultiMoveProbblem) return;
+
+    final sequence = widget.problem.moveSequence!;
+    // step * 2 + 1이 AI의 수 (1, 3, 5, ...)
+    final aiMoveIndex = _sequenceStep * 2 + 1;
+
+    if (aiMoveIndex < sequence.length) {
+      final aiMove = sequence[aiMoveIndex];
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          setState(() {
+            _board[aiMove[0]][aiMove[1]] = _aiColor;
+            _lastMove = aiMove;
+            _sequenceStep++;
+            _waitingForAI = false;
+            _message = ''; // 메시지 초기화
+          });
+        }
+      });
+    }
+  }
+
+  // 다수 문제의 총 사용자 수 개수
+  int get _totalPlayerMoves {
+    if (!_isMultiMoveProbblem) return 1;
+    return (widget.problem.moveSequence!.length + 1) ~/ 2;
   }
 
   void _onTap(int row, int col) {
-    if (_isSolved || _showingAnswer) return;
+    if (_isSolved || _showingAnswer || _waitingForAI) return;
     if (_board[row][col] != Stone.none) return;
 
-    // 첫 수만 확인 (간단한 사활 문제)
-    if (_playerMoves.isEmpty) {
-      if (_isCorrectMove(row, col)) {
+    if (_isCorrectMoveForStep(row, col, _sequenceStep)) {
+      // 정답
+      setState(() {
+        _board[row][col] = widget.problem.playerColor;
+        _playerMoves.add([row, col]);
+        _lastMove = [row, col];
+      });
+
+      if (_isMultiMoveProbblem) {
+        final sequence = widget.problem.moveSequence!;
+        final aiMoveIndex = _sequenceStep * 2 + 1;
+
+        if (aiMoveIndex < sequence.length) {
+          // AI 응수가 있으면 실행
+          setState(() {
+            _waitingForAI = true;
+            _message = '';
+          });
+          _executeAIResponse();
+        } else {
+          // 마지막 수였으면 성공
+          setState(() {
+            _isSolved = true;
+            _message = L10n.get(widget.language, 'correct');
+          });
+        }
+      } else {
+        // 한 수 문제는 바로 성공
         setState(() {
-          _board[row][col] = widget.problem.playerColor;
-          _playerMoves.add([row, col]);
-          _lastMove = [row, col];
           _isSolved = true;
           _message = L10n.get(widget.language, 'correct');
         });
-      } else {
-        setState(() {
-          _board[row][col] = widget.problem.playerColor;
-          _lastMove = [row, col];
-          _message = L10n.get(widget.language, 'incorrect');
-        });
-        // 잠시 후 돌 제거
-        Future.delayed(const Duration(milliseconds: 800), () {
-          if (mounted) {
-            setState(() {
-              _board[row][col] = Stone.none;
-              _lastMove = null;
-              _message = '';
-            });
-          }
-        });
       }
+    } else {
+      // 오답
+      setState(() {
+        _board[row][col] = widget.problem.playerColor;
+        _lastMove = [row, col];
+        _message = L10n.get(widget.language, 'incorrect');
+      });
+
+      // 잠시 후 돌 제거 (또는 AI 반격)
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) {
+          setState(() {
+            _board[row][col] = Stone.none;
+            _lastMove = null;
+            _message = '';
+          });
+        }
+      });
     }
   }
 
@@ -1809,7 +1913,13 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     if (_isSolved) return;
     setState(() {
       _showingAnswer = true;
-      if (widget.problem.correctMoves.isNotEmpty) {
+      if (_isMultiMoveProbblem) {
+        // 다수 문제는 첫 번째 수를 힌트로
+        final sequence = widget.problem.moveSequence!;
+        if (sequence.isNotEmpty) {
+          _hintMove = sequence[0];
+        }
+      } else if (widget.problem.correctMoves.isNotEmpty) {
         final answer = widget.problem.correctMoves[0];
         _hintMove = answer;
       }
@@ -1819,7 +1929,14 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   void _showHint() {
     if (_isSolved || _showingAnswer) return;
     setState(() {
-      if (widget.problem.correctMoves.isNotEmpty) {
+      if (_isMultiMoveProbblem) {
+        // 현재 단계의 힌트
+        final sequence = widget.problem.moveSequence!;
+        final playerMoveIndex = _sequenceStep * 2;
+        if (playerMoveIndex < sequence.length) {
+          _hintMove = sequence[playerMoveIndex];
+        }
+      } else if (widget.problem.correctMoves.isNotEmpty) {
         _hintMove = widget.problem.correctMoves[0];
       }
     });
