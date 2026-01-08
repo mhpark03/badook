@@ -3890,7 +3890,22 @@ class _BadukGameState extends State<BadukGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.vsAI ? tr('vsAI') : tr('twoPlayer')),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.vsAI ? tr('vsAI') : tr('twoPlayer'), style: const TextStyle(fontSize: 16)),
+            Text(
+              gameMessage,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.normal,
+                color: gameOver
+                    ? (gameMessage.contains(tr('congratsWin')) ? Colors.green.shade700 : Colors.blue.shade700)
+                    : (isAIThinking ? Colors.orange.shade700 : Colors.black87),
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
@@ -3903,20 +3918,7 @@ class _BadukGameState extends State<BadukGame> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text(
-              gameMessage,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: gameOver
-                    ? (gameMessage.contains(tr('congratsWin')) ? Colors.green : Colors.blue)
-                    : (isAIThinking ? Colors.orange : Colors.black),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -3927,7 +3929,6 @@ class _BadukGameState extends State<BadukGame> {
                   blackCaptures,
                   Colors.black
                 ),
-                Text('$boardSize x $boardSize', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 _buildScoreCard(
                   widget.vsAI
                     ? (widget.playerColor == Stone.white ? '${tr('me')} (${tr('white')})' : '${tr('ai')} (${tr('white')})')
@@ -3938,13 +3939,12 @@ class _BadukGameState extends State<BadukGame> {
               ],
             ),
           ),
-          const SizedBox(height: 8),
           Expanded(
             child: Center(
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Container(
-                  margin: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: const Color(0xFFDEB887),
                     borderRadius: BorderRadius.circular(8),
