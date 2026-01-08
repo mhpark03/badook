@@ -1394,6 +1394,50 @@ class LifeDeathProblems {
       correctMoves: [[1, 2], [0, 2], [1, 0]],
       explanation: '수상전(手相戰)은 서로 잡으려는 활로 싸움입니다. "바깥 공배부터 메우라"는 격언처럼, 바깥쪽 활로를 먼저 줄여야 이길 수 있습니다.',
     ),
+
+    // 3-7: 변의 궁도 (왼쪽 패턴)
+    LifeDeathProblem(
+      id: 19,
+      name: '3-7',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [[0, 2], [1, 2], [2, 3], [3, 3]],
+      whiteStones: [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0], [2, 2], [3, 2]],
+      correctMoves: [[2, 1]],
+      explanation: '변에서 백의 눈 모양을 깨는 급소입니다. 이 자리에 착점하면 백은 한 눈밖에 만들 수 없습니다.',
+    ),
+
+    // 3-8: 귀의 복잡한 사활 (오른쪽 위 패턴)
+    LifeDeathProblem(
+      id: 20,
+      name: '3-8',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [[0, 6], [1, 4], [2, 3], [2, 4], [3, 4], [3, 5], [4, 6]],
+      whiteStones: [[0, 4], [0, 5], [1, 5], [1, 6], [2, 5], [2, 6], [3, 6], [4, 5]],
+      correctMoves: [[1, 3]],
+      alternativeMoves: [[0, 3]],
+      explanation: '귀에서 백의 근거를 빼앗는 급소입니다. 백의 눈 공간을 줄여 잡을 수 있습니다.',
+    ),
+
+    // 3-9: 중앙 연결 끊기 (중앙 패턴)
+    LifeDeathProblem(
+      id: 21,
+      name: '3-9',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.white,
+      boardSize: 7,
+      blackStones: [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5]],
+      whiteStones: [[4, 1], [4, 3], [4, 5], [5, 2], [5, 4]],
+      correctMoves: [[4, 2]],
+      alternativeMoves: [[4, 4]],
+      explanation: '흑의 돌 연결을 끊는 급소입니다. 이 자리를 차지하면 흑돌을 분단하여 약화시킬 수 있습니다.',
+    ),
   ];
 
   static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
