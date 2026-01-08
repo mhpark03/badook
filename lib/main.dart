@@ -567,7 +567,7 @@ class _GameModeSelectorState extends State<GameModeSelector> {
         ),
         const SizedBox(height: 12),
         ElevatedButton(
-          onPressed: () async {
+          onPressed: () {
             // 저장된 게임을 불러와서 시작
             Navigator.push(
               context,
@@ -577,17 +577,12 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                   playerColor: Stone.values[playerColorIndex],
                   language: widget.language,
                   aiDifficulty: AIDifficulty.values[aiDifficultyIndex],
+                  loadSavedGame: true,  // 자동 불러오기
                 ),
               ),
             ).then((_) {
               // 화면 복귀 시 저장된 게임 정보 새로고침
               _checkSavedGame();
-            });
-
-            // 잠시 후 게임 불러오기 (Navigator 전환 후)
-            Future.delayed(const Duration(milliseconds: 500), () async {
-              final prefs = await SharedPreferences.getInstance();
-              // 게임이 불러와질 것임을 표시 (BadukGame에서 처리)
             });
           },
           style: ElevatedButton.styleFrom(
@@ -743,6 +738,7 @@ class BadukGame extends StatefulWidget {
   final Stone playerColor;
   final GameLanguage language;
   final AIDifficulty aiDifficulty;
+  final bool loadSavedGame;
 
   const BadukGame({
     super.key,
@@ -750,6 +746,7 @@ class BadukGame extends StatefulWidget {
     this.playerColor = Stone.black,
     required this.language,
     this.aiDifficulty = AIDifficulty.intermediate,
+    this.loadSavedGame = false,
   });
 
   @override
@@ -797,7 +794,13 @@ class _BadukGameState extends State<BadukGame> {
     _aiSettings = AISettings.forDifficulty(widget.aiDifficulty);
     _initJosekiDatabase();
     _initBoard();
-    if (widget.vsAI && aiColor == Stone.black) {
+
+    // 이어하기: 저장된 게임 자동 불러오기
+    if (widget.loadSavedGame) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _loadGame();
+      });
+    } else if (widget.vsAI && aiColor == Stone.black) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _aiMove();
       });
