@@ -3890,22 +3890,17 @@ class _BadukGameState extends State<BadukGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(widget.vsAI ? tr('vsAI') : tr('twoPlayer'), style: const TextStyle(fontSize: 16)),
-            Text(
-              gameMessage,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.normal,
-                color: gameOver
-                    ? (gameMessage.contains(tr('congratsWin')) ? Colors.green.shade700 : Colors.blue.shade700)
-                    : (isAIThinking ? Colors.orange.shade700 : Colors.black87),
-              ),
-            ),
-          ],
+        title: Text(
+          gameMessage,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: gameOver
+                ? (gameMessage.contains(tr('congratsWin')) ? Colors.green.shade800 : Colors.blue.shade800)
+                : (isAIThinking ? Colors.orange.shade800 : Colors.black87),
+          ),
         ),
+        centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
