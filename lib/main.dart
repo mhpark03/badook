@@ -3609,40 +3609,6 @@ class _BadukGameState extends State<BadukGame> {
                 PopupMenuItem(value: 19, child: Text('19x19 (${tr('expert')})')),
               ],
             ),
-          // 저장/불러오기 메뉴
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.save),
-            tooltip: tr('save'),
-            onSelected: (value) {
-              if (value == 'save') {
-                _saveGame();
-              } else if (value == 'load') {
-                _loadGame();
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'save',
-                child: Row(
-                  children: [
-                    const Icon(Icons.save_alt, size: 20),
-                    const SizedBox(width: 8),
-                    Text(tr('save')),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'load',
-                child: Row(
-                  children: [
-                    const Icon(Icons.folder_open, size: 20),
-                    const SizedBox(width: 8),
-                    Text(tr('load')),
-                  ],
-                ),
-              ),
-            ],
-          ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _resetGame,
