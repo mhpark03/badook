@@ -6,6 +6,9 @@ void main() {
   runApp(const BadukApp());
 }
 
+// AI 난이도 설정
+enum AIDifficulty { beginner, intermediate, advanced, expert }
+
 // 언어 설정
 enum GameLanguage { korean, english, japanese, chinese }
 
@@ -43,6 +46,11 @@ class L10n {
       'intermediate': '중급',
       'expert': '정식',
       'language': '언어',
+      'aiLevel': 'AI 레벨',
+      'aiEasy': '쉬움',
+      'aiNormal': '보통',
+      'aiHard': '어려움',
+      'aiExpert': '최강',
     },
     GameLanguage.english: {
       'appTitle': 'Go',
@@ -76,6 +84,11 @@ class L10n {
       'intermediate': 'Intermediate',
       'expert': 'Expert',
       'language': 'Language',
+      'aiLevel': 'AI Level',
+      'aiEasy': 'Easy',
+      'aiNormal': 'Normal',
+      'aiHard': 'Hard',
+      'aiExpert': 'Expert',
     },
     GameLanguage.japanese: {
       'appTitle': '囲碁',
@@ -109,6 +122,11 @@ class L10n {
       'intermediate': '中級',
       'expert': '上級',
       'language': '言語',
+      'aiLevel': 'AIレベル',
+      'aiEasy': '簡単',
+      'aiNormal': '普通',
+      'aiHard': '難しい',
+      'aiExpert': '最強',
     },
     GameLanguage.chinese: {
       'appTitle': '围棋',
@@ -142,6 +160,11 @@ class L10n {
       'intermediate': '中级',
       'expert': '高级',
       'language': '语言',
+      'aiLevel': 'AI等级',
+      'aiEasy': '简单',
+      'aiNormal': '普通',
+      'aiHard': '困难',
+      'aiExpert': '最强',
     },
   };
 
@@ -195,7 +218,7 @@ class _BadukAppState extends State<BadukApp> {
   }
 }
 
-class GameModeSelector extends StatelessWidget {
+class GameModeSelector extends StatefulWidget {
   final GameLanguage language;
   final Function(GameLanguage) onLanguageChanged;
 
@@ -206,22 +229,42 @@ class GameModeSelector extends StatelessWidget {
   });
 
   @override
+  State<GameModeSelector> createState() => _GameModeSelectorState();
+}
+
+class _GameModeSelectorState extends State<GameModeSelector> {
+  AIDifficulty _selectedDifficulty = AIDifficulty.intermediate;
+
+  String _getDifficultyName(AIDifficulty difficulty) {
+    switch (difficulty) {
+      case AIDifficulty.beginner:
+        return L10n.get(widget.language, 'aiEasy');
+      case AIDifficulty.intermediate:
+        return L10n.get(widget.language, 'aiNormal');
+      case AIDifficulty.advanced:
+        return L10n.get(widget.language, 'aiHard');
+      case AIDifficulty.expert:
+        return L10n.get(widget.language, 'aiExpert');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(L10n.get(language, 'appTitle')),
+        title: Text(L10n.get(widget.language, 'appTitle')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           PopupMenuButton<GameLanguage>(
             icon: const Icon(Icons.language),
-            tooltip: L10n.get(language, 'language'),
-            onSelected: onLanguageChanged,
+            tooltip: L10n.get(widget.language, 'language'),
+            onSelected: widget.onLanguageChanged,
             itemBuilder: (context) => GameLanguage.values.map((lang) {
               return PopupMenuItem(
                 value: lang,
                 child: Row(
                   children: [
-                    if (lang == language)
+                    if (lang == widget.language)
                       const Icon(Icons.check, size: 18)
                     else
                       const SizedBox(width: 18),
@@ -239,10 +282,55 @@ class GameModeSelector extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              L10n.get(language, 'appTitle'),
+              L10n.get(widget.language, 'appTitle'),
               style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 48),
+            const SizedBox(height: 32),
+            // AI 난이도 선택
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.brown.shade100,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.brown.shade300),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.psychology, color: Colors.brown),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${L10n.get(widget.language, 'aiLevel')}: ',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  DropdownButton<AIDifficulty>(
+                    value: _selectedDifficulty,
+                    underline: const SizedBox(),
+                    items: AIDifficulty.values.map((difficulty) {
+                      return DropdownMenuItem(
+                        value: difficulty,
+                        child: Text(
+                          _getDifficultyName(difficulty),
+                          style: TextStyle(
+                            fontWeight: difficulty == _selectedDifficulty
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedDifficulty = value;
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
             // 컴퓨터와 대국 (흑)
             ElevatedButton(
               onPressed: () {
@@ -252,7 +340,8 @@ class GameModeSelector extends StatelessWidget {
                     builder: (context) => BadukGame(
                       vsAI: true,
                       playerColor: Stone.black,
-                      language: language,
+                      language: widget.language,
+                      aiDifficulty: _selectedDifficulty,
                     ),
                   ),
                 );
@@ -272,7 +361,7 @@ class GameModeSelector extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Text(L10n.get(language, 'playAsBlack'), style: const TextStyle(fontSize: 18)),
+                  Text(L10n.get(widget.language, 'playAsBlack'), style: const TextStyle(fontSize: 18)),
                 ],
               ),
             ),
@@ -286,7 +375,8 @@ class GameModeSelector extends StatelessWidget {
                     builder: (context) => BadukGame(
                       vsAI: true,
                       playerColor: Stone.white,
-                      language: language,
+                      language: widget.language,
+                      aiDifficulty: _selectedDifficulty,
                     ),
                   ),
                 );
@@ -307,7 +397,7 @@ class GameModeSelector extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Text(L10n.get(language, 'playAsWhite'), style: const TextStyle(fontSize: 18)),
+                  Text(L10n.get(widget.language, 'playAsWhite'), style: const TextStyle(fontSize: 18)),
                 ],
               ),
             ),
@@ -320,7 +410,7 @@ class GameModeSelector extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => BadukGame(
                       vsAI: false,
-                      language: language,
+                      language: widget.language,
                     ),
                   ),
                 );
@@ -333,7 +423,7 @@ class GameModeSelector extends StatelessWidget {
                 children: [
                   const Icon(Icons.people, size: 28),
                   const SizedBox(width: 12),
-                  Text(L10n.get(language, 'twoPlayerMode'), style: const TextStyle(fontSize: 18)),
+                  Text(L10n.get(widget.language, 'twoPlayerMode'), style: const TextStyle(fontSize: 18)),
                 ],
               ),
             ),
@@ -345,6 +435,117 @@ class GameModeSelector extends StatelessWidget {
 }
 
 enum Stone { none, black, white }
+
+// MCTS 노드 클래스
+class MCTSNode {
+  final List<int>? move;
+  MCTSNode? parent;
+  List<MCTSNode> children = [];
+  int visits = 0;
+  double wins = 0.0;
+  List<List<int>> untriedMoves;
+  final Stone player;
+
+  MCTSNode({
+    this.move,
+    this.parent,
+    required this.untriedMoves,
+    required this.player,
+  });
+
+  // UCB1 값 계산
+  double ucb1(double explorationConstant) {
+    if (visits == 0) return double.infinity;
+    return (wins / visits) +
+        explorationConstant * sqrt(log(parent!.visits) / visits);
+  }
+
+  // 가장 좋은 자식 선택 (UCB1 기반)
+  MCTSNode selectChild(double explorationConstant) {
+    MCTSNode? best;
+    double bestValue = double.negativeInfinity;
+    for (var child in children) {
+      double value = child.ucb1(explorationConstant);
+      if (value > bestValue) {
+        bestValue = value;
+        best = child;
+      }
+    }
+    return best!;
+  }
+
+  // 확장 가능한지 확인
+  bool get isFullyExpanded => untriedMoves.isEmpty;
+
+  // 터미널 노드인지 확인
+  bool get isTerminal => children.isEmpty && untriedMoves.isEmpty;
+
+  // 가장 많이 방문한 자식 반환 (최종 수 선택용)
+  MCTSNode? getMostVisitedChild() {
+    if (children.isEmpty) return null;
+    return children.reduce((a, b) => a.visits > b.visits ? a : b);
+  }
+}
+
+// AI 설정 클래스
+class AISettings {
+  final int mctsIterations;
+  final int playoutDepth;
+  final double explorationConstant;
+  final bool useHeuristics;
+  final double randomness;
+  final int candidateCount;
+
+  const AISettings({
+    required this.mctsIterations,
+    required this.playoutDepth,
+    required this.explorationConstant,
+    required this.useHeuristics,
+    required this.randomness,
+    required this.candidateCount,
+  });
+
+  static AISettings forDifficulty(AIDifficulty difficulty) {
+    switch (difficulty) {
+      case AIDifficulty.beginner:
+        return const AISettings(
+          mctsIterations: 50,
+          playoutDepth: 30,
+          explorationConstant: 1.414,
+          useHeuristics: false,
+          randomness: 0.4,
+          candidateCount: 5,
+        );
+      case AIDifficulty.intermediate:
+        return const AISettings(
+          mctsIterations: 200,
+          playoutDepth: 60,
+          explorationConstant: 1.414,
+          useHeuristics: true,
+          randomness: 0.2,
+          candidateCount: 10,
+        );
+      case AIDifficulty.advanced:
+        return const AISettings(
+          mctsIterations: 500,
+          playoutDepth: 100,
+          explorationConstant: 1.5,
+          useHeuristics: true,
+          randomness: 0.1,
+          candidateCount: 15,
+        );
+      case AIDifficulty.expert:
+        return const AISettings(
+          mctsIterations: 1000,
+          playoutDepth: 150,
+          explorationConstant: 1.6,
+          useHeuristics: true,
+          randomness: 0.05,
+          candidateCount: 20,
+        );
+    }
+  }
+}
 
 extension StoneExtension on Stone {
   Stone get opponent {
@@ -363,12 +564,14 @@ class BadukGame extends StatefulWidget {
   final bool vsAI;
   final Stone playerColor;
   final GameLanguage language;
+  final AIDifficulty aiDifficulty;
 
   const BadukGame({
     super.key,
     required this.vsAI,
     this.playerColor = Stone.black,
     required this.language,
+    this.aiDifficulty = AIDifficulty.intermediate,
   });
 
   @override
@@ -390,6 +593,13 @@ class _BadukGameState extends State<BadukGame> {
   Map<String, int> territoryCount = {'black': 0, 'white': 0};
   bool isAIThinking = false;
   final Random _random = Random();
+  late AISettings _aiSettings;
+
+  // 패턴 데이터베이스
+  final Map<String, List<List<int>>> _josekiDatabase = {};
+
+  // 트랜스포지션 테이블 (캐시)
+  final Map<String, double> _transpositionTable = {};
 
   String tr(String key) => L10n.get(widget.language, key);
 
@@ -399,12 +609,52 @@ class _BadukGameState extends State<BadukGame> {
   void initState() {
     super.initState();
     boardSize = 19;
+    _aiSettings = AISettings.forDifficulty(widget.aiDifficulty);
+    _initJosekiDatabase();
     _initBoard();
     if (widget.vsAI && aiColor == Stone.black) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _aiMove();
       });
     }
+  }
+
+  // 정석 데이터베이스 초기화
+  void _initJosekiDatabase() {
+    // 화점 정석
+    _josekiDatabase['corner_33'] = [
+      [3, 3], [15, 3], [3, 15], [15, 15]
+    ];
+
+    // 소목 정석
+    _josekiDatabase['corner_34'] = [
+      [3, 4], [4, 3], [15, 4], [16, 3],
+      [3, 14], [4, 15], [15, 14], [16, 15]
+    ];
+
+    // 고목 정석
+    _josekiDatabase['corner_35'] = [
+      [3, 5], [5, 3], [15, 5], [16, 5],
+      [3, 13], [5, 15], [15, 13], [16, 13]
+    ];
+
+    // 화점 협공
+    _josekiDatabase['approach_33'] = [
+      [5, 3], [3, 5], [5, 15], [3, 13],
+      [13, 3], [15, 5], [13, 15], [15, 13]
+    ];
+
+    // 날일자 정석
+    _josekiDatabase['knight_move'] = [
+      [4, 6], [6, 4], [4, 12], [6, 14],
+      [14, 6], [12, 4], [14, 12], [12, 14]
+    ];
+
+    // 두 칸 벌림
+    _josekiDatabase['two_space_extension'] = [
+      [3, 6], [6, 3], [3, 12], [6, 15],
+      [15, 6], [12, 3], [15, 12], [12, 15]
+    ];
   }
 
   void _initBoard() {
@@ -586,14 +836,25 @@ class _BadukGameState extends State<BadukGame> {
 
     if (validMoves.isEmpty) return null;
 
+    // 난이도별 랜덤성 추가 (초급은 가끔 실수)
+    if (_random.nextDouble() < _aiSettings.randomness) {
+      // 좋은 수 중에서 랜덤 선택
+      List<List<int>> reasonableMoves = _getReasonableMoves(validMoves);
+      if (reasonableMoves.isNotEmpty) {
+        return reasonableMoves[_random.nextInt(reasonableMoves.length)];
+      }
+    }
+
     // 영향력 맵 계산
     _calculateInfluenceMap();
 
-    // 초반 정석 체크
-    int stoneCount = _countStones();
-    if (stoneCount < 12) {
-      List<int>? openingMove = _getOpeningMove(validMoves);
-      if (openingMove != null) return openingMove;
+    // 초반 정석 체크 (고급 난이도에서만 정석 사용)
+    if (_aiSettings.useHeuristics) {
+      int stoneCount = _countStones();
+      if (stoneCount < 12) {
+        List<int>? openingMove = _getOpeningMoveAdvanced(validMoves);
+        if (openingMove != null) return openingMove;
+      }
     }
 
     // 우선순위 1: 많은 돌을 잡을 수 있는 수 (2개 이상)
@@ -613,12 +874,14 @@ class _BadukGameState extends State<BadukGame> {
     if (saveMove != null) return saveMove;
 
     // 우선순위 3: 사활 - 상대 그룹 죽이기
-    List<int>? killMove = _findKillMove(validMoves);
+    List<int>? killMove = _findKillMoveAdvanced(validMoves);
     if (killMove != null) return killMove;
 
-    // 우선순위 4: 사다리 공격
-    List<int>? ladderMove = _findLadderAttack(validMoves);
-    if (ladderMove != null) return ladderMove;
+    // 우선순위 4: 사다리 공격 (고급 난이도에서만)
+    if (_aiSettings.useHeuristics) {
+      List<int>? ladderMove = _findLadderAttack(validMoves);
+      if (ladderMove != null) return ladderMove;
+    }
 
     // 우선순위 5: 상대 그룹을 단수로 만들기 (큰 그룹)
     List<int>? atariMove = _findAtariMove(validMoves);
@@ -632,15 +895,499 @@ class _BadukGameState extends State<BadukGame> {
     if (blockMove != null) return blockMove;
 
     // 우선순위 8: 끊기 수 (상대 연결 차단)
-    List<int>? cutMove = _findCutMove(validMoves);
-    if (cutMove != null) return cutMove;
+    if (_aiSettings.useHeuristics) {
+      List<int>? cutMove = _findCutMove(validMoves);
+      if (cutMove != null) return cutMove;
+    }
 
     // 우선순위 9: 압박 수
     List<int>? pressureMove = _findPressureMove(validMoves);
     if (pressureMove != null) return pressureMove;
 
-    // 우선순위 10: 몬테카를로 시뮬레이션 기반 최적 수
+    // 우선순위 10: 코시미/날일자 공격
+    if (_aiSettings.useHeuristics) {
+      List<int>? kosimiMove = _findKosimiMove(validMoves);
+      if (kosimiMove != null) return kosimiMove;
+    }
+
+    // 우선순위 11: MCTS 또는 몬테카를로 시뮬레이션 기반 최적 수
+    if (widget.aiDifficulty == AIDifficulty.expert) {
+      return _findBestMoveWithMCTS(validMoves);
+    } else {
+      return _findBestMoveWithMonteCarlo(validMoves);
+    }
+  }
+
+  // 합리적인 수 목록 (초급 AI용)
+  List<List<int>> _getReasonableMoves(List<List<int>> validMoves) {
+    List<List<int>> reasonable = [];
+    for (var move in validMoves) {
+      // 1선 피하기
+      if (move[0] == 0 || move[0] == boardSize - 1 ||
+          move[1] == 0 || move[1] == boardSize - 1) {
+        continue;
+      }
+      // 자기 돌 근처 또는 상대 돌 근처
+      bool nearStone = false;
+      for (int dr = -2; dr <= 2; dr++) {
+        for (int dc = -2; dc <= 2; dc++) {
+          int nr = move[0] + dr;
+          int nc = move[1] + dc;
+          if (_isValidPosition(nr, nc) && board[nr][nc] != Stone.none) {
+            nearStone = true;
+            break;
+          }
+        }
+        if (nearStone) break;
+      }
+      if (nearStone || _countStones() < 4) {
+        reasonable.add(move);
+      }
+    }
+    return reasonable.isEmpty ? validMoves : reasonable;
+  }
+
+  // 고급 정석 수
+  List<int>? _getOpeningMoveAdvanced(List<List<int>> validMoves) {
+    int stoneCount = _countStones();
+
+    // 첫 수: 정석 데이터베이스에서 선택
+    if (stoneCount == 0) {
+      List<List<int>> openings = [
+        ..._josekiDatabase['corner_33'] ?? [],
+        ..._josekiDatabase['corner_34'] ?? [],
+      ];
+      openings.shuffle(_random);
+      for (var move in openings) {
+        if (validMoves.any((m) => m[0] == move[0] && m[1] == move[1])) {
+          return move;
+        }
+      }
+    }
+
+    // 정석 응수
+    if (stoneCount < 8) {
+      List<int>? josekiResponse = _findJosekiResponse(validMoves);
+      if (josekiResponse != null) return josekiResponse;
+    }
+
+    // 코너 접근
+    if (stoneCount < 12) {
+      List<int>? cornerApproach = _findCornerApproach(validMoves);
+      if (cornerApproach != null) return cornerApproach;
+    }
+
+    return null;
+  }
+
+  // 정석 응수 찾기
+  List<int>? _findJosekiResponse(List<List<int>> validMoves) {
+    // 상대가 코너에 두었으면 협공 또는 협공
+    for (var corner in _josekiDatabase['corner_33'] ?? []) {
+      if (board[corner[0]][corner[1]] == widget.playerColor) {
+        // 협공 수 찾기
+        List<List<int>> approaches = _josekiDatabase['approach_33'] ?? [];
+        for (var approach in approaches) {
+          if (_isNearCorner(approach, corner) &&
+              validMoves.any((m) => m[0] == approach[0] && m[1] == approach[1])) {
+            return approach;
+          }
+        }
+      }
+    }
+
+    // 날일자 확장
+    for (var stone in _getAIStones()) {
+      if (_isCornerStone(stone[0], stone[1])) {
+        for (var knight in _josekiDatabase['knight_move'] ?? []) {
+          if (_isNearCorner(knight, stone) &&
+              validMoves.any((m) => m[0] == knight[0] && m[1] == knight[1])) {
+            return knight;
+          }
+        }
+      }
+    }
+
+    return null;
+  }
+
+  bool _isNearCorner(List<int> point, List<int> corner) {
+    int dist = (point[0] - corner[0]).abs() + (point[1] - corner[1]).abs();
+    return dist <= 6;
+  }
+
+  bool _isCornerStone(int row, int col) {
+    int margin = boardSize == 19 ? 5 : (boardSize == 13 ? 4 : 3);
+    return (row < margin || row >= boardSize - margin) &&
+           (col < margin || col >= boardSize - margin);
+  }
+
+  List<List<int>> _getAIStones() {
+    List<List<int>> stones = [];
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == aiColor) {
+          stones.add([i, j]);
+        }
+      }
+    }
+    return stones;
+  }
+
+  // 코시미 (붙여두기) 수 찾기
+  List<int>? _findKosimiMove(List<List<int>> validMoves) {
+    int bestScore = 0;
+    List<int>? bestMove;
+
+    for (var move in validMoves) {
+      int score = 0;
+
+      // 상대 돌에 대각선으로 붙이기 (코시미)
+      for (var diag in [[-1, -1], [-1, 1], [1, -1], [1, 1]]) {
+        int dr = move[0] + diag[0];
+        int dc = move[1] + diag[1];
+        if (_isValidPosition(dr, dc) && board[dr][dc] == widget.playerColor) {
+          // 빈 점이 공유되는지 확인
+          int sharedEmpty = 0;
+          for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+            int nr = move[0] + dir[0];
+            int nc = move[1] + dir[1];
+            int or = dr + dir[0];
+            int oc = dc + dir[1];
+            if (_isValidPosition(nr, nc) && board[nr][nc] == Stone.none &&
+                _isValidPosition(or, oc) && board[or][oc] == Stone.none) {
+              sharedEmpty++;
+            }
+          }
+          if (sharedEmpty >= 1) {
+            var group = _getGroup(dr, dc);
+            score += group.length * 5;
+          }
+        }
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = move;
+      }
+    }
+
+    if (bestScore >= 10) return bestMove;
+    return null;
+  }
+
+  // 고급 사활 분석
+  List<int>? _findKillMoveAdvanced(List<List<int>> validMoves) {
+    for (var move in validMoves) {
+      board[move[0]][move[1]] = aiColor;
+
+      // 인접한 상대 그룹 확인
+      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        int nr = move[0] + dir[0];
+        int nc = move[1] + dir[1];
+        if (_isValidPosition(nr, nc) && board[nr][nc] == widget.playerColor) {
+          var group = _getGroup(nr, nc);
+          var liberties = _getLiberties(group);
+
+          // 활로가 1-2개이고 눈이 없는 그룹
+          if (liberties.length <= 2 && group.length >= 2) {
+            // 진짜 눈 분석
+            int realEyes = _countRealEyes(group);
+            if (realEyes < 2) {
+              board[move[0]][move[1]] = Stone.none;
+              return move;
+            }
+          }
+
+          // 큰 그룹이지만 눈이 부족한 경우
+          if (liberties.length <= 3 && group.length >= 5) {
+            int realEyes = _countRealEyes(group);
+            if (realEyes == 0) {
+              board[move[0]][move[1]] = Stone.none;
+              return move;
+            }
+          }
+        }
+      }
+      board[move[0]][move[1]] = Stone.none;
+    }
+    return null;
+  }
+
+  // 진짜 눈 개수 계산
+  int _countRealEyes(List<List<int>> group) {
+    Set<String> groupSet = {};
+    for (var stone in group) {
+      groupSet.add('${stone[0]},${stone[1]}');
+    }
+
+    int realEyes = 0;
+    Set<String> checkedEmpty = {};
+
+    for (var stone in group) {
+      for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        int nr = stone[0] + dir[0];
+        int nc = stone[1] + dir[1];
+        String key = '$nr,$nc';
+
+        if (!checkedEmpty.contains(key) && _isValidPosition(nr, nc) && board[nr][nc] == Stone.none) {
+          checkedEmpty.add(key);
+
+          // 진짜 눈인지 확인: 4방향 모두 자기 돌 또는 가장자리
+          int surrounded = 0;
+          int diagonal = 0;
+          int diagonalOpponent = 0;
+
+          for (var d in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+            int nnr = nr + d[0];
+            int nnc = nc + d[1];
+            if (!_isValidPosition(nnr, nnc) || groupSet.contains('$nnr,$nnc')) {
+              surrounded++;
+            }
+          }
+
+          // 대각선 확인 (코너 안전성)
+          for (var d in [[-1, -1], [-1, 1], [1, -1], [1, 1]]) {
+            int nnr = nr + d[0];
+            int nnc = nc + d[1];
+            if (_isValidPosition(nnr, nnc)) {
+              if (board[nnr][nnc] == widget.playerColor) {
+                diagonalOpponent++;
+              } else if (groupSet.contains('$nnr,$nnc') || !_isValidPosition(nnr, nnc)) {
+                diagonal++;
+              }
+            } else {
+              diagonal++;
+            }
+          }
+
+          // 진짜 눈 조건: 4방향 둘러싸임 + 대각선 안전
+          if (surrounded == 4 && diagonalOpponent <= 1) {
+            realEyes++;
+          }
+        }
+      }
+    }
+
+    return realEyes;
+  }
+
+  // MCTS (Monte Carlo Tree Search) 알고리즘
+  List<int>? _findBestMoveWithMCTS(List<List<int>> validMoves) {
+    if (validMoves.isEmpty) return null;
+
+    // 보드 상태 저장
+    List<List<Stone>> originalBoard = List.generate(
+      boardSize, (i) => List.from(board[i])
+    );
+
+    // 후보 수 점수화 및 필터링
+    List<MapEntry<List<int>, int>> scoredMoves = [];
+    for (var move in validMoves) {
+      int score = _evaluateMoveAdvanced(move[0], move[1]);
+      scoredMoves.add(MapEntry(move, score));
+    }
+    scoredMoves.sort((a, b) => b.value.compareTo(a.value));
+
+    // 상위 후보만 MCTS 수행
+    int candidateCount = min(_aiSettings.candidateCount, scoredMoves.length);
+    List<List<int>> candidates = scoredMoves.take(candidateCount).map((e) => e.key).toList();
+
+    // 루트 노드 생성
+    MCTSNode root = MCTSNode(
+      untriedMoves: List.from(candidates),
+      player: aiColor,
+    );
+
+    // MCTS 반복
+    for (int i = 0; i < _aiSettings.mctsIterations; i++) {
+      // 보드 복원
+      _restoreBoard(originalBoard);
+
+      // Selection & Expansion
+      MCTSNode node = root;
+      Stone currentMCTSPlayer = aiColor;
+
+      // Selection: 트리를 따라 내려가기
+      while (node.isFullyExpanded && node.children.isNotEmpty) {
+        node = node.selectChild(_aiSettings.explorationConstant);
+        if (node.move != null) {
+          board[node.move![0]][node.move![1]] = currentMCTSPlayer;
+          _removeCapturedStones(node.move![0], node.move![1], currentMCTSPlayer);
+        }
+        currentMCTSPlayer = currentMCTSPlayer.opponent;
+      }
+
+      // Expansion: 새 노드 추가
+      if (node.untriedMoves.isNotEmpty) {
+        var move = node.untriedMoves.removeAt(_random.nextInt(node.untriedMoves.length));
+        if (_isValidMoveSimple(move[0], move[1], currentMCTSPlayer)) {
+          board[move[0]][move[1]] = currentMCTSPlayer;
+          _removeCapturedStones(move[0], move[1], currentMCTSPlayer);
+
+          List<List<int>> nextMoves = _getValidMovesForPlayer(currentMCTSPlayer.opponent);
+          MCTSNode child = MCTSNode(
+            move: move,
+            parent: node,
+            untriedMoves: nextMoves.take(10).toList(),
+            player: currentMCTSPlayer,
+          );
+          node.children.add(child);
+          node = child;
+          currentMCTSPlayer = currentMCTSPlayer.opponent;
+        }
+      }
+
+      // Simulation: 랜덤 플레이아웃 (가중치 적용)
+      double result = _weightedPlayout(currentMCTSPlayer);
+
+      // Backpropagation: 결과 전파
+      while (node.parent != null) {
+        node.visits++;
+        // AI 관점에서의 승률
+        if (node.player == aiColor) {
+          node.wins += result;
+        } else {
+          node.wins += 1.0 - result;
+        }
+        node = node.parent!;
+      }
+      root.visits++;
+    }
+
+    // 보드 복원
+    _restoreBoard(originalBoard);
+
+    // 가장 많이 방문한 수 선택
+    MCTSNode? bestChild = root.getMostVisitedChild();
+    if (bestChild != null && bestChild.move != null) {
+      return bestChild.move;
+    }
+
+    // 폴백: 기존 몬테카를로
     return _findBestMoveWithMonteCarlo(validMoves);
+  }
+
+  void _restoreBoard(List<List<Stone>> originalBoard) {
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        board[i][j] = originalBoard[i][j];
+      }
+    }
+  }
+
+  List<List<int>> _getValidMovesForPlayer(Stone player) {
+    List<List<int>> moves = [];
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == Stone.none && _isValidMoveSimple(i, j, player)) {
+          moves.add([i, j]);
+        }
+      }
+    }
+    return moves;
+  }
+
+  // 가중치 기반 플레이아웃
+  double _weightedPlayout(Stone startPlayer) {
+    Stone currentSim = startPlayer;
+    int moves = 0;
+    int maxMoves = _aiSettings.playoutDepth;
+    int passes = 0;
+
+    while (moves < maxMoves && passes < 2) {
+      List<List<int>> simMoves = [];
+      List<double> weights = [];
+
+      for (int i = 0; i < boardSize; i++) {
+        for (int j = 0; j < boardSize; j++) {
+          if (board[i][j] == Stone.none && _isValidMoveSimple(i, j, currentSim)) {
+            simMoves.add([i, j]);
+            // 가중치 계산
+            double weight = _calculateMoveWeight(i, j, currentSim);
+            weights.add(weight);
+          }
+        }
+      }
+
+      if (simMoves.isEmpty) {
+        passes++;
+      } else {
+        passes = 0;
+        // 가중치 기반 선택
+        List<int> selectedMove = _selectWeightedMove(simMoves, weights);
+        board[selectedMove[0]][selectedMove[1]] = currentSim;
+        _removeCapturedStones(selectedMove[0], selectedMove[1], currentSim);
+      }
+
+      currentSim = currentSim.opponent;
+      moves++;
+    }
+
+    // 결과 평가
+    int aiTerritory = _countTerritory(aiColor);
+    int playerTerritory = _countTerritory(widget.playerColor);
+
+    if (aiTerritory > playerTerritory) {
+      return 1.0;
+    } else if (aiTerritory < playerTerritory) {
+      return 0.0;
+    } else {
+      return 0.5;
+    }
+  }
+
+  double _calculateMoveWeight(int row, int col, Stone player) {
+    double weight = 1.0;
+
+    // 1선 페널티
+    int edgeDist = _getEdgeDistance(row, col);
+    if (edgeDist == 0) weight *= 0.1;
+    else if (edgeDist == 1) weight *= 0.5;
+
+    // 잡기 보너스
+    int captures = _countCaptures(row, col, player);
+    if (captures > 0) weight *= (1.0 + captures * 2.0);
+
+    // 연결 보너스
+    int connections = 0;
+    for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      int nr = row + dir[0];
+      int nc = col + dir[1];
+      if (_isValidPosition(nr, nc) && board[nr][nc] == player) {
+        connections++;
+      }
+    }
+    weight *= (1.0 + connections * 0.3);
+
+    // 상대 근처 보너스
+    for (var dir in [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      int nr = row + dir[0];
+      int nc = col + dir[1];
+      if (_isValidPosition(nr, nc) && board[nr][nc] == player.opponent) {
+        weight *= 1.5;
+        break;
+      }
+    }
+
+    return weight;
+  }
+
+  List<int> _selectWeightedMove(List<List<int>> moves, List<double> weights) {
+    double totalWeight = weights.fold(0.0, (sum, w) => sum + w);
+    if (totalWeight <= 0) {
+      return moves[_random.nextInt(moves.length)];
+    }
+
+    double r = _random.nextDouble() * totalWeight;
+    double cumulative = 0.0;
+    for (int i = 0; i < moves.length; i++) {
+      cumulative += weights[i];
+      if (r <= cumulative) {
+        return moves[i];
+      }
+    }
+    return moves.last;
   }
 
   // 초반 정석 수
