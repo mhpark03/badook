@@ -1317,11 +1317,12 @@ class _BadukGameState extends State<BadukGame> {
       if (josekiHint != null) return josekiHint;
     }
 
-    // 중후반: MCTS (AI 설정과 동일하게 사용하여 일관된 속도 제공)
-    final int hintIterations = _aiSettings.mctsIterations;
-    final int hintPlayoutDepth = _aiSettings.playoutDepth;
-    final double hintExploration = _aiSettings.explorationConstant;
-    final int hintCandidateCount = _aiSettings.candidateCount;
+    // 중후반: MCTS (전문가 레벨, 디바이스 성능에 따라 자동 조정)
+    final expertSettings = AISettings.forDifficulty(AIDifficulty.expert);
+    final int hintIterations = expertSettings.mctsIterations;
+    final int hintPlayoutDepth = expertSettings.playoutDepth;
+    final double hintExploration = expertSettings.explorationConstant;
+    final int hintCandidateCount = expertSettings.candidateCount;
 
     // 보드 상태 저장
     List<List<Stone>> originalBoard = List.generate(
