@@ -1604,6 +1604,15 @@ class _BadukGameState extends State<BadukGame> {
 
     if (validMoves.isEmpty) return null;
 
+    // 초반 정석 기반 빠른 응답 (모든 난이도)
+    int stoneCount = _countStones();
+    int earlyGameThreshold = boardSize == 19 ? 20 : (boardSize == 13 ? 12 : 8);
+
+    if (stoneCount < earlyGameThreshold) {
+      List<int>? josekiMove = _findAIJosekiMove(validMoves);
+      if (josekiMove != null) return josekiMove;
+    }
+
     // 난이도별 랜덤성 추가 (초급은 가끔 실수)
     if (_random.nextDouble() < _aiSettings.randomness) {
       // 좋은 수 중에서 랜덤 선택
@@ -1615,15 +1624,6 @@ class _BadukGameState extends State<BadukGame> {
 
     // 영향력 맵 계산
     _calculateInfluenceMap();
-
-    // 초반 정석 체크 (고급 난이도에서만 정석 사용)
-    if (_aiSettings.useHeuristics) {
-      int stoneCount = _countStones();
-      if (stoneCount < 12) {
-        List<int>? openingMove = _getOpeningMoveAdvanced(validMoves);
-        if (openingMove != null) return openingMove;
-      }
-    }
 
     // 우선순위 1: 많은 돌을 잡을 수 있는 수 (2개 이상)
     int maxCaptures = 0;
@@ -1713,6 +1713,168 @@ class _BadukGameState extends State<BadukGame> {
       }
     }
     return reasonable.isEmpty ? validMoves : reasonable;
+  }
+
+  // AI 초반 정석 기반 수 (빠른 응답)
+  List<int>? _findAIJosekiMove(List<List<int>> validMoves) {
+    int stoneCount = _countStones();
+    Stone opponent = aiColor.opponent;
+
+    // 첫 수: 화점 또는 소목
+    if (stoneCount == 0) {
+      List<List<int>> openings = [
+        ..._josekiDatabase['corner_33'] ?? [],
+        ..._josekiDatabase['corner_34'] ?? [],
+      ];
+      openings.shuffle(_random);
+      for (var move in openings) {
+        if (validMoves.any((m) => m[0] == move[0] && m[1] == move[1])) {
+          return move;
+        }
+      }
+    }
+
+    // 긴급 상황 체크: 단수 그룹 구하기
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == aiColor) {
+          var group = _getGroup(i, j);
+          var liberties = _getLiberties(group);
+          if (liberties.length == 1 && group.length >= 2) {
+            // 단수 탈출
+            for (var move in validMoves) {
+              board[move[0]][move[1]] = aiColor;
+              var newLiberties = _getLiberties(_getGroup(i, j));
+              board[move[0]][move[1]] = Stone.none;
+              if (newLiberties.length >= 2) {
+                return move;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 잡을 수 있는 돌 체크
+    for (var move in validMoves) {
+      int captures = _countCaptures(move[0], move[1], aiColor);
+      if (captures >= 2) return move;
+    }
+
+    // 빈 코너 차지하기
+    List<List<int>> corners = [
+      ..._josekiDatabase['corner_33'] ?? [],
+      ..._josekiDatabase['corner_34'] ?? [],
+    ];
+    corners.shuffle(_random);
+    for (var corner in corners) {
+      if (validMoves.any((m) => m[0] == corner[0] && m[1] == corner[1])) {
+        bool hasNearbyStone = false;
+        for (int di = -2; di <= 2; di++) {
+          for (int dj = -2; dj <= 2; dj++) {
+            int ni = corner[0] + di;
+            int nj = corner[1] + dj;
+            if (_isValidPosition(ni, nj) && board[ni][nj] != Stone.none) {
+              hasNearbyStone = true;
+              break;
+            }
+          }
+          if (hasNearbyStone) break;
+        }
+        if (!hasNearbyStone) return corner;
+      }
+    }
+
+    // 상대 코너에 협공
+    for (var corner in _josekiDatabase['corner_33'] ?? []) {
+      if (board[corner[0]][corner[1]] == opponent) {
+        List<List<int>> approaches = _josekiDatabase['approach_33'] ?? [];
+        List<List<int>> validApproaches = [];
+        for (var approach in approaches) {
+          if (_isNearCorner(approach, corner) &&
+              validMoves.any((m) => m[0] == approach[0] && m[1] == approach[1])) {
+            validApproaches.add(approach);
+          }
+        }
+        if (validApproaches.isNotEmpty) {
+          return validApproaches[_random.nextInt(validApproaches.length)];
+        }
+      }
+    }
+
+    // 자기 돌 근처 날일자/두칸 벌림
+    List<List<int>> myCornerStones = [];
+    for (int i = 0; i < boardSize; i++) {
+      for (int j = 0; j < boardSize; j++) {
+        if (board[i][j] == aiColor && _isCornerStone(i, j)) {
+          myCornerStones.add([i, j]);
+        }
+      }
+    }
+
+    if (myCornerStones.isNotEmpty) {
+      myCornerStones.shuffle(_random);
+      for (var stone in myCornerStones) {
+        // 날일자 확장
+        List<List<int>> knightMoves = [];
+        for (var knight in _josekiDatabase['knight_move'] ?? []) {
+          if (_isNearCorner(knight, stone) &&
+              validMoves.any((m) => m[0] == knight[0] && m[1] == knight[1])) {
+            knightMoves.add(knight);
+          }
+        }
+        if (knightMoves.isNotEmpty) {
+          return knightMoves[_random.nextInt(knightMoves.length)];
+        }
+
+        // 두 칸 벌림
+        List<List<int>> extensions = [];
+        for (var ext in _josekiDatabase['two_space_extension'] ?? []) {
+          if (_isNearCorner(ext, stone) &&
+              validMoves.any((m) => m[0] == ext[0] && m[1] == ext[1])) {
+            extensions.add(ext);
+          }
+        }
+        if (extensions.isNotEmpty) {
+          return extensions[_random.nextInt(extensions.length)];
+        }
+      }
+    }
+
+    // 변 차지하기 (3선/4선)
+    List<List<int>> sidePoints = [];
+    int line3 = boardSize == 19 ? 2 : (boardSize == 13 ? 2 : 2);
+    int line4 = boardSize == 19 ? 3 : (boardSize == 13 ? 3 : 2);
+
+    for (int i = line3; i <= line4; i++) {
+      for (int j = 5; j < boardSize - 5; j += 3) {
+        sidePoints.add([i, j]);
+        sidePoints.add([boardSize - 1 - i, j]);
+        sidePoints.add([j, i]);
+        sidePoints.add([j, boardSize - 1 - i]);
+      }
+    }
+    sidePoints.shuffle(_random);
+
+    for (var point in sidePoints) {
+      if (validMoves.any((m) => m[0] == point[0] && m[1] == point[1])) {
+        bool hasNearbyStone = false;
+        for (int di = -2; di <= 2; di++) {
+          for (int dj = -2; dj <= 2; dj++) {
+            int ni = point[0] + di;
+            int nj = point[1] + dj;
+            if (_isValidPosition(ni, nj) && board[ni][nj] != Stone.none) {
+              hasNearbyStone = true;
+              break;
+            }
+          }
+          if (hasNearbyStone) break;
+        }
+        if (!hasNearbyStone) return point;
+      }
+    }
+
+    return null;  // 정석 수 없음 -> 일반 로직으로 폴백
   }
 
   // 고급 정석 수
