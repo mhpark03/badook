@@ -1538,6 +1538,37 @@ class LifeDeathProblems {
       correctMoves: [[2, 5]],
       explanation: '수상전에서 바깥쪽 활로부터 메워야 합니다. 이 급소에 두면 백의 활로를 효과적으로 줄여 잡을 수 있습니다.',
     ),
+
+    // 3-12: 대마 사활 - 복잡한 눈 모양
+    LifeDeathProblem(
+      id: 24,
+      name: '대마 잡기',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.white,
+      boardSize: 9,
+      blackStones: [
+        [1, 2], [1, 3], [1, 4], [1, 5],
+        [2, 4], [2, 5],
+        [3, 2], [3, 4], [3, 5],
+        [4, 3], [4, 5], [4, 6],
+        [5, 3], [5, 4], [5, 6],
+        [6, 2], [6, 3], [6, 4], [6, 5], [6, 6],
+      ],
+      whiteStones: [
+        [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
+        [1, 1], [1, 6], [1, 7],
+        [2, 1], [2, 3], [2, 6], [2, 7],
+        [3, 1], [3, 6], [3, 7],
+        [4, 2], [4, 7],
+        [5, 2], [5, 5], [5, 7],
+        [6, 1], [6, 7],
+        [7, 2], [7, 3], [7, 4], [7, 5], [7, 6],
+      ],
+      correctMoves: [[1, 7]],
+      alternativeMoves: [[4, 4]],
+      explanation: '백이 급소에 치중하여 흑의 눈 모양을 깨는 문제입니다. 이 자리에 두면 흑은 두 눈을 만들 수 없습니다.',
+    ),
   ];
 
   static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
@@ -1556,7 +1587,7 @@ class LifeDeathProblems {
   static const Map<String, List<int>> categoryProblems = {
     'youtubeBasics': [1, 2, 3, 4],           // 바둑 입문 (단수치기)
     'youtubeCapture': [1, 2, 3, 4],           // 돌 잡기 기초
-    'youtubeLifeDeath': [5, 6, 9, 17],        // 사활 기초 (살기)
+    'youtubeLifeDeath': [5, 6, 9, 17, 24],     // 사활 기초 (살기)
     'youtube3Space': [7, 8, 9],               // 3궁도 (직삼궁/곡삼궁)
     'youtube4Space': [13, 14, 15],            // 4궁도 (직사궁/곡사궁/꽃사궁)
     'youtube5Space': [16],                    // 5궁도 (오궁도화)
