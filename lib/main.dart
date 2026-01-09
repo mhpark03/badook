@@ -2260,12 +2260,12 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     if (_isSolved || _showingAnswer || _waitingForAI) return;
     if (_board[row][col] != Stone.none) return;
 
-    // 힌트 마커 초기화
-    _hintMove = null;
+    final isCorrect = _isCorrectMoveForStep(row, col, _sequenceStep);
 
-    if (_isCorrectMoveForStep(row, col, _sequenceStep)) {
+    if (isCorrect) {
       // 정답
       setState(() {
+        _hintMove = null;
         _board[row][col] = _currentProblem.playerColor;
         _playerMoves.add([row, col]);
         _lastMove = [row, col];
@@ -2335,7 +2335,8 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   }
 
   void _showHint() {
-    if (_isSolved || _showingAnswer) return;
+    // AI가 응수 중일 때는 힌트를 표시하지 않음
+    if (_isSolved || _showingAnswer || _waitingForAI) return;
     setState(() {
       if (_isMultiMoveProbblem) {
         // 현재 단계의 힌트
@@ -2617,15 +2618,18 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     if (stone == Stone.none) {
       // 힌트 표시
       if (isHint) {
-        return Container(
-          width: cellSize * 0.5,
-          height: cellSize * 0.5,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.yellow.withOpacity(0.7),
-            border: Border.all(color: Colors.orange, width: 2),
+        // IgnorePointer로 감싸서 Icon이 터치 이벤트를 방해하지 않도록 함
+        return IgnorePointer(
+          child: Container(
+            width: cellSize * 0.5,
+            height: cellSize * 0.5,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.yellow.withOpacity(0.7),
+              border: Border.all(color: Colors.orange, width: 2),
+            ),
+            child: const Icon(Icons.lightbulb, size: 16, color: Colors.orange),
           ),
-          child: const Icon(Icons.lightbulb, size: 16, color: Colors.orange),
         );
       }
       return const SizedBox();
