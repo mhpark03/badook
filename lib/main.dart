@@ -1596,6 +1596,36 @@ class LifeDeathProblems {
       ],
       explanation: '7수 만에 백을 잡는 수상전입니다. 흑1 치중, 백2 응수, 흑3 연결, 백4 응수, 흑5 급소, 백6 응수, 흑7로 마무리합니다.',
     ),
+
+    // 3-14: 3수 사활 - 귀 급소
+    LifeDeathProblem(
+      id: 26,
+      name: '3수 급소',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [
+        [1, 3], [1, 4],
+        [2, 2], [2, 3], [2, 4], [2, 5],
+        [3, 3], [3, 4],
+        [4, 2], [4, 3], [4, 4],
+      ],
+      whiteStones: [
+        [1, 0], [1, 5], [1, 6],
+        [2, 0], [2, 1], [2, 5], [2, 6],
+        [3, 0], [3, 1], [3, 2], [3, 5], [3, 6],
+        [4, 0], [4, 1], [4, 5], [4, 6],
+        [5, 1], [5, 2], [5, 3], [5, 4], [5, 5],
+      ],
+      correctMoves: [[1, 2]],
+      moveSequence: [
+        [1, 2],  // 흑1: 급소 치중
+        [0, 3],  // 백2: 응수
+        [0, 1],  // 흑3: 마무리
+      ],
+      explanation: '3수 만에 백을 잡는 문제입니다. 흑1로 급소 치중 후, 백2 응수에 흑3으로 마무리합니다.',
+    ),
   ];
 
   static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
@@ -1618,7 +1648,7 @@ class LifeDeathProblems {
     'youtube3Space': [7, 8, 9],               // 3궁도 (직삼궁/곡삼궁)
     'youtube4Space': [13, 14, 15],            // 4궁도 (직사궁/곡사궁/꽃사궁)
     'youtube5Space': [16],                    // 5궁도 (오궁도화)
-    'youtubeCorner': [13, 20, 22],            // 귀 사활 (귀곡사)
+    'youtubeCorner': [13, 20, 22, 26],         // 귀 사활 (귀곡사)
     'youtubeThrowIn': [11],                   // 환격 (던져넣기)
     'youtubeCapturingRace': [18, 23, 25],       // 수상전 (활로싸움)
   };
