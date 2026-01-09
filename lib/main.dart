@@ -2261,9 +2261,20 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
 
   void _onTap(int row, int col) {
     debugPrint('_onTap: _isSolved=$_isSolved, _showingAnswer=$_showingAnswer, _waitingForAI=$_waitingForAI');
-    if (_isSolved || _showingAnswer || _waitingForAI) {
+    if (_isSolved || _waitingForAI) {
       debugPrint('_onTap: early return due to state');
       return;
+    }
+    // 정답 보기 상태에서 정답 위치를 탭하면 진행 허용
+    if (_showingAnswer) {
+      if (_hintMove == null || _hintMove![0] != row || _hintMove![1] != col) {
+        debugPrint('_onTap: showing answer but wrong position tapped');
+        return;
+      }
+      // 정답 위치 탭 - 정답 보기 상태 해제
+      setState(() {
+        _showingAnswer = false;
+      });
     }
     debugPrint('_onTap: board[$row][$col]=${_board[row][col]}');
     if (_board[row][col] != Stone.none) {
@@ -2636,8 +2647,14 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     final isHint = _hintMove != null && _hintMove![0] == row && _hintMove![1] == col;
 
     if (stone == Stone.none) {
-      // 힌트 표시
+      // 힌트 또는 정답 표시
       if (isHint) {
+        // 정답 보기: 초록색, 힌트: 노란색
+        final isAnswer = _showingAnswer;
+        final markerColor = isAnswer ? Colors.green.withOpacity(0.7) : Colors.yellow.withOpacity(0.7);
+        final borderColor = isAnswer ? Colors.green.shade700 : Colors.orange;
+        final icon = isAnswer ? Icons.check : Icons.lightbulb;
+
         // IgnorePointer로 감싸서 Icon이 터치 이벤트를 방해하지 않도록 함
         return IgnorePointer(
           child: Container(
@@ -2645,10 +2662,10 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
             height: cellSize * 0.5,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.yellow.withOpacity(0.7),
-              border: Border.all(color: Colors.orange, width: 2),
+              color: markerColor,
+              border: Border.all(color: borderColor, width: 2),
             ),
-            child: const Icon(Icons.lightbulb, size: 16, color: Colors.orange),
+            child: Icon(icon, size: 16, color: borderColor),
           ),
         );
       }
