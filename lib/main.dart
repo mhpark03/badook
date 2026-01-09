@@ -2574,14 +2574,12 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
                     icon: const Icon(Icons.visibility, color: Colors.orange),
                     tooltip: L10n.get(widget.language, 'showAnswer'),
                   ),
-                if (_isSolved)
+                // 마지막 문제가 아닐 때만 다음 버튼 표시
+                if (_isSolved && _currentIndex < widget.problems.length - 1)
                   IconButton(
                     onPressed: () async {
                       await _markCurrentAsSolved();
-                      // 다음 문제로 자동 이동
-                      if (_currentIndex < widget.problems.length - 1) {
-                        _switchToProblem(_currentIndex + 1);
-                      }
+                      _switchToProblem(_currentIndex + 1);
                     },
                     icon: const Icon(Icons.arrow_forward, color: Colors.green),
                     tooltip: L10n.get(widget.language, 'nextProblem'),
