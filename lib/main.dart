@@ -2346,10 +2346,11 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
     setState(() {
       _showingAnswer = true;
       if (_isMultiMoveProbblem) {
-        // 다수 문제는 첫 번째 수를 힌트로
+        // 현재 단계의 정답을 표시
         final sequence = _currentProblem.moveSequence!;
-        if (sequence.isNotEmpty) {
-          _hintMove = sequence[0];
+        final playerMoveIndex = _sequenceStep * 2;
+        if (playerMoveIndex < sequence.length) {
+          _hintMove = sequence[playerMoveIndex];
         }
       } else if (_currentProblem.correctMoves.isNotEmpty) {
         final answer = _currentProblem.correctMoves[0];
