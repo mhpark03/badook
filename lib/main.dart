@@ -1524,6 +1524,20 @@ class LifeDeathProblems {
       ],
       explanation: '귀에서 3수 만에 백을 잡는 문제입니다. 흑1로 급소 치중, 백2 저항 후 흑3으로 마무리합니다.',
     ),
+
+    // 3-11: 수상전 (활로 싸움) - 새 문제
+    LifeDeathProblem(
+      id: 23,
+      name: '수상전',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [[1, 5], [3, 3], [3, 4], [3, 5], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]],
+      whiteStones: [[3, 6], [4, 3], [4, 4], [4, 5], [4, 6], [5, 3], [5, 4], [5, 5], [5, 6]],
+      correctMoves: [[2, 5]],
+      explanation: '수상전에서 바깥쪽 활로부터 메워야 합니다. 이 급소에 두면 백의 활로를 효과적으로 줄여 잡을 수 있습니다.',
+    ),
   ];
 
   static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
@@ -1548,7 +1562,7 @@ class LifeDeathProblems {
     'youtube5Space': [16],                    // 5궁도 (오궁도화)
     'youtubeCorner': [13, 20, 22],            // 귀 사활 (귀곡사)
     'youtubeThrowIn': [11],                   // 환격 (던져넣기)
-    'youtubeCapturingRace': [18],             // 수상전 (활로싸움)
+    'youtubeCapturingRace': [18, 23],          // 수상전 (활로싸움)
   };
 
   static List<LifeDeathProblem> getByCategory(String category) {
