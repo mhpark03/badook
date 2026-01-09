@@ -1657,6 +1657,40 @@ class LifeDeathProblems {
       ],
       explanation: '13수 만에 백을 잡는 복잡한 수상전입니다. 정확한 순서로 두어야 백을 잡을 수 있습니다.',
     ),
+
+    // 3-16: 7수 사활 - 눈 모양 파괴
+    LifeDeathProblem(
+      id: 28,
+      name: '7수 사활',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [
+        [0, 3], [0, 4], [0, 5],
+        [1, 2], [1, 3], [1, 4],
+        [3, 4],
+        [4, 1], [4, 4], [4, 5],
+        [5, 0], [5, 1], [5, 2], [5, 3], [5, 5],
+      ],
+      whiteStones: [
+        [2, 1], [2, 4], [2, 6],
+        [3, 1], [3, 2],
+        [4, 2], [4, 3],
+        [5, 6],
+      ],
+      correctMoves: [[2, 3]],
+      moveSequence: [
+        [2, 3],  // 흑1: 급소 치중
+        [2, 2],  // 백2: 응수
+        [1, 5],  // 흑3: 연결
+        [3, 3],  // 백4: 응수
+        [2, 5],  // 흑5: 압박
+        [5, 4],  // 백6: 응수
+        [3, 5],  // 흑7: 마무리
+      ],
+      explanation: '7수 만에 백의 눈 모양을 파괴하여 잡는 문제입니다. 흑1 급소 치중이 핵심입니다.',
+    ),
   ];
 
   static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
@@ -1681,7 +1715,7 @@ class LifeDeathProblems {
     'youtube5Space': [16],                    // 5궁도 (오궁도화)
     'youtubeCorner': [13, 20, 22, 26],         // 귀 사활 (귀곡사)
     'youtubeThrowIn': [11],                   // 환격 (던져넣기)
-    'youtubeCapturingRace': [18, 23, 25, 27],   // 수상전 (활로싸움)
+    'youtubeCapturingRace': [18, 23, 25, 27, 28], // 수상전 (활로싸움)
   };
 
   static List<LifeDeathProblem> getByCategory(String category) {
