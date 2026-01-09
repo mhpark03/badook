@@ -2265,17 +2265,17 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
       debugPrint('_onTap: early return due to state');
       return;
     }
-    // 정답 보기 상태에서 정답 위치를 탭하면 진행 허용
+
+    // 정답 보기 상태 처리
+    bool wasShowingAnswer = _showingAnswer;
     if (_showingAnswer) {
       if (_hintMove == null || _hintMove![0] != row || _hintMove![1] != col) {
         debugPrint('_onTap: showing answer but wrong position tapped');
         return;
       }
-      // 정답 위치 탭 - 정답 보기 상태 해제
-      setState(() {
-        _showingAnswer = false;
-      });
+      debugPrint('_onTap: correct answer position tapped, clearing _showingAnswer');
     }
+
     debugPrint('_onTap: board[$row][$col]=${_board[row][col]}');
     if (_board[row][col] != Stone.none) {
       debugPrint('_onTap: early return - cell not empty');
@@ -2289,6 +2289,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
       // 정답
       setState(() {
         _hintMove = null;
+        _showingAnswer = false;  // 정답 보기 상태 해제
         _board[row][col] = _currentProblem.playerColor;
         _playerMoves.add([row, col]);
         _lastMove = [row, col];
@@ -2358,8 +2359,12 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   }
 
   void _showHint() {
+    debugPrint('_showHint: _isSolved=$_isSolved, _showingAnswer=$_showingAnswer, _waitingForAI=$_waitingForAI, step=$_sequenceStep');
     // AI가 응수 중일 때는 힌트를 표시하지 않음
-    if (_isSolved || _showingAnswer || _waitingForAI) return;
+    if (_isSolved || _showingAnswer || _waitingForAI) {
+      debugPrint('_showHint: early return');
+      return;
+    }
     setState(() {
       if (_isMultiMoveProbblem) {
         // 현재 단계의 힌트
