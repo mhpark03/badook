@@ -2193,12 +2193,15 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
 
   // 현재 단계의 정답 확인
   bool _isCorrectMoveForStep(int row, int col, int step) {
+    debugPrint('_isCorrectMoveForStep: isMultiMove=$_isMultiMoveProbblem');
     if (_isMultiMoveProbblem) {
       final sequence = _currentProblem.moveSequence!;
       // step * 2가 사용자의 수 (0, 2, 4, ...)
       final playerMoveIndex = step * 2;
+      debugPrint('_isCorrectMoveForStep: playerMoveIndex=$playerMoveIndex, seqLen=${sequence.length}');
       if (playerMoveIndex < sequence.length) {
         final expected = sequence[playerMoveIndex];
+        debugPrint('_isCorrectMoveForStep: expected=$expected, got=[$row,$col]');
         return expected[0] == row && expected[1] == col;
       }
       return false;
@@ -2257,10 +2260,19 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   }
 
   void _onTap(int row, int col) {
-    if (_isSolved || _showingAnswer || _waitingForAI) return;
-    if (_board[row][col] != Stone.none) return;
+    debugPrint('_onTap: _isSolved=$_isSolved, _showingAnswer=$_showingAnswer, _waitingForAI=$_waitingForAI');
+    if (_isSolved || _showingAnswer || _waitingForAI) {
+      debugPrint('_onTap: early return due to state');
+      return;
+    }
+    debugPrint('_onTap: board[$row][$col]=${_board[row][col]}');
+    if (_board[row][col] != Stone.none) {
+      debugPrint('_onTap: early return - cell not empty');
+      return;
+    }
 
     final isCorrect = _isCorrectMoveForStep(row, col, _sequenceStep);
+    debugPrint('_onTap: isCorrect=$isCorrect, step=$_sequenceStep');
 
     if (isCorrect) {
       // 정답
@@ -2342,11 +2354,14 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
         // 현재 단계의 힌트
         final sequence = _currentProblem.moveSequence!;
         final playerMoveIndex = _sequenceStep * 2;
+        debugPrint('_showHint: playerMoveIndex=$playerMoveIndex, seqLen=${sequence.length}');
         if (playerMoveIndex < sequence.length) {
           _hintMove = sequence[playerMoveIndex];
+          debugPrint('_showHint: set hintMove=$_hintMove');
         }
       } else if (_currentProblem.correctMoves.isNotEmpty) {
         _hintMove = _currentProblem.correctMoves[0];
+        debugPrint('_showHint: set hintMove from correctMoves=$_hintMove');
       }
     });
   }
