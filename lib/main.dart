@@ -1723,6 +1723,43 @@ class LifeDeathProblems {
       ],
       explanation: '6수 만에 백의 활로를 줄여 잡는 수상전입니다.',
     ),
+
+    // 3-18: 7수 수상전
+    LifeDeathProblem(
+      id: 30,
+      name: '7수 수상전',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [
+        [0, 5],
+        [1, 5],
+        [2, 6],
+        [3, 2], [3, 6],
+        [4, 0], [4, 6],
+        [5, 0], [5, 5], [5, 6],
+      ],
+      whiteStones: [
+        [1, 3], [1, 4],
+        [2, 3], [2, 4],
+        [3, 3], [3, 4], [3, 5],
+        [4, 2], [4, 4], [4, 5],
+        [5, 1], [5, 3], [5, 4],
+        [6, 5],
+      ],
+      correctMoves: [[5, 2]],
+      moveSequence: [
+        [5, 2],  // 흑1: 치중
+        [4, 3],  // 백2: 응수
+        [6, 2],  // 흑3: 압박
+        [6, 4],  // 백4: 응수
+        [2, 5],  // 흑5: 끊기
+        [6, 3],  // 백6: 응수
+        [6, 1],  // 흑7: 마무리
+      ],
+      explanation: '7수 만에 백을 잡는 복잡한 수상전입니다. 흑5 끊기가 핵심입니다.',
+    ),
   ];
 
   static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
@@ -1747,7 +1784,7 @@ class LifeDeathProblems {
     'youtube5Space': [16],                    // 5궁도 (오궁도화)
     'youtubeCorner': [13, 20, 22, 26],         // 귀 사활 (귀곡사)
     'youtubeThrowIn': [11],                   // 환격 (던져넣기)
-    'youtubeCapturingRace': [18, 23, 25, 27, 28, 29], // 수상전 (활로싸움)
+    'youtubeCapturingRace': [18, 23, 25, 27, 28, 29, 30], // 수상전 (활로싸움)
   };
 
   static List<LifeDeathProblem> getByCategory(String category) {
