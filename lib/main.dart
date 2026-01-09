@@ -1626,6 +1626,37 @@ class LifeDeathProblems {
       ],
       explanation: '3수 만에 백을 잡는 문제입니다. 흑1로 급소 치중 후, 백2 응수에 흑3으로 마무리합니다.',
     ),
+
+    // 3-15: 13수 수상전 - 복잡한 순서
+    LifeDeathProblem(
+      id: 27,
+      name: '13수 수상전',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [
+        [3, 1], [4, 1], [4, 2], [4, 3], [4, 4], [5, 2],
+      ],
+      whiteStones: [],
+      correctMoves: [[0, 5]],
+      moveSequence: [
+        [0, 5],  // 흑1
+        [1, 6],  // 백2
+        [0, 3],  // 흑3
+        [1, 3],  // 백4
+        [0, 1],  // 흑5
+        [1, 5],  // 백6
+        [0, 4],  // 흑7
+        [2, 3],  // 백8
+        [0, 6],  // 흑9
+        [1, 1],  // 백10
+        [1, 0],  // 흑11
+        [1, 2],  // 백12
+        [0, 2],  // 흑13: 마무리
+      ],
+      explanation: '13수 만에 백을 잡는 복잡한 수상전입니다. 정확한 순서로 두어야 백을 잡을 수 있습니다.',
+    ),
   ];
 
   static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
@@ -1650,7 +1681,7 @@ class LifeDeathProblems {
     'youtube5Space': [16],                    // 5궁도 (오궁도화)
     'youtubeCorner': [13, 20, 22, 26],         // 귀 사활 (귀곡사)
     'youtubeThrowIn': [11],                   // 환격 (던져넣기)
-    'youtubeCapturingRace': [18, 23, 25],       // 수상전 (활로싸움)
+    'youtubeCapturingRace': [18, 23, 25, 27],   // 수상전 (활로싸움)
   };
 
   static List<LifeDeathProblem> getByCategory(String category) {
