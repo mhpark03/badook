@@ -1761,12 +1761,12 @@ class LifeDeathProblems {
       explanation: '7수 만에 백을 잡는 복잡한 수상전입니다. 흑5 끊기가 핵심입니다.',
     ),
 
-    // 3-19: 5수 수상전
+    // 3-19: 5수 사활
     LifeDeathProblem(
       id: 31,
-      name: '5수 수상전',
+      name: '5수 사활',
       difficulty: ProblemDifficulty.intermediate,
-      type: ProblemType.kill,
+      type: ProblemType.live,
       playerColor: Stone.black,
       boardSize: 7,
       blackStones: [
@@ -1783,13 +1783,13 @@ class LifeDeathProblems {
       ],
       correctMoves: [[0, 5]],
       moveSequence: [
-        [0, 5],  // 흑1: 압박
+        [0, 5],  // 흑1: 눈 만들기
         [1, 6],  // 백2: 응수
-        [0, 3],  // 흑3: 끊기
+        [0, 3],  // 흑3: 연결
         [0, 2],  // 백4: 응수
-        [1, 3],  // 흑5: 마무리
+        [1, 3],  // 흑5: 두 눈 확보
       ],
-      explanation: '5수 만에 백을 잡는 수상전입니다. 흑3 끊기가 핵심입니다.',
+      explanation: '5수 만에 흑이 두 눈을 만들어 사는 문제입니다.',
     ),
   ];
 
@@ -1809,13 +1809,13 @@ class LifeDeathProblems {
   static const Map<String, List<int>> categoryProblems = {
     'youtubeBasics': [1, 2, 3, 4],           // 바둑 입문 (단수치기)
     'youtubeCapture': [1, 2, 3, 4],           // 돌 잡기 기초
-    'youtubeLifeDeath': [5, 6, 9, 17, 24],     // 사활 기초 (살기)
+    'youtubeLifeDeath': [5, 6, 9, 17, 24, 31],     // 사활 기초 (살기)
     'youtube3Space': [7, 8, 9],               // 3궁도 (직삼궁/곡삼궁)
     'youtube4Space': [13, 14, 15],            // 4궁도 (직사궁/곡사궁/꽃사궁)
     'youtube5Space': [16],                    // 5궁도 (오궁도화)
     'youtubeCorner': [13, 20, 22, 26],         // 귀 사활 (귀곡사)
     'youtubeThrowIn': [11],                   // 환격 (던져넣기)
-    'youtubeCapturingRace': [18, 23, 25, 27, 28, 29, 30, 31], // 수상전 (활로싸움)
+    'youtubeCapturingRace': [18, 23, 25, 27, 28, 29, 30], // 수상전 (활로싸움)
   };
 
   static List<LifeDeathProblem> getByCategory(String category) {
