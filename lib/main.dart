@@ -2492,25 +2492,30 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
                           painter: ProblemBoardPainter(
                             boardSize: displaySize,
                           ),
-                          child: Stack(
-                            children: [
-                              // 돌 및 터치 영역
-                              for (int row = 0; row < displaySize; row++)
-                                for (int col = 0; col < displaySize; col++)
-                                  Positioned(
-                                    left: col * cellSize,
-                                    top: row * cellSize,
-                                    width: cellSize,
-                                    height: cellSize,
-                                    child: GestureDetector(
-                                      behavior: HitTestBehavior.opaque,
-                                      onTap: () => _onTap(row, col),
-                                      child: Center(
-                                        child: _buildStone(row, col, cellSize),
+                          child: SizedBox.expand(
+                            child: Stack(
+                              children: [
+                                // 돌 및 터치 영역
+                                for (int row = 0; row < displaySize; row++)
+                                  for (int col = 0; col < displaySize; col++)
+                                    Positioned(
+                                      left: col * cellSize,
+                                      top: row * cellSize,
+                                      width: cellSize,
+                                      height: cellSize,
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () {
+                                          debugPrint('TAP: row=$row, col=$col');
+                                          _onTap(row, col);
+                                        },
+                                        child: Center(
+                                          child: _buildStone(row, col, cellSize),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },
