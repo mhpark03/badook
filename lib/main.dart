@@ -2242,6 +2242,7 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
             _lastMove = aiMove;
             _sequenceStep++;
             _waitingForAI = false;
+            _hintMove = null; // 힌트 마커 초기화
             _message = ''; // 메시지 초기화
           });
         }
@@ -2258,6 +2259,9 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
   void _onTap(int row, int col) {
     if (_isSolved || _showingAnswer || _waitingForAI) return;
     if (_board[row][col] != Stone.none) return;
+
+    // 힌트 마커 초기화
+    _hintMove = null;
 
     if (_isCorrectMoveForStep(row, col, _sequenceStep)) {
       // 정답
@@ -2498,12 +2502,10 @@ class _LifeDeathProblemGameState extends State<LifeDeathProblemGame> {
                                     width: cellSize,
                                     height: cellSize,
                                     child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
                                       onTap: () => _onTap(row, col),
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        child: Center(
-                                          child: _buildStone(row, col, cellSize),
-                                        ),
+                                      child: Center(
+                                        child: _buildStone(row, col, cellSize),
                                       ),
                                     ),
                                   ),
