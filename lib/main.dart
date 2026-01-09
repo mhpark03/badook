@@ -1569,6 +1569,33 @@ class LifeDeathProblems {
       alternativeMoves: [[4, 4]],
       explanation: '백이 급소에 치중하여 흑의 눈 모양을 깨는 문제입니다. 이 자리에 두면 흑은 두 눈을 만들 수 없습니다.',
     ),
+
+    // 3-13: 7수 수상전 - 순서대로 두기
+    LifeDeathProblem(
+      id: 25,
+      name: '7수 수상전',
+      difficulty: ProblemDifficulty.advanced,
+      type: ProblemType.kill,
+      playerColor: Stone.black,
+      boardSize: 7,
+      blackStones: [
+        [1, 6], [2, 6], [3, 5], [3, 6], [4, 1], [4, 5],
+      ],
+      whiteStones: [
+        [1, 5], [2, 5], [3, 2], [3, 3], [3, 4],
+      ],
+      correctMoves: [[4, 4]],
+      moveSequence: [
+        [4, 4],  // 흑1: 치중
+        [5, 3],  // 백2: 응수
+        [4, 6],  // 흑3: 연결
+        [5, 2],  // 백4: 응수
+        [2, 4],  // 흑5: 급소
+        [5, 4],  // 백6: 응수
+        [0, 5],  // 흑7: 마무리
+      ],
+      explanation: '7수 만에 백을 잡는 수상전입니다. 흑1 치중, 백2 응수, 흑3 연결, 백4 응수, 흑5 급소, 백6 응수, 흑7로 마무리합니다.',
+    ),
   ];
 
   static List<LifeDeathProblem> getByDifficulty(ProblemDifficulty difficulty) {
@@ -1593,7 +1620,7 @@ class LifeDeathProblems {
     'youtube5Space': [16],                    // 5궁도 (오궁도화)
     'youtubeCorner': [13, 20, 22],            // 귀 사활 (귀곡사)
     'youtubeThrowIn': [11],                   // 환격 (던져넣기)
-    'youtubeCapturingRace': [18, 23],          // 수상전 (활로싸움)
+    'youtubeCapturingRace': [18, 23, 25],       // 수상전 (활로싸움)
   };
 
   static List<LifeDeathProblem> getByCategory(String category) {
