@@ -4,6 +4,7 @@ import '../../l10n/l10n_helper.dart';
 import '../../services/ad_service.dart';
 import '../../services/hi_lo/hi_lo_controller.dart';
 import '../../services/hi_lo/hi_lo_stats_service.dart';
+import '../../widgets/card_game_provider.dart';
 import 'hi_lo_game_screen.dart';
 
 class HiLoHomeScreen extends StatefulWidget {
@@ -127,14 +128,14 @@ class _HiLoHomeScreenState extends State<HiLoHomeScreen> {
                                 if (mounted) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const HiLoGameScreen()),
+                                    MaterialPageRoute(builder: (context) => const CardGameProviderWrapper(child: HiLoGameScreen())),
                                   );
                                 }
                               } else {
                                 controller.startNewGame();
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const HiLoGameScreen()),
+                                  MaterialPageRoute(builder: (context) => const CardGameProviderWrapper(child: HiLoGameScreen())),
                                 );
                               }
                             },

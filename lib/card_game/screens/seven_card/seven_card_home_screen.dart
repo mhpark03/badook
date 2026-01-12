@@ -4,6 +4,7 @@ import '../../l10n/l10n_helper.dart';
 import '../../services/ad_service.dart';
 import '../../services/seven_card/seven_card_controller.dart';
 import '../../services/seven_card/seven_card_stats_service.dart';
+import '../../widgets/card_game_provider.dart';
 import 'seven_card_game_screen.dart';
 
 class SevenCardHomeScreen extends StatefulWidget {
@@ -127,14 +128,14 @@ class _SevenCardHomeScreenState extends State<SevenCardHomeScreen> {
                                 if (mounted) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const SevenCardGameScreen()),
+                                    MaterialPageRoute(builder: (context) => const CardGameProviderWrapper(child: SevenCardGameScreen())),
                                   );
                                 }
                               } else {
                                 controller.startNewGame();
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const SevenCardGameScreen()),
+                                  MaterialPageRoute(builder: (context) => const CardGameProviderWrapper(child: SevenCardGameScreen())),
                                 );
                               }
                             },

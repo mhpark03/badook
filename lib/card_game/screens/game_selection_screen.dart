@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../widgets/banner_ad_widget.dart';
-import '../services/game_controller.dart';
-import '../services/stats_service.dart';
-import '../services/seven_card/seven_card_controller.dart';
-import '../services/seven_card/seven_card_stats_service.dart';
-import '../services/hi_lo/hi_lo_controller.dart';
-import '../services/hi_lo/hi_lo_stats_service.dart';
-import '../services/hula/hula_stats_service.dart';
-import '../services/onecard/onecard_stats_service.dart';
-import '../services/hearts/hearts_stats_service.dart';
+import '../widgets/card_game_provider.dart';
 import 'home_screen.dart';
 import 'seven_card/seven_card_home_screen.dart';
 import 'hi_lo/hi_lo_home_screen.dart';
@@ -17,31 +8,6 @@ import 'hula/hula_home_screen.dart';
 import 'onecard/onecard_home_screen.dart';
 import 'hearts/hearts_home_screen.dart';
 import '../../main.dart';
-
-/// 카드 게임에 필요한 Provider를 제공하는 래퍼
-class _CardGameProviderWrapper extends StatelessWidget {
-  final Widget child;
-
-  const _CardGameProviderWrapper({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => StatsService()..loadStats()),
-        ChangeNotifierProvider(create: (_) => GameController()),
-        ChangeNotifierProvider(create: (_) => SevenCardStatsService()..loadStats()),
-        ChangeNotifierProvider(create: (_) => SevenCardController()),
-        ChangeNotifierProvider(create: (_) => HiLoStatsService()..loadStats()),
-        ChangeNotifierProvider(create: (_) => HiLoController()),
-        ChangeNotifierProvider(create: (_) => HulaStatsService()..loadStats()),
-        ChangeNotifierProvider(create: (_) => OneCardStatsService()..loadStats()),
-        ChangeNotifierProvider(create: (_) => HeartsStatsService()..loadStats()),
-      ],
-      child: child,
-    );
-  }
-}
 
 // 기본 문자열
 class _DefaultStrings {
@@ -216,7 +182,7 @@ class GameSelectionScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => _CardGameProviderWrapper(child: game.screen),
+              builder: (context) => CardGameProviderWrapper(child: game.screen),
             ),
           );
         },
