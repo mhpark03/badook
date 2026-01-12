@@ -6,6 +6,9 @@ import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
 
+// 카드게임 import
+import 'card_game/screens/game_selection_screen.dart' as card_game;
+
 void main() {
   runApp(const BadukApp());
 }
@@ -160,6 +163,8 @@ class L10n {
       'solvedCount': '해결한 문제',
       'totalProblems': '전체 문제',
       'backToList': '목록으로',
+      // 카드게임
+      'cardGame': '카드게임',
       // 정보 페이지
       'about': '앱 소개',
       'help': '도움말',
@@ -284,6 +289,8 @@ class L10n {
       'solvedCount': 'Solved',
       'totalProblems': 'Total',
       'backToList': 'Back to List',
+      // Card game
+      'cardGame': 'Card Game',
       // Info pages
       'about': 'About',
       'help': 'Help',
@@ -408,6 +415,8 @@ class L10n {
       'solvedCount': '正解数',
       'totalProblems': '全問題',
       'backToList': '一覧に戻る',
+      // カードゲーム
+      'cardGame': 'カードゲーム',
       // 情報ページ
       'about': 'アプリについて',
       'help': 'ヘルプ',
@@ -532,6 +541,8 @@ class L10n {
       'solvedCount': '已解决',
       'totalProblems': '总题数',
       'backToList': '返回列表',
+      // 卡牌游戏
+      'cardGame': '卡牌游戏',
       // 信息页面
       'about': '关于',
       'help': '帮助',
@@ -629,6 +640,20 @@ AppBar buildCommonAppBar({
             color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const card_game.GameSelectionScreen(),
+            ),
+          );
+        },
+        child: Text(
+          L10n.get(language, 'cardGame'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
       TextButton(
