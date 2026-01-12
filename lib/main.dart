@@ -747,7 +747,7 @@ class _BadukAppState extends State<BadukApp> {
         useMaterial3: true,
       ),
       home: _benchmarkDone
-          ? GameModeSelector(
+          ? AboutPage(
               language: _language,
               onLanguageChanged: _setLanguage,
             )
