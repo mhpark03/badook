@@ -79,8 +79,10 @@ class L10n {
   static final Map<GameLanguage, Map<String, String>> _strings = {
     GameLanguage.korean: {
       'appTitle': '바둑',
-      'vsAI': '바둑 - vs AI',
+      'vsAI': 'AI 대국',
+      'vsAIDesc': 'AI와 대국하기',
       'twoPlayer': '바둑 - 2인 대국',
+      'twoPlayerModeDesc': '같이 대국하기',
       'playAsBlack': '컴퓨터와 대국 (흑)',
       'playAsWhite': '컴퓨터와 대국 (백)',
       'twoPlayerMode': '2인 대국',
@@ -137,7 +139,8 @@ class L10n {
       'aiHardDesc': '고급 전략과 정석 사용',
       'aiExpertDesc': '최고 수준의 AI',
       // 사활 배우기
-      'lifeDeathProblems': '사활 배우기',
+      'lifeDeathProblems': '사활 문제',
+      'lifeDeathProblemsDesc': '문제 풀기',
       'problemList': '문제 목록',
       'problem': '문제',
       'solveProblem': '문제 풀기',
@@ -205,8 +208,10 @@ class L10n {
     },
     GameLanguage.english: {
       'appTitle': 'Go',
-      'vsAI': 'Go - vs AI',
+      'vsAI': 'AI Game',
+      'vsAIDesc': 'Play vs AI',
       'twoPlayer': 'Go - 2 Players',
+      'twoPlayerModeDesc': 'Local play',
       'playAsBlack': 'Play as Black',
       'playAsWhite': 'Play as White',
       'twoPlayerMode': '2 Players',
@@ -263,7 +268,8 @@ class L10n {
       'aiHardDesc': 'Advanced strategies and joseki',
       'aiExpertDesc': 'Strongest AI level',
       // Life and Death Learning
-      'lifeDeathProblems': 'Learn Life & Death',
+      'lifeDeathProblems': 'Life & Death',
+      'lifeDeathProblemsDesc': 'Solve problems',
       'problemList': 'Problem List',
       'problem': 'Problem',
       'solveProblem': 'Solve Problems',
@@ -331,8 +337,10 @@ class L10n {
     },
     GameLanguage.japanese: {
       'appTitle': '囲碁',
-      'vsAI': '囲碁 - vs AI',
+      'vsAI': 'AI対局',
+      'vsAIDesc': 'AIと対局',
       'twoPlayer': '囲碁 - 対人戦',
+      'twoPlayerModeDesc': '二人で対局',
       'playAsBlack': '黒で対局',
       'playAsWhite': '白で対局',
       'twoPlayerMode': '対人戦',
@@ -389,7 +397,8 @@ class L10n {
       'aiHardDesc': '高度な戦略と定石を使用',
       'aiExpertDesc': '最強レベルのAI',
       // 詰碁学習
-      'lifeDeathProblems': '詰碁を学ぶ',
+      'lifeDeathProblems': '詰碁',
+      'lifeDeathProblemsDesc': '問題を解く',
       'problemList': '問題一覧',
       'problem': '問題',
       'solveProblem': '問題を解く',
@@ -457,8 +466,10 @@ class L10n {
     },
     GameLanguage.chinese: {
       'appTitle': '围棋',
-      'vsAI': '围棋 - vs AI',
+      'vsAI': 'AI对战',
+      'vsAIDesc': '与AI对弈',
       'twoPlayer': '围棋 - 双人对战',
+      'twoPlayerModeDesc': '双人对弈',
       'playAsBlack': '执黑对局',
       'playAsWhite': '执白对局',
       'twoPlayerMode': '双人对战',
@@ -515,7 +526,8 @@ class L10n {
       'aiHardDesc': '使用高级策略和定式',
       'aiExpertDesc': '最强AI级别',
       // 死活学习
-      'lifeDeathProblems': '学习死活',
+      'lifeDeathProblems': '死活题',
+      'lifeDeathProblemsDesc': '做题',
       'problemList': '题目列表',
       'problem': '题目',
       'solveProblem': '做题',
@@ -838,6 +850,47 @@ class _GameModeSelectorState extends State<GameModeSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final screenHeight = mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom;
+    final isSmallScreen = screenHeight < 600;
+
+    // 반응형: 화면 너비에 따라 최대 너비와 폰트 크기 결정
+    final double maxContentWidth;
+    final double iconSize;
+    final double titleSize;
+    final double subtitleSize;
+
+    if (screenWidth >= 900) {
+      maxContentWidth = 800;
+      iconSize = 48;
+      titleSize = 20;
+      subtitleSize = 14;
+    } else if (screenWidth >= 600) {
+      maxContentWidth = 600;
+      iconSize = 40;
+      titleSize = 18;
+      subtitleSize = 13;
+    } else {
+      maxContentWidth = double.infinity;
+      iconSize = isSmallScreen ? 28 : 36;
+      titleSize = isSmallScreen ? 14.0 : 17.0;
+      subtitleSize = isSmallScreen ? 10.0 : 12.0;
+    }
+
+    final double tileWidth;
+    final double tileHeight;
+    if (screenWidth >= 900) {
+      tileWidth = 200;
+      tileHeight = 160;
+    } else if (screenWidth >= 600) {
+      tileWidth = 160;
+      tileHeight = 130;
+    } else {
+      tileWidth = (screenWidth - 48) / 2;
+      tileHeight = isSmallScreen ? 100 : 120;
+    }
+
     return Scaffold(
       appBar: buildCommonAppBar(
         context: context,
@@ -845,208 +898,243 @@ class _GameModeSelectorState extends State<GameModeSelector> {
         language: widget.language,
         onLanguageChanged: widget.onLanguageChanged,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              L10n.get(widget.language, 'appTitle'),
-              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 48),
-            // AI 대국
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AIDifficultySelector(
-                      language: widget.language,
-                    ),
-                  ),
-                ).then((_) => _checkSavedGame());
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                backgroundColor: Colors.brown.shade100,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+      backgroundColor: Colors.brown[800],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+          child: Center(
+            child: Container(
+              constraints: BoxConstraints(maxWidth: maxContentWidth),
+              child: Column(
                 children: [
-                  const Icon(Icons.smart_toy, size: 28, color: Colors.brown),
-                  const SizedBox(width: 12),
-                  Text(
-                    L10n.get(widget.language, 'vsAI'),
-                    style: const TextStyle(fontSize: 18, color: Colors.brown),
+                  Wrap(
+                    spacing: isSmallScreen ? 10 : 16,
+                    runSpacing: isSmallScreen ? 10 : 16,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      // AI 대국
+                      SizedBox(
+                        width: tileWidth,
+                        height: tileHeight,
+                        child: _buildGameTile(
+                          context: context,
+                          title: L10n.get(widget.language, 'vsAI'),
+                          subtitle: L10n.get(widget.language, 'vsAIDesc'),
+                          icon: Icons.smart_toy,
+                          color: Colors.brown[600]!,
+                          iconSize: iconSize,
+                          titleSize: titleSize,
+                          subtitleSize: subtitleSize,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AIDifficultySelector(
+                                  language: widget.language,
+                                ),
+                              ),
+                            ).then((_) => _checkSavedGame());
+                          },
+                        ),
+                      ),
+                      // 2인 대국
+                      SizedBox(
+                        width: tileWidth,
+                        height: tileHeight,
+                        child: _buildGameTile(
+                          context: context,
+                          title: L10n.get(widget.language, 'twoPlayerMode'),
+                          subtitle: L10n.get(widget.language, 'twoPlayerModeDesc'),
+                          icon: Icons.people,
+                          color: Colors.blueGrey[600]!,
+                          iconSize: iconSize,
+                          titleSize: titleSize,
+                          subtitleSize: subtitleSize,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BadukGame(
+                                  vsAI: false,
+                                  language: widget.language,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      // 사활 문제
+                      SizedBox(
+                        width: tileWidth,
+                        height: tileHeight,
+                        child: _buildGameTile(
+                          context: context,
+                          title: L10n.get(widget.language, 'lifeDeathProblems'),
+                          subtitle: L10n.get(widget.language, 'lifeDeathProblemsDesc'),
+                          icon: Icons.extension,
+                          color: Colors.green[700]!,
+                          iconSize: iconSize,
+                          titleSize: titleSize,
+                          subtitleSize: subtitleSize,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LifeDeathProblemSelector(
+                                  language: widget.language,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      // 이어하기 (저장된 게임이 있을 때만)
+                      if (_savedGameInfo != null)
+                        SizedBox(
+                          width: tileWidth,
+                          height: tileHeight,
+                          child: _buildContinueTile(
+                            context: context,
+                            iconSize: iconSize,
+                            titleSize: titleSize,
+                            subtitleSize: subtitleSize,
+                          ),
+                        ),
+                    ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-            // 2인 대국
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BadukGame(
-                      vsAI: false,
-                      language: widget.language,
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.people, size: 28),
-                  const SizedBox(width: 12),
-                  Text(L10n.get(widget.language, 'twoPlayerMode'), style: const TextStyle(fontSize: 18)),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // 사활 문제
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LifeDeathProblemSelector(
-                      language: widget.language,
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                backgroundColor: Colors.green.shade100,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.extension, size: 28, color: Colors.green),
-                  const SizedBox(width: 12),
-                  Text(
-                    L10n.get(widget.language, 'lifeDeathProblems'),
-                    style: const TextStyle(fontSize: 18, color: Colors.green),
-                  ),
-                ],
-              ),
-            ),
-            // 이어하기 버튼 (저장된 게임이 있을 때만 표시)
-            if (_savedGameInfo != null) ...[
-              const SizedBox(height: 32),
-              const Divider(),
-              const SizedBox(height: 16),
-              _buildContinueButton(),
-            ],
-          ],
+          ),
         ),
       ),
     );
   }
 
-  // 이어하기 버튼 위젯
-  Widget _buildContinueButton() {
+  Widget _buildGameTile({
+    required BuildContext context,
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required double iconSize,
+    required double titleSize,
+    required double subtitleSize,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: color,
+      borderRadius: BorderRadius.circular(16),
+      elevation: 4,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final availableHeight = constraints.maxHeight;
+            final availableWidth = constraints.maxWidth;
+            final padding = availableHeight * 0.06;
+            final dynamicIconSize = (availableHeight * 0.28).clamp(18.0, iconSize);
+            final iconPadding = dynamicIconSize * 0.25;
+            final dynamicTitleSize = (availableHeight * 0.11).clamp(11.0, titleSize);
+            final dynamicSubtitleSize = (availableHeight * 0.08).clamp(8.0, subtitleSize);
+            final spacing = availableHeight * 0.04;
+
+            return Container(
+              padding: EdgeInsets.all(padding),
+              width: availableWidth,
+              height: availableHeight,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SizedBox(
+                  width: availableWidth - padding * 2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(iconPadding),
+                        decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          icon,
+                          color: Colors.white,
+                          size: dynamicIconSize,
+                        ),
+                      ),
+                      SizedBox(height: spacing),
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: dynamicTitleSize,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: spacing * 0.3),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: dynamicSubtitleSize,
+                          color: Colors.white70,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContinueTile({
+    required BuildContext context,
+    required double iconSize,
+    required double titleSize,
+    required double subtitleSize,
+  }) {
     if (_savedGameInfo == null) return const SizedBox();
 
-    // 저장된 게임 정보 파싱
     final boardSize = _savedGameInfo!['boardSize'] ?? 19;
     final moveCount = (_savedGameInfo!['moveHistory'] as List?)?.length ?? 0;
     final vsAI = _savedGameInfo!['vsAI'] ?? true;
     final playerColorIndex = _savedGameInfo!['playerColor'] ?? 1;
     final aiDifficultyIndex = _savedGameInfo!['aiDifficulty'] ?? 1;
-    final saveTimeStr = _savedGameInfo!['saveTime'] as String?;
 
-    String saveTimeDisplay = '';
-    if (saveTimeStr != null) {
-      try {
-        final saveTime = DateTime.parse(saveTimeStr);
-        saveTimeDisplay = '${saveTime.month}/${saveTime.day} ${saveTime.hour}:${saveTime.minute.toString().padLeft(2, '0')}';
-      } catch (e) {
-        saveTimeDisplay = '';
-      }
-    }
-
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.blue.shade200),
+    return _buildGameTile(
+      context: context,
+      title: L10n.get(widget.language, 'continue'),
+      subtitle: '$boardSize×$boardSize · ${L10n.get(widget.language, 'moveCount')}: $moveCount',
+      icon: Icons.play_arrow,
+      color: Colors.blue[700]!,
+      iconSize: iconSize,
+      titleSize: titleSize,
+      subtitleSize: subtitleSize,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BadukGame(
+              vsAI: vsAI,
+              playerColor: Stone.values[playerColorIndex],
+              language: widget.language,
+              aiDifficulty: AIDifficulty.values[aiDifficultyIndex],
+              loadSavedGame: true,
+            ),
           ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.save, color: Colors.blue),
-                  const SizedBox(width: 8),
-                  Text(
-                    L10n.get(widget.language, 'savedGameInfo'),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '$boardSize×$boardSize | ${L10n.get(widget.language, 'moveCount')}: $moveCount${saveTimeDisplay.isNotEmpty ? ' | $saveTimeDisplay' : ''}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade700,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        ElevatedButton(
-          onPressed: () {
-            // 저장된 게임을 불러와서 시작
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BadukGame(
-                  vsAI: vsAI,
-                  playerColor: Stone.values[playerColorIndex],
-                  language: widget.language,
-                  aiDifficulty: AIDifficulty.values[aiDifficultyIndex],
-                  loadSavedGame: true,  // 자동 불러오기
-                ),
-              ),
-            ).then((_) {
-              // 화면 복귀 시 저장된 게임 정보 새로고침
-              _checkSavedGame();
-            });
-          },
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.play_arrow, size: 28),
-              const SizedBox(width: 12),
-              Text(
-                L10n.get(widget.language, 'continue'),
-                style: const TextStyle(fontSize: 18),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ).then((_) => _checkSavedGame());
+      },
     );
   }
 }
