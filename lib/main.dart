@@ -690,71 +690,65 @@ class _GameModeSelectorState extends State<GameModeSelector> {
         title: Text(L10n.get(widget.language, 'appTitle')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
-          PopupMenuButton<String>(
+          IconButton(
             icon: const Icon(Icons.info_outline),
-            tooltip: L10n.get(widget.language, 'info'),
-            onSelected: (value) {
-              Widget page;
-              switch (value) {
-                case 'about':
-                  page = AboutPage(onBack: () => Navigator.pop(context), language: widget.language);
-                  break;
-                case 'help':
-                  page = HelpPage(onBack: () => Navigator.pop(context), language: widget.language);
-                  break;
-                case 'privacy':
-                  page = PrivacyPolicyPage(onBack: () => Navigator.pop(context), language: widget.language);
-                  break;
-                case 'terms':
-                  page = TermsOfServicePage(onBack: () => Navigator.pop(context), language: widget.language);
-                  break;
-                default:
-                  return;
-              }
-              Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+            tooltip: L10n.get(widget.language, 'about'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AboutPage(
+                    onBack: () => Navigator.pop(context),
+                    language: widget.language,
+                  ),
+                ),
+              );
             },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'about',
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline, size: 20, color: Colors.brown[700]),
-                    const SizedBox(width: 12),
-                    Text(L10n.get(widget.language, 'about')),
-                  ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.help_outline),
+            tooltip: L10n.get(widget.language, 'help'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HelpPage(
+                    onBack: () => Navigator.pop(context),
+                    language: widget.language,
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'help',
-                child: Row(
-                  children: [
-                    Icon(Icons.help_outline, size: 20, color: Colors.brown[700]),
-                    const SizedBox(width: 12),
-                    Text(L10n.get(widget.language, 'help')),
-                  ],
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.privacy_tip_outlined),
+            tooltip: L10n.get(widget.language, 'privacyPolicy'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PrivacyPolicyPage(
+                    onBack: () => Navigator.pop(context),
+                    language: widget.language,
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'privacy',
-                child: Row(
-                  children: [
-                    Icon(Icons.privacy_tip_outlined, size: 20, color: Colors.brown[700]),
-                    const SizedBox(width: 12),
-                    Text(L10n.get(widget.language, 'privacyPolicy')),
-                  ],
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.description_outlined),
+            tooltip: L10n.get(widget.language, 'termsOfService'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TermsOfServicePage(
+                    onBack: () => Navigator.pop(context),
+                    language: widget.language,
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'terms',
-                child: Row(
-                  children: [
-                    Icon(Icons.description_outlined, size: 20, color: Colors.brown[700]),
-                    const SizedBox(width: 12),
-                    Text(L10n.get(widget.language, 'termsOfService')),
-                  ],
-                ),
-              ),
-            ],
+              );
+            },
           ),
           PopupMenuButton<GameLanguage>(
             icon: const Icon(Icons.language),
