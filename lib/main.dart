@@ -690,9 +690,7 @@ class _GameModeSelectorState extends State<GameModeSelector> {
         title: Text(L10n.get(widget.language, 'appTitle')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            tooltip: L10n.get(widget.language, 'about'),
+          TextButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -704,10 +702,24 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                 ),
               );
             },
+            child: Text(
+              L10n.get(widget.language, 'about'),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            tooltip: L10n.get(widget.language, 'help'),
+          TextButton(
+            onPressed: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+            child: Text(
+              L10n.get(widget.language, 'appTitle'),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          TextButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -719,10 +731,12 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                 ),
               );
             },
+            child: Text(
+              L10n.get(widget.language, 'help'),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.privacy_tip_outlined),
-            tooltip: L10n.get(widget.language, 'privacyPolicy'),
+          TextButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -734,10 +748,12 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                 ),
               );
             },
+            child: Text(
+              L10n.get(widget.language, 'privacyPolicy'),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.description_outlined),
-            tooltip: L10n.get(widget.language, 'termsOfService'),
+          TextButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -749,6 +765,10 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                 ),
               );
             },
+            child: Text(
+              L10n.get(widget.language, 'termsOfService'),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
           ),
           PopupMenuButton<GameLanguage>(
             icon: const Icon(Icons.language),
