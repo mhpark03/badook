@@ -690,20 +690,71 @@ class _GameModeSelectorState extends State<GameModeSelector> {
         title: Text(L10n.get(widget.language, 'appTitle')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
-          IconButton(
+          PopupMenuButton<String>(
             icon: const Icon(Icons.info_outline),
             tooltip: L10n.get(widget.language, 'info'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => InfoMenuPage(
-                    onBack: () => Navigator.pop(context),
-                    language: widget.language,
-                  ),
-                ),
-              );
+            onSelected: (value) {
+              Widget page;
+              switch (value) {
+                case 'about':
+                  page = AboutPage(onBack: () => Navigator.pop(context), language: widget.language);
+                  break;
+                case 'help':
+                  page = HelpPage(onBack: () => Navigator.pop(context), language: widget.language);
+                  break;
+                case 'privacy':
+                  page = PrivacyPolicyPage(onBack: () => Navigator.pop(context), language: widget.language);
+                  break;
+                case 'terms':
+                  page = TermsOfServicePage(onBack: () => Navigator.pop(context), language: widget.language);
+                  break;
+                default:
+                  return;
+              }
+              Navigator.push(context, MaterialPageRoute(builder: (context) => page));
             },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'about',
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, size: 20, color: Colors.brown[700]),
+                    const SizedBox(width: 12),
+                    Text(L10n.get(widget.language, 'about')),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'help',
+                child: Row(
+                  children: [
+                    Icon(Icons.help_outline, size: 20, color: Colors.brown[700]),
+                    const SizedBox(width: 12),
+                    Text(L10n.get(widget.language, 'help')),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'privacy',
+                child: Row(
+                  children: [
+                    Icon(Icons.privacy_tip_outlined, size: 20, color: Colors.brown[700]),
+                    const SizedBox(width: 12),
+                    Text(L10n.get(widget.language, 'privacyPolicy')),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'terms',
+                child: Row(
+                  children: [
+                    Icon(Icons.description_outlined, size: 20, color: Colors.brown[700]),
+                    const SizedBox(width: 12),
+                    Text(L10n.get(widget.language, 'termsOfService')),
+                  ],
+                ),
+              ),
+            ],
           ),
           PopupMenuButton<GameLanguage>(
             icon: const Icon(Icons.language),

@@ -32,14 +32,97 @@
   <title>baduk_app</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Google AdSense (Test Mode) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
-  <script>
-    // 테스트 모드 활성화
-    (adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
-  </script>
+  <style>
+    /* 광고 컨테이너 스타일 */
+    .ad-container {
+      display: none;
+      width: 100%;
+      max-width: 728px;
+      margin: 0 auto;
+      text-align: center;
+      min-height: 90px;
+      background: transparent;
+    }
+    .ad-container.visible {
+      display: block;
+    }
+    /* 앱 로드 전에는 광고 숨김 */
+    .ad-container.loading {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
+  <!-- 하단 배너 광고 (앱 로드 후 표시) - 테스트 모드 -->
+  <div id="bottom-ad" class="ad-container loading">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-0000000000000000"
+         data-ad-slot="0000000000"
+         data-ad-format="horizontal"
+         data-full-width-responsive="false"
+         data-adtest="on"></ins>
+  </div>
+
   <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    // Flutter 앱 로드 완료 후 광고 초기화
+    var adInitialized = false;
+
+    function initAdsense() {
+      if (adInitialized) return;
+      adInitialized = true;
+
+      // AdSense 스크립트 동적 로드
+      var script = document.createElement('script');
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000';
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+      script.onload = function() {
+        // 스크립트 로드 후 광고 표시
+        showAd();
+      };
+      document.head.appendChild(script);
+    }
+
+    function showAd() {
+      var adContainer = document.getElementById('bottom-ad');
+      if (adContainer) {
+        adContainer.classList.remove('loading');
+        adContainer.classList.add('visible');
+        try {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch(e) {
+          console.log('AdSense error:', e);
+        }
+      }
+    }
+
+    function hideAd() {
+      var adContainer = document.getElementById('bottom-ad');
+      if (adContainer) {
+        adContainer.classList.remove('visible');
+        adContainer.classList.add('loading');
+      }
+    }
+
+    // Flutter에서 호출할 수 있는 전역 함수
+    window.initAdsense = initAdsense;
+    window.showAd = showAd;
+    window.hideAd = hideAd;
+
+    // Flutter 앱이 준비되면 광고 초기화 (3초 딜레이)
+    window.addEventListener('flutter-first-frame', function() {
+      setTimeout(initAdsense, 3000);
+    });
+
+    // 백업: flutter-first-frame 이벤트가 없는 경우 5초 후 초기화
+    setTimeout(function() {
+      if (!adInitialized) {
+        initAdsense();
+      }
+    }, 5000);
+  </script>
 </body>
 </html>
