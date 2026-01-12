@@ -590,6 +590,122 @@ class L10n {
   }
 }
 
+// 공통 앱바 빌더
+AppBar buildCommonAppBar({
+  required BuildContext context,
+  required String title,
+  required GameLanguage language,
+  required Function(GameLanguage) onLanguageChanged,
+}) {
+  return AppBar(
+    title: Text(title),
+    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    automaticallyImplyLeading: false,
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AboutPage(
+                language: language,
+                onLanguageChanged: onLanguageChanged,
+              ),
+            ),
+          );
+        },
+        child: Text(
+          L10n.get(language, 'about'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        },
+        child: Text(
+          L10n.get(language, 'appTitle'),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HelpPage(
+                language: language,
+                onLanguageChanged: onLanguageChanged,
+              ),
+            ),
+          );
+        },
+        child: Text(
+          L10n.get(language, 'help'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PrivacyPolicyPage(
+                language: language,
+                onLanguageChanged: onLanguageChanged,
+              ),
+            ),
+          );
+        },
+        child: Text(
+          L10n.get(language, 'privacyPolicy'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TermsOfServicePage(
+                language: language,
+                onLanguageChanged: onLanguageChanged,
+              ),
+            ),
+          );
+        },
+        child: Text(
+          L10n.get(language, 'termsOfService'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+      ),
+      PopupMenuButton<GameLanguage>(
+        icon: const Icon(Icons.language),
+        tooltip: L10n.get(language, 'language'),
+        onSelected: onLanguageChanged,
+        itemBuilder: (context) => GameLanguage.values.map((lang) {
+          return PopupMenuItem(
+            value: lang,
+            child: Row(
+              children: [
+                if (lang == language)
+                  const Icon(Icons.check, size: 18)
+                else
+                  const SizedBox(width: 18),
+                const SizedBox(width: 8),
+                Text(L10n.getLanguageName(lang)),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    ],
+  );
+}
+
 class BadukApp extends StatefulWidget {
   const BadukApp({super.key});
 
@@ -686,111 +802,11 @@ class _GameModeSelectorState extends State<GameModeSelector> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.get(widget.language, 'appTitle')),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AboutPage(
-                    onBack: () => Navigator.pop(context),
-                    language: widget.language,
-                  ),
-                ),
-              );
-            },
-            child: Text(
-              L10n.get(widget.language, 'about'),
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.popUntil(context, (route) => route.isFirst);
-            },
-            child: Text(
-              L10n.get(widget.language, 'appTitle'),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HelpPage(
-                    onBack: () => Navigator.pop(context),
-                    language: widget.language,
-                  ),
-                ),
-              );
-            },
-            child: Text(
-              L10n.get(widget.language, 'help'),
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PrivacyPolicyPage(
-                    onBack: () => Navigator.pop(context),
-                    language: widget.language,
-                  ),
-                ),
-              );
-            },
-            child: Text(
-              L10n.get(widget.language, 'privacyPolicy'),
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TermsOfServicePage(
-                    onBack: () => Navigator.pop(context),
-                    language: widget.language,
-                  ),
-                ),
-              );
-            },
-            child: Text(
-              L10n.get(widget.language, 'termsOfService'),
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
-          ),
-          PopupMenuButton<GameLanguage>(
-            icon: const Icon(Icons.language),
-            tooltip: L10n.get(widget.language, 'language'),
-            onSelected: widget.onLanguageChanged,
-            itemBuilder: (context) => GameLanguage.values.map((lang) {
-              return PopupMenuItem(
-                value: lang,
-                child: Row(
-                  children: [
-                    if (lang == widget.language)
-                      const Icon(Icons.check, size: 18)
-                    else
-                      const SizedBox(width: 18),
-                    const SizedBox(width: 8),
-                    Text(L10n.getLanguageName(lang)),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ],
+      appBar: buildCommonAppBar(
+        context: context,
+        title: L10n.get(widget.language, 'appTitle'),
+        language: widget.language,
+        onLanguageChanged: widget.onLanguageChanged,
       ),
       body: Center(
         child: Column(
@@ -6360,11 +6376,13 @@ class BoardPainter extends CustomPainter {
 class InfoMenuPage extends StatelessWidget {
   final VoidCallback onBack;
   final GameLanguage language;
+  final Function(GameLanguage) onLanguageChanged;
 
   const InfoMenuPage({
     super.key,
     required this.onBack,
     required this.language,
+    required this.onLanguageChanged,
   });
 
   @override
@@ -6481,15 +6499,15 @@ class InfoMenuPage extends StatelessWidget {
         builder: (context) {
           switch (page) {
             case 'about':
-              return AboutPage(onBack: () => Navigator.pop(context), language: language);
+              return AboutPage(language: language, onLanguageChanged: onLanguageChanged);
             case 'help':
-              return HelpPage(onBack: () => Navigator.pop(context), language: language);
+              return HelpPage(language: language, onLanguageChanged: onLanguageChanged);
             case 'privacy':
-              return PrivacyPolicyPage(onBack: () => Navigator.pop(context), language: language);
+              return PrivacyPolicyPage(language: language, onLanguageChanged: onLanguageChanged);
             case 'terms':
-              return TermsOfServicePage(onBack: () => Navigator.pop(context), language: language);
+              return TermsOfServicePage(language: language, onLanguageChanged: onLanguageChanged);
             default:
-              return AboutPage(onBack: () => Navigator.pop(context), language: language);
+              return AboutPage(language: language, onLanguageChanged: onLanguageChanged);
           }
         },
       ),
@@ -6499,26 +6517,23 @@ class InfoMenuPage extends StatelessWidget {
 
 // 앱 소개 페이지
 class AboutPage extends StatelessWidget {
-  final VoidCallback onBack;
   final GameLanguage language;
+  final Function(GameLanguage) onLanguageChanged;
 
   const AboutPage({
     super.key,
-    required this.onBack,
     required this.language,
+    required this.onLanguageChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.get(language, 'about')),
-        backgroundColor: Colors.brown[700],
-        foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: onBack,
-        ),
+      appBar: buildCommonAppBar(
+        context: context,
+        title: L10n.get(language, 'about'),
+        language: language,
+        onLanguageChanged: onLanguageChanged,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -6595,26 +6610,23 @@ class AboutPage extends StatelessWidget {
 
 // 도움말 페이지
 class HelpPage extends StatelessWidget {
-  final VoidCallback onBack;
   final GameLanguage language;
+  final Function(GameLanguage) onLanguageChanged;
 
   const HelpPage({
     super.key,
-    required this.onBack,
     required this.language,
+    required this.onLanguageChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.get(language, 'help')),
-        backgroundColor: Colors.brown[700],
-        foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: onBack,
-        ),
+      appBar: buildCommonAppBar(
+        context: context,
+        title: L10n.get(language, 'help'),
+        language: language,
+        onLanguageChanged: onLanguageChanged,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -6649,26 +6661,23 @@ class HelpPage extends StatelessWidget {
 
 // 개인정보처리방침 페이지
 class PrivacyPolicyPage extends StatelessWidget {
-  final VoidCallback onBack;
   final GameLanguage language;
+  final Function(GameLanguage) onLanguageChanged;
 
   const PrivacyPolicyPage({
     super.key,
-    required this.onBack,
     required this.language,
+    required this.onLanguageChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.get(language, 'privacyPolicy')),
-        backgroundColor: Colors.brown[700],
-        foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: onBack,
-        ),
+      appBar: buildCommonAppBar(
+        context: context,
+        title: L10n.get(language, 'privacyPolicy'),
+        language: language,
+        onLanguageChanged: onLanguageChanged,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -6703,26 +6712,23 @@ class PrivacyPolicyPage extends StatelessWidget {
 
 // 이용약관 페이지
 class TermsOfServicePage extends StatelessWidget {
-  final VoidCallback onBack;
   final GameLanguage language;
+  final Function(GameLanguage) onLanguageChanged;
 
   const TermsOfServicePage({
     super.key,
-    required this.onBack,
     required this.language,
+    required this.onLanguageChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.get(language, 'termsOfService')),
-        backgroundColor: Colors.brown[700],
-        foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: onBack,
-        ),
+      appBar: buildCommonAppBar(
+        context: context,
+        title: L10n.get(language, 'termsOfService'),
+        language: language,
+        onLanguageChanged: onLanguageChanged,
       ),
       body: Container(
         decoration: BoxDecoration(
