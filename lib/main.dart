@@ -632,7 +632,16 @@ AppBar buildCommonAppBar({
       ),
       TextButton(
         onPressed: () {
-          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GameModeSelector(
+                language: language,
+                onLanguageChanged: onLanguageChanged,
+              ),
+            ),
+            (route) => route.isFirst,
+          );
         },
         child: Text(
           L10n.get(language, 'appTitle'),
@@ -647,7 +656,10 @@ AppBar buildCommonAppBar({
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const card_game.GameSelectionScreen(),
+              builder: (context) => card_game.GameSelectionScreen(
+                language: language,
+                onLanguageChanged: onLanguageChanged,
+              ),
             ),
           );
         },

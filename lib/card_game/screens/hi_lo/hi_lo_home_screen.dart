@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../l10n/generated/app_localizations.dart';
+import '../../l10n/l10n_helper.dart';
 import '../../services/ad_service.dart';
 import '../../services/hi_lo/hi_lo_controller.dart';
 import '../../services/hi_lo/hi_lo_stats_service.dart';
@@ -35,7 +35,7 @@ class _HiLoHomeScreenState extends State<HiLoHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom;
     final isSmallScreen = screenHeight < 600;

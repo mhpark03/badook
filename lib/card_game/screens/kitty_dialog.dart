@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../l10n/generated/app_localizations.dart';
+import '../l10n/l10n_helper.dart';
 import '../models/card.dart';
 import '../models/player.dart';
 import '../models/game_state.dart';
@@ -118,7 +118,7 @@ class _KittySelectionScreenState extends State<KittySelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 

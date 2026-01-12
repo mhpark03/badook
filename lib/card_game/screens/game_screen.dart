@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../l10n/generated/app_localizations.dart';
+import '../l10n/l10n_helper.dart';
 import '../models/card.dart';
 import '../models/player.dart';
 import '../models/game_state.dart';
@@ -182,7 +182,7 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     return Consumer<GameController>(
       builder: (context, controller, child) {
@@ -258,7 +258,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildWaitingScreen(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     return Center(
       child: Column(
@@ -298,7 +298,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildBiddingScreen(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final state = controller.state;
 
     return Column(
@@ -394,7 +394,7 @@ class _GameScreenState extends State<GameScreen> {
     String statusText;
     Color statusColor;
 
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     if (isPassed) {
       borderColor = Colors.grey;
@@ -453,7 +453,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildCenterBiddingArea(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final state = controller.state;
     final isHumanTurn = state.currentBidder == 0 && !controller.isProcessing;
 
@@ -746,7 +746,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildBiddingPlayerHand(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final state = controller.state;
     final hand = state.players[0].hand;
     final isPassed = state.passedPlayers[0];
@@ -898,7 +898,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildKittyScreen(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     if (controller.state.declarerId != 0) {
       return Column(
@@ -970,7 +970,7 @@ class _GameScreenState extends State<GameScreen> {
   bool _friendDialogShown = false;
 
   Widget _buildFriendScreen(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     if (controller.state.declarerId != 0) {
       return Column(
@@ -1048,7 +1048,7 @@ class _GameScreenState extends State<GameScreen> {
       _stopTrickTimer();
     }
 
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     return Stack(
       children: [
@@ -1220,7 +1220,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildTrickConfirmOverlay(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final trick = controller.lastCompletedTrick;
     if (trick == null) return const SizedBox.shrink();
 
@@ -1375,7 +1375,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildGameInfo(GameState state) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     // 오픈된 기루다 수 계산
     int playedGirudaCount = 0;
@@ -1540,7 +1540,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildPlayArea(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final state = controller.state;
     final trick = state.currentTrick;
 
@@ -1640,7 +1640,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildPlayerIndicator(Player player, GameState state, int index, double maxWidth) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final isCurrentPlayer = state.currentPlayer == index;
     final isDeclarer = player.isDeclarer;
     final isFriend = player.isFriend && state.friendRevealed;
@@ -1863,7 +1863,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildTrickCards(Trick? trick, GameState state, GameController controller, double cardWidth, double cardHeight) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final isHumanLeading = state.currentPlayer == 0 && (trick == null || trick.cards.isEmpty);
     final lastTrick = controller.lastCompletedTrick;
     final showPreviousTrick = isHumanLeading && lastTrick != null;
@@ -2085,7 +2085,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildPlayerHand(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final hand = controller.humanPlayer.hand;
     final playableCards =
         controller.state.phase == GamePhase.playing ? controller.getPlayableCards() : hand;
@@ -2311,7 +2311,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showJokerCallDialog(PlayingCard card, GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final suitSymbol = _getSuitSymbol(card.suit!);
     showDialog(
       context: context,
@@ -2347,7 +2347,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showJokerLeadSuitDialog(PlayingCard card, GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -2392,7 +2392,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showAllPassedDialog(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -2418,7 +2418,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showDealMissDialog(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final hand = controller.humanPlayer.hand;
 
     showDialog(
@@ -2469,7 +2469,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildBaseScoreExplanation(GameState state) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final targetTricks = state.currentBid?.tricks ?? 13;
     const int minContract = 13;
     final isNoFriend = state.friendDeclaration?.isNoFriend ?? false;
@@ -2576,7 +2576,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _buildGameEndScreen(GameController controller) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
     final state = controller.state;
 
     // 통계 기록 (한 번만)

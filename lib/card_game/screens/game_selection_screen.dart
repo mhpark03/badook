@@ -1,8 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../l10n/generated/app_localizations.dart';
 import '../widgets/banner_ad_widget.dart';
 import 'home_screen.dart';
 import 'seven_card/seven_card_home_screen.dart';
@@ -10,13 +6,35 @@ import 'hi_lo/hi_lo_home_screen.dart';
 import 'hula/hula_home_screen.dart';
 import 'onecard/onecard_home_screen.dart';
 import 'hearts/hearts_home_screen.dart';
+import '../../main.dart';
+
+// 기본 문자열
+class _DefaultStrings {
+  static const selectGame = '게임 선택';
+  static const appTitle = '마이티';
+  static const gameSubtitle = '5인 트럼프';
+  static const sevenCardTitle = '세븐카드';
+  static const sevenCardSubtitle = '포커 게임';
+  static const hiLoTitle = '하이로우';
+  static const hiLoSubtitle = '숫자 맞추기';
+  static const hulaTitle = '훌라';
+  static const hulaSubtitle = '3장 카드';
+  static const heartsTitle = '하트';
+  static const heartsSubtitle = '패스 게임';
+}
 
 class GameSelectionScreen extends StatelessWidget {
-  const GameSelectionScreen({super.key});
+  final GameLanguage language;
+  final Function(GameLanguage) onLanguageChanged;
+
+  const GameSelectionScreen({
+    super.key,
+    required this.language,
+    required this.onLanguageChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom;
@@ -29,19 +47,16 @@ class GameSelectionScreen extends StatelessWidget {
     final double subtitleSize;
 
     if (screenWidth >= 900) {
-      // 데스크탑/대형 태블릿
       maxContentWidth = 800;
       iconSize = 48;
       titleSize = 20;
       subtitleSize = 14;
     } else if (screenWidth >= 600) {
-      // 태블릿
       maxContentWidth = 600;
       iconSize = 40;
       titleSize = 18;
       subtitleSize = 13;
     } else {
-      // 모바일
       maxContentWidth = double.infinity;
       iconSize = isSmallScreen ? 28 : 36;
       titleSize = isSmallScreen ? 14.0 : 17.0;
@@ -50,29 +65,29 @@ class GameSelectionScreen extends StatelessWidget {
 
     final games = [
       _GameInfo(
-        title: l10n.appTitle,
-        subtitle: l10n.gameSubtitle,
+        title: _DefaultStrings.appTitle,
+        subtitle: _DefaultStrings.gameSubtitle,
         icon: Icons.style,
         color: Colors.green[700]!,
         screen: const HomeScreen(),
       ),
       _GameInfo(
-        title: l10n.sevenCardTitle,
-        subtitle: l10n.sevenCardSubtitle,
+        title: _DefaultStrings.sevenCardTitle,
+        subtitle: _DefaultStrings.sevenCardSubtitle,
         icon: Icons.casino,
         color: Colors.blue[700]!,
         screen: const SevenCardHomeScreen(),
       ),
       _GameInfo(
-        title: l10n.hiLoTitle,
-        subtitle: l10n.hiLoSubtitle,
+        title: _DefaultStrings.hiLoTitle,
+        subtitle: _DefaultStrings.hiLoSubtitle,
         icon: Icons.swap_vert,
         color: Colors.purple[700]!,
         screen: const HiLoHomeScreen(),
       ),
       _GameInfo(
-        title: l10n.hulaTitle,
-        subtitle: l10n.hulaSubtitle,
+        title: _DefaultStrings.hulaTitle,
+        subtitle: _DefaultStrings.hulaSubtitle,
         icon: Icons.style,
         color: Colors.teal[700]!,
         screen: const HulaHomeScreen(),
@@ -85,15 +100,14 @@ class GameSelectionScreen extends StatelessWidget {
         screen: const OneCardHomeScreen(),
       ),
       _GameInfo(
-        title: l10n.heartsTitle,
-        subtitle: l10n.heartsSubtitle,
+        title: _DefaultStrings.heartsTitle,
+        subtitle: _DefaultStrings.heartsSubtitle,
         icon: Icons.favorite,
         color: Colors.red[700]!,
         screen: const HeartsHomeScreen(),
       ),
     ];
 
-    // 타일 크기 계산 (고정 크기로 변경)
     final double tileWidth;
     final double tileHeight;
     if (screenWidth >= 900) {
@@ -103,11 +117,17 @@ class GameSelectionScreen extends StatelessWidget {
       tileWidth = 160;
       tileHeight = 130;
     } else {
-      tileWidth = (screenWidth - 48) / 2; // 2열, 패딩 고려
+      tileWidth = (screenWidth - 48) / 2;
       tileHeight = isSmallScreen ? 100 : 120;
     }
 
     return Scaffold(
+      appBar: buildCommonAppBar(
+        context: context,
+        title: L10n.get(language, 'cardGame'),
+        language: language,
+        onLanguageChanged: onLanguageChanged,
+      ),
       backgroundColor: Colors.green[900],
       body: SafeArea(
         child: Column(
@@ -118,57 +138,21 @@ class GameSelectionScreen extends StatelessWidget {
                 child: Center(
                   child: Container(
                     constraints: BoxConstraints(maxWidth: maxContentWidth),
-                    child: Column(
-                      children: [
-                        // 앱 타이틀
-                        Text(
-                          l10n.selectGame,
-                          style: TextStyle(
-                            fontSize: screenWidth >= 600 ? 32 : (isSmallScreen ? 22 : 28),
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: const [
-                              Shadow(
-                                blurRadius: 10,
-                                color: Colors.black54,
-                                offset: Offset(2, 2),
-                              ),
-                            ],
-                          ),
+                    child: Wrap(
+                      spacing: isSmallScreen ? 10 : 16,
+                      runSpacing: isSmallScreen ? 10 : 16,
+                      alignment: WrapAlignment.center,
+                      children: games.map((game) => SizedBox(
+                        width: tileWidth,
+                        height: tileHeight,
+                        child: _buildGameTile(
+                          context: context,
+                          game: game,
+                          iconSize: iconSize,
+                          titleSize: titleSize,
+                          subtitleSize: subtitleSize,
                         ),
-                        SizedBox(height: isSmallScreen ? 12 : 20),
-
-                        // 게임 그리드 (Wrap으로 변경하여 스크롤 가능)
-                        Wrap(
-                          spacing: isSmallScreen ? 10 : 16,
-                          runSpacing: isSmallScreen ? 10 : 16,
-                          alignment: WrapAlignment.center,
-                          children: games.map((game) => SizedBox(
-                            width: tileWidth,
-                            height: tileHeight,
-                            child: _buildGameTile(
-                              context: context,
-                              game: game,
-                              iconSize: iconSize,
-                              titleSize: titleSize,
-                              subtitleSize: subtitleSize,
-                            ),
-                          )).toList(),
-                        ),
-
-                        // 앱 종료 버튼
-                        Padding(
-                          padding: EdgeInsets.only(top: isSmallScreen ? 16 : 24),
-                          child: TextButton.icon(
-                            onPressed: () => _showExitAppDialog(context, l10n),
-                            icon: Icon(Icons.power_settings_new, color: Colors.white54, size: isSmallScreen ? 16 : 20),
-                            label: Text(
-                              l10n.exitApp,
-                              style: TextStyle(color: Colors.white54, fontSize: isSmallScreen ? 12 : 14),
-                            ),
-                          ),
-                        ),
-                      ],
+                      )).toList(),
                     ),
                   ),
                 ),
@@ -202,7 +186,6 @@ class GameSelectionScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            // 사용 가능한 공간에 맞춰 동적 크기 계산
             final availableHeight = constraints.maxHeight;
             final availableWidth = constraints.maxWidth;
             final padding = availableHeight * 0.06;
@@ -266,36 +249,6 @@ class GameSelectionScreen extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
-  }
-
-  void _showExitAppDialog(BuildContext context, AppLocalizations l10n) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.exitApp),
-        content: Text(l10n.exitAppConfirm),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              if (Platform.isAndroid) {
-                SystemNavigator.pop();
-              } else if (Platform.isIOS) {
-                exit(0);
-              } else {
-                exit(0);
-              }
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text(l10n.exit, style: const TextStyle(color: Colors.white)),
-          ),
-        ],
       ),
     );
   }

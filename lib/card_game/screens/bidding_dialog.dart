@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../l10n/generated/app_localizations.dart';
+import '../l10n/l10n_helper.dart';
 import '../models/card.dart';
 import '../models/game_state.dart';
 
@@ -52,7 +52,7 @@ class _BiddingDialogState extends State<BiddingDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     return AlertDialog(
       title: Text(l10n.bid),

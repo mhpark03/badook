@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../l10n/generated/app_localizations.dart';
+import '../../l10n/l10n_helper.dart';
 import '../../models/card.dart';
 import '../../models/seven_card/poker_hand.dart';
 import '../../models/seven_card/seven_card_state.dart';
@@ -189,7 +189,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = getL10n(context);
 
     return Consumer<SevenCardController>(
       builder: (context, controller, child) {
