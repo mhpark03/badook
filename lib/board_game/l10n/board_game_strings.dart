@@ -12,8 +12,8 @@ class BoardGameStrings {
     'common.lose': '패배',
     'common.hint': '힌트',
     'common.giveUp': '포기',
-    'common.watchAd': '광고 보기',
-    'common.watchAdRevive': '광고 보고 부활하기',
+    'common.watchAd': '확인',
+    'common.watchAdRevive': '부활하기',
 
     // App common
     'app.continue': '이어하기',
@@ -27,8 +27,8 @@ class BoardGameStrings {
     'dialog.selectMode': '모드 선택',
     'dialog.selectDifficulty': '난이도 선택',
     'dialog.hintTitle': '힌트',
-    'dialog.hintMessage': '광고를 보고 힌트를 받으시겠습니까?',
-    'dialog.reviveMessage': '광고를 보고 부활하시겠습니까?',
+    'dialog.hintMessage': '힌트를 사용하시겠습니까?',
+    'dialog.reviveMessage': '부활하시겠습니까?',
 
     // VS mode
     'vs.vsComputer': 'AI 대전',
@@ -163,7 +163,7 @@ class BoardGameStrings {
     'games.bubble.retry': '다시 하기',
     'games.bubble.playAgain': '다시 하기',
     'games.bubble.hintTitle': '힌트',
-    'games.bubble.hintMessage': '광고를 보고 힌트를 받으시겠습니까?',
+    'games.bubble.hintMessage': '힌트를 사용하시겠습니까?',
     'games.bubble.rulesTitle': '게임 방법',
     'games.bubble.rulesObjective': '목표',
     'games.bubble.rulesObjectiveDesc': '같은 색 버블 3개 이상을 연결하여 터트리세요.',
