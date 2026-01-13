@@ -7206,7 +7206,7 @@ class _HelpPageState extends State<HelpPage> {
         break;
       case 'minesweeper':
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const MinesweeperScreen(difficulty: MinesweeperDifficulty.easy),
+          builder: (context) => const MinesweeperScreen(difficulty: MinesweeperDifficulty.hard),
         ));
         break;
       case 'solitaire':
@@ -7216,7 +7216,7 @@ class _HelpPageState extends State<HelpPage> {
         break;
       case 'maze':
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const MazeScreen(difficulty: MazeDifficulty.easy),
+          builder: (context) => const MazeScreen(difficulty: MazeDifficulty.hard),
         ));
         break;
       case 'bubble':
@@ -7231,7 +7231,7 @@ class _HelpPageState extends State<HelpPage> {
         break;
       case 'baseball':
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const BaseballScreen(difficulty: BaseballDifficulty.easy),
+          builder: (context) => const BaseballScreen(difficulty: BaseballDifficulty.hard),
         ));
         break;
       case 'sudoku':
@@ -7242,28 +7242,28 @@ class _HelpPageState extends State<HelpPage> {
       case 'sudoku_classic':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => const sudoku_classic.GameScreen(
-            initialDifficulty: sudoku_state.Difficulty.easy,
+            initialDifficulty: sudoku_state.Difficulty.expert,
           ),
         ));
         break;
       case 'sudoku_samurai':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => const SamuraiGameScreen(
-            initialDifficulty: SamuraiDifficulty.easy,
+            initialDifficulty: SamuraiDifficulty.hard,
           ),
         ));
         break;
       case 'sudoku_killer':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => KillerGameScreen(
-            initialDifficulty: KillerDifficulty.easy,
+            initialDifficulty: KillerDifficulty.hard,
           ),
         ));
         break;
       case 'sudoku_sum':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => NumberSumsGameScreen(
-            initialDifficulty: NumberSumsDifficulty.easy,
+            initialDifficulty: NumberSumsDifficulty.hard,
           ),
         ));
         break;
