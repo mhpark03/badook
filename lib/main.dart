@@ -6866,30 +6866,57 @@ class HelpPage extends StatelessWidget {
         language: language,
         onLanguageChanged: onLanguageChanged,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.brown[100]!, Colors.brown[200]!],
-          ),
-        ),
+      backgroundColor: Colors.green[800],
+      body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              L10n.get(language, 'helpContent'),
-              style: TextStyle(
-                fontSize: 16,
-                height: 1.6,
-                color: Colors.brown[800],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 타이틀
+              Center(
+                child: Text(
+                  L10n.get(language, 'helpTitle'),
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10,
+                        color: Colors.black54,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 24),
+              // 콘텐츠 박스
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.95),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  L10n.get(language, 'helpContent'),
+                  style: TextStyle(
+                    fontSize: 16,
+                    height: 1.8,
+                    color: Colors.grey[800],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
