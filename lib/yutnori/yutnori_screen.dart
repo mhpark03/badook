@@ -146,11 +146,20 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   late AnimationController _yutAnimController;
   late Animation<double> _yutAnimation;
 
+  // 던지기 애니메이션 (말판 중앙)
+  late AnimationController _throwAnimController;
+  late Animation<double> _throwAnimation;
+  bool showThrowAnimation = false;
+
   // 메시지
   String? gameMessage;
 
   // 윷 이미지 상태 (던지기 애니메이션용)
   List<bool> yutStickStates = [false, false, false, false];
+
+  // 던지기 애니메이션용 랜덤 회전값
+  List<double> _stickRotations = [0, 0, 0, 0];
+  List<double> _stickOffsets = [0, 0, 0, 0];
 
   // 윷판 위치 정보 (29개 위치)
   // 0: 시작점, 1-5: 우측 하단→우측 상단
@@ -184,6 +193,16 @@ class _YutnoriScreenState extends State<YutnoriScreen>
       curve: Curves.bounceOut,
     );
 
+    // 던지기 애니메이션 컨트롤러
+    _throwAnimController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+    _throwAnimation = CurvedAnimation(
+      parent: _throwAnimController,
+      curve: Curves.easeOutBack,
+    );
+
     // 항상 먼저 초기화 (async 로드 전에 playerPieces가 필요함)
     _initGame();
 
@@ -199,6 +218,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   void dispose() {
     _autoExecuteTimer?.cancel();
     _yutAnimController.dispose();
+    _throwAnimController.dispose();
     super.dispose();
   }
 
@@ -351,13 +371,22 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   void _throwYut() {
     if (!canThrowYut || isThrowingYut || gameOver) return;
 
+    // 랜덤 회전값과 오프셋 생성
+    final random = Random();
+    _stickRotations = List.generate(4, (_) => random.nextDouble() * 2 * 3.14159);
+    _stickOffsets = List.generate(4, (_) => (random.nextDouble() - 0.5) * 20);
+
     setState(() {
       isThrowingYut = true;
+      showThrowAnimation = true;
       gameMessage = '${'games.yutnori.throwing'.tr()}...';
     });
 
     _yutAnimController.reset();
     _yutAnimController.forward();
+
+    _throwAnimController.reset();
+    _throwAnimController.forward();
 
     // 랜덤 애니메이션
     Timer.periodic(const Duration(milliseconds: 100), (timer) {
@@ -371,6 +400,8 @@ class _YutnoriScreenState extends State<YutnoriScreen>
       } else {
         setState(() {
           yutStickStates = List.generate(4, (_) => Random().nextBool());
+          // 애니메이션 중 랜덤 회전 업데이트
+          _stickRotations = List.generate(4, (_) => Random().nextDouble() * 2 * 3.14159);
         });
       }
     });
@@ -379,8 +410,12 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   void _finishThrowYut() {
     final result = _generateYutResult();
 
+    // 최종 결과에 맞는 회전값 설정 (앞면=0도, 뒷면=180도)
+    final finalStates = _getYutStatesForResult(result);
+    _stickRotations = finalStates.map((isFlat) => isFlat ? 0.0 : 3.14159).toList();
+
     setState(() {
-      yutStickStates = _getYutStatesForResult(result);
+      yutStickStates = finalStates;
       currentYutResult = result;
       pendingMoves.add(result);
       isThrowingYut = false;
@@ -407,6 +442,16 @@ class _YutnoriScreenState extends State<YutnoriScreen>
     });
 
     HapticFeedback.mediumImpact();
+
+    // 결과 표시 후 애니메이션 숨기기
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          showThrowAnimation = false;
+        });
+      }
+    });
+
     _saveGame();
 
     // 컴퓨터 턴 처리
@@ -2636,57 +2681,210 @@ class _YutnoriScreenState extends State<YutnoriScreen>
           child: SizedBox(
             width: size,
             height: size,
-            child: CustomPaint(
-              painter: YutBoardPainter(),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  // 시작점/골인점 라벨
-                  Positioned(
-                    left: center + radius * 0.85 - 24,
-                    top: center + radius * 0.85 + 14,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade700,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        'games.yutnori.startGoal'.tr(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // 진행 방향 화살표 (시작점에서 위로)
-                  Positioned(
-                    left: center + radius * 0.85 + 6,
-                    top: center + radius * 0.55,
-                    child: Column(
-                      children: [
-                        Icon(Icons.arrow_upward, color: Colors.blue.shade700, size: 18),
-                        Text(
-                          'games.yutnori.progress'.tr(),
-                          style: TextStyle(
-                            color: Colors.blue.shade700,
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
+            child: Stack(
+              children: [
+                // 윷판 배경
+                CustomPaint(
+                  painter: YutBoardPainter(),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      // 시작점/골인점 라벨
+                      Positioned(
+                        left: center + radius * 0.85 - 24,
+                        top: center + radius * 0.85 + 14,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade700,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'games.yutnori.startGoal'.tr(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      // 진행 방향 화살표 (시작점에서 위로)
+                      Positioned(
+                        left: center + radius * 0.85 + 6,
+                        top: center + radius * 0.55,
+                        child: Column(
+                          children: [
+                            Icon(Icons.arrow_upward, color: Colors.blue.shade700, size: 18),
+                            Text(
+                              'games.yutnori.progress'.tr(),
+                              style: TextStyle(
+                                color: Colors.blue.shade700,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // 말들
+                      ..._buildPiecesOnBoard(size),
+                    ],
                   ),
-                  // 말들
-                  ..._buildPiecesOnBoard(size),
-                ],
+                ),
+                // 던지기 애니메이션 오버레이
+                if (showThrowAnimation)
+                  _buildThrowAnimationOverlay(size),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 윷 던지기 애니메이션 오버레이
+  Widget _buildThrowAnimationOverlay(double boardSize) {
+    final stickWidth = boardSize * 0.06;
+    final stickHeight = boardSize * 0.25;
+
+    return AnimatedBuilder(
+      animation: _throwAnimController,
+      builder: (context, child) {
+        final progress = _throwAnimation.value;
+        final scale = 0.3 + progress * 0.7;
+        final opacity = isThrowingYut ? 1.0 : (progress > 0.8 ? 1.0 : progress / 0.8);
+
+        return Center(
+          child: Transform.scale(
+            scale: scale,
+            child: Opacity(
+              opacity: opacity.clamp(0.0, 1.0),
+              child: Container(
+                padding: EdgeInsets.all(boardSize * 0.05),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(boardSize * 0.05),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 윷가락 4개
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(4, (i) {
+                        return AnimatedBuilder(
+                          animation: _throwAnimController,
+                          builder: (context, child) {
+                            final rotation = isThrowingYut
+                                ? _stickRotations[i]
+                                : (yutStickStates[i] ? 0.0 : 3.14159);
+                            final offsetY = isThrowingYut
+                                ? sin(_throwAnimController.value * 3.14159 * 4 + i) * 10
+                                : 0.0;
+
+                            return Transform.translate(
+                              offset: Offset(_stickOffsets[i], offsetY),
+                              child: Transform(
+                                alignment: Alignment.center,
+                                transform: Matrix4.identity()
+                                  ..setEntry(3, 2, 0.001)
+                                  ..rotateX(rotation),
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: stickWidth * 0.2),
+                                  width: stickWidth,
+                                  height: stickHeight,
+                                  decoration: BoxDecoration(
+                                    // 앞면(X표시)은 밝은색, 뒷면은 어두운색
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: yutStickStates[i]
+                                          ? [const Color(0xFFF5DEB3), const Color(0xFFDEB887)]
+                                          : [const Color(0xFF8B4513), const Color(0xFF654321)],
+                                    ),
+                                    borderRadius: BorderRadius.circular(stickWidth * 0.3),
+                                    border: Border.all(
+                                      color: const Color(0xFF654321),
+                                      width: 2,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(alpha: 0.3),
+                                        offset: const Offset(2, 2),
+                                        blurRadius: 4,
+                                      ),
+                                    ],
+                                  ),
+                                  child: yutStickStates[i]
+                                      ? Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            _buildXMark(stickWidth * 0.5),
+                                            _buildXMark(stickWidth * 0.5),
+                                            _buildXMark(stickWidth * 0.5),
+                                          ],
+                                        )
+                                      : null,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }),
+                    ),
+                    // 결과 텍스트
+                    if (!isThrowingYut && currentYutResult != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: boardSize * 0.03),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: boardSize * 0.04,
+                            vertical: boardSize * 0.02,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
+                            ),
+                            borderRadius: BorderRadius.circular(boardSize * 0.02),
+                          ),
+                          child: Text(
+                            currentYutResult!.name,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: boardSize * 0.06,
+                              fontWeight: FontWeight.bold,
+                              shadows: const [
+                                Shadow(
+                                  color: Colors.black54,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 2,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
         );
       },
+    );
+  }
+
+  // X 마크 위젯
+  Widget _buildXMark(double size) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(
+        painter: XMarkPainter(),
+      ),
     );
   }
 
@@ -3868,6 +4066,35 @@ class YutBoardPainter extends CustomPainter {
     }
 
     return positions;
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// 윷가락 X 마크 그리기
+class XMarkPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF8B4513)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+
+    final padding = size.width * 0.15;
+
+    // X 그리기
+    canvas.drawLine(
+      Offset(padding, padding),
+      Offset(size.width - padding, size.height - padding),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(size.width - padding, padding),
+      Offset(padding, size.height - padding),
+      paint,
+    );
   }
 
   @override
