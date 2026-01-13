@@ -11,6 +11,7 @@ import '../services/stats_service.dart';
 import '../widgets/card_widget.dart';
 import 'kitty_dialog.dart';
 import 'friend_dialog.dart' show FriendSelectionScreen;
+import '../../services/web_ad_helper.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -2555,6 +2556,9 @@ class _GameScreenState extends State<GameScreen> {
   Widget _buildGameEndScreen(GameController controller) {
     final l10n = getL10n(context);
     final state = controller.state;
+
+    // 광고 표시
+    WebAdHelper.showAd();
 
     // 통계 기록 (한 번만)
     if (!_statsRecorded && state.declarerId != null) {

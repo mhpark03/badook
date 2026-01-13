@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import 'models/game_board.dart';
+import '../../../../services/web_ad_helper.dart';
 import 'widgets/game_board_widget.dart';
 import 'widgets/next_piece_widget.dart';
 import 'widgets/control_button.dart';
@@ -164,6 +165,7 @@ class _TetrisScreenState extends State<TetrisScreen> {
   void _showGameOverDialog() {
     if (_gameOverDialogShown) return;
     _gameOverDialogShown = true;
+    WebAdHelper.showAd();
 
     showDialog(
       context: context,

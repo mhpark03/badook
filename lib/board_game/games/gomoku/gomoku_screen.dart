@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
+import '../../../../services/web_ad_helper.dart';
 
 enum Stone { none, black, white }
 
@@ -367,6 +368,7 @@ class _GomokuScreenState extends State<GomokuScreen> {
 
   // 게임 종료 팝업
   void _showGameOverDialog() {
+    WebAdHelper.showAd();
     final youWinMessage = 'games.gomoku.youWin'.tr();
     final drawMessage = 'common.draw'.tr();
     final isWin = gameMessage == youWinMessage;

@@ -6,6 +6,7 @@ import '../../l10n/board_game_strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/gemini_service.dart';
 import '../../services/game_save_service.dart';
+import '../../../../services/web_ad_helper.dart';
 
 enum JanggiPieceType { gung, cha, po, ma, sang, sa, byung }
 
@@ -2732,6 +2733,7 @@ class _JanggiScreenState extends State<JanggiScreen> {
   }
 
   void _showGameOverDialog() {
+    WebAdHelper.showAd();
     // 저장된 게임 삭제
     JanggiScreen.clearSavedGame();
 

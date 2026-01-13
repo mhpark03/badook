@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
+import '../../../../services/web_ad_helper.dart';
 
 enum BaseballDifficulty {
   easy,   // 3자리
@@ -203,6 +204,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
       if (result.isCorrect) {
         gameOver = true;
         gameWon = true;
+        WebAdHelper.showAd();
       }
     });
 

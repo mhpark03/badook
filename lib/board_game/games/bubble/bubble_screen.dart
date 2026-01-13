@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../l10n/board_game_strings.dart';
 import 'models/bubble_game.dart';
+import '../../../../services/web_ad_helper.dart';
 
 class BubbleScreen extends StatefulWidget {
   const BubbleScreen({super.key});
@@ -55,6 +56,7 @@ class _BubbleScreenState extends State<BubbleScreen> {
   }
 
   void _showGameOverDialog() {
+    WebAdHelper.showAd();
     if (game.score > highScore) {
       highScore = game.score;
     }
@@ -107,6 +109,7 @@ class _BubbleScreenState extends State<BubbleScreen> {
   }
 
   void _showGameWonDialog() {
+    WebAdHelper.showAd();
     if (game.score > highScore) {
       highScore = game.score;
     }

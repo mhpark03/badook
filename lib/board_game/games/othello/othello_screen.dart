@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
+import '../../../../services/web_ad_helper.dart';
 
 enum Disc { none, black, white }
 
@@ -395,6 +396,7 @@ class _OthelloScreenState extends State<OthelloScreen> {
   bool _isUserWin = false;
 
   void _setWinMessage() {
+    WebAdHelper.showAd();
     String winner;
     _isUserWin = false;
     if (blackCount > whiteCount) {

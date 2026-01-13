@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../services/hearts/hearts_stats_service.dart';
 import '../../services/game_save_service.dart';
+import '../../../services/web_ad_helper.dart';
 
 enum Suit { spade, heart, diamond, club }
 
@@ -1958,6 +1959,9 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
   }
 
   Widget _buildGameEndOverlay(bool isSmallScreen) {
+    // 광고 표시
+    WebAdHelper.showAd();
+
     // 승자 찾기
     int minScore = scores.reduce(min);
     int winnerId = scores.indexOf(minScore);

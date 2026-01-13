@@ -7,6 +7,7 @@ import '../../models/seven_card/poker_hand.dart';
 import '../../models/seven_card/seven_card_state.dart';
 import '../../services/seven_card/seven_card_controller.dart';
 import '../../services/seven_card/seven_card_stats_service.dart';
+import '../../../services/web_ad_helper.dart';
 
 /// 반응형 사이즈 헬퍼
 class _ResponsiveSizes {
@@ -1244,6 +1245,9 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
   }
 
   Widget _buildGameEndScreen(SevenCardController controller, SevenCardState state, AppLocalizations l10n) {
+    // 광고 표시
+    WebAdHelper.showAd();
+
     final winner = state.winnerId != null ? state.players[state.winnerId!] : null;
     final statsService = Provider.of<SevenCardStatsService>(context, listen: false);
     final bonusInfo = state.bonusInfo;

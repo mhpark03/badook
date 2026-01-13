@@ -9,6 +9,7 @@ import '../services/game_storage.dart';
 import '../widgets/sudoku_board.dart';
 import '../widgets/game_control_panel.dart';
 import '../widgets/game_status_bar.dart';
+import '../../../../../services/web_ad_helper.dart';
 
 class GameScreen extends StatefulWidget {
   final Difficulty? initialDifficulty;
@@ -408,6 +409,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   }
 
   void _showCompletionDialog() {
+    WebAdHelper.showAd();
     String timeStr = _formatTime(_elapsedSeconds);
     // 완료된 게임 삭제
     GameStorage.deleteRegularGame();

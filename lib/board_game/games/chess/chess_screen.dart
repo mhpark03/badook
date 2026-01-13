@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
+import '../../../../services/web_ad_helper.dart';
 
 enum PieceType { king, queen, rook, bishop, knight, pawn }
 enum PieceColor { white, black }
@@ -483,6 +484,7 @@ class _ChessScreenState extends State<ChessScreen> {
   }
 
   void _setWinMessage(PieceColor winner) {
+    WebAdHelper.showAd();
     switch (widget.gameMode) {
       case ChessGameMode.vsComputerWhite:
         gameMessage = winner == PieceColor.white

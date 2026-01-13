@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
+import '../../../../services/web_ad_helper.dart';
 
 // 윷 결과
 enum YutResult {
@@ -3541,6 +3542,9 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   }
 
   Widget _buildGameOverOverlay() {
+    // 광고 표시
+    WebAdHelper.showAd();
+
     // 플레이어 등수 계산
     final playerRank = rankings.contains(0) ? rankings.indexOf(0) + 1 : rankings.length + 1;
     final isFirstPlace = playerRank == 1;

@@ -7,6 +7,7 @@ import '../models/number_sums_game_state.dart';
 import '../models/number_sums_generator.dart';
 import '../services/game_storage.dart';
 import '../widgets/number_sums_board.dart';
+import '../../../../../services/web_ad_helper.dart';
 
 class NumberSumsGameScreen extends StatefulWidget {
   final NumberSumsDifficulty? initialDifficulty;
@@ -235,6 +236,7 @@ class _NumberSumsGameScreenState extends State<NumberSumsGameScreen>
   }
 
   void _showCompletionDialog() {
+    WebAdHelper.showAd();
     String timeStr = _formatTime(_elapsedSeconds);
     GameStorage.deleteNumberSumsGame();
     showDialog(

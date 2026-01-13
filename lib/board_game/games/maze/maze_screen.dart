@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import 'models/maze.dart';
+import '../../../../services/web_ad_helper.dart';
 import 'widgets/maze_widget.dart';
 
 enum MazeDifficulty { easy, medium, hard }
@@ -93,6 +94,7 @@ class _MazeScreenState extends State<MazeScreen> {
   }
 
   void _showWinDialog() {
+    WebAdHelper.showAd();
     showDialog(
       context: context,
       barrierDismissible: false,

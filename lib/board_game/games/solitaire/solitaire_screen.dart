@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
+import '../../../../services/web_ad_helper.dart';
 
 enum Suit { hearts, diamonds, clubs, spades }
 
@@ -666,6 +667,7 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
   }
 
   void _showWinDialog() {
+    WebAdHelper.showAd();
     showDialog(
       context: context,
       barrierDismissible: false,

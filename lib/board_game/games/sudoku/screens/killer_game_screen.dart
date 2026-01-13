@@ -9,6 +9,7 @@ import '../services/game_storage.dart';
 import '../widgets/killer_sudoku_board.dart';
 import '../widgets/game_control_panel.dart';
 import '../widgets/game_status_bar.dart';
+import '../../../../../services/web_ad_helper.dart';
 
 class KillerGameScreen extends StatefulWidget {
   final KillerDifficulty? initialDifficulty;
@@ -394,6 +395,7 @@ class _KillerGameScreenState extends State<KillerGameScreen>
   }
 
   void _showCompletionDialog() {
+    WebAdHelper.showAd();
     String timeStr = _formatTime(_elapsedSeconds);
     GameStorage.deleteKillerGame();
     showDialog(

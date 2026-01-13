@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
+import '../../../../services/web_ad_helper.dart';
 
 // 카드 무늬
 enum Suit { spade, heart, diamond, club }
@@ -2449,6 +2450,9 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
   }
 
   Widget _buildGameOverOverlay() {
+    // 광고 표시
+    WebAdHelper.showAd();
+
     final isPlayerWinner = winner == 'common.player'.tr();
 
     return Container(

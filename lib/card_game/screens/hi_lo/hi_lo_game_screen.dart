@@ -6,6 +6,7 @@ import '../../models/card.dart';
 import '../../models/hi_lo/hi_lo_state.dart';
 import '../../services/hi_lo/hi_lo_controller.dart';
 import '../../services/hi_lo/hi_lo_stats_service.dart';
+import '../../../services/web_ad_helper.dart';
 
 /// 반응형 사이즈 헬퍼
 class _ResponsiveSizes {
@@ -1976,6 +1977,9 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
   }
 
   Widget _buildGameEndScreen(HiLoController controller, HiLoState state, AppLocalizations l10n) {
+    // 광고 표시
+    WebAdHelper.showAd();
+
     final result = state.result;
     final statsService = Provider.of<HiLoStatsService>(context, listen: false);
     final bonusInfo = result?.bonusInfo;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
+import '../../../../services/web_ad_helper.dart';
 
 enum CellState { hidden, revealed, flagged }
 
@@ -328,6 +329,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     int safeCells = totalCells - totalMines;
     if (revealedCount == safeCells) {
       gameWon = true;
+      WebAdHelper.showAd();
       HapticFeedback.heavyImpact();
       MinesweeperScreen.clearSavedGame();
     }
