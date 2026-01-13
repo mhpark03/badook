@@ -102,22 +102,62 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
   // 왼손잡이 모드 (true: 왼손잡이 - 카드 넘기기가 오른쪽)
   bool _leftHandedMode = false;
 
-  // 화면 너비 저장 (동적 카드 크기 계산용)
+  // 화면 크기 저장 (동적 카드 크기 계산용)
   double _screenWidth = 0;
+  double _screenHeight = 0;
 
-  // 카드 크기 (화면 너비와 모드에 따라 동적 계산) - 표준 카드 비율 5:7 (0.714)
+  // 카드 비율 상수 - 표준 포커 카드 비율
+  static const double _cardAspectRatio = 1.5;  // 세로/가로 비율
+
+  // 카드 크기 (화면 크기와 모드에 따라 동적 계산)
   double get cardWidth {
     if (_screenWidth == 0) return _largeCardMode ? 56 : 50;
-    // 7열 + 패딩(16) + 열간격(7*4=28) 고려하여 계산
-    final baseWidth = (_screenWidth - 16 - 28) / 7;
-    if (_largeCardMode) {
-      return baseWidth.clamp(50.0, 62.0);  // 크게 모드: 50~62
+
+    // 가로 모드인지 확인 (웹/데스크톱 포함)
+    final isLandscape = _screenWidth > _screenHeight;
+
+    if (isLandscape) {
+      // 가로 모드: 화면 높이 기준으로 카드 크기 계산
+      // 상단(파운데이션 카드) + 간격 + 하단(테이블 카드 + 겹침) 고려
+      // 테이블에서 최대 약 13장 겹침 가능 (1장 전체 + 12장 겹침)
+      final availableHeight = _screenHeight - 20;  // 상하 여백
+      // 상단 카드 높이 + 간격(8) + 하단 영역(카드 1장 + 최대 12장 겹침)
+      // cardHeight + 8 + cardHeight + 12 * cardOverlap
+      // cardHeight + 8 + cardHeight + 12 * 0.35 * cardWidth
+      // 1.5w + 8 + 1.5w + 4.2w = 7.2w + 8
+      // w = (availableHeight - 8) / 7.2
+      final baseWidth = (availableHeight - 8) / 7.0;
+
+      if (_largeCardMode) {
+        return baseWidth.clamp(50.0, 110.0);
+      } else {
+        return baseWidth.clamp(42.0, 95.0);
+      }
     } else {
-      return baseWidth.clamp(42.0, 50.0);  // 작게 모드: 42~50
+      // 세로 모드 (모바일): 기존 로직
+      final baseWidth = (_screenWidth - 16 - 28) / 7;
+      if (_largeCardMode) {
+        return baseWidth.clamp(50.0, 62.0);
+      } else {
+        return baseWidth.clamp(42.0, 50.0);
+      }
     }
   }
-  double get cardHeight => cardWidth * 1.4;  // 비율 5:7
-  double get cardOverlap => _largeCardMode ? (cardWidth * 0.43) : (cardWidth * 0.4);  // 테이블 카드 겹침 간격
+  double get cardHeight => cardWidth * _cardAspectRatio;
+  double get cardOverlap {
+    // 웹/데스크톱에서는 겹침 간격도 비례 증가
+    final isLandscape = _screenWidth > _screenHeight;
+    if (isLandscape) {
+      return _largeCardMode ? (cardWidth * 0.38) : (cardWidth * 0.35);
+    }
+    return _largeCardMode ? (cardWidth * 0.43) : (cardWidth * 0.4);
+  }
+
+  // 게임 영역 너비 계산 (카드 크기 기반)
+  double get gameAreaWidth {
+    // 7열 카드 + 열간격(6개) + 좌우 패딩
+    return cardWidth * 7 + cardWidth * 0.12 * 6 + 16;
+  }
 
   // Undo 히스토리
   List<Map<String, dynamic>> _undoHistory = [];
@@ -970,8 +1010,9 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 화면 너비 저장 (동적 카드 크기 계산용)
+    // 화면 크기 저장 (동적 카드 크기 계산용)
     _screenWidth = MediaQuery.of(context).size.width;
+    _screenHeight = MediaQuery.of(context).size.height;
 
     if (isLoading) {
       return Scaffold(
@@ -1105,19 +1146,12 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
         child: SafeArea(
           child: Stack(
             children: [
-              // 메인 게임 컨텐츠 - 가로 모드에서 너비 제한
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  // 화면 높이 기준으로 적절한 너비 계산 (카드 비율 유지)
-                  final maxWidth = constraints.maxHeight * 1.4;
-                  final actualWidth = min(constraints.maxWidth, maxWidth);
-                  return Center(
-                    child: SizedBox(
-                      width: actualWidth,
-                      child: _buildGameContent(),
-                    ),
-                  );
-                },
+              // 메인 게임 컨텐츠 - 화면 중앙에 배치 (카드 크기 기반 너비)
+              Center(
+                child: SizedBox(
+                  width: gameAreaWidth,  // 카드 크기에서 계산된 너비 사용
+                  child: _buildGameContent(),
+                ),
               ),
               // 왼쪽 상단: 뒤로가기 버튼 + 제목 + 상태 정보
               Positioned(
@@ -1721,11 +1755,12 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
   }
 
   Widget _buildCardPlaceholder({Widget? child}) {
+    final borderRadius = cardWidth * 0.08;  // 비례 테두리 반경
     return Container(
       width: cardWidth,
       height: cardHeight,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(color: Colors.white30, width: 2),
       ),
       child: child != null ? Center(child: child) : null,
@@ -1737,6 +1772,8 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
     double height = 70,
     bool showPartial = false,
   }) {
+    final borderRadius = cardWidth * 0.08;  // 비례 테두리 반경
+
     // 크게 모드: 그라데이션 + 장식 패턴
     if (_largeCardMode && !showPartial) {
       return Container(
@@ -1748,13 +1785,13 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
             end: Alignment.bottomRight,
             colors: [Colors.blue.shade600, Colors.blue.shade900],
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(borderRadius),
           border: Border.all(color: Colors.blue.shade300, width: 2),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(60),
-              blurRadius: 3,
-              offset: const Offset(1, 2),
+              blurRadius: cardWidth * 0.05,
+              offset: Offset(cardWidth * 0.02, cardWidth * 0.03),
             ),
           ],
         ),
@@ -1764,7 +1801,7 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
             height: height * 0.5,
             decoration: BoxDecoration(
               color: Colors.blue.shade800.withAlpha(200),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(borderRadius * 0.8),
               border: Border.all(color: Colors.white.withAlpha(100), width: 2),
             ),
             child: Center(
@@ -1786,11 +1823,11 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
       decoration: BoxDecoration(
         color: Colors.blue.shade800,
         borderRadius: showPartial
-            ? const BorderRadius.only(
-                topLeft: Radius.circular(6),
-                topRight: Radius.circular(6),
+            ? BorderRadius.only(
+                topLeft: Radius.circular(borderRadius),
+                topRight: Radius.circular(borderRadius),
               )
-            : BorderRadius.circular(6),
+            : BorderRadius.circular(borderRadius),
         border: showPartial
             ? const Border(
                 top: BorderSide(color: Colors.white, width: 1),
@@ -1803,8 +1840,8 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
             : [
                 BoxShadow(
                   color: Colors.black.withAlpha(51),
-                  blurRadius: 2,
-                  offset: const Offset(1, 1),
+                  blurRadius: cardWidth * 0.04,
+                  offset: Offset(cardWidth * 0.02, cardWidth * 0.02),
                 ),
               ],
       ),
@@ -1812,10 +1849,10 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
           ? null
           : Center(
               child: Container(
-                width: width - 10,
-                height: height - 10,
+                width: width * 0.85,  // 비례 크기
+                height: height * 0.9,  // 비례 크기
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(borderRadius * 0.6),
                   border: Border.all(color: Colors.white24),
                 ),
               ),
@@ -1829,49 +1866,56 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
     double height = 70,
     bool showPartial = false,
   }) {
+    // 비례 크기 계산
+    final borderRadius = cardWidth * 0.08;  // 비례 테두리 반경
+
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: showPartial
-            ? const BorderRadius.only(
-                topLeft: Radius.circular(6),
-                topRight: Radius.circular(6),
+            ? BorderRadius.only(
+                topLeft: Radius.circular(borderRadius),
+                topRight: Radius.circular(borderRadius),
               )
-            : BorderRadius.circular(6),
+            : BorderRadius.circular(borderRadius),
         border: Border.all(color: Colors.grey.shade400),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(51),
-            blurRadius: 2,
-            offset: const Offset(1, 1),
+            blurRadius: cardWidth * 0.04,  // 비례 그림자
+            offset: Offset(cardWidth * 0.02, cardWidth * 0.02),
           ),
         ],
       ),
       child: showPartial
           ? Padding(
-              padding: const EdgeInsets.only(left: 3, top: 2),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    card.rankString,
-                    style: TextStyle(
-                      color: card.suitColor,
-                      fontSize: _largeCardMode ? (cardWidth * 0.25) : (cardWidth * 0.22),
-                      fontWeight: FontWeight.bold,
+              padding: EdgeInsets.only(left: cardWidth * 0.06, top: cardWidth * 0.04),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.topLeft,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      card.rankString,
+                      style: TextStyle(
+                        color: card.suitColor,
+                        fontSize: _largeCardMode ? (cardWidth * 0.30) : (cardWidth * 0.26),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    card.suitString,
-                    style: TextStyle(
-                      color: card.suitColor,
-                      fontSize: _largeCardMode ? (cardWidth * 0.22) : (cardWidth * 0.18),
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      card.suitString,
+                      style: TextStyle(
+                        color: card.suitColor,
+                        fontSize: _largeCardMode ? (cardWidth * 0.26) : (cardWidth * 0.22),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           : _largeCardMode
@@ -1883,33 +1927,37 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
   // 작은 카드 레이아웃 (기존)
   Widget _buildSmallCardContent(PlayingCard card) {
     return Padding(
-      padding: const EdgeInsets.all(2),
+      padding: EdgeInsets.all(cardWidth * 0.04),  // 비례 패딩
       child: Column(
         children: [
           // 상단: 랭크 + 무늬 표시 (왼쪽 정렬)
           Align(
             alignment: Alignment.topLeft,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  card.rankString,
-                  style: TextStyle(
-                    color: card.suitColor,
-                    fontSize: cardWidth * 0.2,  // 동적 글자 크기
-                    fontWeight: FontWeight.bold,
-                    height: 1.0,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.topLeft,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    card.rankString,
+                    style: TextStyle(
+                      color: card.suitColor,
+                      fontSize: cardWidth * 0.26,
+                      fontWeight: FontWeight.bold,
+                      height: 1.0,
+                    ),
                   ),
-                ),
-                Text(
-                  card.suitString,
-                  style: TextStyle(
-                    color: card.suitColor,
-                    fontSize: cardWidth * 0.16,
-                    height: 1.0,
+                  Text(
+                    card.suitString,
+                    style: TextStyle(
+                      color: card.suitColor,
+                      fontSize: cardWidth * 0.22,
+                      height: 1.0,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           // 중앙 영역: 숫자에 맞는 무늬 배열
@@ -1924,32 +1972,36 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
   // 큰 카드 레이아웃 (새로운 디자인)
   Widget _buildLargeCardContent(PlayingCard card) {
     return Padding(
-      padding: const EdgeInsets.all(3),
+      padding: EdgeInsets.all(cardWidth * 0.05),  // 비례 패딩
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 상단: 숫자 + 무늬 (크게 표시)
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                card.rankString,
-                style: TextStyle(
-                  color: card.suitColor,
-                  fontSize: cardWidth * 0.27,
-                  fontWeight: FontWeight.bold,
-                  height: 1.0,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.topLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  card.rankString,
+                  style: TextStyle(
+                    color: card.suitColor,
+                    fontSize: cardWidth * 0.32,
+                    fontWeight: FontWeight.bold,
+                    height: 1.0,
+                  ),
                 ),
-              ),
-              Text(
-                card.suitString,
-                style: TextStyle(
-                  color: card.suitColor,
-                  fontSize: cardWidth * 0.22,
-                  height: 1.0,
+                Text(
+                  card.suitString,
+                  style: TextStyle(
+                    color: card.suitColor,
+                    fontSize: cardWidth * 0.28,
+                    height: 1.0,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           // 중앙: J/Q/K는 아이콘, 나머지는 무늬
           Expanded(
@@ -1980,7 +2032,7 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
       return Icon(
         faceIcon,
         color: color,
-        size: cardWidth * 0.5,
+        size: cardWidth * 0.6,  // 크기 증가
       );
     }
 
@@ -1990,7 +2042,7 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
         suit,
         style: TextStyle(
           color: color,
-          fontSize: cardWidth * 0.55,
+          fontSize: cardWidth * 0.65,  // 크기 증가
         ),
       );
     }
@@ -2000,7 +2052,7 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
       suit,
       style: TextStyle(
         color: color,
-        fontSize: cardWidth * 0.45,
+        fontSize: cardWidth * 0.55,  // 크기 증가
       ),
     );
   }
@@ -2010,16 +2062,16 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
     final suit = card.suitString;
     final color = card.suitColor;
 
-    // 숫자에 따라 무늬 크기 조정 (많을수록 작게)
+    // 숫자에 따라 무늬 크기 조정 (많을수록 작게) - 카드 너비에 비례
     double pipSize;
     if (card.rank <= 3) {
-      pipSize = 12.0;
+      pipSize = cardWidth * 0.24;  // 기존 12.0 -> 비례 크기
     } else if (card.rank <= 6) {
-      pipSize = 10.0;
+      pipSize = cardWidth * 0.20;  // 기존 10.0 -> 비례 크기
     } else if (card.rank <= 8) {
-      pipSize = 9.0;
+      pipSize = cardWidth * 0.18;  // 기존 9.0 -> 비례 크기
     } else {
-      pipSize = 8.0; // 9, 10
+      pipSize = cardWidth * 0.16;  // 기존 8.0 -> 비례 크기
     }
 
     // J, Q, K는 아이콘만 표시 (무늬 제거)
@@ -2036,7 +2088,7 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
         icon = Icons.workspace_premium;
       }
       return Center(
-        child: Icon(icon, color: color, size: 28),
+        child: Icon(icon, color: color, size: cardWidth * 0.55),  // 비례 크기
       );
     }
 
@@ -2045,7 +2097,7 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
       return Center(
         child: Text(
           suit,
-          style: TextStyle(color: color, fontSize: 20),
+          style: TextStyle(color: color, fontSize: cardWidth * 0.45),  // 비례 크기
         ),
       );
     }
