@@ -8,12 +8,36 @@ import 'dart:async';
 
 // 카드게임 import
 import 'card_game/screens/game_selection_screen.dart' as card_game;
+import 'card_game/screens/home_screen.dart' as mighty_home;
+import 'card_game/screens/hearts/hearts_home_screen.dart';
+import 'card_game/screens/hula/hula_home_screen.dart';
+import 'card_game/screens/onecard/onecard_home_screen.dart';
+import 'card_game/screens/hi_lo/hi_lo_home_screen.dart';
+import 'card_game/screens/seven_card/seven_card_home_screen.dart';
+import 'card_game/widgets/card_game_provider.dart';
 
 // 보드게임 import
 import 'board_game/screens/board_game_selection_screen.dart';
+import 'board_game/games/tetris/tetris_screen.dart';
+import 'board_game/games/minesweeper/minesweeper_screen.dart';
+import 'board_game/games/maze/maze_screen.dart';
+import 'board_game/games/bubble/bubble_screen.dart';
+import 'board_game/games/mole/mole_screen.dart';
+import 'board_game/games/gomoku/gomoku_screen.dart';
+import 'board_game/games/othello/othello_screen.dart';
+import 'board_game/games/solitaire/solitaire_screen.dart';
+import 'board_game/games/baseball/baseball_screen.dart';
 
 // 스도쿠 import
 import 'board_game/screens/sudoku_selection_screen.dart';
+import 'board_game/games/sudoku/screens/game_screen.dart' as sudoku_classic;
+import 'board_game/games/sudoku/screens/samurai_game_screen.dart';
+import 'board_game/games/sudoku/screens/killer_game_screen.dart';
+import 'board_game/games/sudoku/models/game_state.dart' as sudoku_state;
+import 'board_game/games/sudoku/models/samurai_game_state.dart';
+import 'board_game/games/sudoku/models/killer_sudoku_generator.dart';
+import 'board_game/games/number_sums/screens/number_sums_game_screen.dart';
+import 'board_game/games/number_sums/models/number_sums_generator.dart';
 
 // 윷놀이 import
 import 'yutnori/yutnori_screen.dart';
@@ -7126,35 +7150,121 @@ class _HelpPageState extends State<HelpPage> {
         ));
         break;
       case 'cardGame':
-      case 'mighty':
-      case 'hearts':
-      case 'hula':
-      case 'onecard':
-      case 'highlow':
-      case 'sevenpoker':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => card_game.GameSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
         ));
         break;
+      case 'mighty':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const CardGameProviderWrapper(child: mighty_home.HomeScreen()),
+        ));
+        break;
+      case 'hearts':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const CardGameProviderWrapper(child: HeartsHomeScreen()),
+        ));
+        break;
+      case 'hula':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const CardGameProviderWrapper(child: HulaHomeScreen()),
+        ));
+        break;
+      case 'onecard':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const CardGameProviderWrapper(child: OneCardHomeScreen()),
+        ));
+        break;
+      case 'highlow':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const CardGameProviderWrapper(child: HiLoHomeScreen()),
+        ));
+        break;
+      case 'sevenpoker':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const CardGameProviderWrapper(child: SevenCardHomeScreen()),
+        ));
+        break;
       case 'boardGame':
-      case 'gomoku':
-      case 'othello':
-      case 'tetris':
-      case 'minesweeper':
-      case 'solitaire':
-      case 'maze':
-      case 'bubble':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => BoardGameSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
         ));
         break;
+      case 'gomoku':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const GomokuScreen(gameMode: GameMode.vsComputerWhite),
+        ));
+        break;
+      case 'othello':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const OthelloScreen(gameMode: OthelloGameMode.vsComputerWhite),
+        ));
+        break;
+      case 'tetris':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const TetrisScreen(),
+        ));
+        break;
+      case 'minesweeper':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const MinesweeperScreen(difficulty: MinesweeperDifficulty.easy),
+        ));
+        break;
+      case 'solitaire':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const SolitaireScreen(),
+        ));
+        break;
+      case 'maze':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const MazeScreen(difficulty: MazeDifficulty.easy),
+        ));
+        break;
+      case 'bubble':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const BubbleScreen(),
+        ));
+        break;
+      case 'whackamole':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const MoleScreen(),
+        ));
+        break;
+      case 'baseball':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const BaseballScreen(difficulty: BaseballDifficulty.easy),
+        ));
+        break;
       case 'sudoku':
-      case 'sudoku_classic':
-      case 'sudoku_samurai':
-      case 'sudoku_killer':
-      case 'sudoku_sum':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => SudokuSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
+        ));
+        break;
+      case 'sudoku_classic':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const sudoku_classic.GameScreen(
+            initialDifficulty: sudoku_state.Difficulty.easy,
+          ),
+        ));
+        break;
+      case 'sudoku_samurai':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const SamuraiGameScreen(
+            initialDifficulty: SamuraiDifficulty.easy,
+          ),
+        ));
+        break;
+      case 'sudoku_killer':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => KillerGameScreen(
+            initialDifficulty: KillerDifficulty.easy,
+          ),
+        ));
+        break;
+      case 'sudoku_sum':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => NumberSumsGameScreen(
+            initialDifficulty: NumberSumsDifficulty.easy,
+          ),
         ));
         break;
       case 'yutnori':
