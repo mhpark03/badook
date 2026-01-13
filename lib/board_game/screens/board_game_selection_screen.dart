@@ -6,6 +6,10 @@ import '../games/minesweeper/minesweeper_screen.dart';
 import '../games/maze/maze_screen.dart';
 import '../games/bubble/bubble_screen.dart';
 import '../games/mole/mole_screen.dart';
+import '../games/gomoku/gomoku_screen.dart';
+import '../games/othello/othello_screen.dart';
+import '../games/solitaire/solitaire_screen.dart';
+import '../games/baseball/baseball_screen.dart';
 
 class BoardGameSelectionScreen extends StatelessWidget {
   final GameLanguage language;
@@ -82,6 +86,34 @@ class BoardGameSelectionScreen extends StatelessWidget {
         icon: Icons.pest_control,
         color: Colors.brown[700]!,
         screen: const MoleScreen(),
+      ),
+      _GameInfo(
+        title: 'games.gomoku.name'.tr(),
+        subtitle: 'games.gomoku.subtitle'.tr(),
+        icon: Icons.grid_on,
+        color: Colors.amber[800]!,
+        onTap: (context) => _showGomokuDialog(context),
+      ),
+      _GameInfo(
+        title: 'games.othello.name'.tr(),
+        subtitle: 'games.othello.subtitle'.tr(),
+        icon: Icons.radio_button_checked,
+        color: Colors.green[800]!,
+        onTap: (context) => _showOthelloDialog(context),
+      ),
+      _GameInfo(
+        title: 'games.solitaire.name'.tr(),
+        subtitle: 'games.solitaire.subtitle'.tr(),
+        icon: Icons.style,
+        color: Colors.red[800]!,
+        screen: const SolitaireScreen(),
+      ),
+      _GameInfo(
+        title: 'games.baseball.name'.tr(),
+        subtitle: 'games.baseball.subtitle'.tr(),
+        icon: Icons.pin,
+        color: Colors.orange[800]!,
+        onTap: (context) => _showBaseballDialog(context),
       ),
     ];
 
@@ -262,6 +294,162 @@ class BoardGameSelectionScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => const MazeScreen(
                       difficulty: MazeDifficulty.hard,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showGomokuDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        title: Text(
+          'dialog.selectMode'.tr(),
+          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDifficultyButton(
+              context,
+              title: 'vs.vsComputer'.tr(),
+              subtitle: 'games.gomoku.playAsBlack'.tr(),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GomokuScreen(
+                      gameMode: GameMode.vsComputerWhite,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'vs.twoPlayer'.tr(),
+              subtitle: 'games.gomoku.twoPlayerDesc'.tr(),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GomokuScreen(
+                      gameMode: GameMode.vsPerson,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showOthelloDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        title: Text(
+          'dialog.selectMode'.tr(),
+          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDifficultyButton(
+              context,
+              title: 'vs.vsComputer'.tr(),
+              subtitle: 'games.othello.playAsBlack'.tr(),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const OthelloScreen(
+                      gameMode: OthelloGameMode.vsComputerWhite,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'vs.twoPlayer'.tr(),
+              subtitle: 'games.othello.twoPlayerDesc'.tr(),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const OthelloScreen(
+                      gameMode: OthelloGameMode.vsPerson,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showBaseballDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        title: Text(
+          'dialog.selectDifficulty'.tr(),
+          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDifficultyButton(
+              context,
+              title: 'common.easy'.tr(),
+              subtitle: 'games.baseball.easyDesc'.tr(),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BaseballScreen(
+                      difficulty: BaseballDifficulty.easy,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'common.hard'.tr(),
+              subtitle: 'games.baseball.hardDesc'.tr(),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BaseballScreen(
+                      difficulty: BaseballDifficulty.hard,
                     ),
                   ),
                 );

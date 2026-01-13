@@ -1027,7 +1027,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
             ),
           ),
           Text(
-            gameWon ? 'games.baseball.attempts'.tr(args: [guessHistory.length.toString()]) : secretNumber,
+            gameWon ? 'games.baseball.attempts'.tr(namedArgs: {'count': guessHistory.length.toString()}) : secretNumber,
             style: TextStyle(
               color: Colors.grey.shade400,
               fontSize: 12,
@@ -1132,7 +1132,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
               ),
               Text(
                 gameWon
-                    ? 'games.baseball.attempts'.tr(args: [guessHistory.length.toString()])
+                    ? 'games.baseball.attempts'.tr(namedArgs: {'count': guessHistory.length.toString()})
                     : '${'common.answer'.tr()}: $secretNumber',
                 style: TextStyle(
                   color: Colors.grey.shade300,
