@@ -1488,28 +1488,36 @@ class _GomokuScreenState extends State<GomokuScreen> {
             ),
           ],
         ),
-        child: CustomPaint(
-          painter: BoardPainter(),
-          child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: boardSize,
-            ),
-            itemCount: boardSize * boardSize,
-            itemBuilder: (context, index) {
-              int row = index ~/ boardSize;
-              int col = index % boardSize;
-              return GestureDetector(
-                onTap: () => _placeStone(row, col),
-                child: Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: _buildStone(row, col),
-                  ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // 바둑판 크기에 따라 셀 크기와 돌 크기 계산
+            final cellSize = constraints.maxWidth / boardSize;
+            final stoneSize = cellSize * 0.85; // 셀의 85%를 돌 크기로
+
+            return CustomPaint(
+              painter: BoardPainter(),
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: boardSize,
                 ),
-              );
-            },
-          ),
+                itemCount: boardSize * boardSize,
+                itemBuilder: (context, index) {
+                  int row = index ~/ boardSize;
+                  int col = index % boardSize;
+                  return GestureDetector(
+                    onTap: () => _placeStone(row, col),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Center(
+                        child: _buildStone(row, col, stoneSize),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
     );
@@ -1598,24 +1606,29 @@ class _GomokuScreenState extends State<GomokuScreen> {
     );
   }
 
-  Widget _buildStone(int row, int col) {
+  Widget _buildStone(int row, int col, double stoneSize) {
     if (board[row][col] == Stone.none) return const SizedBox();
 
     bool isWinning = _isWinningStone(row, col);
     bool isLastMove = (row == lastMoveRow && col == lastMoveCol);
     Color stoneColor = board[row][col] == Stone.black ? Colors.black : Colors.white;
 
+    // 마지막 수 표시 점 크기는 돌 크기의 35%
+    final dotSize = stoneSize * 0.35;
+    // 테두리 두께는 돌 크기에 비례
+    final borderWidth = stoneSize * 0.12;
+
     return Stack(
       alignment: Alignment.center,
       children: [
         Container(
-          width: 20,
-          height: 20,
+          width: stoneSize,
+          height: stoneSize,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: stoneColor,
             border: isWinning
-                ? Border.all(color: Colors.red, width: 3)
+                ? Border.all(color: Colors.red, width: borderWidth)
                 : (board[row][col] == Stone.white
                     ? Border.all(color: Colors.grey, width: 1)
                     : null),
@@ -1637,8 +1650,8 @@ class _GomokuScreenState extends State<GomokuScreen> {
         // 마지막 수 표시 (빨간 점)
         if (isLastMove && !isWinning)
           Container(
-            width: 8,
-            height: 8,
+            width: dotSize,
+            height: dotSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: board[row][col] == Stone.black ? Colors.red : Colors.red.shade700,
