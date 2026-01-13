@@ -1402,36 +1402,36 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   }
 
   // 다음 순서 버튼
-  Widget _buildPlayButton({bool compact = false}) {
+  Widget _buildPlayButton({bool compact = false, double scaleFactor = 1.0}) {
     return GestureDetector(
       onTap: _onNextTurn,
       child: Container(
         padding: compact
-            ? const EdgeInsets.all(8)
-            : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ? EdgeInsets.all(8 * scaleFactor)
+            : EdgeInsets.symmetric(horizontal: 16 * scaleFactor, vertical: 8 * scaleFactor),
         decoration: BoxDecoration(
           color: Colors.blue.shade700,
-          borderRadius: BorderRadius.circular(compact ? 20 : 8),
+          borderRadius: BorderRadius.circular((compact ? 20 : 8) * scaleFactor),
           boxShadow: [
             BoxShadow(
               color: Colors.blue.withValues(alpha: 0.5),
-              blurRadius: 8,
-              spreadRadius: 1,
+              blurRadius: 8 * scaleFactor,
+              spreadRadius: 1 * scaleFactor,
             ),
           ],
         ),
         child: compact
-            ? const Icon(Icons.play_arrow, color: Colors.white, size: 24)
+            ? Icon(Icons.play_arrow, color: Colors.white, size: 24 * scaleFactor)
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.play_arrow, color: Colors.white, size: 20),
-                  const SizedBox(width: 4),
+                  Icon(Icons.play_arrow, color: Colors.white, size: 20 * scaleFactor),
+                  SizedBox(width: 4 * scaleFactor),
                   Text(
                     'games.yutnori.next'.tr(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 14,
+                      fontSize: 14 * scaleFactor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -1468,130 +1468,144 @@ class _YutnoriScreenState extends State<YutnoriScreen>
 
   Widget _buildLandscapeLayout() {
     return Scaffold(
-      body: Container(
-        color: const Color(0xFFDEB887),
-        child: SafeArea(
-          child: Stack(
-            children: [
-              Row(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final screenWidth = constraints.maxWidth;
+          final screenHeight = constraints.maxHeight;
+          final isWideScreen = screenWidth > 800;
+          final scaleFactor = isWideScreen
+              ? min(screenHeight / 500, screenWidth / 1000).clamp(1.0, 2.0)
+              : 1.0;
+          final panelWidth = isWideScreen ? screenWidth * 0.15 : 130.0;
+
+          return Container(
+            color: const Color(0xFFDEB887),
+            child: SafeArea(
+              child: Stack(
                 children: [
-                  // 좌측 열: C2 (상) + 턴정보/다음버튼 (중) + C3 (하)
-                  SizedBox(
-                    width: 130,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 50), // 뒤로가기 버튼 공간
-                        // C2 (좌상단)
-                        if (playerCount >= 3)
-                          _buildLandscapeCompactComputer(2)
-                        else
-                          const SizedBox(height: 50),
-                        // 턴 정보 + 다음 버튼 (C2와 C3 사이)
-                        Expanded(
-                          child: _buildLandscapeLeftControls(),
-                        ),
-                        // C3 (좌하단)
-                        if (playerCount >= 4)
-                          _buildLandscapeCompactComputer(3)
-                        else
-                          const SizedBox(height: 50),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
-                  ),
-                  // 중앙: 윷판 (최대 크기)
-                  Expanded(
-                    child: Column(
-                      children: [
-                        // 상단 제목
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF8B4513),
-                              borderRadius: BorderRadius.circular(16),
+                  Row(
+                    children: [
+                      // 좌측 열: C2 (상) + 턴정보/다음버튼 (중) + C3 (하)
+                      SizedBox(
+                        width: panelWidth,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 50 * scaleFactor), // 뒤로가기 버튼 공간
+                            // C2 (좌상단)
+                            if (playerCount >= 3)
+                              _buildLandscapeCompactComputer(2, scaleFactor)
+                            else
+                              SizedBox(height: 50 * scaleFactor),
+                            // 턴 정보 + 다음 버튼 (C2와 C3 사이)
+                            Expanded(
+                              child: _buildLandscapeLeftControls(scaleFactor),
                             ),
-                            child: Text(
-                              '${'games.yutnori.name'.tr()} (${playerCount}${'games.yutnori.players'.tr()})',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                            // C3 (좌하단)
+                            if (playerCount >= 4)
+                              _buildLandscapeCompactComputer(3, scaleFactor)
+                            else
+                              SizedBox(height: 50 * scaleFactor),
+                            SizedBox(height: 8 * scaleFactor),
+                          ],
+                        ),
+                      ),
+                      // 중앙: 윷판 (최대 크기)
+                      Expanded(
+                        child: Column(
+                          children: [
+                            // 상단 제목
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8 * scaleFactor),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16 * scaleFactor, vertical: 6 * scaleFactor),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF8B4513),
+                                  borderRadius: BorderRadius.circular(16 * scaleFactor),
+                                ),
+                                child: Text(
+                                  '${'games.yutnori.name'.tr()} (${playerCount}${'games.yutnori.players'.tr()})',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14 * scaleFactor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            // 윷판
+                            Expanded(
+                              child: Center(
+                                child: _buildYutBoard(),
+                              ),
+                            ),
+                          ],
                         ),
-                        // 윷판
-                        Expanded(
-                          child: Center(
-                            child: _buildYutBoard(),
-                          ),
+                      ),
+                      // 우측 열: C1 (상) + 윷던지기/결과 (중) + 플레이어 (하)
+                      SizedBox(
+                        width: panelWidth,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 50 * scaleFactor), // 새게임 버튼 공간
+                            // C1 (우상단)
+                            _buildLandscapeCompactComputer(1, scaleFactor),
+                            // 윷 던지기 + 결과 (C1과 플레이어 사이)
+                            Expanded(
+                              child: _buildLandscapeRightControls(scaleFactor),
+                            ),
+                            // 플레이어 (우하단)
+                            _buildLandscapeCompactPlayer(scaleFactor),
+                            SizedBox(height: 8 * scaleFactor),
+                          ],
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  // 왼쪽 상단: 뒤로가기 버튼
+                  Positioned(
+                    top: 8 * scaleFactor,
+                    left: 8 * scaleFactor,
+                    child: _buildCircleButton(
+                      icon: Icons.arrow_back,
+                      onPressed: () => Navigator.pop(context),
+                      scaleFactor: scaleFactor,
                     ),
                   ),
-                  // 우측 열: C1 (상) + 윷던지기/결과 (중) + 플레이어 (하)
-                  SizedBox(
-                    width: 130,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 50), // 새게임 버튼 공간
-                        // C1 (우상단)
-                        _buildLandscapeCompactComputer(1),
-                        // 윷 던지기 + 결과 (C1과 플레이어 사이)
-                        Expanded(
-                          child: _buildLandscapeRightControls(),
-                        ),
-                        // 플레이어 (우하단)
-                        _buildLandscapeCompactPlayer(),
-                        const SizedBox(height: 8),
-                      ],
+                  // 오른쪽 상단: 새 게임 버튼
+                  Positioned(
+                    top: 8 * scaleFactor,
+                    right: 8 * scaleFactor,
+                    child: _buildCircleButton(
+                      icon: Icons.refresh,
+                      onPressed: _restartGame,
+                      scaleFactor: scaleFactor,
                     ),
                   ),
+                  // 게임 오버 오버레이
+                  if (gameOver) _buildGameOverOverlay(),
                 ],
               ),
-              // 왼쪽 상단: 뒤로가기 버튼
-              Positioned(
-                top: 8,
-                left: 8,
-                child: _buildCircleButton(
-                  icon: Icons.arrow_back,
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ),
-              // 오른쪽 상단: 새 게임 버튼
-              Positioned(
-                top: 8,
-                right: 8,
-                child: _buildCircleButton(
-                  icon: Icons.refresh,
-                  onPressed: _restartGame,
-                ),
-              ),
-              // 게임 오버 오버레이
-              if (gameOver) _buildGameOverOverlay(),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
   // 가로모드: 좌측 컨트롤 (턴 정보 + 다음 버튼 + 결과)
-  Widget _buildLandscapeLeftControls() {
+  Widget _buildLandscapeLeftControls(double scaleFactor) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: EdgeInsets.symmetric(horizontal: 4 * scaleFactor),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // 현재 턴 표시
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 8 * scaleFactor, vertical: 6 * scaleFactor),
             decoration: BoxDecoration(
               color: _getPlayerColor(currentPlayer),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8 * scaleFactor),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -1599,26 +1613,26 @@ class _YutnoriScreenState extends State<YutnoriScreen>
                 Icon(
                   isPlayerTurn ? Icons.person : Icons.computer,
                   color: Colors.white,
-                  size: 14,
+                  size: 14 * scaleFactor,
                 ),
-                const SizedBox(width: 3),
+                SizedBox(width: 3 * scaleFactor),
                 Text(
                   '${_getPlayerName(currentPlayer)} ${'games.yutnori.turn'.tr()}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: 10 * scaleFactor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10 * scaleFactor),
           // 남은 이동 표시 (결과 포함) - 클릭하여 선택
           if (pendingMoves.isNotEmpty)
             Wrap(
-              spacing: 4,
-              runSpacing: 4,
+              spacing: 4 * scaleFactor,
+              runSpacing: 4 * scaleFactor,
               alignment: WrapAlignment.center,
               children: pendingMoves.asMap().entries.map((entry) {
                 final index = entry.key;
@@ -1628,7 +1642,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
                 return GestureDetector(
                   onTap: currentPlayer == 0 ? () => _selectMove(index) : null,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 10 * scaleFactor, vertical: 5 * scaleFactor),
                     decoration: BoxDecoration(
                       gradient: isSelected
                           ? const LinearGradient(
@@ -1644,14 +1658,14 @@ class _YutnoriScreenState extends State<YutnoriScreen>
                                 )
                               : null,
                       color: (!isSelected && !canSelect) ? const Color(0xFF8B4513) : null,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8 * scaleFactor),
                       border: Border.all(
                         color: isSelected
                             ? Colors.white
                             : canSelect
                                 ? const Color(0xFFFFCC80)
                                 : const Color(0xFF5D4037),
-                        width: isSelected ? 2 : 1.5,
+                        width: isSelected ? 2 * scaleFactor : 1.5 * scaleFactor,
                       ),
                       boxShadow: canSelect || isSelected
                           ? [
@@ -1659,8 +1673,8 @@ class _YutnoriScreenState extends State<YutnoriScreen>
                                 color: isSelected
                                     ? Colors.orange.withValues(alpha: 0.5)
                                     : Colors.black.withValues(alpha: 0.3),
-                                offset: const Offset(0, 2),
-                                blurRadius: 3,
+                                offset: Offset(0, 2 * scaleFactor),
+                                blurRadius: 3 * scaleFactor,
                               ),
                             ]
                           : null,
@@ -1669,22 +1683,22 @@ class _YutnoriScreenState extends State<YutnoriScreen>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (canSelect && !isSelected)
-                          const Padding(
-                            padding: EdgeInsets.only(right: 3),
-                            child: Icon(Icons.touch_app, color: Colors.white70, size: 12),
+                          Padding(
+                            padding: EdgeInsets.only(right: 3 * scaleFactor),
+                            child: Icon(Icons.touch_app, color: Colors.white70, size: 12 * scaleFactor),
                           ),
                         Text(
                           move.name,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: isSelected ? 14 : 12,
+                            fontSize: (isSelected ? 14 : 12) * scaleFactor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         if (isSelected)
-                          const Padding(
-                            padding: EdgeInsets.only(left: 3),
-                            child: Icon(Icons.check, color: Colors.white, size: 12),
+                          Padding(
+                            padding: EdgeInsets.only(left: 3 * scaleFactor),
+                            child: Icon(Icons.check, color: Colors.white, size: 12 * scaleFactor),
                           ),
                       ],
                     ),
@@ -1698,7 +1712,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   }
 
   // 가로모드: 우측 컨트롤 (메시지 + 윷 던지기)
-  Widget _buildLandscapeRightControls() {
+  Widget _buildLandscapeRightControls(double scaleFactor) {
     // 결과가 있으면 결과 이름 제외한 메시지만 표시
     String? displayMessage = gameMessage;
     if (displayMessage != null) {
@@ -1725,18 +1739,18 @@ class _YutnoriScreenState extends State<YutnoriScreen>
         // 메시지 (상단) - 결과 이름 제외
         if (displayMessage != null && displayMessage.isNotEmpty)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            margin: const EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.symmetric(horizontal: 8 * scaleFactor, vertical: 6 * scaleFactor),
+            margin: EdgeInsets.only(bottom: 10 * scaleFactor),
             decoration: BoxDecoration(
               color: const Color(0xFF8B4513).withValues(alpha: 0.9),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8 * scaleFactor),
             ),
             child: Text(
               displayMessage,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 10,
+                fontSize: 10 * scaleFactor,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -1746,52 +1760,52 @@ class _YutnoriScreenState extends State<YutnoriScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(4, (i) {
             return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              width: 18,
-              height: 55,
+              margin: EdgeInsets.symmetric(horizontal: 3 * scaleFactor),
+              width: 18 * scaleFactor,
+              height: 55 * scaleFactor,
               decoration: BoxDecoration(
                 color: yutStickStates[i]
                     ? const Color(0xFF8B4513)
                     : const Color(0xFFF5DEB3),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: const Color(0xFF654321), width: 2),
+                borderRadius: BorderRadius.circular(4 * scaleFactor),
+                border: Border.all(color: const Color(0xFF654321), width: 2 * scaleFactor),
               ),
             );
           }),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10 * scaleFactor),
         // 버튼 영역 (윷 던지기 / 결과 표시 / 다음 버튼 / 던지는 중)
         if (isPlayerTurn && canThrowYut && !isThrowingYut)
           GestureDetector(
             onTap: _throwYut,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 14 * scaleFactor, vertical: 10 * scaleFactor),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [Color(0xFF4CAF50), Color(0xFF388E3C)],
                 ),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF2E7D32), width: 2),
+                borderRadius: BorderRadius.circular(12 * scaleFactor),
+                border: Border.all(color: const Color(0xFF2E7D32), width: 2 * scaleFactor),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.3),
-                    offset: const Offset(0, 3),
-                    blurRadius: 4,
+                    offset: Offset(0, 3 * scaleFactor),
+                    blurRadius: 4 * scaleFactor,
                   ),
                 ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.casino, color: Colors.white, size: 16),
-                  const SizedBox(width: 6),
+                  Icon(Icons.casino, color: Colors.white, size: 16 * scaleFactor),
+                  SizedBox(width: 6 * scaleFactor),
                   Text(
                     'games.yutnori.throwButton'.tr(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 13,
+                      fontSize: 13 * scaleFactor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -1801,29 +1815,29 @@ class _YutnoriScreenState extends State<YutnoriScreen>
           )
         else if (isThrowingYut)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 14 * scaleFactor, vertical: 10 * scaleFactor),
             decoration: BoxDecoration(
               color: Colors.grey,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey.shade600, width: 2),
+              borderRadius: BorderRadius.circular(12 * scaleFactor),
+              border: Border.all(color: Colors.grey.shade600, width: 2 * scaleFactor),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(
-                  width: 14,
-                  height: 14,
+                SizedBox(
+                  width: 14 * scaleFactor,
+                  height: 14 * scaleFactor,
                   child: CircularProgressIndicator(
-                    strokeWidth: 2,
+                    strokeWidth: 2 * scaleFactor,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(width: 6),
+                SizedBox(width: 6 * scaleFactor),
                 Text(
                   'games.yutnori.throwing'.tr(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 13,
+                    fontSize: 13 * scaleFactor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -1832,11 +1846,11 @@ class _YutnoriScreenState extends State<YutnoriScreen>
           )
         else if (waitingForNextTurn && currentPlayer > 0)
           // 컴퓨터 차례일 때 다음 버튼 (결과 표시보다 우선)
-          _buildPlayButton(compact: true)
+          _buildPlayButton(compact: true, scaleFactor: scaleFactor)
         else if (currentYutResult != null && !isThrowingYut)
           // 던지기 결과 표시 (버튼 위치에)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20 * scaleFactor, vertical: 10 * scaleFactor),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -1846,27 +1860,27 @@ class _YutnoriScreenState extends State<YutnoriScreen>
                   const Color(0xFFFF8C00),
                 ],
               ),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFB8860B), width: 2),
+              borderRadius: BorderRadius.circular(12 * scaleFactor),
+              border: Border.all(color: const Color(0xFFB8860B), width: 2 * scaleFactor),
               boxShadow: [
                 BoxShadow(
                   color: Colors.orange.withValues(alpha: 0.5),
-                  offset: const Offset(0, 2),
-                  blurRadius: 6,
+                  offset: Offset(0, 2 * scaleFactor),
+                  blurRadius: 6 * scaleFactor,
                 ),
               ],
             ),
             child: Text(
               currentYutResult!.name,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 18 * scaleFactor,
                 fontWeight: FontWeight.bold,
                 shadows: [
                   Shadow(
                     color: Colors.black54,
-                    offset: Offset(1, 1),
-                    blurRadius: 2,
+                    offset: Offset(1 * scaleFactor, 1 * scaleFactor),
+                    blurRadius: 2 * scaleFactor,
                   ),
                 ],
               ),
@@ -1877,63 +1891,63 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   }
 
   // 가로모드: 컴팩트 컴퓨터 위젯
-  Widget _buildLandscapeCompactComputer(int playerIndex) {
+  Widget _buildLandscapeCompactComputer(int playerIndex, double scaleFactor) {
     final isCurrentTurn = currentPlayer == playerIndex;
     final finishedCount =
         playerPieces[playerIndex].where((p) => p.isFinished).length;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      margin: const EdgeInsets.symmetric(horizontal: 6),
+      padding: EdgeInsets.symmetric(horizontal: 8 * scaleFactor, vertical: 6 * scaleFactor),
+      margin: EdgeInsets.symmetric(horizontal: 6 * scaleFactor),
       decoration: BoxDecoration(
         color: isCurrentTurn
             ? _getPlayerColor(playerIndex).withValues(alpha: 0.2)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10 * scaleFactor),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 10 * scaleFactor, vertical: 5 * scaleFactor),
             decoration: BoxDecoration(
               color: isCurrentTurn
                   ? _getPlayerColor(playerIndex)
                   : const Color(0xFF8B4513),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8 * scaleFactor),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.computer, color: Colors.white, size: 14),
-                const SizedBox(width: 4),
+                Icon(Icons.computer, color: Colors.white, size: 14 * scaleFactor),
+                SizedBox(width: 4 * scaleFactor),
                 Text(
                   'C$playerIndex',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 12 * scaleFactor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6 * scaleFactor),
           // 말 상태
           Row(
             mainAxisSize: MainAxisSize.min,
             children: List.generate(4, (i) {
               final pieceFinished = i < finishedCount;
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                width: 14,
-                height: 14,
+                margin: EdgeInsets.symmetric(horizontal: 2 * scaleFactor),
+                width: 14 * scaleFactor,
+                height: 14 * scaleFactor,
                 decoration: BoxDecoration(
                   color: pieceFinished
                       ? Colors.amber
                       : _getPlayerColor(playerIndex),
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 1),
+                  border: Border.all(color: Colors.white, width: 1 * scaleFactor),
                 ),
               );
             }),
@@ -1944,7 +1958,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   }
 
   // 가로모드: 컴팩트 플레이어 위젯
-  Widget _buildLandscapeCompactPlayer() {
+  Widget _buildLandscapeCompactPlayer(double scaleFactor) {
     final isCurrentTurn = currentPlayer == 0;
     final finishedCount = playerPieces[0].where((p) => p.isFinished).length;
     final waitingCount = playerPieces[0].where((p) => p.isWaiting).length;
@@ -1973,59 +1987,59 @@ class _YutnoriScreenState extends State<YutnoriScreen>
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      margin: const EdgeInsets.symmetric(horizontal: 6),
+      padding: EdgeInsets.symmetric(horizontal: 8 * scaleFactor, vertical: 6 * scaleFactor),
+      margin: EdgeInsets.symmetric(horizontal: 6 * scaleFactor),
       decoration: BoxDecoration(
         color: isCurrentTurn
             ? _getPlayerColor(0).withValues(alpha: 0.2)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10 * scaleFactor),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 10 * scaleFactor, vertical: 5 * scaleFactor),
             decoration: BoxDecoration(
               color: isCurrentTurn
                   ? _getPlayerColor(0)
                   : const Color(0xFF8B4513),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8 * scaleFactor),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.person, color: Colors.white, size: 14),
-                const SizedBox(width: 4),
+                Icon(Icons.person, color: Colors.white, size: 14 * scaleFactor),
+                SizedBox(width: 4 * scaleFactor),
                 Text(
                   'common.player'.tr(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 11,
+                    fontSize: 11 * scaleFactor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6 * scaleFactor),
           // 새로 달기 버튼 (대기 말이 있고 이동 가능할 때, 자동 실행 대기 중 아닐 때)
           if (isCurrentTurn && pendingMoves.isNotEmpty && waitingCount > 0 && canStartNewPiece && !isAutoActionPending)
             Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: EdgeInsets.only(bottom: 4 * scaleFactor),
               child: GestureDetector(
                 onTap: _startNewPiece,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 12 * scaleFactor, vertical: 6 * scaleFactor),
                   decoration: BoxDecoration(
                     color: Colors.green.shade600,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12 * scaleFactor),
                   ),
                   child: Text(
                     '${'games.yutnori.startNew'.tr()} ($waitingCount)',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 11,
+                      fontSize: 11 * scaleFactor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -2035,20 +2049,20 @@ class _YutnoriScreenState extends State<YutnoriScreen>
           // 건너뛰기 버튼 (이동 불가시, 자동 실행 대기 중 아닐 때)
           if (isCurrentTurn && pendingMoves.isNotEmpty && !hasMovablePiece && !isAutoActionPending)
             Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: EdgeInsets.only(bottom: 4 * scaleFactor),
               child: GestureDetector(
                 onTap: _skipMove,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 12 * scaleFactor, vertical: 6 * scaleFactor),
                   decoration: BoxDecoration(
                     color: Colors.red.shade700,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12 * scaleFactor),
                   ),
                   child: Text(
                     'games.yutnori.skip'.tr(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 11,
+                      fontSize: 11 * scaleFactor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -2062,9 +2076,9 @@ class _YutnoriScreenState extends State<YutnoriScreen>
               final pieceFinished = i < finishedCount;
               final pieceWaiting = playerPieces[0][i].isWaiting;
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                width: 12,
-                height: 12,
+                margin: EdgeInsets.symmetric(horizontal: 2 * scaleFactor),
+                width: 12 * scaleFactor,
+                height: 12 * scaleFactor,
                 decoration: BoxDecoration(
                   color: pieceFinished
                       ? Colors.amber
@@ -2072,7 +2086,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
                           ? _getPlayerColor(0).withValues(alpha: 0.5)
                           : _getPlayerColor(0),
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 1),
+                  border: Border.all(color: Colors.white, width: 1 * scaleFactor),
                 ),
               );
             }),
@@ -2465,17 +2479,18 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   Widget _buildCircleButton({
     required IconData icon,
     required VoidCallback onPressed,
+    double scaleFactor = 1.0,
   }) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: 40,
-        height: 40,
+        width: 40 * scaleFactor,
+        height: 40 * scaleFactor,
         decoration: BoxDecoration(
           color: const Color(0xFF8B4513),
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: Colors.white, size: 20),
+        child: Icon(icon, color: Colors.white, size: 20 * scaleFactor),
       ),
     );
   }
