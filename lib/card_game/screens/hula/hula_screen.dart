@@ -2770,12 +2770,14 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
   }
 
   void _calculateScoresAndEnd({required int stopperIndex}) {
-    // 모든 플레이어 점수 계산 (등록하지 못한 플레이어는 2배 패널티)
+    // 모든 플레이어 점수 계산 (등록하지 못했거나 7을 가지고 있으면 2배 패널티)
     final playerRegistered = playerMelds.isNotEmpty;
-    scores[0] = _calculateHandScore(playerHand) * (playerRegistered ? 1 : 2);
+    final playerHasSeven = playerHand.any((c) => _isSeven(c));
+    scores[0] = _calculateHandScore(playerHand) * ((!playerRegistered || playerHasSeven) ? 2 : 1);
     for (int i = 0; i < computerHands.length; i++) {
       final computerRegistered = computerMelds[i].isNotEmpty;
-      scores[i + 1] = _calculateHandScore(computerHands[i]) * (computerRegistered ? 1 : 2);
+      final computerHasSeven = computerHands[i].any((c) => _isSeven(c));
+      scores[i + 1] = _calculateHandScore(computerHands[i]) * ((!computerRegistered || computerHasSeven) ? 2 : 1);
     }
 
     // 최저 점수 찾기
@@ -2819,12 +2821,14 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
 
   // stopperIndex: 스톱 실패한 플레이어 인덱스 (null이면 일반 종료)
   void _endGame(int winnerIdx, {int? stopperIndex}) {
-    // 손패 점수 계산 (등록하지 못한 플레이어는 2배 패널티)
+    // 손패 점수 계산 (등록하지 못했거나 7을 가지고 있으면 2배 패널티)
     final playerRegistered = playerMelds.isNotEmpty;
-    scores[0] = _calculateHandScore(playerHand) * (playerRegistered ? 1 : 2);
+    final playerHasSeven = playerHand.any((c) => _isSeven(c));
+    scores[0] = _calculateHandScore(playerHand) * ((!playerRegistered || playerHasSeven) ? 2 : 1);
     for (int i = 0; i < computerHands.length; i++) {
       final computerRegistered = computerMelds[i].isNotEmpty;
-      scores[i + 1] = _calculateHandScore(computerHands[i]) * (computerRegistered ? 1 : 2);
+      final computerHasSeven = computerHands[i].any((c) => _isSeven(c));
+      scores[i + 1] = _calculateHandScore(computerHands[i]) * ((!computerRegistered || computerHasSeven) ? 2 : 1);
     }
 
     // 라운드 점수 계산
