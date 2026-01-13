@@ -64,7 +64,7 @@ class GomokuScreen extends StatefulWidget {
 }
 
 class _GomokuScreenState extends State<GomokuScreen> {
-  static const int boardSize = 15;
+  static const int boardSize = 19;
   List<List<Stone>> board = List.generate(
     boardSize,
     (_) => List.generate(boardSize, (_) => Stone.none),
@@ -1794,10 +1794,10 @@ class BoardPainter extends CustomPainter {
       ..color = Colors.black
       ..strokeWidth = 1;
 
-    double cellSize = size.width / 15;
+    double cellSize = size.width / 19;
     double padding = cellSize / 2;
 
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 19; i++) {
       canvas.drawLine(
         Offset(padding, padding + i * cellSize),
         Offset(size.width - padding, padding + i * cellSize),
@@ -1811,9 +1811,9 @@ class BoardPainter extends CustomPainter {
     }
 
     final starPoints = [
-      [3, 3], [3, 7], [3, 11],
-      [7, 3], [7, 7], [7, 11],
-      [11, 3], [11, 7], [11, 11],
+      [3, 3], [3, 9], [3, 15],
+      [9, 3], [9, 9], [9, 15],
+      [15, 3], [15, 9], [15, 15],
     ];
 
     final starPaint = Paint()
