@@ -360,15 +360,24 @@ class _YutnoriScreenState extends State<YutnoriScreen>
     _yutAnimController.reset();
     _yutAnimController.forward();
 
+    // 안전장치: 최대 1초 후 강제 종료
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if (mounted && isThrowingYut) {
+        _finishThrowYut();
+      }
+    });
+
     // 랜덤 애니메이션
     Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      if (!mounted) {
+      if (!mounted || !isThrowingYut) {
         timer.cancel();
         return;
       }
       if (_yutAnimController.status == AnimationStatus.completed) {
         timer.cancel();
-        _finishThrowYut();
+        if (isThrowingYut) {
+          _finishThrowYut();
+        }
       } else {
         setState(() {
           yutStickStates = List.generate(4, (_) => Random().nextBool());
