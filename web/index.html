@@ -53,20 +53,26 @@
   </style>
 </head>
 <body>
-  <!-- 하단 배너 광고 (앱 로드 후 표시) - 테스트 모드 -->
+  <!-- 하단 배너 광고 (앱 로드 후 표시) -->
+  <!-- 디버그 모드: localhost에서 테스트 광고 표시 -->
+  <!-- 릴리즈 모드: 실제 광고 표시 -->
   <div id="bottom-ad" class="ad-container loading">
     <ins class="adsbygoogle"
          style="display:block"
-         data-ad-client="ca-pub-0000000000000000"
-         data-ad-slot="0000000000"
+         data-ad-client="ca-pub-8361977398389047"
+         data-ad-slot="1127832458"
          data-ad-format="horizontal"
-         data-full-width-responsive="false"
-         data-adtest="on"></ins>
+         data-full-width-responsive="false"></ins>
   </div>
 
   <script src="flutter_bootstrap.js" async></script>
 
   <script>
+    // 디버그 모드 감지 (localhost 또는 127.0.0.1)
+    var isDebugMode = window.location.hostname === 'localhost' ||
+                      window.location.hostname === '127.0.0.1' ||
+                      window.location.hostname.includes('localhost');
+
     // Flutter 앱 로드 완료 후 광고 초기화
     var adInitialized = false;
 
@@ -74,9 +80,20 @@
       if (adInitialized) return;
       adInitialized = true;
 
+      // 디버그 모드에서는 테스트 광고 설정
+      if (isDebugMode) {
+        console.log('AdSense: Debug mode - test ads enabled');
+        var adElement = document.querySelector('.adsbygoogle');
+        if (adElement) {
+          adElement.setAttribute('data-adtest', 'on');
+        }
+      } else {
+        console.log('AdSense: Release mode - production ads');
+      }
+
       // AdSense 스크립트 동적 로드
       var script = document.createElement('script');
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000';
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8361977398389047';
       script.async = true;
       script.crossOrigin = 'anonymous';
       script.onload = function() {
