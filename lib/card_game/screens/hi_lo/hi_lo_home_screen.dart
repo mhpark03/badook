@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/l10n_helper.dart';
-import '../../services/ad_service.dart';
 import '../../services/hi_lo/hi_lo_controller.dart';
 import '../../services/hi_lo/hi_lo_stats_service.dart';
 import '../../widgets/card_game_provider.dart';
@@ -385,14 +384,7 @@ class _HiLoHomeScreenState extends State<HiLoHomeScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  statsService.resetStats();
-                },
-                onAdNotAvailable: () {
-                  statsService.resetStats();
-                },
-              );
+              statsService.resetStats();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: Text(l10n.resetStats, style: const TextStyle(color: Colors.white)),

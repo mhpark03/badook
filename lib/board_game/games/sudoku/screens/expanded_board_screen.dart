@@ -6,7 +6,6 @@ import '../models/samurai_game_state.dart';
 import '../models/samurai_sudoku_generator.dart';
 import '../widgets/game_control_panel.dart';
 import '../widgets/game_status_bar.dart';
-import '../../../services/ad_service.dart';
 
 /// 확장 보드 화면에서 반환하는 빠른 입력 모드 상태
 class ExpandedBoardResult {
@@ -905,71 +904,6 @@ class _ExpandedBoardScreenState extends State<ExpandedBoardScreen> {
     // 일시정지 상태에서는 입력 차단
     if (_localIsPaused) return;
 
-    // 광고 시청 확인 다이얼로그 표시
-    _showFillNotesAdDialog();
-  }
-
-  void _showFillNotesAdDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text('dialog.fillNotesTitle'.tr(), style: const TextStyle(color: Colors.white)),
-        content: Text(
-          'dialog.fillNotesMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr()),
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pop(context);
-              _showAdForFillNotes();
-            },
-            icon: const Icon(Icons.play_circle_outline),
-            label: Text('common.watchAd'.tr()),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showAdForFillNotes() {
-    final adService = AdService();
-
-    if (!adService.isAdLoaded) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('common.adLoadingFreeHint'.tr())),
-      );
-      _applyFillAllNotes();
-      return;
-    }
-
-    bool rewardEarned = false;
-    adService.showRewardedAd(
-      onUserEarnedReward: (ad, reward) {
-        rewardEarned = true;
-      },
-      onAdDismissed: () {
-        if (mounted && rewardEarned) {
-          _applyFillAllNotes();
-        }
-      },
-      onAdNotAvailable: () {
-        if (mounted) {
-          _applyFillAllNotes();
-        }
-      },
-    );
-  }
-
-  void _applyFillAllNotes() {
     setState(() {
       widget.gameState.fillAllNotes(widget.boardIndex);
     });
@@ -991,7 +925,7 @@ class _ExpandedBoardScreenState extends State<ExpandedBoardScreen> {
     }
   }
 
-  // 오답 시 광고 다이얼로그 (4번째 오답부터)
+  // 오답 시 다이얼로그 (4번째 오답부터)
   void _showFailureAdDialog() {
     showDialog(
       context: context,
@@ -1000,7 +934,7 @@ class _ExpandedBoardScreenState extends State<ExpandedBoardScreen> {
         backgroundColor: Colors.grey.shade900,
         title: Text('dialog.wrongAnswer'.tr(), style: const TextStyle(color: Colors.redAccent)),
         content: Text(
-          '${'common.failureCount'.tr(namedArgs: {'count': '$_localFailureCount'})}\n${'dialog.adWatchContinue'.tr()}',
+          'common.failureCount'.tr(namedArgs: {'count': '$_localFailureCount'}),
           style: const TextStyle(color: Colors.white70),
         ),
         actions: [
@@ -1009,87 +943,21 @@ class _ExpandedBoardScreenState extends State<ExpandedBoardScreen> {
             child: Text('app.cancel'.tr()),
           ),
           ElevatedButton(
-            onPressed: () async {
+            onPressed: () {
               Navigator.pop(context);
-              final adService = AdService();
-              bool rewardEarned = false;
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  rewardEarned = true;
-                },
-                onAdDismissed: () {
-                  if (mounted && rewardEarned) {
-                    // 광고 시청 완료 후 틀린 항목 되돌리기
-                    _onUndo();
-                  }
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없는 경우에도 되돌리기 실행
-                _onUndo();
-                adService.loadRewardedAd();
-              }
+              _onUndo();
             },
-            child: Text('common.watchAd'.tr()),
+            child: Text('dialog.undoTitle'.tr()),
           ),
         ],
       ),
     );
   }
 
-  // 취소 버튼 광고 다이얼로그
+  // 취소 버튼
   void _showUndoAdDialog() {
-    if (_localIsPaused || !widget.gameState.canUndo) {
-      debugPrint('Undo 다이얼로그 표시 불가: paused=$_localIsPaused, canUndo=${widget.gameState.canUndo}');
-      return;
-    }
-
-    debugPrint('Undo 다이얼로그 표시, undoCount=${widget.gameState.undoCount}');
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text('dialog.undoTitle'.tr(), style: const TextStyle(color: Colors.white)),
-        content: Text(
-          'dialog.undoMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr()),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final adService = AdService();
-              bool rewardEarned = false;
-              debugPrint('광고 시청 시작');
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  rewardEarned = true;
-                  debugPrint('광고 보상 획득');
-                },
-                onAdDismissed: () {
-                  debugPrint('광고 닫힘: mounted=$mounted, rewardEarned=$rewardEarned');
-                  if (mounted && rewardEarned) {
-                    _onUndo();
-                  }
-                },
-              );
-              debugPrint('showRewardedAd 반환: result=$result');
-              if (!result && mounted) {
-                // 광고가 없는 경우 되돌리기 실행
-                debugPrint('광고 없음 - 무료 Undo');
-                _onUndo();
-                adService.loadRewardedAd();
-              }
-            },
-            child: Text('common.watchAd'.tr()),
-          ),
-        ],
-      ),
-    );
+    if (_localIsPaused || !widget.gameState.canUndo) return;
+    _onUndo();
   }
 
   void _onHint() {
@@ -1110,72 +978,8 @@ class _ExpandedBoardScreenState extends State<ExpandedBoardScreen> {
       return;
     }
 
-    // 광고 시청 확인 다이얼로그 표시
-    _showAdConfirmDialog(selectedRow!, selectedCol!);
-  }
-
-  void _showAdConfirmDialog(int row, int col) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text('dialog.hintTitle'.tr(), style: const TextStyle(color: Colors.white)),
-        content: Text(
-          'common.hintWatchAdFull'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr()),
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pop(context);
-              _showAdForHint(row, col);
-            },
-            icon: const Icon(Icons.play_circle_outline),
-            label: Text('common.watchAd'.tr()),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showAdForHint(int row, int col) {
-    final adService = AdService();
-
-    if (!adService.isAdLoaded) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('common.adLoadingFreeHint'.tr())),
-      );
-      _applyHint(row, col);
-      return;
-    }
-
-    bool rewardEarned = false;
-    adService.showRewardedAd(
-      onUserEarnedReward: (ad, reward) {
-        rewardEarned = true;
-      },
-      onAdDismissed: () {
-        if (mounted && rewardEarned) {
-          _applyHint(row, col);
-        }
-      },
-      onAdNotAvailable: () {
-        if (mounted) {
-          _applyHint(row, col);
-        }
-      },
-    );
-  }
-
-  void _applyHint(int row, int col) {
-    widget.onHint(widget.boardIndex, row, col);
+    // 힌트 적용
+    widget.onHint(widget.boardIndex, selectedRow!, selectedCol!);
     _checkCompletion();
     setState(() {});
   }

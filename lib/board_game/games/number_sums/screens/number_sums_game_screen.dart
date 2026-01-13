@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../l10n/board_game_strings.dart';
-import '../../../services/ad_service.dart';
 import '../models/number_sums_game_state.dart';
 import '../models/number_sums_generator.dart';
 import '../services/game_storage.dart';
@@ -229,44 +228,10 @@ class _NumberSumsGameScreenState extends State<NumberSumsGameScreen>
     });
   }
 
-  // 힌트 모드 광고 확인 다이얼로그
+  // 힌트 모드 활성화
   void _showHintAdDialog() {
     if (_gameState.isCompleted) return;
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text('dialog.hintModeTitle'.tr(), style: const TextStyle(color: Colors.white)),
-        content: Text(
-          'dialog.hintModeMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr()),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  _setGameMode(NumberSumsGameMode.hint);
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없어도 기능 실행
-                _setGameMode(NumberSumsGameMode.hint);
-                adService.loadRewardedAd();
-              }
-            },
-            child: Text('common.watchAd'.tr()),
-          ),
-        ],
-      ),
-    );
+    _setGameMode(NumberSumsGameMode.hint);
   }
 
   void _showCompletionDialog() {

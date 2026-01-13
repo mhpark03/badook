@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
-import '../../services/ad_service.dart';
 
 enum CellState { hidden, revealed, flagged }
 
@@ -124,7 +123,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     startTime = null;
   }
 
-  // 부활 광고 다이얼로그 (폭탄 터트렸을 때)
+  // 부활 다이얼로그 (폭탄 터트렸을 때)
   void _showReviveAdDialog(int row, int col) {
     showDialog(
       context: context,
@@ -139,7 +138,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
           ],
         ),
         content: Text(
-          'dialog.reviveMessage'.tr(),
+          'dialog.continueMessage'.tr(),
           style: const TextStyle(color: Colors.white70),
         ),
         actions: [
@@ -155,32 +154,17 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
             },
             child: Text('common.giveUp'.tr(), style: const TextStyle(color: Colors.grey)),
           ),
-          ElevatedButton.icon(
-            onPressed: () async {
+          ElevatedButton(
+            onPressed: () {
               Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  // 부활: 해당 셀을 깃발로 표시
-                  setState(() {
-                    board[row][col].state = CellState.flagged;
-                    flagCount++;
-                  });
-                  _saveGame();
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없어도 부활
-                setState(() {
-                  board[row][col].state = CellState.flagged;
-                  flagCount++;
-                });
-                adService.loadRewardedAd();
-                _saveGame();
-              }
+              // 부활: 해당 셀을 깃발로 표시
+              setState(() {
+                board[row][col].state = CellState.flagged;
+                flagCount++;
+              });
+              _saveGame();
             },
-            icon: const Icon(Icons.play_circle_outline),
-            label: Text('common.watchAdRevive'.tr()),
+            child: Text('common.continue'.tr()),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepOrange,
             ),
@@ -190,44 +174,10 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     );
   }
 
-  // 힌트 광고 확인 다이얼로그
+  // 힌트
   void _showHintAdDialog() {
     if (gameOver || gameWon || firstClick) return;
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text('dialog.hintTitle'.tr(), style: const TextStyle(color: Colors.white)),
-        content: Text(
-          'dialog.hintMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr()),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  _useHint();
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없어도 기능 실행
-                _useHint();
-                adService.loadRewardedAd();
-              }
-            },
-            child: Text('common.watchAd'.tr()),
-          ),
-        ],
-      ),
-    );
+    _useHint();
   }
 
   // 힌트 사용: 안전한 셀 하나를 자동으로 열기

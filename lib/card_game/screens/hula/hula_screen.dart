@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../services/game_save_service.dart';
-import '../../services/ad_service.dart';
 import '../../services/hula/hula_stats_service.dart';
 
 // 카드 무늬
@@ -320,7 +319,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('새 게임'),
-        content: const Text('광고를 시청하면 새 게임을 시작합니다.\n계속하시겠습니까?'),
+        content: const Text('새 게임을 시작하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -329,19 +328,11 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  _showHint = false;
-                  _initGame();
-                },
-                onAdNotAvailable: () {
-                  _showHint = false;
-                  _initGame();
-                },
-              );
+              _showHint = false;
+              _initGame();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-            child: const Text('새 게임', style: TextStyle(color: Colors.white)),
+            child: const Text('확인', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -363,7 +354,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('힌트'),
-        content: const Text('광고를 시청하면 힌트가 활성화됩니다.\n계속하시겠습니까?'),
+        content: const Text('힌트를 활성화하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -372,22 +363,12 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  setState(() {
-                    _showHint = true;
-                  });
-                },
-                onAdNotAvailable: () {
-                  // 광고 로드 실패 시에도 힌트 활성화
-                  setState(() {
-                    _showHint = true;
-                  });
-                },
-              );
+              setState(() {
+                _showHint = true;
+              });
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('광고 보기', style: TextStyle(color: Colors.black)),
+            child: const Text('확인', style: TextStyle(color: Colors.black)),
           ),
         ],
       ),

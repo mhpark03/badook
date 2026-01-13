@@ -7,7 +7,6 @@ import '../l10n/l10n_helper.dart';
 import '../models/game_state.dart';
 import '../services/game_controller.dart';
 import '../services/stats_service.dart';
-import '../services/ad_service.dart';
 import '../widgets/card_game_provider.dart';
 import 'game_screen.dart';
 
@@ -425,15 +424,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              // 보상형 광고 표시 후 초기화
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  statsService.resetStats();
-                },
-                onAdNotAvailable: () {
-                  statsService.resetStats();
-                },
-              );
+              statsService.resetStats();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: Text(l10n.resetStats, style: const TextStyle(color: Colors.white)),

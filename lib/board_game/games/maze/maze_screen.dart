@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import 'models/maze.dart';
 import 'widgets/maze_widget.dart';
-import '../../services/ad_service.dart';
 
 enum MazeDifficulty { easy, medium, hard }
 
@@ -151,44 +150,10 @@ class _MazeScreenState extends State<MazeScreen> {
     _startTimer();
   }
 
-  // 힌트 광고 다이얼로그
+  // 힌트
   void _showHintAdDialog() {
     if (isGameWon) return;
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text('dialog.hintTitle'.tr(), style: const TextStyle(color: Colors.white)),
-        content: Text(
-          'dialog.hintMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr()),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  _useHint();
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없어도 기능 실행
-                _useHint();
-                adService.loadRewardedAd();
-              }
-            },
-            child: Text('common.watchAd'.tr()),
-          ),
-        ],
-      ),
-    );
+    _useHint();
   }
 
   // 힌트 사용: 경로 표시

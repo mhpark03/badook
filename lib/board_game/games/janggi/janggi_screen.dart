@@ -6,7 +6,6 @@ import '../../l10n/board_game_strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/gemini_service.dart';
 import '../../services/game_save_service.dart';
-import '../../services/ad_service.dart';
 
 enum JanggiPieceType { gung, cha, po, ma, sang, sa, byung }
 
@@ -1722,7 +1721,7 @@ class _JanggiScreenState extends State<JanggiScreen> {
     _saveGame();
   }
 
-  // 취소 광고 다이얼로그
+  // 취소
   void _showUndoAdDialog() {
     if (_moveHistory.isEmpty || isGameOver || isThinking) return;
 
@@ -1734,55 +1733,7 @@ class _JanggiScreenState extends State<JanggiScreen> {
       if (currentTurn != playerColor) return;
     }
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFFF5DEB3),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: Color(0xFF8B4513), width: 3),
-        ),
-        title: Row(
-          children: [
-            const Icon(Icons.undo, color: Color(0xFF8B4513), size: 28),
-            const SizedBox(width: 8),
-            Text('dialog.undoTitle'.tr(), style: const TextStyle(color: Color(0xFF8B4513))),
-          ],
-        ),
-        content: Text(
-          'dialog.undoMessage'.tr(),
-          style: const TextStyle(color: Colors.black87),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr(), style: const TextStyle(color: Color(0xFF8B4513))),
-          ),
-          ElevatedButton.icon(
-            onPressed: () async {
-              Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  _undoMove();
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없어도 기능 실행
-                _undoMove();
-                adService.loadRewardedAd();
-              }
-            },
-            icon: const Icon(Icons.play_circle_outline, size: 18),
-            label: Text('common.watchAd'.tr()),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF8B4513),
-              foregroundColor: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
+    _undoMove();
   }
 
   void _undoMove() {

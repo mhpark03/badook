@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../l10n/board_game_strings.dart';
 import 'models/bubble_game.dart';
-import '../../services/ad_service.dart';
 
 class BubbleScreen extends StatefulWidget {
   const BubbleScreen({super.key});
@@ -50,58 +49,9 @@ class _BubbleScreenState extends State<BubbleScreen> {
   }
 
   void _showHintAdDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        title: Text(
-          'games.bubble.hintTitle'.tr(),
-          style: const TextStyle(color: Color(0xFF00D9FF)),
-        ),
-        content: Text(
-          'games.bubble.hintMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'common.cancel'.tr(),
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF00D9FF),
-            ),
-            onPressed: () async {
-              Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  setState(() {
-                    showHintLine = true;
-                  });
-                },
-              );
-              if (!result && mounted) {
-                setState(() {
-                  showHintLine = true;
-                });
-                adService.loadRewardedAd();
-              }
-            },
-            child: Text(
-              'common.watchAd'.tr(),
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-        ],
-      ),
-    );
+    setState(() {
+      showHintLine = true;
+    });
   }
 
   void _showGameOverDialog() {

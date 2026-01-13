@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
-import '../../services/ad_service.dart';
 
 enum BaseballDifficulty {
   easy,   // 3자리
@@ -248,7 +247,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
     HapticFeedback.selectionClick();
   }
 
-  // 힌트 광고 확인 다이얼로그
+  // 힌트
   void _showHintAdDialog() {
     if (gameOver) return;
 
@@ -262,40 +261,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
 
     if (hiddenPositions.isEmpty) return;
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text('dialog.hintTitle'.tr(), style: const TextStyle(color: Colors.white)),
-        content: Text(
-          'dialog.hintMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr()),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  _useHint();
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없어도 기능 실행
-                _useHint();
-                adService.loadRewardedAd();
-              }
-            },
-            child: Text('common.watchAd'.tr()),
-          ),
-        ],
-      ),
-    );
+    _useHint();
   }
 
   void _useHint() {
@@ -336,26 +302,26 @@ class _BaseballScreenState extends State<BaseballScreen> {
     HapticFeedback.mediumImpact();
   }
 
-  // 추가 시도 광고 다이얼로그
+  // 추가 시도 다이얼로그
   void _showExtendAdDialog() {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey.shade900,
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.sports_baseball, color: Colors.deepOrange, size: 28),
-            SizedBox(width: 8),
+            const Icon(Icons.sports_baseball, color: Colors.deepOrange, size: 28),
+            const SizedBox(width: 8),
             Text(
-              '시도 횟수 소진!',
-              style: TextStyle(color: Colors.deepOrange),
+              'games.baseball.attemptsExhausted'.tr(),
+              style: const TextStyle(color: Colors.deepOrange),
             ),
           ],
         ),
-        content: const Text(
-          '광고를 시청하면 5회 추가 시도할 수 있습니다.',
-          style: TextStyle(color: Colors.white70),
+        content: Text(
+          'games.baseball.extendMessage'.tr(),
+          style: const TextStyle(color: Colors.white70),
         ),
         actions: [
           TextButton(
@@ -366,25 +332,14 @@ class _BaseballScreenState extends State<BaseballScreen> {
                 gameWon = false;
               });
             },
-            child: const Text('포기'),
+            child: Text('common.giveUp'.tr()),
           ),
-          ElevatedButton.icon(
-            onPressed: () async {
+          ElevatedButton(
+            onPressed: () {
               Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  _extendAttempts();
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없어도 기능 실행
-                _extendAttempts();
-                adService.loadRewardedAd();
-              }
+              _extendAttempts();
             },
-            icon: const Icon(Icons.play_circle_outline, size: 18),
-            label: const Text('광고 보고 계속하기'),
+            child: Text('common.continue'.tr()),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepOrange,
             ),

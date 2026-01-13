@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/l10n_helper.dart';
 import '../../services/hearts/hearts_stats_service.dart';
-import '../../services/ad_service.dart';
 import 'hearts_screen.dart';
 
 class HeartsHomeScreen extends StatefulWidget {
@@ -366,14 +365,7 @@ class _HeartsHomeScreenState extends State<HeartsHomeScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  statsService.resetStats();
-                },
-                onAdNotAvailable: () {
-                  statsService.resetStats();
-                },
-              );
+              statsService.resetStats();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: Text(l10n.resetStats, style: const TextStyle(color: Colors.white)),

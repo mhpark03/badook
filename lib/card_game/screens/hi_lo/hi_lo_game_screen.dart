@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../l10n/l10n_helper.dart';
 import '../../models/card.dart';
 import '../../models/hi_lo/hi_lo_state.dart';
-import '../../services/ad_service.dart';
 import '../../services/hi_lo/hi_lo_controller.dart';
 import '../../services/hi_lo/hi_lo_stats_service.dart';
 
@@ -103,7 +102,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.newGame),
-        content: const Text('광고를 시청하면 새 게임을 시작합니다.\n계속하시겠습니까?'),
+        content: const Text('새 게임을 시작하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -112,18 +111,9 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  _statsRecorded = false;
-                  _showHint = false;
-                  controller.startNewGame();
-                },
-                onAdNotAvailable: () {
-                  _statsRecorded = false;
-                  _showHint = false;
-                  controller.startNewGame();
-                },
-              );
+              _statsRecorded = false;
+              _showHint = false;
+              controller.startNewGame();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
             child: Text(l10n.newGame, style: const TextStyle(color: Colors.black)),
@@ -148,7 +138,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('힌트'),
-        content: const Text('광고를 시청하면 힌트가 활성화됩니다.\n계속하시겠습니까?'),
+        content: const Text('힌트를 활성화하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -157,22 +147,12 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  setState(() {
-                    _showHint = true;
-                  });
-                },
-                onAdNotAvailable: () {
-                  // 광고 로드 실패 시에도 힌트 활성화
-                  setState(() {
-                    _showHint = true;
-                  });
-                },
-              );
+              setState(() {
+                _showHint = true;
+              });
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('광고 보기', style: TextStyle(color: Colors.black)),
+            child: const Text('확인', style: TextStyle(color: Colors.black)),
           ),
         ],
       ),

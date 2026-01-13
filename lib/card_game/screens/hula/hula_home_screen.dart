@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/l10n_helper.dart';
 import '../../services/hula/hula_stats_service.dart';
-import '../../services/ad_service.dart';
 import 'hula_screen.dart';
 
 class HulaHomeScreen extends StatefulWidget {
@@ -369,15 +368,7 @@ class _HulaHomeScreenState extends State<HulaHomeScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              // 보상형 광고 표시 후 초기화
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  statsService.resetStats();
-                },
-                onAdNotAvailable: () {
-                  statsService.resetStats();
-                },
-              );
+              statsService.resetStats();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: Text(l10n.resetStats, style: const TextStyle(color: Colors.white)),

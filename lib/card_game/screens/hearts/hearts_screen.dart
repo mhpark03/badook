@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../services/hearts/hearts_stats_service.dart';
-import '../../services/ad_service.dart';
 import '../../services/game_save_service.dart';
 
 enum Suit { spade, heart, diamond, club }
@@ -1556,13 +1555,10 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              AdService().showRewardedAd(
-                onRewarded: _startNewGame,
-                onAdNotAvailable: _startNewGame,
-              );
+              _startNewGame();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('새 게임', style: TextStyle(color: Colors.black)),
+            child: const Text('확인', style: TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -1571,12 +1567,10 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
 
   void _onHintButtonPressed() {
     if (_showHint) {
-      // 힌트가 켜져 있으면 광고 없이 끄기
       setState(() {
         _showHint = false;
       });
     } else {
-      // 힌트가 꺼져 있으면 다이얼로그 표시
       _showHintDialog();
     }
   }
@@ -1586,7 +1580,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('힌트'),
-        content: const Text('광고를 시청하면 힌트가 활성화됩니다.\n계속하시겠습니까?'),
+        content: const Text('힌트를 활성화하시겠습니까?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -1595,24 +1589,13 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              AdService().showRewardedAd(
-                onRewarded: () {
-                  setState(() {
-                    _showHint = true;
-                  });
-                  _showMessage('힌트가 활성화되었습니다!');
-                },
-                onAdNotAvailable: () {
-                  // 광고 로드 실패 시에도 힌트 활성화
-                  setState(() {
-                    _showHint = true;
-                  });
-                  _showMessage('힌트가 활성화되었습니다!');
-                },
-              );
+              setState(() {
+                _showHint = true;
+              });
+              _showMessage('힌트가 활성화되었습니다!');
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('광고 보기', style: TextStyle(color: Colors.black)),
+            child: const Text('확인', style: TextStyle(color: Colors.black)),
           ),
         ],
       ),

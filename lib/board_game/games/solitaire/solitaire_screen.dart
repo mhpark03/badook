@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
-import '../../services/ad_service.dart';
 
 enum Suit { hearts, diamonds, clubs, spades }
 
@@ -584,44 +583,10 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
     }
   }
 
-  // 되돌리기 광고 확인 다이얼로그
+  // 되돌리기
   void _showUndoAdDialog() {
     if (_undoHistory.isEmpty) return;
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text('dialog.undoTitle'.tr(), style: const TextStyle(color: Colors.white)),
-        content: Text(
-          'dialog.undoMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('app.cancel'.tr()),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final adService = AdService();
-              final result = await adService.showRewardedAd(
-                onUserEarnedReward: (ad, reward) {
-                  _undo();
-                },
-              );
-              if (!result && mounted) {
-                // 광고가 없어도 기능 실행
-                _undo();
-                adService.loadRewardedAd();
-              }
-            },
-            child: Text('common.watchAd'.tr()),
-          ),
-        ],
-      ),
-    );
+    _undo();
   }
 
   // Undo 실행
