@@ -15,6 +15,9 @@ import 'board_game/screens/board_game_selection_screen.dart';
 // 스도쿠 import
 import 'board_game/screens/sudoku_selection_screen.dart';
 
+// 장기 import
+import 'janggi/janggi_selection_screen.dart';
+
 void main() {
   runApp(const BadukApp());
 }
@@ -174,6 +177,7 @@ class L10n {
       'backToList': '목록으로',
       // 카드게임
       'cardGame': '카드게임',
+      'janggi': '장기',
       'boardGame': '보드게임',
       'sudoku': '스도쿠',
       // 정보 페이지
@@ -305,6 +309,7 @@ class L10n {
       'backToList': 'Back to List',
       // Card game
       'cardGame': 'Card Game',
+      'janggi': 'Janggi',
       'boardGame': 'Board Game',
       'sudoku': 'Sudoku',
       // Info pages
@@ -436,6 +441,7 @@ class L10n {
       'backToList': '一覧に戻る',
       // カードゲーム
       'cardGame': 'カードゲーム',
+      'janggi': '将棋',
       'boardGame': 'ボードゲーム',
       'sudoku': '数独',
       // 情報ページ
@@ -567,6 +573,7 @@ class L10n {
       'backToList': '返回列表',
       // 卡牌游戏
       'cardGame': '卡牌游戏',
+      'janggi': '象棋',
       'boardGame': '桌游',
       'sudoku': '数独',
       // 信息页面
@@ -675,6 +682,23 @@ AppBar buildCommonAppBar({
             color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => JanggiSelectionScreen(
+                language: language,
+                onLanguageChanged: onLanguageChanged,
+              ),
+            ),
+          );
+        },
+        child: Text(
+          L10n.get(language, 'janggi'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
       TextButton(
