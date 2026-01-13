@@ -192,6 +192,42 @@ class L10n {
       'help_boardGame': '[오목]\n흑과 백이 번갈아 돌을 놓아 먼저 5개를 연속으로 놓으면 승리합니다.\n가로, 세로, 대각선 모두 가능합니다.\n\n[오델로]\n상대 돌을 자신의 돌로 양쪽에서 감싸면 뒤집을 수 있습니다.\n게임 종료 시 더 많은 돌을 가진 쪽이 승리합니다.\n\n[테트리스]\n떨어지는 블록을 쌓아 가로줄을 완성하면 사라집니다.\n블록이 맨 위까지 쌓이면 게임 오버입니다.\n\n[지뢰찾기]\n숫자 힌트를 이용해 지뢰 위치를 추리합니다.\n지뢰가 아닌 모든 칸을 열면 승리합니다.\n\n[솔리테어]\n카드를 규칙에 맞게 정리하여 4개의 기초 더미를 완성하는 게임입니다.\n\n[미로]\n출구를 찾아 미로를 탈출하는 게임입니다.\n\n[버블]\n같은 색 버블 3개 이상을 맞춰 터뜨리는 게임입니다.',
       'help_sudoku': '[게임 방법]\n9x9 칸에 1~9 숫자를 중복 없이 채우는 논리 퍼즐입니다.\n각 가로줄, 세로줄, 3x3 박스에 같은 숫자가 없어야 합니다.\n\n[게임 모드]\n- 클래식: 기본 스도쿠\n- 사무라이: 5개의 스도쿠가 겹쳐진 대형 퍼즐\n- 킬러: 점선 영역 내 숫자 합이 주어진 숫자와 일치해야 함\n- 숫자합: 인접한 칸의 합이 힌트로 주어지는 변형\n\n[난이도]\n초급 / 중급 / 고급 / 전문가',
       'help_yutnori': '[게임 방법]\n윷을 던져 나온 결과에 따라 말을 이동시킵니다.\n모든 말을 먼저 도착점에 들여보내면 승리합니다.\n\n[윷 결과]\n- 도: 1칸 이동\n- 개: 2칸 이동\n- 걸: 3칸 이동\n- 윷: 4칸 이동 + 한 번 더 던지기\n- 모: 5칸 이동 + 한 번 더 던지기\n\n[특수 규칙]\n- 상대 말을 잡으면 한 번 더 던질 수 있습니다\n- 같은 위치의 내 말은 업어서 함께 이동할 수 있습니다\n- 지름길을 활용하면 더 빨리 도착할 수 있습니다',
+      // 하위 게임 이름
+      'mighty': '마이티',
+      'hearts': '하트',
+      'hula': '훌라',
+      'onecard': '원카드',
+      'highlow': '하이로우',
+      'sevenpoker': '세븐포커',
+      'gomoku': '오목',
+      'othello': '오델로',
+      'tetris': '테트리스',
+      'minesweeper': '지뢰찾기',
+      'solitaire': '솔리테어',
+      'maze': '미로',
+      'bubble': '버블',
+      'sudoku_classic': '클래식',
+      'sudoku_samurai': '사무라이',
+      'sudoku_killer': '킬러',
+      'sudoku_sum': '숫자합',
+      // 하위 게임 도움말
+      'help_mighty': '[게임 방법]\n5인용 트릭테이킹 게임입니다. 주공이 되어 선언한 점수를 획득하면 승리합니다.\n\n[게임 진행]\n1. 카드 분배: 각 플레이어에게 10장씩 배분\n2. 비딩: 가장 높은 점수를 선언한 사람이 주공\n3. 기루다 선언: 주공이 으뜸패(기루다) 무늬 선택\n4. 프렌드 콜: 주공이 파트너를 지정\n5. 트릭 진행: 10번의 트릭으로 점수 획득\n\n[점수 계산]\n- 점수카드: A, K, Q, J, 10 (각 1점, 총 20점)\n- 여당 승리: 선언 점수 이상 획득 시\n- 야당 승리: 여당이 선언 점수 미달 시',
+      'help_hearts': '[게임 방법]\n하트 카드와 스페이드Q를 피하며 최저 점수를 노리는 게임입니다.\n\n[점수]\n- 하트 1장당 1점 (총 13점)\n- 스페이드Q: 13점\n- 총 26점 가능\n\n[게임 진행]\n1. 각 플레이어에게 13장 배분\n2. 매 라운드 시작 전 3장씩 교환\n3. 클로버2를 가진 사람이 선\n4. 13번의 트릭 진행\n\n[특수 규칙]\n- 첫 트릭에 점수카드 불가\n- 하트가 브레이크되기 전엔 하트로 선 불가\n- 슈팅 더 문: 26점 모두 획득 시 0점 (다른 사람 +26점)',
+      'help_hula': '[게임 방법]\n같은 숫자나 연속된 숫자 조합을 만들어 먼저 패를 버리면 승리합니다.\n\n[카드 조합]\n- 트리플: 같은 숫자 3장\n- 스트레이트: 연속된 숫자 3장 이상\n- 세트: 같은 숫자 4장\n\n[게임 진행]\n1. 각 플레이어에게 7장 배분\n2. 차례대로 덱에서 1장 뽑기\n3. 조합이 완성되면 내려놓기\n4. 손패 1장 버리기\n5. 먼저 패를 다 버리면 승리\n\n[득점]\n- 승자 제외 나머지 손패 점수 합산\n- 숫자카드: 액면가\n- J, Q, K: 10점\n- A: 15점',
+      'help_onecard': '[게임 방법]\nUNO와 유사한 게임입니다. 같은 숫자나 무늬의 카드를 내며 먼저 패를 없애면 승리합니다.\n\n[카드 규칙]\n- 같은 숫자 또는 같은 무늬만 낼 수 있음\n- 낼 카드가 없으면 덱에서 뽑기\n\n[특수 카드]\n- A: 무늬 상관없이 낼 수 있음, 무늬 변경\n- 2: 다음 사람 2장 뽑기\n- 3: 패스\n- 7: 무늬 변경 가능\n- J: 순서 역전\n- Q: 다음 사람 건너뛰기\n- K: 다음 사람 1장 뽑기\n- 조커: 다음 사람 5장 뽑기\n\n[승리 조건]\n- 먼저 모든 패를 낸 사람이 승리',
+      'help_highlow': '[게임 방법]\n다음 카드가 현재 카드보다 높을지 낮을지 맞추는 게임입니다.\n\n[카드 순서]\nA(낮음) - 2 - 3 - ... - Q - K(높음)\n\n[게임 진행]\n1. 첫 카드 공개\n2. 다음 카드가 높을지(High) 낮을지(Low) 선택\n3. 맞추면 계속 진행, 틀리면 게임 오버\n4. 연속으로 맞출수록 높은 점수\n\n[점수]\n- 연속 정답 수에 따라 점수 증가\n- 같은 숫자가 나오면 무승부 (점수 유지)',
+      'help_sevenpoker': '[게임 방법]\n7장의 카드로 족보를 만들어 겨루는 포커 게임입니다.\n\n[게임 진행]\n1. 각자 2장씩 비공개로 받음\n2. 1장씩 공개하며 4번의 베팅 라운드\n3. 마지막 7번째 카드는 비공개\n4. 7장 중 5장으로 최고 족보 완성\n\n[족보 순위 (높은순)]\n- 로열 스트레이트 플러시\n- 스트레이트 플러시\n- 포카드\n- 풀하우스\n- 플러시\n- 스트레이트\n- 트리플\n- 투페어\n- 원페어\n- 하이카드',
+      'help_gomoku': '[게임 방법]\n흑과 백이 번갈아 돌을 놓아 먼저 5개를 연속으로 놓으면 승리합니다.\n\n[기본 규칙]\n- 흑이 먼저 시작\n- 가로, 세로, 대각선 모두 가능\n- 정확히 5개 연속 (6개 이상은 무효)\n\n[게임 모드]\n- AI 대전: 컴퓨터와 대결\n- 2인 대전: 친구와 함께\n\n[전략 팁]\n- 양쪽이 열린 4개 연속(열린 4)은 막기 어려움\n- 동시에 두 방향으로 4를 만드는 것이 유리\n- 상대의 3연속을 미리 차단',
+      'help_othello': '[게임 방법]\n상대 돌을 자신의 돌로 양쪽에서 감싸면 뒤집을 수 있습니다.\n게임 종료 시 더 많은 돌을 가진 쪽이 승리합니다.\n\n[기본 규칙]\n- 8x8 판에서 진행\n- 흑이 먼저 시작\n- 반드시 상대 돌을 뒤집을 수 있는 곳에만 착수 가능\n- 둘 수 없으면 패스\n\n[게임 종료]\n- 판이 가득 차거나\n- 양쪽 모두 둘 곳이 없을 때\n\n[전략 팁]\n- 코너를 차지하면 유리\n- 가장자리도 중요한 위치\n- 초반에 돌이 적은 것이 오히려 유리할 수 있음',
+      'help_tetris': '[게임 방법]\n떨어지는 블록을 쌓아 가로줄을 완성하면 사라집니다.\n블록이 맨 위까지 쌓이면 게임 오버입니다.\n\n[조작법]\n- 좌우: 블록 이동\n- 위: 회전\n- 아래: 빠르게 내리기\n- 스페이스: 즉시 낙하\n\n[블록 종류]\n- I, O, T, S, Z, J, L 총 7종류\n\n[점수]\n- 1줄: 100점\n- 2줄: 300점\n- 3줄: 500점\n- 4줄(테트리스): 800점\n\n[레벨]\n- 줄을 지울수록 레벨 상승\n- 레벨이 오르면 낙하 속도 증가',
+      'help_minesweeper': '[게임 방법]\n숫자 힌트를 이용해 지뢰 위치를 추리합니다.\n지뢰가 아닌 모든 칸을 열면 승리합니다.\n\n[숫자의 의미]\n- 숫자는 주변 8칸에 있는 지뢰 개수\n- 0이면 주변에 지뢰 없음 (자동 확장)\n\n[조작법]\n- 클릭: 칸 열기\n- 오른쪽 클릭/길게 누르기: 깃발 표시\n\n[난이도]\n- 초급: 9x9, 지뢰 10개\n- 중급: 16x16, 지뢰 40개\n- 고급: 30x16, 지뢰 99개\n\n[전략 팁]\n- 모서리부터 시작하면 안전\n- 1-2-1 패턴 등 자주 나오는 패턴 익히기',
+      'help_solitaire': '[게임 방법]\n카드를 규칙에 맞게 정리하여 4개의 기초 더미를 완성하는 게임입니다.\n\n[목표]\n- 4개의 기초 더미에 A부터 K까지 같은 무늬로 쌓기\n\n[규칙]\n- 테이블 카드: 빨강-검정 번갈아, 내림차순으로 쌓기\n- 기초 더미: 같은 무늬, 오름차순(A-K)으로 쌓기\n- 덱에서 카드를 뽑아 사용 가능\n\n[조작법]\n- 카드 드래그: 이동\n- 카드 더블클릭: 자동으로 기초 더미로 이동\n- 덱 클릭: 새 카드 뽑기',
+      'help_maze': '[게임 방법]\n출구를 찾아 미로를 탈출하는 게임입니다.\n\n[조작법]\n- 화살표/스와이프: 이동\n- 벽은 통과 불가\n\n[게임 모드]\n- 다양한 크기의 미로\n- 시간 제한 모드\n\n[전략 팁]\n- 한쪽 벽을 계속 따라가면 출구 도달 가능\n- 분기점에서 방문한 곳 기억하기\n- 막다른 길에서는 되돌아가기',
+      'help_bubble': '[게임 방법]\n같은 색 버블 3개 이상을 맞춰 터뜨리는 게임입니다.\n\n[조작법]\n- 조준: 마우스/터치로 방향 설정\n- 발사: 클릭/터치\n\n[규칙]\n- 같은 색 버블 3개 이상 연결 시 터짐\n- 터진 버블 아래 매달린 버블도 함께 떨어짐\n- 모든 버블을 제거하면 클리어\n\n[점수]\n- 한 번에 많이 터뜨릴수록 고득점\n- 연쇄로 떨어지는 버블 보너스\n\n[게임 오버]\n- 버블이 바닥 선까지 내려오면 종료',
+      'help_sudoku_classic': '[클래식 스도쿠]\n기본 스도쿠 규칙을 따릅니다.\n\n[규칙]\n- 9x9 칸에 1~9 숫자 배치\n- 각 가로줄에 1~9 한 번씩\n- 각 세로줄에 1~9 한 번씩\n- 각 3x3 박스에 1~9 한 번씩\n\n[난이도]\n- 초급: 빈 칸 적음, 논리적 추론만으로 해결\n- 중급: 약간의 가정 필요\n- 고급: 고급 기법 필요\n- 전문가: 복잡한 체인 기법 필요\n\n[팁]\n- 확실한 숫자부터 채우기\n- 후보 숫자 메모 기능 활용',
+      'help_sudoku_samurai': '[사무라이 스도쿠]\n5개의 스도쿠가 겹쳐진 대형 퍼즐입니다.\n\n[구조]\n- 중앙 1개 + 모서리 4개 = 총 5개 스도쿠\n- 모서리 스도쿠는 중앙과 3x3 박스를 공유\n\n[규칙]\n- 각 스도쿠는 기본 규칙 적용\n- 겹치는 영역은 두 스도쿠 규칙 모두 만족\n\n[전략]\n- 겹치는 영역부터 해결하면 효율적\n- 한 스도쿠의 답이 다른 스도쿠에 영향',
+      'help_sudoku_killer': '[킬러 스도쿠]\n점선 영역(케이지) 내 숫자 합이 조건입니다.\n\n[규칙]\n- 기본 스도쿠 규칙 적용\n- 점선 영역 내 숫자 합 = 표시된 숫자\n- 같은 영역 내 숫자 중복 불가\n\n[예시]\n- 2칸 합 3 = 1+2\n- 2칸 합 17 = 8+9\n- 3칸 합 6 = 1+2+3\n\n[전략]\n- 합이 정해진 조합이 하나뿐인 케이지 먼저\n- 큰 케이지는 가능한 조합 좁히기',
+      'help_sudoku_sum': '[숫자합 스도쿠]\n인접한 칸의 합이 힌트로 주어집니다.\n\n[규칙]\n- 기본 스도쿠 규칙 적용\n- 칸 사이 숫자 = 두 칸의 합\n\n[예시]\n- 칸 사이 5 표시 = 두 칸이 1+4 또는 2+3\n- 칸 사이 17 표시 = 두 칸이 8+9\n\n[전략]\n- 합이 작거나 큰 경우 경우의 수가 적음\n- 여러 힌트가 만나는 지점 활용',
       // 정보 페이지
       'about': '앱 소개',
       'help': '도움말',
@@ -333,6 +369,42 @@ class L10n {
       'help_boardGame': '[Gomoku]\nPlace stones alternately. First to get 5 in a row wins.\nHorizontal, vertical, and diagonal lines all count.\n\n[Othello]\nFlip opponent pieces by sandwiching them with your pieces.\nPlayer with more pieces at the end wins.\n\n[Tetris]\nStack falling blocks to complete horizontal lines.\nGame over when blocks reach the top.\n\n[Minesweeper]\nUse number hints to find mines.\nOpen all non-mine cells to win.\n\n[Solitaire]\nArrange cards by rules to build 4 foundation piles.\n\n[Maze]\nFind the exit to escape the maze.\n\n[Bubble]\nMatch 3 or more same-colored bubbles to pop them.',
       'help_sudoku': '[How to Play]\nFill a 9x9 grid with numbers 1-9 without repetition.\nNo duplicates in any row, column, or 3x3 box.\n\n[Game Modes]\n- Classic: Standard sudoku\n- Samurai: 5 overlapping sudoku grids\n- Killer: Numbers in cages must sum to given total\n- Sum: Adjacent cell sums given as hints\n\n[Difficulty]\nEasy / Medium / Hard / Expert',
       'help_yutnori': '[How to Play]\nThrow yut sticks and move pieces based on results.\nFirst to bring all pieces to the finish wins.\n\n[Yut Results]\n- Do: Move 1 space\n- Gae: Move 2 spaces\n- Geol: Move 3 spaces\n- Yut: Move 4 spaces + throw again\n- Mo: Move 5 spaces + throw again\n\n[Special Rules]\n- Capture opponent piece = throw again\n- Stack your pieces on same spot to move together\n- Use shortcuts to reach finish faster',
+      // Sub-game names
+      'mighty': 'Mighty',
+      'hearts': 'Hearts',
+      'hula': 'Hula',
+      'onecard': 'One Card',
+      'highlow': 'Hi-Lo',
+      'sevenpoker': 'Seven Poker',
+      'gomoku': 'Gomoku',
+      'othello': 'Othello',
+      'tetris': 'Tetris',
+      'minesweeper': 'Minesweeper',
+      'solitaire': 'Solitaire',
+      'maze': 'Maze',
+      'bubble': 'Bubble',
+      'sudoku_classic': 'Classic',
+      'sudoku_samurai': 'Samurai',
+      'sudoku_killer': 'Killer',
+      'sudoku_sum': 'Sum',
+      // Sub-game help
+      'help_mighty': '[How to Play]\nA 5-player trick-taking game.\nDeclarer and partner form the ruling party against 3 opposition players.\n\n[Rules]\n- Bidding: Declare minimum points to win\n- Declarer picks partner by calling a card\n- Win tricks with highest card of led suit or trump\n- Ruling party must reach declared points to win',
+      'help_hearts': '[How to Play]\nAvoid collecting hearts and the Queen of Spades.\n\n[Scoring]\n- Each heart: 1 point\n- Queen of Spades: 13 points\n- Lowest total score wins\n\n[Special]\n- Shooting the Moon: Collect all hearts + Queen of Spades to give 26 points to others',
+      'help_hula': '[How to Play]\nCreate sets of same numbers or sequences to discard cards.\nFirst player to empty their hand wins.\n\n[Sets]\n- Three of a kind: 3+ cards of same number\n- Sequence: 3+ consecutive cards of same suit\n\n[Tip]\nPlan your sets strategically!',
+      'help_onecard': '[How to Play]\nSimilar to UNO. Match the top card by number or suit.\nFirst to discard all cards wins.\n\n[Special Cards]\n- Attack cards: Next player draws extra cards\n- Skip: Skip next player\n- Change suit: Choose new suit',
+      'help_highlow': '[How to Play]\nGuess if the next card will be higher or lower than the current card.\n\n[Rules]\n- Same value counts as wrong\n- Build winning streaks for higher scores\n\n[Tip]\nCards near extremes (A or K) are easier to predict!',
+      'help_sevenpoker': '[How to Play]\nCreate the best poker hand using 7 cards.\n\n[Hand Rankings]\n1. Royal Flush\n2. Straight Flush\n3. Four of a Kind\n4. Full House\n5. Flush\n6. Straight\n7. Three of a Kind\n8. Two Pair\n9. One Pair\n10. High Card',
+      'help_gomoku': '[How to Play]\nBlack and white take turns placing stones.\nFirst to get 5 stones in a row wins.\n\n[Rules]\n- Horizontal, vertical, and diagonal all count\n- Cannot place on occupied spots\n\n[Strategy]\nBlock opponent while building your own line!',
+      'help_othello': '[How to Play]\nFlip opponent pieces by sandwiching them between your pieces.\nPlayer with more pieces at the end wins.\n\n[Rules]\n- Must flip at least one piece each turn\n- Pass if no valid moves\n\n[Strategy]\nCorners are valuable - they cannot be flipped!',
+      'help_tetris': '[How to Play]\nRotate and place falling blocks to complete horizontal lines.\nCompleted lines disappear for points.\n\n[Controls]\n- Move: Left/Right arrows\n- Rotate: Up arrow\n- Drop: Down arrow\n\n[Tip]\nKeep the stack low and flat!',
+      'help_minesweeper': '[How to Play]\nFind all mines without clicking on them.\nNumbers show how many adjacent mines there are.\n\n[Controls]\n- Click: Open cell\n- Long press: Flag mine\n\n[Tip]\nUse number patterns to deduce mine locations!',
+      'help_solitaire': '[How to Play]\nArrange cards to build 4 foundation piles by suit (A to K).\n\n[Rules]\n- Tableau: Stack cards in descending order, alternating colors\n- Foundation: Build up by suit from Ace\n\n[Tip]\nReveal face-down cards as priority!',
+      'help_maze': '[How to Play]\nFind the path from start to exit.\n\n[Controls]\n- Swipe or use arrows to move\n- Find the shortest path for best score\n\n[Tip]\nFollow one wall to eventually find the exit!',
+      'help_bubble': '[How to Play]\nShoot bubbles to match 3 or more of the same color.\nMatched bubbles pop and disappear.\n\n[Rules]\n- Aim and shoot to attach bubbles\n- Clear all bubbles to win\n\n[Tip]\nAim for clusters and use bounces off walls!',
+      'help_sudoku_classic': '[How to Play]\nFill a 9x9 grid with numbers 1-9.\n\n[Rules]\n- No duplicate numbers in any row\n- No duplicate numbers in any column\n- No duplicate numbers in any 3x3 box\n\n[Tip]\nStart with rows/columns that have the most numbers!',
+      'help_sudoku_samurai': '[How to Play]\n5 overlapping sudoku grids in one large puzzle.\n\n[Rules]\n- Each 9x9 grid follows standard sudoku rules\n- Overlapping regions must satisfy both grids\n\n[Tip]\nUse overlapping areas to find cross-references!',
+      'help_sudoku_killer': '[How to Play]\nSudoku with cages. Numbers in each cage must sum to the given total.\n\n[Rules]\n- Standard sudoku rules apply\n- Cage numbers cannot repeat\n- Cage sum must equal the clue\n\n[Tip]\nSmall cages with high sums reveal limited possibilities!',
+      'help_sudoku_sum': '[How to Play]\nSudoku with adjacent cell sum hints.\n\n[Rules]\n- Standard sudoku rules apply\n- Numbers between cells show their sum\n\n[Tip]\nUse sums to narrow down possibilities!',
       // Info pages
       'about': 'About',
       'help': 'Help',
@@ -474,6 +546,42 @@ class L10n {
       'help_boardGame': '[五目並べ]\n黒と白が交互に石を置き、先に5つ並べれば勝ち。\n縦、横、斜めすべて有効。\n\n[オセロ]\n相手の石を自分の石で挟むとひっくり返せます。\n終局時、より多くの石を持つ方が勝ち。\n\n[テトリス]\n落ちてくるブロックを積み、横列を揃えて消すゲーム。\nブロックが一番上まで積まれるとゲームオーバー。\n\n[マインスイーパー]\n数字のヒントで地雷の位置を推理します。\n地雷以外のすべてのマスを開ければ勝ち。\n\n[ソリティア]\nルールに従ってカードを並べ、4つの基礎の山を完成させるゲーム。\n\n[迷路]\n出口を見つけて脱出するゲーム。\n\n[バブル]\n同じ色のバブルを3つ以上揃えて消すゲーム。',
       'help_sudoku': '[遊び方]\n9x9マスに1~9の数字を重複なく埋めるパズル。\n縦、横、3x3ボックスに同じ数字は入れません。\n\n[ゲームモード]\n- クラシック：基本の数独\n- サムライ：5つの数独が重なった大型パズル\n- キラー：点線内の数字の合計が指定された数になる\n- 数字合計：隣接するマスの合計がヒント\n\n[難易度]\n初級 / 中級 / 上級 / エキスパート',
       'help_yutnori': '[遊び方]\nユッを投げて結果に従って駒を動かします。\nすべての駒を先にゴールさせれば勝ち。\n\n[ユッの結果]\n- ド：1マス移動\n- ゲ：2マス移動\n- ゴル：3マス移動\n- ユッ：4マス移動＋もう一回投げる\n- モ：5マス移動＋もう一回投げる\n\n[特殊ルール]\n- 相手の駒を取るともう一回投げられる\n- 同じ位置の自分の駒は一緒に動かせる\n- 近道を使うとより早くゴールできる',
+      // サブゲーム名
+      'mighty': 'マイティ',
+      'hearts': 'ハーツ',
+      'hula': 'フラ',
+      'onecard': 'ワンカード',
+      'highlow': 'ハイロー',
+      'sevenpoker': 'セブンポーカー',
+      'gomoku': '五目並べ',
+      'othello': 'オセロ',
+      'tetris': 'テトリス',
+      'minesweeper': 'マインスイーパー',
+      'solitaire': 'ソリティア',
+      'maze': '迷路',
+      'bubble': 'バブル',
+      'sudoku_classic': 'クラシック',
+      'sudoku_samurai': 'サムライ',
+      'sudoku_killer': 'キラー',
+      'sudoku_sum': '数字合計',
+      // サブゲームヘルプ
+      'help_mighty': '[遊び方]\n5人用トリックテイキングゲーム。\n主公とパートナーが与党となり、野党3人と対戦します。\n\n[ルール]\n- ビディング：獲得する最低点数を宣言\n- 主公はカードを指定してパートナーを選ぶ\n- リードされたスートか切り札の最高カードで勝つ\n- 与党は宣言した点数以上を獲得すれば勝利',
+      'help_hearts': '[遊び方]\nハートとスペードQを集めないようにするゲーム。\n\n[スコア]\n- ハート1枚：1点\n- スペードQ：13点\n- 合計点が最も低いプレイヤーが勝利\n\n[特殊]\n- シュート・ザ・ムーン：ハート全部＋スペードQを集めると他プレイヤーに26点を与える',
+      'help_hula': '[遊び方]\n同じ数字や連続した数字の組み合わせを作ってカードを捨てます。\n先に手札をなくした人が勝ち。\n\n[セット]\n- スリーオブアカインド：同じ数字3枚以上\n- シーケンス：同じスート3枚以上の連番\n\n[コツ]\n戦略的にセットを計画しよう！',
+      'help_onecard': '[遊び方]\nUNOに似たゲーム。数字かスートを合わせてカードを出します。\n先に手札をなくした人が勝ち。\n\n[特殊カード]\n- 攻撃カード：次のプレイヤーが追加でカードを引く\n- スキップ：次のプレイヤーをスキップ\n- スート変更：新しいスートを選ぶ',
+      'help_highlow': '[遊び方]\n次のカードが今のカードより高いか低いかを当てます。\n\n[ルール]\n- 同じ数字は不正解\n- 連勝で高スコアを獲得\n\n[コツ]\n極端な数字（AやK）は予測しやすい！',
+      'help_sevenpoker': '[遊び方]\n7枚のカードで最高のポーカーハンドを作ります。\n\n[役のランキング]\n1. ロイヤルフラッシュ\n2. ストレートフラッシュ\n3. フォーオブアカインド\n4. フルハウス\n5. フラッシュ\n6. ストレート\n7. スリーオブアカインド\n8. ツーペア\n9. ワンペア\n10. ハイカード',
+      'help_gomoku': '[遊び方]\n黒と白が交互に石を置きます。\n先に5つ並べた方が勝ち。\n\n[ルール]\n- 縦、横、斜めすべて有効\n- 既に石がある場所には置けない\n\n[戦略]\n相手を止めながら自分のラインを作ろう！',
+      'help_othello': '[遊び方]\n相手の石を自分の石で挟むとひっくり返せます。\n終局時、より多くの石を持つ方が勝ち。\n\n[ルール]\n- 毎ターン最低1つ石をひっくり返す必要がある\n- 有効な手がない場合はパス\n\n[戦略]\n角は価値が高い - ひっくり返されない！',
+      'help_tetris': '[遊び方]\n落ちてくるブロックを回転させて積み、横列を揃えます。\n揃った列は消えてポイントになります。\n\n[操作]\n- 移動：左右矢印\n- 回転：上矢印\n- ドロップ：下矢印\n\n[コツ]\n低く平らに積もう！',
+      'help_minesweeper': '[遊び方]\n地雷をクリックせずにすべて見つけるゲーム。\n数字は隣接する地雷の数を示します。\n\n[操作]\n- クリック：マスを開く\n- 長押し：地雷にフラグを立てる\n\n[コツ]\n数字のパターンで地雷の位置を推理しよう！',
+      'help_solitaire': '[遊び方]\nカードを並べて4つの基礎の山（AからK）を作ります。\n\n[ルール]\n- 場札：色を交互に降順で積む\n- 基礎：スートごとにAから昇順で積む\n\n[コツ]\n裏返しのカードを優先的に表にしよう！',
+      'help_maze': '[遊び方]\nスタートから出口までの道を見つけます。\n\n[操作]\n- スワイプか矢印キーで移動\n- 最短経路で最高スコア\n\n[コツ]\n壁に沿って進めば必ず出口に辿り着く！',
+      'help_bubble': '[遊び方]\nバブルを発射して同じ色を3つ以上揃えます。\n揃ったバブルは弾けて消えます。\n\n[ルール]\n- 狙いを定めてバブルを発射\n- すべてのバブルを消せばクリア\n\n[コツ]\nまとまりを狙い、壁で跳ね返そう！',
+      'help_sudoku_classic': '[遊び方]\n9x9マスに1~9の数字を埋めます。\n\n[ルール]\n- 横一列に同じ数字は入れない\n- 縦一列に同じ数字は入れない\n- 3x3ボックスに同じ数字は入れない\n\n[コツ]\n数字が多い行や列から始めよう！',
+      'help_sudoku_samurai': '[遊び方]\n5つの数独が重なった大型パズル。\n\n[ルール]\n- 各9x9グリッドは標準の数独ルールに従う\n- 重なる部分は両方のグリッドを満たす必要がある\n\n[コツ]\n重なる部分を使って相互参照しよう！',
+      'help_sudoku_killer': '[遊び方]\nケージ付きの数独。各ケージの数字の合計が指定された数になる必要があります。\n\n[ルール]\n- 標準の数独ルールが適用\n- ケージ内の数字は重複できない\n- ケージの合計は手がかりと一致する必要がある\n\n[コツ]\n合計が高い小さなケージは可能性が限られる！',
+      'help_sudoku_sum': '[遊び方]\n隣接するマスの合計がヒントとして与えられる数独。\n\n[ルール]\n- 標準の数独ルールが適用\n- マスの間の数字はその合計を示す\n\n[コツ]\n合計を使って可能性を絞ろう！',
       // 情報ページ
       'about': 'アプリについて',
       'help': 'ヘルプ',
@@ -615,6 +723,42 @@ class L10n {
       'help_boardGame': '[五子棋]\n黑白双方交替落子，先连成5子者获胜。\n横、竖、斜线均可。\n\n[黑白棋]\n用自己的棋子夹住对方棋子可以翻转。\n终局时棋子多者获胜。\n\n[俄罗斯方块]\n堆叠下落的方块，完成一行即可消除。\n方块堆到顶部则游戏结束。\n\n[扫雷]\n根据数字提示推理地雷位置。\n打开所有非地雷格子即可获胜。\n\n[纸牌接龙]\n按规则整理纸牌，完成4个基础牌堆。\n\n[迷宫]\n找到出口逃离迷宫。\n\n[泡泡]\n将3个以上相同颜色的泡泡连在一起消除。',
       'help_sudoku': '[游戏方法]\n在9x9格子中填入1-9数字，不能重复。\n每行、每列、每个3x3宫格内数字不能相同。\n\n[游戏模式]\n- 经典：基本数独\n- 武士：5个数独重叠的大型拼图\n- 杀手：虚线区域内数字之和等于指定数字\n- 数字和：相邻格子的和作为提示\n\n[难度]\n简单 / 中等 / 困难 / 专家',
       'help_yutnori': '[游戏方法]\n投掷木棒，根据结果移动棋子。\n先将所有棋子移到终点者获胜。\n\n[投掷结果]\n- 道：移动1格\n- 盖：移动2格\n- 葛：移动3格\n- 柶：移动4格+再投一次\n- 模：移动5格+再投一次\n\n[特殊规则]\n- 吃掉对方棋子可以再投一次\n- 同一位置的己方棋子可以一起移动\n- 利用捷径可以更快到达终点',
+      // 子游戏名称
+      'mighty': 'Mighty',
+      'hearts': '红心大战',
+      'hula': 'Hula',
+      'onecard': 'UNO',
+      'highlow': '高低',
+      'sevenpoker': '七张扑克',
+      'gomoku': '五子棋',
+      'othello': '黑白棋',
+      'tetris': '俄罗斯方块',
+      'minesweeper': '扫雷',
+      'solitaire': '纸牌接龙',
+      'maze': '迷宫',
+      'bubble': '泡泡',
+      'sudoku_classic': '经典',
+      'sudoku_samurai': '武士',
+      'sudoku_killer': '杀手',
+      'sudoku_sum': '数字和',
+      // 子游戏帮助
+      'help_mighty': '[游戏方法]\n5人墩牌游戏。\n主公和搭档组成执政党，对抗3名在野党玩家。\n\n[规则]\n- 叫牌：宣告要获得的最低分数\n- 主公通过指定一张牌选择搭档\n- 用最大的跟牌或王牌赢得一墩\n- 执政党必须达到宣告的分数才能获胜',
+      'help_hearts': '[游戏方法]\n避免收集红心和黑桃Q的游戏。\n\n[计分]\n- 每张红心：1分\n- 黑桃Q：13分\n- 总分最低者获胜\n\n[特殊]\n- 全收：收集所有红心+黑桃Q，给其他玩家26分',
+      'help_hula': '[游戏方法]\n组成相同数字或连续数字的组合来出牌。\n先出完手牌者获胜。\n\n[组合]\n- 三条：3张以上相同数字\n- 顺子：3张以上同花连续牌\n\n[提示]\n策略性地规划你的组合！',
+      'help_onecard': '[游戏方法]\n类似UNO。用相同数字或花色的牌跟牌。\n先出完手牌者获胜。\n\n[特殊牌]\n- 攻击牌：下家额外抽牌\n- 跳过：跳过下家\n- 换色：选择新花色',
+      'help_highlow': '[游戏方法]\n猜测下一张牌比当前牌高还是低。\n\n[规则]\n- 相同数字算错误\n- 连胜获得更高分数\n\n[提示]\n极端数字（A或K）更容易预测！',
+      'help_sevenpoker': '[游戏方法]\n用7张牌组成最佳牌型。\n\n[牌型排名]\n1. 皇家同花顺\n2. 同花顺\n3. 四条\n4. 葫芦\n5. 同花\n6. 顺子\n7. 三条\n8. 两对\n9. 一对\n10. 高牌',
+      'help_gomoku': '[游戏方法]\n黑白双方交替落子。\n先连成5子者获胜。\n\n[规则]\n- 横、竖、斜线均可\n- 不能落在已有棋子的位置\n\n[策略]\n阻挡对手的同时构建自己的连线！',
+      'help_othello': '[游戏方法]\n用己方棋子夹住对方棋子可以翻转。\n终局时棋子多者获胜。\n\n[规则]\n- 每回合必须翻转至少一个棋子\n- 无有效走法时跳过\n\n[策略]\n角落很有价值 - 无法被翻转！',
+      'help_tetris': '[游戏方法]\n旋转下落的方块并堆叠，完成水平线。\n完成的行消除得分。\n\n[控制]\n- 移动：左右箭头\n- 旋转：上箭头\n- 下落：下箭头\n\n[提示]\n保持低而平整！',
+      'help_minesweeper': '[游戏方法]\n在不点击地雷的情况下找出所有地雷。\n数字表示相邻地雷的数量。\n\n[控制]\n- 点击：打开格子\n- 长按：标记地雷\n\n[提示]\n利用数字规律推断地雷位置！',
+      'help_solitaire': '[游戏方法]\n整理纸牌，按花色建立4个基础牌堆（A到K）。\n\n[规则]\n- 列牌：红黑交替降序堆叠\n- 基础：按花色从A升序堆叠\n\n[提示]\n优先翻开朝下的牌！',
+      'help_maze': '[游戏方法]\n找到从起点到出口的路径。\n\n[控制]\n- 滑动或使用箭头移动\n- 找到最短路径获得最高分\n\n[提示]\n沿着墙壁走最终能找到出口！',
+      'help_bubble': '[游戏方法]\n发射泡泡，连接3个以上相同颜色的泡泡。\n相连的泡泡会消除。\n\n[规则]\n- 瞄准后发射泡泡\n- 消除所有泡泡获胜\n\n[提示]\n瞄准泡泡群，利用墙壁反弹！',
+      'help_sudoku_classic': '[游戏方法]\n在9x9格子中填入1-9数字。\n\n[规则]\n- 每行不能有重复数字\n- 每列不能有重复数字\n- 每个3x3宫格不能有重复数字\n\n[提示]\n从数字最多的行/列开始！',
+      'help_sudoku_samurai': '[游戏方法]\n5个数独重叠的大型拼图。\n\n[规则]\n- 每个9x9格子遵循标准数独规则\n- 重叠区域必须同时满足两个格子\n\n[提示]\n利用重叠区域进行交叉验证！',
+      'help_sudoku_killer': '[游戏方法]\n带笼子的数独。每个笼子内的数字之和必须等于指定数字。\n\n[规则]\n- 标准数独规则适用\n- 笼子内数字不能重复\n- 笼子之和必须等于提示\n\n[提示]\n高数值的小笼子可能性有限！',
+      'help_sudoku_sum': '[游戏方法]\n相邻格子的和作为提示的数独。\n\n[规则]\n- 标准数独规则适用\n- 格子之间的数字表示它们的和\n\n[提示]\n利用和来缩小可能性！',
       // 信息页面
       'about': '关于',
       'help': '帮助',
@@ -6894,102 +7038,106 @@ class HelpPage extends StatefulWidget {
 }
 
 class _HelpPageState extends State<HelpPage> {
-  int _selectedGameIndex = 0;
+  String _selectedGameKey = 'baduk';
+  final Set<String> _expandedCategories = {'cardGame', 'boardGame', 'sudoku'};
 
   List<Map<String, dynamic>> _getGameList() {
     return [
+      {'key': 'baduk', 'icon': Icons.grid_on, 'color': Colors.black87},
+      {'key': 'janggi', 'icon': Icons.castle, 'color': Colors.brown},
       {
-        'key': 'baduk',
-        'icon': Icons.grid_on,
-        'color': Colors.black87,
+        'key': 'cardGame', 'icon': Icons.style, 'color': Colors.red,
+        'subGames': [
+          {'key': 'mighty', 'icon': Icons.star},
+          {'key': 'hearts', 'icon': Icons.favorite},
+          {'key': 'hula', 'icon': Icons.layers},
+          {'key': 'onecard', 'icon': Icons.filter_1},
+          {'key': 'highlow', 'icon': Icons.swap_vert},
+          {'key': 'sevenpoker', 'icon': Icons.casino},
+        ],
       },
       {
-        'key': 'janggi',
-        'icon': Icons.castle,
-        'color': Colors.brown,
+        'key': 'boardGame', 'icon': Icons.dashboard, 'color': Colors.blue,
+        'subGames': [
+          {'key': 'gomoku', 'icon': Icons.circle_outlined},
+          {'key': 'othello', 'icon': Icons.contrast},
+          {'key': 'tetris', 'icon': Icons.view_module},
+          {'key': 'minesweeper', 'icon': Icons.flag},
+          {'key': 'solitaire', 'icon': Icons.style},
+          {'key': 'maze', 'icon': Icons.route},
+          {'key': 'bubble', 'icon': Icons.bubble_chart},
+        ],
       },
       {
-        'key': 'cardGame',
-        'icon': Icons.style,
-        'color': Colors.red,
+        'key': 'sudoku', 'icon': Icons.grid_3x3, 'color': Colors.purple,
+        'subGames': [
+          {'key': 'sudoku_classic', 'icon': Icons.grid_3x3},
+          {'key': 'sudoku_samurai', 'icon': Icons.view_comfy},
+          {'key': 'sudoku_killer', 'icon': Icons.calculate},
+          {'key': 'sudoku_sum', 'icon': Icons.functions},
+        ],
       },
-      {
-        'key': 'boardGame',
-        'icon': Icons.dashboard,
-        'color': Colors.blue,
-      },
-      {
-        'key': 'sudoku',
-        'icon': Icons.grid_3x3,
-        'color': Colors.purple,
-      },
-      {
-        'key': 'yutnori',
-        'icon': Icons.casino,
-        'color': Colors.orange,
-      },
+      {'key': 'yutnori', 'icon': Icons.casino, 'color': Colors.orange},
     ];
   }
 
-  void _navigateToGame(int index) {
-    final games = _getGameList();
-    final gameKey = games[index]['key'];
+  Map<String, dynamic>? _findGameByKey(String key) {
+    for (var game in _getGameList()) {
+      if (game['key'] == key) return game;
+      if (game['subGames'] != null) {
+        for (var subGame in game['subGames']) {
+          if (subGame['key'] == key) {
+            return {...subGame, 'color': game['color'], 'parentKey': game['key']};
+          }
+        }
+      }
+    }
+    return null;
+  }
 
+  void _navigateToGame(String gameKey) {
     switch (gameKey) {
       case 'baduk':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GameModeSelector(
-              language: widget.language,
-              onLanguageChanged: widget.onLanguageChanged,
-            ),
-          ),
-        );
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => GameModeSelector(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
+        ));
         break;
       case 'janggi':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => JanggiSelectionScreen(
-              language: widget.language,
-              onLanguageChanged: widget.onLanguageChanged,
-            ),
-          ),
-        );
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => JanggiSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
+        ));
         break;
       case 'cardGame':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => card_game.GameSelectionScreen(
-              language: widget.language,
-              onLanguageChanged: widget.onLanguageChanged,
-            ),
-          ),
-        );
+      case 'mighty':
+      case 'hearts':
+      case 'hula':
+      case 'onecard':
+      case 'highlow':
+      case 'sevenpoker':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => card_game.GameSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
+        ));
         break;
       case 'boardGame':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BoardGameSelectionScreen(
-              language: widget.language,
-              onLanguageChanged: widget.onLanguageChanged,
-            ),
-          ),
-        );
+      case 'gomoku':
+      case 'othello':
+      case 'tetris':
+      case 'minesweeper':
+      case 'solitaire':
+      case 'maze':
+      case 'bubble':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => BoardGameSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
+        ));
         break;
       case 'sudoku':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SudokuSelectionScreen(
-              language: widget.language,
-              onLanguageChanged: widget.onLanguageChanged,
-            ),
-          ),
-        );
+      case 'sudoku_classic':
+      case 'sudoku_samurai':
+      case 'sudoku_killer':
+      case 'sudoku_sum':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => SudokuSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
+        ));
         break;
       case 'yutnori':
         _showYutnoriPlayerSelection(context, widget.language, widget.onLanguageChanged);
@@ -6999,7 +7147,6 @@ class _HelpPageState extends State<HelpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final games = _getGameList();
     final screenWidth = MediaQuery.of(context).size.width;
     final isWideScreen = screenWidth > 600;
 
@@ -7018,54 +7165,16 @@ class _HelpPageState extends State<HelpPage> {
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 게임 목록 (좌측)
-                    SizedBox(
-                      width: 200,
-                      child: _buildGameList(games),
-                    ),
+                    SizedBox(width: 220, child: _buildGameList()),
                     const SizedBox(width: 16),
-                    // 게임 설명 (우측)
-                    Expanded(
-                      child: _buildGameDescription(games),
-                    ),
+                    Expanded(child: _buildGameDescription()),
                   ],
                 )
               : Column(
                   children: [
-                    // 게임 목록 (상단 - 가로 스크롤)
-                    SizedBox(
-                      height: 50,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: games.length,
-                        itemBuilder: (context, index) {
-                          final game = games[index];
-                          final isSelected = index == _selectedGameIndex;
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: ChoiceChip(
-                              label: Text(L10n.get(widget.language, game['key'])),
-                              selected: isSelected,
-                              onSelected: (selected) {
-                                if (selected) {
-                                  setState(() => _selectedGameIndex = index);
-                                }
-                              },
-                              selectedColor: game['color'] as Color,
-                              labelStyle: TextStyle(
-                                color: isSelected ? Colors.white : Colors.black87,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                    SizedBox(height: 50, child: _buildHorizontalGameList()),
                     const SizedBox(height: 16),
-                    // 게임 설명 (하단)
-                    Expanded(
-                      child: _buildGameDescription(games),
-                    ),
+                    Expanded(child: _buildGameDescription()),
                   ],
                 ),
         ),
@@ -7073,48 +7182,122 @@ class _HelpPageState extends State<HelpPage> {
     );
   }
 
-  Widget _buildGameList(List<Map<String, dynamic>> games) {
+  Widget _buildHorizontalGameList() {
+    final allGames = <Map<String, dynamic>>[];
+    for (var game in _getGameList()) {
+      allGames.add(game);
+      if (game['subGames'] != null) {
+        for (var subGame in game['subGames']) {
+          allGames.add({...subGame, 'color': game['color'], 'isSubGame': true});
+        }
+      }
+    }
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: allGames.length,
+      itemBuilder: (context, index) {
+        final game = allGames[index];
+        final isSelected = game['key'] == _selectedGameKey;
+        final isSubGame = game['isSubGame'] == true;
+        return Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: ChoiceChip(
+            label: Text(
+              isSubGame ? '  ${L10n.get(widget.language, game['key'])}' : L10n.get(widget.language, game['key']),
+              style: TextStyle(fontSize: isSubGame ? 12 : 14),
+            ),
+            selected: isSelected,
+            onSelected: (selected) {
+              if (selected) setState(() => _selectedGameKey = game['key']);
+            },
+            selectedColor: game['color'] as Color,
+            labelStyle: TextStyle(
+              color: isSelected ? Colors.white : Colors.black87,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildGameList() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: games.length,
-        itemBuilder: (context, index) {
-          final game = games[index];
-          final isSelected = index == _selectedGameIndex;
-          return ListTile(
-            leading: Icon(
-              game['icon'] as IconData,
-              color: isSelected ? game['color'] as Color : Colors.grey,
-            ),
-            title: Text(
-              L10n.get(widget.language, game['key']),
-              style: TextStyle(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? game['color'] as Color : Colors.black87,
-              ),
-            ),
-            selected: isSelected,
-            selectedTileColor: (game['color'] as Color).withValues(alpha: 0.1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            onTap: () {
-              setState(() => _selectedGameIndex = index);
-            },
-          );
-        },
+      child: SingleChildScrollView(
+        child: Column(
+          children: _getGameList().map((game) {
+            final hasSubGames = game['subGames'] != null;
+            final isExpanded = _expandedCategories.contains(game['key']);
+            final isSelected = game['key'] == _selectedGameKey;
+            final color = game['color'] as Color;
+
+            if (hasSubGames) {
+              return Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  leading: Icon(game['icon'] as IconData, color: color),
+                  title: Text(L10n.get(widget.language, game['key']),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: color)),
+                  initiallyExpanded: isExpanded,
+                  onExpansionChanged: (expanded) {
+                    setState(() {
+                      if (expanded) {
+                        _expandedCategories.add(game['key']);
+                      } else {
+                        _expandedCategories.remove(game['key']);
+                      }
+                    });
+                  },
+                  children: (game['subGames'] as List).map<Widget>((subGame) {
+                    final subKey = subGame['key'] as String;
+                    final isSubSelected = subKey == _selectedGameKey;
+                    return ListTile(
+                      contentPadding: const EdgeInsets.only(left: 56, right: 16),
+                      leading: Icon(subGame['icon'] as IconData,
+                          size: 20, color: isSubSelected ? color : Colors.grey),
+                      title: Text(L10n.get(widget.language, subKey),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: isSubSelected ? FontWeight.bold : FontWeight.normal,
+                            color: isSubSelected ? color : Colors.black87,
+                          )),
+                      selected: isSubSelected,
+                      selectedTileColor: color.withValues(alpha: 0.1),
+                      onTap: () => setState(() => _selectedGameKey = subKey),
+                    );
+                  }).toList(),
+                ),
+              );
+            } else {
+              return ListTile(
+                leading: Icon(game['icon'] as IconData,
+                    color: isSelected ? color : Colors.grey),
+                title: Text(L10n.get(widget.language, game['key']),
+                    style: TextStyle(
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected ? color : Colors.black87,
+                    )),
+                selected: isSelected,
+                selectedTileColor: color.withValues(alpha: 0.1),
+                onTap: () => setState(() => _selectedGameKey = game['key']),
+              );
+            }
+          }).toList(),
+        ),
       ),
     );
   }
 
-  Widget _buildGameDescription(List<Map<String, dynamic>> games) {
-    final game = games[_selectedGameIndex];
-    final gameKey = game['key'] as String;
-    final helpKey = 'help_$gameKey';
+  Widget _buildGameDescription() {
+    final game = _findGameByKey(_selectedGameKey);
+    if (game == null) return const SizedBox();
+
+    final color = game['color'] as Color;
+    final helpKey = 'help_$_selectedGameKey';
 
     return Container(
       width: double.infinity,
@@ -7122,54 +7305,31 @@ class _HelpPageState extends State<HelpPage> {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))],
       ),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 게임 타이틀
             Row(
               children: [
-                Icon(
-                  game['icon'] as IconData,
-                  size: 32,
-                  color: game['color'] as Color,
-                ),
+                Icon(game['icon'] as IconData, size: 32, color: color),
                 const SizedBox(width: 12),
-                Text(
-                  L10n.get(widget.language, gameKey),
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: game['color'] as Color,
-                  ),
+                Expanded(
+                  child: Text(L10n.get(widget.language, _selectedGameKey),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color)),
                 ),
               ],
             ),
             const SizedBox(height: 16),
             const Divider(),
             const SizedBox(height: 16),
-            // 게임 설명
-            Text(
-              L10n.get(widget.language, helpKey),
-              style: TextStyle(
-                fontSize: 16,
-                height: 1.8,
-                color: Colors.grey[800],
-              ),
-            ),
+            Text(L10n.get(widget.language, helpKey),
+                style: TextStyle(fontSize: 16, height: 1.8, color: Colors.grey[800])),
             const SizedBox(height: 24),
-            // 게임 시작 버튼
             Center(
               child: ElevatedButton.icon(
-                onPressed: () => _navigateToGame(_selectedGameIndex),
+                onPressed: () => _navigateToGame(_selectedGameKey),
                 icon: const Icon(Icons.play_arrow),
                 label: Text(
                   widget.language == GameLanguage.korean ? '게임 시작' :
@@ -7177,7 +7337,7 @@ class _HelpPageState extends State<HelpPage> {
                   widget.language == GameLanguage.chinese ? '开始游戏' : 'Start Game',
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: game['color'] as Color,
+                  backgroundColor: color,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                   textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
