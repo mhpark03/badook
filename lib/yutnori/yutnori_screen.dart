@@ -1608,9 +1608,9 @@ class _YutnoriScreenState extends State<YutnoriScreen>
           final screenHeight = constraints.maxHeight;
           final isWideScreen = screenWidth > 800;
           final scaleFactor = isWideScreen
-              ? min(screenHeight / 500, screenWidth / 1000).clamp(1.0, 2.0)
+              ? min(screenHeight / 400, screenWidth / 800).clamp(1.2, 2.5)
               : 1.0;
-          final panelWidth = isWideScreen ? screenWidth * 0.15 : 130.0;
+          final panelWidth = isWideScreen ? screenWidth * 0.16 : 130.0;
 
           return Container(
             color: const Color(0xFFDEB887),
