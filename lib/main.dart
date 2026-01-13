@@ -15,6 +15,9 @@ import 'board_game/screens/board_game_selection_screen.dart';
 // 스도쿠 import
 import 'board_game/screens/sudoku_selection_screen.dart';
 
+// 윷놀이 import
+import 'yutnori/yutnori_screen.dart';
+
 // 장기 import
 import 'janggi/janggi_selection_screen.dart';
 
@@ -180,6 +183,7 @@ class L10n {
       'janggi': '장기',
       'boardGame': '보드게임',
       'sudoku': '스도쿠',
+      'yutnori': '윷놀이',
       // 정보 페이지
       'about': '앱 소개',
       'help': '도움말',
@@ -312,6 +316,7 @@ class L10n {
       'janggi': 'Janggi',
       'boardGame': 'Board Game',
       'sudoku': 'Sudoku',
+      'yutnori': 'Yut Nori',
       // Info pages
       'about': 'About',
       'help': 'Help',
@@ -444,6 +449,7 @@ class L10n {
       'janggi': '将棋',
       'boardGame': 'ボードゲーム',
       'sudoku': '数独',
+      'yutnori': 'ユンノリ',
       // 情報ページ
       'about': 'アプリについて',
       'help': 'ヘルプ',
@@ -576,6 +582,7 @@ class L10n {
       'janggi': '象棋',
       'boardGame': '桌游',
       'sudoku': '数独',
+      'yutnori': '掷柶游戏',
       // 信息页面
       'about': '关于',
       'help': '帮助',
@@ -749,6 +756,15 @@ AppBar buildCommonAppBar({
         },
         child: Text(
           L10n.get(language, 'sudoku'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          _showYutnoriPlayerSelection(context, language, onLanguageChanged);
+        },
+        child: Text(
+          L10n.get(language, 'yutnori'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -6710,6 +6726,46 @@ class InfoMenuPage extends StatelessWidget {
       ),
     );
   }
+}
+
+// 윷놀이 플레이어 수 선택 다이얼로그
+void _showYutnoriPlayerSelection(BuildContext context, GameLanguage language, Function(GameLanguage) onLanguageChanged) {
+  final playerLabels = {
+    2: '2인 (1:1)',
+    3: '3인',
+    4: '4인',
+  };
+  final playerLabelsEn = {
+    2: '2 Players (1v1)',
+    3: '3 Players',
+    4: '4 Players',
+  };
+
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(L10n.get(language, 'yutnori')),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (int i = 2; i <= 4; i++)
+            ListTile(
+              title: Text(language == GameLanguage.korean ? playerLabels[i]! : playerLabelsEn[i]!),
+              leading: Icon(Icons.people, color: Colors.brown.shade600),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => YutnoriScreen(playerCount: i),
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
+    ),
+  );
 }
 
 // 앱 소개 페이지
