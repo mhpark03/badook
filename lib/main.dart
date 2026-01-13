@@ -12,6 +12,9 @@ import 'card_game/screens/game_selection_screen.dart' as card_game;
 // 보드게임 import
 import 'board_game/screens/board_game_selection_screen.dart';
 
+// 스도쿠 import
+import 'board_game/screens/sudoku_selection_screen.dart';
+
 void main() {
   runApp(const BadukApp());
 }
@@ -172,6 +175,7 @@ class L10n {
       // 카드게임
       'cardGame': '카드게임',
       'boardGame': '보드게임',
+      'sudoku': '스도쿠',
       // 정보 페이지
       'about': '앱 소개',
       'help': '도움말',
@@ -302,6 +306,7 @@ class L10n {
       // Card game
       'cardGame': 'Card Game',
       'boardGame': 'Board Game',
+      'sudoku': 'Sudoku',
       // Info pages
       'about': 'About',
       'help': 'Help',
@@ -432,6 +437,7 @@ class L10n {
       // カードゲーム
       'cardGame': 'カードゲーム',
       'boardGame': 'ボードゲーム',
+      'sudoku': '数独',
       // 情報ページ
       'about': 'アプリについて',
       'help': 'ヘルプ',
@@ -562,6 +568,7 @@ class L10n {
       // 卡牌游戏
       'cardGame': '卡牌游戏',
       'boardGame': '桌游',
+      'sudoku': '数独',
       // 信息页面
       'about': '关于',
       'help': '帮助',
@@ -701,6 +708,23 @@ AppBar buildCommonAppBar({
         },
         child: Text(
           L10n.get(language, 'boardGame'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SudokuSelectionScreen(
+                language: language,
+                onLanguageChanged: onLanguageChanged,
+              ),
+            ),
+          );
+        },
+        child: Text(
+          L10n.get(language, 'sudoku'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),

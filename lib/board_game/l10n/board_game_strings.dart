@@ -205,8 +205,12 @@ class BoardGameStrings {
     'games.sudoku.subtitle': '숫자 퍼즐',
     'games.sudoku.description': '1-9 숫자를 채우세요',
     'games.sudoku.classic': '클래식',
+    'games.sudoku.classicDesc': '기본 9x9 스도쿠',
     'games.sudoku.samurai': '사무라이',
+    'games.sudoku.samuraiDesc': '5개 스도쿠 결합',
     'games.sudoku.killer': '킬러',
+    'games.sudoku.killerDesc': '합계 케이지 스도쿠',
+    'common.expert': '전문가',
 
     // Number Sums
     'games.numberSums.name': '숫자합',
