@@ -700,9 +700,12 @@ class _BaseballScreenState extends State<BaseballScreen> {
   }
 
   Widget _buildPortraitNumberPad() {
-    const buttonSize = 56.0;
-    const fontSize = 24.0;
-    const spacing = 8.0;
+    // 화면 너비에 맞게 버튼 크기 계산
+    final screenWidth = MediaQuery.of(context).size.width;
+    final availableWidth = screenWidth - 32;  // 좌우 패딩 제외
+    final buttonSize = (availableWidth / 5 - 8).clamp(40.0, 56.0);  // 5개 버튼 + 간격
+    final fontSize = buttonSize * 0.43;
+    final spacing = buttonSize * 0.14;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -718,13 +721,13 @@ class _BaseballScreenState extends State<BaseballScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [1, 2, 3, 4, 5].map((n) => _buildNumberButton(n, buttonSize, fontSize, spacing)).toList(),
           ),
-          const SizedBox(height: spacing),
+          SizedBox(height: spacing),
           // 6-0
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [6, 7, 8, 9, 0].map((n) => _buildNumberButton(n, buttonSize, fontSize, spacing)).toList(),
           ),
-          const SizedBox(height: spacing + 2),
+          SizedBox(height: spacing + 2),
           // 삭제, 확인 버튼
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -736,7 +739,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
                 color: Colors.grey,
                 margin: spacing / 2,
               ),
-              const SizedBox(width: spacing),
+              SizedBox(width: spacing),
               _buildActionButton(
                 icon: Icons.backspace_outlined,
                 onTap: _onDelete,
@@ -744,13 +747,13 @@ class _BaseballScreenState extends State<BaseballScreen> {
                 color: Colors.orange,
                 margin: spacing / 2,
               ),
-              const SizedBox(width: spacing),
+              SizedBox(width: spacing),
               GestureDetector(
                 onTap: _submitGuess,
                 child: Container(
                   width: buttonSize * 2 + spacing,
                   height: buttonSize,
-                  margin: const EdgeInsets.all(spacing / 2),
+                  margin: EdgeInsets.all(spacing / 2),
                   decoration: BoxDecoration(
                     color: Colors.deepOrange,
                     borderRadius: BorderRadius.circular(12),
@@ -758,7 +761,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
                   child: Center(
                     child: Text(
                       'common.confirm'.tr(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontSize: fontSize * 0.85,
                         fontWeight: FontWeight.bold,
