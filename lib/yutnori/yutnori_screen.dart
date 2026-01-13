@@ -148,8 +148,10 @@ class _YutnoriScreenState extends State<YutnoriScreen>
 
   // 던지기 애니메이션 (말판 중앙)
   late AnimationController _throwAnimController;
-  late Animation<double> _throwAnimation;
   bool showThrowAnimation = false;
+
+  // 애니메이션 단계: 0=던지기, 1=낙하, 2=튕김, 3=정착
+  int _animationPhase = 0;
 
   // 메시지
   String? gameMessage;
@@ -157,9 +159,14 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   // 윷 이미지 상태 (던지기 애니메이션용)
   List<bool> yutStickStates = [false, false, false, false];
 
-  // 던지기 애니메이션용 랜덤 회전값
-  List<double> _stickRotations = [0, 0, 0, 0];
-  List<double> _stickOffsets = [0, 0, 0, 0];
+  // 던지기 애니메이션용 값들
+  List<double> _stickRotationsX = [0, 0, 0, 0];  // X축 회전 (앞뒤)
+  List<double> _stickRotationsZ = [0, 0, 0, 0];  // Z축 회전 (좌우 기울기)
+  List<double> _stickOffsetsX = [0, 0, 0, 0];    // 가로 오프셋
+  List<double> _stickOffsetsY = [0, 0, 0, 0];    // 세로 오프셋 (높이)
+  List<double> _stickScales = [1, 1, 1, 1];      // 크기 (원근감)
+  List<double> _targetRotationsX = [0, 0, 0, 0]; // 최종 회전값
+  List<double> _bounceOffsets = [0, 0, 0, 0];    // 튕김 오프셋
 
   // 윷판 위치 정보 (29개 위치)
   // 0: 시작점, 1-5: 우측 하단→우측 상단
@@ -193,15 +200,12 @@ class _YutnoriScreenState extends State<YutnoriScreen>
       curve: Curves.bounceOut,
     );
 
-    // 던지기 애니메이션 컨트롤러
+    // 던지기 애니메이션 컨트롤러 (더 긴 시간으로)
     _throwAnimController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1800),
       vsync: this,
     );
-    _throwAnimation = CurvedAnimation(
-      parent: _throwAnimController,
-      curve: Curves.easeOutBack,
-    );
+    _throwAnimController.addListener(_updateThrowAnimation);
 
     // 항상 먼저 초기화 (async 로드 전에 playerPieces가 필요함)
     _initGame();
@@ -371,15 +375,22 @@ class _YutnoriScreenState extends State<YutnoriScreen>
   void _throwYut() {
     if (!canThrowYut || isThrowingYut || gameOver) return;
 
-    // 랜덤 회전값과 오프셋 생성
+    // 랜덤 초기값 생성
     final random = Random();
-    _stickRotations = List.generate(4, (_) => random.nextDouble() * 2 * 3.14159);
-    _stickOffsets = List.generate(4, (_) => (random.nextDouble() - 0.5) * 20);
+    _stickRotationsX = List.generate(4, (_) => 0.0);
+    _stickRotationsZ = List.generate(4, (_) => (random.nextDouble() - 0.5) * 0.3);
+    _stickOffsetsX = List.generate(4, (_) => (random.nextDouble() - 0.5) * 30);
+    _stickOffsetsY = List.generate(4, (_) => 0.0);
+    _stickScales = List.generate(4, (_) => 1.0);
+    _bounceOffsets = List.generate(4, (_) => 0.0);
+    _animationPhase = 0;
 
     setState(() {
       isThrowingYut = true;
       showThrowAnimation = true;
       gameMessage = '${'games.yutnori.throwing'.tr()}...';
+      // 던지는 동안 랜덤 상태
+      yutStickStates = List.generate(4, (_) => random.nextBool());
     });
 
     _yutAnimController.reset();
@@ -387,36 +398,114 @@ class _YutnoriScreenState extends State<YutnoriScreen>
 
     _throwAnimController.reset();
     _throwAnimController.forward();
-
-    // 랜덤 애니메이션
-    Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-      if (_yutAnimController.status == AnimationStatus.completed) {
-        timer.cancel();
-        _finishThrowYut();
-      } else {
-        setState(() {
-          yutStickStates = List.generate(4, (_) => Random().nextBool());
-          // 애니메이션 중 랜덤 회전 업데이트
-          _stickRotations = List.generate(4, (_) => Random().nextDouble() * 2 * 3.14159);
-        });
-      }
-    });
   }
 
-  void _finishThrowYut() {
-    final result = _generateYutResult();
+  // 애니메이션 업데이트 (물리 기반)
+  void _updateThrowAnimation() {
+    if (!mounted || !showThrowAnimation) return;
 
-    // 최종 결과에 맞는 회전값 설정 (앞면=0도, 뒷면=180도)
+    final progress = _throwAnimController.value;
+    final random = Random();
+
+    // 단계별 애니메이션
+    // 0.0 ~ 0.3: 위로 던지기 (올라감)
+    // 0.3 ~ 0.6: 낙하
+    // 0.6 ~ 0.8: 첫 번째 튕김
+    // 0.8 ~ 1.0: 정착
+
+    setState(() {
+      if (progress < 0.3) {
+        // 위로 던지기
+        _animationPhase = 0;
+        final throwProgress = progress / 0.3;
+        final height = sin(throwProgress * 3.14159) * 150; // 포물선
+
+        for (int i = 0; i < 4; i++) {
+          _stickOffsetsY[i] = -height; // 위로 올라감
+          _stickRotationsX[i] = throwProgress * 3.14159 * 3; // 빠르게 회전
+          _stickScales[i] = 1.0 - throwProgress * 0.2; // 멀어지며 작아짐
+          // 던지는 동안 랜덤 상태 변경
+          if (random.nextDouble() < 0.3) {
+            yutStickStates[i] = random.nextBool();
+          }
+        }
+      } else if (progress < 0.6) {
+        // 낙하
+        _animationPhase = 1;
+        final fallProgress = (progress - 0.3) / 0.3;
+        final height = (1 - fallProgress * fallProgress) * 120; // 가속 낙하
+
+        for (int i = 0; i < 4; i++) {
+          _stickOffsetsY[i] = -height;
+          _stickRotationsX[i] = (0.3 + fallProgress * 0.3) * 3.14159 * 3 + i * 0.5;
+          _stickScales[i] = 0.8 + fallProgress * 0.3; // 가까워지며 커짐
+          // 낙하 중 랜덤 상태
+          if (random.nextDouble() < 0.2) {
+            yutStickStates[i] = random.nextBool();
+          }
+        }
+      } else if (progress < 0.8) {
+        // 첫 번째 튕김
+        _animationPhase = 2;
+        final bounceProgress = (progress - 0.6) / 0.2;
+        final bounce = sin(bounceProgress * 3.14159) * 40; // 작은 튕김
+
+        // 결과 결정 (아직 안 했으면)
+        if (_animationPhase == 2 && bounceProgress < 0.1) {
+          _determineResult();
+        }
+
+        for (int i = 0; i < 4; i++) {
+          _stickOffsetsY[i] = -bounce;
+          // 최종 회전값으로 수렴
+          _stickRotationsX[i] = _targetRotationsX[i] + (1 - bounceProgress) * 1.0;
+          _stickScales[i] = 1.1 - bounceProgress * 0.1;
+          _bounceOffsets[i] = (random.nextDouble() - 0.5) * 10 * (1 - bounceProgress);
+        }
+      } else {
+        // 정착
+        _animationPhase = 3;
+        final settleProgress = (progress - 0.8) / 0.2;
+        final smallBounce = sin(settleProgress * 3.14159 * 2) * 10 * (1 - settleProgress);
+
+        for (int i = 0; i < 4; i++) {
+          _stickOffsetsY[i] = -smallBounce;
+          _stickRotationsX[i] = _targetRotationsX[i];
+          _stickScales[i] = 1.0;
+          _bounceOffsets[i] *= (1 - settleProgress);
+        }
+      }
+    });
+
+    // 애니메이션 완료
+    if (progress >= 1.0) {
+      _finishThrowYut();
+    }
+  }
+
+  // 결과 결정
+  void _determineResult() {
+    final result = _generateYutResult();
     final finalStates = _getYutStatesForResult(result);
-    _stickRotations = finalStates.map((isFlat) => isFlat ? 0.0 : 3.14159).toList();
+
+    // 최종 회전값 설정 (앞면=0, 뒷면=π)
+    _targetRotationsX = finalStates.map((isFlat) => isFlat ? 0.0 : 3.14159).toList();
 
     setState(() {
       yutStickStates = finalStates;
       currentYutResult = result;
+    });
+  }
+
+  void _finishThrowYut() {
+    // 결과가 아직 결정되지 않았으면 결정
+    if (currentYutResult == null) {
+      _determineResult();
+    }
+
+    final result = currentYutResult!;
+
+    setState(() {
       pendingMoves.add(result);
       isThrowingYut = false;
 
@@ -444,7 +533,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
     HapticFeedback.mediumImpact();
 
     // 결과 표시 후 애니메이션 숨기기
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    Future.delayed(const Duration(milliseconds: 1200), () {
       if (mounted) {
         setState(() {
           showThrowAnimation = false;
@@ -2745,131 +2834,130 @@ class _YutnoriScreenState extends State<YutnoriScreen>
 
   // 윷 던지기 애니메이션 오버레이
   Widget _buildThrowAnimationOverlay(double boardSize) {
-    final stickWidth = boardSize * 0.06;
-    final stickHeight = boardSize * 0.25;
+    final stickWidth = boardSize * 0.055;
+    final stickHeight = boardSize * 0.22;
 
     return AnimatedBuilder(
       animation: _throwAnimController,
       builder: (context, child) {
-        final progress = _throwAnimation.value;
-        final scale = 0.3 + progress * 0.7;
-        final opacity = isThrowingYut ? 1.0 : (progress > 0.8 ? 1.0 : progress / 0.8);
-
         return Center(
-          child: Transform.scale(
-            scale: scale,
-            child: Opacity(
-              opacity: opacity.clamp(0.0, 1.0),
-              child: Container(
-                padding: EdgeInsets.all(boardSize * 0.05),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.6),
-                  borderRadius: BorderRadius.circular(boardSize * 0.05),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 윷가락 4개
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(4, (i) {
-                        return AnimatedBuilder(
-                          animation: _throwAnimController,
-                          builder: (context, child) {
-                            final rotation = isThrowingYut
-                                ? _stickRotations[i]
-                                : (yutStickStates[i] ? 0.0 : 3.14159);
-                            final offsetY = isThrowingYut
-                                ? sin(_throwAnimController.value * 3.14159 * 4 + i) * 10
-                                : 0.0;
+          child: Container(
+            width: boardSize * 0.7,
+            height: boardSize * 0.7,
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(boardSize * 0.05),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // 윷가락 4개
+                ...List.generate(4, (i) {
+                  final scale = _stickScales[i];
+                  final offsetX = _stickOffsetsX[i] + _bounceOffsets[i];
+                  final offsetY = _stickOffsetsY[i];
+                  final rotationX = _stickRotationsX[i];
+                  final rotationZ = _stickRotationsZ[i];
 
-                            return Transform.translate(
-                              offset: Offset(_stickOffsets[i], offsetY),
-                              child: Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.identity()
-                                  ..setEntry(3, 2, 0.001)
-                                  ..rotateX(rotation),
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(horizontal: stickWidth * 0.2),
-                                  width: stickWidth,
-                                  height: stickHeight,
-                                  decoration: BoxDecoration(
-                                    // 앞면(X표시)은 밝은색, 뒷면은 어두운색
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: yutStickStates[i]
-                                          ? [const Color(0xFFF5DEB3), const Color(0xFFDEB887)]
-                                          : [const Color(0xFF8B4513), const Color(0xFF654321)],
-                                    ),
-                                    borderRadius: BorderRadius.circular(stickWidth * 0.3),
-                                    border: Border.all(
-                                      color: const Color(0xFF654321),
-                                      width: 2,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.3),
-                                        offset: const Offset(2, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                  child: yutStickStates[i]
-                                      ? Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            _buildXMark(stickWidth * 0.5),
-                                            _buildXMark(stickWidth * 0.5),
-                                            _buildXMark(stickWidth * 0.5),
-                                          ],
-                                        )
-                                      : null,
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }),
-                    ),
-                    // 결과 텍스트
-                    if (!isThrowingYut && currentYutResult != null)
-                      Padding(
-                        padding: EdgeInsets.only(top: boardSize * 0.03),
+                  // 가로로 배치할 기본 오프셋
+                  final baseOffsetX = (i - 1.5) * (stickWidth * 1.4);
+
+                  return Transform.translate(
+                    offset: Offset(baseOffsetX + offsetX, offsetY),
+                    child: Transform.scale(
+                      scale: scale,
+                      child: Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.002)
+                          ..rotateX(rotationX)
+                          ..rotateZ(rotationZ),
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: boardSize * 0.04,
-                            vertical: boardSize * 0.02,
-                          ),
+                          width: stickWidth,
+                          height: stickHeight,
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
+                            // 앞면(X표시)은 밝은색, 뒷면은 어두운색
+                            gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
+                              colors: yutStickStates[i]
+                                  ? [const Color(0xFFF5DEB3), const Color(0xFFDEB887)]
+                                  : [const Color(0xFF8B4513), const Color(0xFF654321)],
                             ),
-                            borderRadius: BorderRadius.circular(boardSize * 0.02),
+                            borderRadius: BorderRadius.circular(stickWidth * 0.25),
+                            border: Border.all(
+                              color: const Color(0xFF654321),
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.4),
+                                offset: Offset(2, 4 - offsetY * 0.02),
+                                blurRadius: 6 - offsetY * 0.03,
+                              ),
+                            ],
                           ),
-                          child: Text(
-                            currentYutResult!.name,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: boardSize * 0.06,
-                              fontWeight: FontWeight.bold,
-                              shadows: const [
-                                Shadow(
-                                  color: Colors.black54,
-                                  offset: Offset(1, 1),
-                                  blurRadius: 2,
-                                ),
-                              ],
+                          child: yutStickStates[i]
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    _buildXMark(stickWidth * 0.5),
+                                    _buildXMark(stickWidth * 0.5),
+                                    _buildXMark(stickWidth * 0.5),
+                                  ],
+                                )
+                              : null,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+                // 결과 텍스트 (정착 단계에서만)
+                if (_animationPhase >= 2 && currentYutResult != null)
+                  Positioned(
+                    bottom: boardSize * 0.08,
+                    child: AnimatedOpacity(
+                      opacity: _animationPhase >= 2 ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 300),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: boardSize * 0.05,
+                          vertical: boardSize * 0.025,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
+                          ),
+                          borderRadius: BorderRadius.circular(boardSize * 0.025),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.orange.withValues(alpha: 0.5),
+                              blurRadius: 10,
+                              spreadRadius: 2,
                             ),
+                          ],
+                        ),
+                        child: Text(
+                          currentYutResult!.name,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: boardSize * 0.07,
+                            fontWeight: FontWeight.bold,
+                            shadows: const [
+                              Shadow(
+                                color: Colors.black54,
+                                offset: Offset(1, 1),
+                                blurRadius: 2,
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                  ],
-                ),
-              ),
+                    ),
+                  ),
+              ],
             ),
           ),
         );
