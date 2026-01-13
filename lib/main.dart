@@ -6788,68 +6788,53 @@ class AboutPage extends StatelessWidget {
         language: language,
         onLanguageChanged: onLanguageChanged,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.brown[100]!, Colors.brown[200]!],
-          ),
-        ),
+      backgroundColor: Colors.green[800],
+      body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.brown[700],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Icon(
-                    Icons.grid_on,
-                    size: 60,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+              // 타이틀
               Center(
                 child: Text(
-                  L10n.get(language, 'appTitle'),
-                  style: TextStyle(
+                  L10n.get(language, 'aboutTitle'),
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.brown[800],
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10,
+                        color: Colors.black54,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Center(
-                child: Text(
-                  'Version 1.0.0',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.brown[600],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 24),
+              // 콘텐츠 박스
               Container(
-                padding: const EdgeInsets.all(16),
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white.withValues(alpha: 0.95),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Text(
                   L10n.get(language, 'aboutContent'),
                   style: TextStyle(
                     fontSize: 16,
-                    height: 1.6,
-                    color: Colors.brown[800],
+                    height: 1.8,
+                    color: Colors.grey[800],
                   ),
                 ),
               ),
