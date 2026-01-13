@@ -2845,8 +2845,12 @@ class _YutnoriScreenState extends State<YutnoriScreen>
             width: boardSize * 0.7,
             height: boardSize * 0.7,
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.5),
+              color: const Color(0xFF2D1B0E),
               borderRadius: BorderRadius.circular(boardSize * 0.05),
+              border: Border.all(
+                color: const Color(0xFF8B4513),
+                width: 3,
+              ),
             ),
             child: Stack(
               alignment: Alignment.center,
