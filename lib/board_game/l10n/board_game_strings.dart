@@ -228,6 +228,7 @@ class BoardGameStrings {
     'games.sudoku.samuraiDesc': '5개 스도쿠 결합',
     'games.sudoku.killer': '킬러',
     'games.sudoku.killerDesc': '합계 케이지 스도쿠',
+    'games.sudoku.boardNum': '보드 {num}',
     // Sudoku control panel
     'games.sudoku.eraseMode': '지우기 모드',
     'games.sudoku.selectNumber': '숫자를 선택하세요',
