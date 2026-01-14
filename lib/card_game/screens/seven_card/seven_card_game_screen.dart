@@ -86,6 +86,25 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
     );
   }
 
+  bool _namesUpdated = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_namesUpdated) {
+      _namesUpdated = true;
+      final l10n = getL10n(context);
+      final controller = Provider.of<SevenCardController>(context, listen: false);
+      controller.updatePlayerNames([
+        l10n.player,
+        l10n.aiPlayer1,
+        l10n.aiPlayer2,
+        l10n.aiPlayer3,
+        l10n.aiPlayer4,
+      ]);
+    }
+  }
+
   @override
   void dispose() {
     _fireworksController.dispose();
@@ -971,7 +990,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
-                      controller.getHandRankDisplayName(player.allCardsPokerHand),
+                      getHandRankDisplayName(context, player.allCardsPokerHand),
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -1317,7 +1336,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
                               style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
                             ),
                             Text(
-                              controller.getHandRankName(bonusInfo.handRank),
+                              getHandRankName(context, bonusInfo.handRank),
                               style: TextStyle(color: Colors.red[900], fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                           ],
@@ -1334,7 +1353,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
                     if (winner?.pokerHand != null && bonusInfo == null) ...[
                       const SizedBox(height: 4),
                       Text(
-                        controller.getHandRankName(winner!.pokerHand!.rank),
+                        getHandRankName(context, winner!.pokerHand!.rank),
                         style: const TextStyle(fontSize: 16, color: Colors.green),
                       ),
                     ],
@@ -1667,7 +1686,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    controller.getHandRankDisplayName(player.pokerHand),
+                    getHandRankDisplayName(context, player.pokerHand),
                     style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
                   ),
                 ),

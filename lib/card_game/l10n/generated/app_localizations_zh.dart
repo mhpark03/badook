@@ -1296,4 +1296,51 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get onecardGuideTips => '• 攻击牌留着防御用\n• 不喊UNO罚抽2张！\n• 20张以上破产输';
+
+  @override
+  String get handRoyalStraightFlush => '皇家同花顺';
+
+  @override
+  String get handBackStraightFlush => '反向同花顺';
+
+  @override
+  String get handStraightFlush => '同花顺';
+
+  @override
+  String get handFourOfAKind => '四条';
+
+  @override
+  String get handFullHouse => '葫芦';
+
+  @override
+  String get handFlush => '同花';
+
+  @override
+  String get handMountain => '山';
+
+  @override
+  String get handBackStraight => '反向顺子';
+
+  @override
+  String get handStraight => '顺子';
+
+  @override
+  String get handTriple => '三条';
+
+  @override
+  String get handTwoPair => '两对';
+
+  @override
+  String get handOnePair => '一对';
+
+  @override
+  String get handHighCard => '高牌';
+
+  @override
+  String highCardTop(String rank) {
+    return '$rank高';
+  }
+
+  @override
+  String get noLow => '无低牌';
 }

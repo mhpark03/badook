@@ -441,5 +441,25 @@
   "onecardGuideDefenseTitle": "防御",
   "onecardGuideDefense": "被攻击时可以用相同攻击牌防御。\n防御后攻击累积传给下一位。",
   "onecardGuideTipsTitle": "游戏技巧",
-  "onecardGuideTips": "• 攻击牌留着防御用\n• 不喊UNO罚抽2张！\n• 20张以上破产输"
+  "onecardGuideTips": "• 攻击牌留着防御用\n• 不喊UNO罚抽2张！\n• 20张以上破产输",
+  "handRoyalStraightFlush": "皇家同花顺",
+  "handBackStraightFlush": "反向同花顺",
+  "handStraightFlush": "同花顺",
+  "handFourOfAKind": "四条",
+  "handFullHouse": "葫芦",
+  "handFlush": "同花",
+  "handMountain": "山",
+  "handBackStraight": "反向顺子",
+  "handStraight": "顺子",
+  "handTriple": "三条",
+  "handTwoPair": "两对",
+  "handOnePair": "一对",
+  "handHighCard": "高牌",
+  "highCardTop": "{rank}高",
+  "@highCardTop": {
+    "placeholders": {
+      "rank": {"type": "String"}
+    }
+  },
+  "noLow": "无低牌"
 }

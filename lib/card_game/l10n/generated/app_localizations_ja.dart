@@ -1306,4 +1306,51 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get onecardGuideTips =>
       '• 攻撃カードは防御用に取っておきましょう\n• ワンカードを言わないと2枚ペナルティ！\n• 20枚以上になると破産負け';
+
+  @override
+  String get handRoyalStraightFlush => 'ロイヤルストレートフラッシュ';
+
+  @override
+  String get handBackStraightFlush => 'バックストレートフラッシュ';
+
+  @override
+  String get handStraightFlush => 'ストレートフラッシュ';
+
+  @override
+  String get handFourOfAKind => 'フォーカード';
+
+  @override
+  String get handFullHouse => 'フルハウス';
+
+  @override
+  String get handFlush => 'フラッシュ';
+
+  @override
+  String get handMountain => 'マウンテン';
+
+  @override
+  String get handBackStraight => 'バックストレート';
+
+  @override
+  String get handStraight => 'ストレート';
+
+  @override
+  String get handTriple => 'スリーカード';
+
+  @override
+  String get handTwoPair => 'ツーペア';
+
+  @override
+  String get handOnePair => 'ワンペア';
+
+  @override
+  String get handHighCard => 'ハイカード';
+
+  @override
+  String highCardTop(String rank) {
+    return '$rankトップ';
+  }
+
+  @override
+  String get noLow => 'ロー無し';
 }

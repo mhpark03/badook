@@ -2459,6 +2459,96 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'• 공격 카드는 방어용으로 아껴두세요\n• 원카드를 외치지 않으면 벌칙 2장!\n• 20장 이상 모이면 파산 패배'**
   String get onecardGuideTips;
+
+  /// No description provided for @handRoyalStraightFlush.
+  ///
+  /// In ko, this message translates to:
+  /// **'로열 스트레이트 플러시'**
+  String get handRoyalStraightFlush;
+
+  /// No description provided for @handBackStraightFlush.
+  ///
+  /// In ko, this message translates to:
+  /// **'백스트레이트 플러시'**
+  String get handBackStraightFlush;
+
+  /// No description provided for @handStraightFlush.
+  ///
+  /// In ko, this message translates to:
+  /// **'스트레이트 플러시'**
+  String get handStraightFlush;
+
+  /// No description provided for @handFourOfAKind.
+  ///
+  /// In ko, this message translates to:
+  /// **'포카드'**
+  String get handFourOfAKind;
+
+  /// No description provided for @handFullHouse.
+  ///
+  /// In ko, this message translates to:
+  /// **'풀하우스'**
+  String get handFullHouse;
+
+  /// No description provided for @handFlush.
+  ///
+  /// In ko, this message translates to:
+  /// **'플러시'**
+  String get handFlush;
+
+  /// No description provided for @handMountain.
+  ///
+  /// In ko, this message translates to:
+  /// **'마운틴'**
+  String get handMountain;
+
+  /// No description provided for @handBackStraight.
+  ///
+  /// In ko, this message translates to:
+  /// **'백스트레이트'**
+  String get handBackStraight;
+
+  /// No description provided for @handStraight.
+  ///
+  /// In ko, this message translates to:
+  /// **'스트레이트'**
+  String get handStraight;
+
+  /// No description provided for @handTriple.
+  ///
+  /// In ko, this message translates to:
+  /// **'트리플'**
+  String get handTriple;
+
+  /// No description provided for @handTwoPair.
+  ///
+  /// In ko, this message translates to:
+  /// **'투페어'**
+  String get handTwoPair;
+
+  /// No description provided for @handOnePair.
+  ///
+  /// In ko, this message translates to:
+  /// **'원페어'**
+  String get handOnePair;
+
+  /// No description provided for @handHighCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'하이카드'**
+  String get handHighCard;
+
+  /// No description provided for @highCardTop.
+  ///
+  /// In ko, this message translates to:
+  /// **'{rank}탑'**
+  String highCardTop(String rank);
+
+  /// No description provided for @noLow.
+  ///
+  /// In ko, this message translates to:
+  /// **'로우 없음'**
+  String get noLow;
 }
 
 class _AppLocalizationsDelegate

@@ -88,6 +88,15 @@ class SevenCardController extends ChangeNotifier {
     _state = SevenCardState(players: players);
   }
 
+  /// 플레이어 이름을 로컬라이즈된 이름으로 업데이트
+  void updatePlayerNames(List<String> names) {
+    if (names.length != _state.players.length) return;
+    for (int i = 0; i < names.length; i++) {
+      _state.players[i].name = names[i];
+    }
+    notifyListeners();
+  }
+
   void startNewGame() {
     _state.startNewGame();
     notifyListeners();

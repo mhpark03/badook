@@ -377,6 +377,7 @@ class _HeartsHomeScreenState extends State<HeartsHomeScreen> {
   }
 
   void _showGameGuideDialog(BuildContext context, bool isSmallScreen) {
+    final l10n = AppLocalizations.of(context)!;
     final titleSize = isSmallScreen ? 14.0 : 16.0;
     final textSize = isSmallScreen ? 12.0 : 14.0;
 

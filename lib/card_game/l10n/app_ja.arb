@@ -441,5 +441,25 @@
   "onecardGuideDefenseTitle": "防御",
   "onecardGuideDefense": "攻撃されたら同じ攻撃カードで防げます。\n防ぐと攻撃が累積して次の人に回ります。",
   "onecardGuideTipsTitle": "ゲームのコツ",
-  "onecardGuideTips": "• 攻撃カードは防御用に取っておきましょう\n• ワンカードを言わないと2枚ペナルティ！\n• 20枚以上になると破産負け"
+  "onecardGuideTips": "• 攻撃カードは防御用に取っておきましょう\n• ワンカードを言わないと2枚ペナルティ！\n• 20枚以上になると破産負け",
+  "handRoyalStraightFlush": "ロイヤルストレートフラッシュ",
+  "handBackStraightFlush": "バックストレートフラッシュ",
+  "handStraightFlush": "ストレートフラッシュ",
+  "handFourOfAKind": "フォーカード",
+  "handFullHouse": "フルハウス",
+  "handFlush": "フラッシュ",
+  "handMountain": "マウンテン",
+  "handBackStraight": "バックストレート",
+  "handStraight": "ストレート",
+  "handTriple": "スリーカード",
+  "handTwoPair": "ツーペア",
+  "handOnePair": "ワンペア",
+  "handHighCard": "ハイカード",
+  "highCardTop": "{rank}トップ",
+  "@highCardTop": {
+    "placeholders": {
+      "rank": {"type": "String"}
+    }
+  },
+  "noLow": "ロー無し"
 }

@@ -1312,4 +1312,51 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get onecardGuideTips =>
       '• 공격 카드는 방어용으로 아껴두세요\n• 원카드를 외치지 않으면 벌칙 2장!\n• 20장 이상 모이면 파산 패배';
+
+  @override
+  String get handRoyalStraightFlush => '로열 스트레이트 플러시';
+
+  @override
+  String get handBackStraightFlush => '백스트레이트 플러시';
+
+  @override
+  String get handStraightFlush => '스트레이트 플러시';
+
+  @override
+  String get handFourOfAKind => '포카드';
+
+  @override
+  String get handFullHouse => '풀하우스';
+
+  @override
+  String get handFlush => '플러시';
+
+  @override
+  String get handMountain => '마운틴';
+
+  @override
+  String get handBackStraight => '백스트레이트';
+
+  @override
+  String get handStraight => '스트레이트';
+
+  @override
+  String get handTriple => '트리플';
+
+  @override
+  String get handTwoPair => '투페어';
+
+  @override
+  String get handOnePair => '원페어';
+
+  @override
+  String get handHighCard => '하이카드';
+
+  @override
+  String highCardTop(String rank) {
+    return '$rank탑';
+  }
+
+  @override
+  String get noLow => '로우 없음';
 }

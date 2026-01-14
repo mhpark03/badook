@@ -442,5 +442,25 @@
   "onecardGuideDefenseTitle": "Defense",
   "onecardGuideDefense": "Block attacks with matching attack cards.\nBlocked attacks stack to the next player.",
   "onecardGuideTipsTitle": "Game Tips",
-  "onecardGuideTips": "• Save attack cards for defense\n• 2-card penalty for not calling One Card!\n• 20+ cards = bankruptcy loss"
+  "onecardGuideTips": "• Save attack cards for defense\n• 2-card penalty for not calling One Card!\n• 20+ cards = bankruptcy loss",
+  "handRoyalStraightFlush": "Royal Straight Flush",
+  "handBackStraightFlush": "Back Straight Flush",
+  "handStraightFlush": "Straight Flush",
+  "handFourOfAKind": "Four of a Kind",
+  "handFullHouse": "Full House",
+  "handFlush": "Flush",
+  "handMountain": "Mountain",
+  "handBackStraight": "Back Straight",
+  "handStraight": "Straight",
+  "handTriple": "Triple",
+  "handTwoPair": "Two Pair",
+  "handOnePair": "One Pair",
+  "handHighCard": "High Card",
+  "highCardTop": "{rank} High",
+  "@highCardTop": {
+    "placeholders": {
+      "rank": {"type": "String"}
+    }
+  },
+  "noLow": "No Low"
 }

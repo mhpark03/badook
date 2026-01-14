@@ -1323,4 +1323,51 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onecardGuideTips =>
       '• Save attack cards for defense\n• 2-card penalty for not calling One Card!\n• 20+ cards = bankruptcy loss';
+
+  @override
+  String get handRoyalStraightFlush => 'Royal Straight Flush';
+
+  @override
+  String get handBackStraightFlush => 'Back Straight Flush';
+
+  @override
+  String get handStraightFlush => 'Straight Flush';
+
+  @override
+  String get handFourOfAKind => 'Four of a Kind';
+
+  @override
+  String get handFullHouse => 'Full House';
+
+  @override
+  String get handFlush => 'Flush';
+
+  @override
+  String get handMountain => 'Mountain';
+
+  @override
+  String get handBackStraight => 'Back Straight';
+
+  @override
+  String get handStraight => 'Straight';
+
+  @override
+  String get handTriple => 'Triple';
+
+  @override
+  String get handTwoPair => 'Two Pair';
+
+  @override
+  String get handOnePair => 'One Pair';
+
+  @override
+  String get handHighCard => 'High Card';
+
+  @override
+  String highCardTop(String rank) {
+    return '$rank High';
+  }
+
+  @override
+  String get noLow => 'No Low';
 }
