@@ -86,11 +86,11 @@ class SevenCardStatsService extends ChangeNotifier {
   }
 
   /// 플레이어 이름을 로컬라이즈된 이름으로 업데이트
-  void updateLocalizedNames(List<String> names) {
+  void updateLocalizedNames(List<String> names, {bool notify = false}) {
     for (int i = 0; i < _playerStats.length && i < names.length; i++) {
       _playerStats[i].name = names[i];
     }
-    notifyListeners();
+    if (notify) notifyListeners();
   }
 
   void _initDefaultStats() {
