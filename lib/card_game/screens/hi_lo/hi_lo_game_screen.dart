@@ -229,18 +229,18 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
             children: [
               const Icon(Icons.visibility, color: Colors.amber, size: 40),
               const SizedBox(height: 8),
-              const Text(
-                '공개할 카드를 선택하세요',
-                style: TextStyle(
+              Text(
+                getL10n(context).selectCardToReveal,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 4),
-              const Text(
-                '선택한 카드가 상대에게 공개됩니다',
-                style: TextStyle(color: Colors.white70, fontSize: 14),
+              Text(
+                getL10n(context).selectedCardWillBeRevealed,
+                style: const TextStyle(color: Colors.white70, fontSize: 14),
               ),
               // AI 추천 표시
               if (_showHint && isMyTurn && recommendedIndex != null) ...[

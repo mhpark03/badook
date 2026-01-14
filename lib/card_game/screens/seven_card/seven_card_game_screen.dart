@@ -235,7 +235,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               const Icon(Icons.visibility, color: Colors.amber, size: 40),
               const SizedBox(height: 8),
               Text(
-                '공개할 카드를 선택하세요',
+                getL10n(context).selectCardToReveal,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -244,7 +244,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               ),
               const SizedBox(height: 4),
               Text(
-                '선택한 카드가 상대에게 공개됩니다',
+                getL10n(context).selectedCardWillBeRevealed,
                 style: const TextStyle(color: Colors.white70, fontSize: 14),
               ),
               // AI 추천 표시
