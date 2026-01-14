@@ -289,6 +289,9 @@ class BoardGameStrings {
     'games.janggi.playAsHan': '한으로 대국',
     'games.janggi.continueGame': '이어하기',
     'games.janggi.continueGameDesc': '저장된 게임 이어하기',
+    'games.janggi.startGame': '게임 시작',
+    'games.janggi.drawConfirm': '무승부로 게임을 종료하시겠습니까?\n\n반복되는 장군 등의 상황에서\n무승부를 선언할 수 있습니다.',
+    'games.janggi.drawResult': '게임이 무승부로 종료되었습니다.',
 
     // Minesweeper
     'games.minesweeper.name': '지뢰찾기',
@@ -494,6 +497,18 @@ class BoardGameStrings {
     'games.onecard.name': '원카드',
     'games.onecard.subtitle': '카드 게임',
     'games.onecard.description': '카드를 먼저 버리세요',
+    'games.onecard.oneCard': '원카드',
+    'games.onecard.oneCardCall': '원카드!',
+    'games.onecard.oneCardTimer': '원카드\n({seconds}초)',
+    'games.onecard.oneCardTimerShort': '원카드 ({seconds}초)',
+    'games.onecard.selectSuit': '무늬를 선택하세요',
+    'games.onecard.clockwise': '시계',
+    'games.onecard.counterClockwise': '반시계',
+    'games.onecard.spade': '스페이드',
+    'games.onecard.heart': '하트',
+    'games.onecard.diamond': '다이아몬드',
+    'games.onecard.club': '클로버',
+    'games.onecard.cantPlayCard': '이 카드는 낼 수 없습니다',
   };
 
   // 일본어 문자열
@@ -780,6 +795,9 @@ class BoardGameStrings {
     'games.janggi.playAsHan': '漢で対局',
     'games.janggi.continueGame': '続ける',
     'games.janggi.continueGameDesc': '保存されたゲームを続ける',
+    'games.janggi.startGame': 'ゲーム開始',
+    'games.janggi.drawConfirm': '引き分けでゲームを終了しますか？\n\n繰り返し将軍などの状況で\n引き分けを宣言できます。',
+    'games.janggi.drawResult': '引き分けでゲームが終了しました。',
 
     // Minesweeper
     'games.minesweeper.name': 'マインスイーパー',
@@ -985,6 +1003,18 @@ class BoardGameStrings {
     'games.onecard.name': 'ワンカード',
     'games.onecard.subtitle': 'カードゲーム',
     'games.onecard.description': '先にカードを捨ててください',
+    'games.onecard.oneCard': 'ワンカード',
+    'games.onecard.oneCardCall': 'ワンカード！',
+    'games.onecard.oneCardTimer': 'ワンカード\n({seconds}秒)',
+    'games.onecard.oneCardTimerShort': 'ワンカード ({seconds}秒)',
+    'games.onecard.selectSuit': 'スートを選んでください',
+    'games.onecard.clockwise': '時計回り',
+    'games.onecard.counterClockwise': '反時計回り',
+    'games.onecard.spade': 'スペード',
+    'games.onecard.heart': 'ハート',
+    'games.onecard.diamond': 'ダイヤ',
+    'games.onecard.club': 'クラブ',
+    'games.onecard.cantPlayCard': 'このカードは出せません',
   };
 
   // 영어 문자열
@@ -1271,6 +1301,9 @@ class BoardGameStrings {
     'games.janggi.playAsHan': 'Play as Han',
     'games.janggi.continueGame': 'Continue',
     'games.janggi.continueGameDesc': 'Continue saved game',
+    'games.janggi.startGame': 'Start Game',
+    'games.janggi.drawConfirm': 'End the game as a draw?\n\nYou can declare a draw in situations\nlike repeated check.',
+    'games.janggi.drawResult': 'The game ended in a draw.',
 
     // Minesweeper
     'games.minesweeper.name': 'Minesweeper',
@@ -1472,6 +1505,18 @@ class BoardGameStrings {
     'games.onecard.name': 'OneCard',
     'games.onecard.subtitle': 'Card Game',
     'games.onecard.description': 'Be first to discard all cards',
+    'games.onecard.oneCard': 'UNO',
+    'games.onecard.oneCardCall': 'UNO!',
+    'games.onecard.oneCardTimer': 'UNO\n({seconds}s)',
+    'games.onecard.oneCardTimerShort': 'UNO ({seconds}s)',
+    'games.onecard.selectSuit': 'Select a suit',
+    'games.onecard.clockwise': 'Clockwise',
+    'games.onecard.counterClockwise': 'Counter-clockwise',
+    'games.onecard.spade': 'Spade',
+    'games.onecard.heart': 'Heart',
+    'games.onecard.diamond': 'Diamond',
+    'games.onecard.club': 'Club',
+    'games.onecard.cantPlayCard': 'Cannot play this card',
   };
 
   // 중국어 문자열 (간체)
@@ -1562,6 +1607,9 @@ class BoardGameStrings {
     'games.janggi.playAsHan': '执汉对弈',
     'games.janggi.continueGame': '继续',
     'games.janggi.continueGameDesc': '继续已保存的游戏',
+    'games.janggi.startGame': '开始游戏',
+    'games.janggi.drawConfirm': '以平局结束游戏吗？\n\n在重复将军等情况下\n可以宣布平局。',
+    'games.janggi.drawResult': '游戏以平局结束。',
 
     // Gomoku
     'games.gomoku.name': '五子棋',
@@ -1599,6 +1647,23 @@ class BoardGameStrings {
     'games.solitaire.name': '纸牌',
     'games.solitaire.subtitle': '卡牌游戏',
     'games.solitaire.description': '整理卡牌完成四个基础堆',
+
+    // OneCard
+    'games.onecard.name': 'OneCard',
+    'games.onecard.subtitle': '卡牌游戏',
+    'games.onecard.description': '先出完所有牌',
+    'games.onecard.oneCard': 'UNO',
+    'games.onecard.oneCardCall': 'UNO!',
+    'games.onecard.oneCardTimer': 'UNO\n({seconds}秒)',
+    'games.onecard.oneCardTimerShort': 'UNO ({seconds}秒)',
+    'games.onecard.selectSuit': '请选择花色',
+    'games.onecard.clockwise': '顺时针',
+    'games.onecard.counterClockwise': '逆时针',
+    'games.onecard.spade': '黑桃',
+    'games.onecard.heart': '红桃',
+    'games.onecard.diamond': '方块',
+    'games.onecard.club': '梅花',
+    'games.onecard.cantPlayCard': '这张牌无法出',
   };
 
   // 언어별 문자열 맵

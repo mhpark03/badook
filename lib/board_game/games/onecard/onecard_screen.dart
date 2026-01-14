@@ -923,13 +923,13 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
   String _getSuitName(Suit suit) {
     switch (suit) {
       case Suit.spade:
-        return '스페이드';
+        return 'games.onecard.spade'.tr();
       case Suit.heart:
-        return '하트';
+        return 'games.onecard.heart'.tr();
       case Suit.diamond:
-        return '다이아몬드';
+        return 'games.onecard.diamond'.tr();
       case Suit.club:
-        return '클로버';
+        return 'games.onecard.club'.tr();
     }
   }
 
@@ -940,7 +940,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     final playable = _getPlayableCards(playerHand);
 
     if (!playable.contains(card)) {
-      _showMessage('이 카드는 낼 수 없습니다');
+      _showMessage('games.onecard.cantPlayCard'.tr());
       HapticFeedback.lightImpact();
       return;
     }
@@ -1472,8 +1472,8 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
   Widget _buildLandscapeOneCardButton() {
     final alreadyCalled = playerCalledOneCard;
     final buttonText = alreadyCalled
-        ? '원카드!'
-        : (_oneCardTimeLeft > 0 ? '원카드\n($_oneCardTimeLeft초)' : '원카드');
+        ? 'games.onecard.oneCardCall'.tr()
+        : (_oneCardTimeLeft > 0 ? 'games.onecard.oneCardTimer'.tr(namedArgs: {'seconds': '$_oneCardTimeLeft'}) : 'games.onecard.oneCard'.tr());
 
     return GestureDetector(
       onTap: alreadyCalled ? null : _callOneCard,
@@ -1715,7 +1715,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    turnDirection == 1 ? '반시계' : '시계',
+                    turnDirection == 1 ? 'games.onecard.counterClockwise'.tr() : 'games.onecard.clockwise'.tr(),
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 11),
                   ),
                 ],
@@ -1943,7 +1943,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    turnDirection == 1 ? '반시계' : '시계',
+                    turnDirection == 1 ? 'games.onecard.counterClockwise'.tr() : 'games.onecard.clockwise'.tr(),
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                 ],
@@ -2243,8 +2243,8 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
 
     // 타이머가 작동 중이면 남은 시간 표시
     final buttonText = alreadyCalled
-        ? '원카드!'
-        : (_oneCardTimeLeft > 0 ? '원카드 ($_oneCardTimeLeft초)' : '원카드');
+        ? 'games.onecard.oneCardCall'.tr()
+        : (_oneCardTimeLeft > 0 ? 'games.onecard.oneCardTimerShort'.tr(namedArgs: {'seconds': '$_oneCardTimeLeft'}) : 'games.onecard.oneCard'.tr());
 
     return GestureDetector(
       onTap: alreadyCalled ? null : _callOneCard,
@@ -2392,9 +2392,9 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                '무늬를 선택하세요',
-                style: TextStyle(
+              Text(
+                'games.onecard.selectSuit'.tr(),
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

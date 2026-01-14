@@ -743,9 +743,9 @@ class _JanggiScreenState extends State<JanggiScreen> {
                   });
                   _startGame();
                 },
-                child: const Text(
-                  '게임 시작',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                child: Text(
+                  'games.janggi.startGame'.tr(),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -2590,9 +2590,9 @@ class _JanggiScreenState extends State<JanggiScreen> {
               ),
             ],
           ),
-          content: const Text(
-            '무승부로 게임을 종료하시겠습니까?\n\n반복되는 장군 등의 상황에서\n무승부를 선언할 수 있습니다.',
-            style: TextStyle(color: Color(0xFF5D4037)),
+          content: Text(
+            'games.janggi.drawConfirm'.tr(),
+            style: const TextStyle(color: Color(0xFF5D4037)),
             textAlign: TextAlign.center,
           ),
           actionsAlignment: MainAxisAlignment.center,
@@ -2664,9 +2664,9 @@ class _JanggiScreenState extends State<JanggiScreen> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                '게임이 무승부로 종료되었습니다.',
-                style: TextStyle(
+              Text(
+                'games.janggi.drawResult'.tr(),
+                style: const TextStyle(
                   fontSize: 16,
                   color: Color(0xFF5D4037),
                 ),
@@ -3236,7 +3236,7 @@ class _JanggiScreenState extends State<JanggiScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  isInCheck ? '장군!' : (isThinking ? '생각중...' : 'common.turn'.tr()),
+                  isInCheck ? 'games.janggi.check'.tr() : (isThinking ? 'games.janggi.thinking'.tr() : 'common.turn'.tr()),
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.white,

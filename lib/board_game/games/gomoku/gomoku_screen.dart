@@ -326,7 +326,7 @@ class _GomokuScreenState extends State<GomokuScreen> {
       }
       if (_isDraw()) {
         gameOver = true;
-        gameMessage = '무승부입니다!';
+        gameMessage = 'common.draw'.tr();
         _saveGame(); // 게임 종료 시 저장 데이터 삭제
         Future.microtask(() => _showGameOverDialog());
         return;
@@ -454,7 +454,7 @@ class _GomokuScreenState extends State<GomokuScreen> {
         }
         if (_isDraw()) {
           gameOver = true;
-          gameMessage = '무승부입니다!';
+          gameMessage = 'common.draw'.tr();
           _saveGame(); // 게임 종료 시 저장 데이터 삭제
           Future.microtask(() => _showGameOverDialog());
           return;
@@ -1292,7 +1292,7 @@ class _GomokuScreenState extends State<GomokuScreen> {
                     _buildCircleButton(
                       icon: Icons.arrow_back,
                       onPressed: () => Navigator.pop(context),
-                      tooltip: '뒤로가기',
+                      tooltip: 'common.back'.tr(),
                     ),
                     const SizedBox(width: 8),
                     Container(
@@ -1449,7 +1449,7 @@ class _GomokuScreenState extends State<GomokuScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                '차례',
+                'common.turn'.tr(),
                 style: TextStyle(
                   color: highlightColor,
                   fontSize: 14,
