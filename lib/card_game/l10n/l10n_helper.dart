@@ -67,3 +67,24 @@ String _getRankSymbol(int rankValue) {
     default: return '$rankValue';
   }
 }
+
+/// 라운드 전환 메시지 반환
+String getRoundTransitionMessage(BuildContext context, int round) {
+  final l10n = getL10n(context);
+  final roundComplete = l10n.roundComplete(round);
+  String cardDistribution;
+  switch (round) {
+    case 1:
+      cardDistribution = l10n.cardDistribution5;
+      break;
+    case 2:
+      cardDistribution = l10n.cardDistribution6;
+      break;
+    case 3:
+      cardDistribution = l10n.cardDistribution7;
+      break;
+    default:
+      cardDistribution = '';
+  }
+  return '$roundComplete\n$cardDistribution\n\n${l10n.goodLuck}';
+}

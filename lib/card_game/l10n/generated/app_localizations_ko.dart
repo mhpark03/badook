@@ -177,6 +177,28 @@ class AppLocalizationsKo extends AppLocalizations {
   String get aiDeclaringFriend => 'AI가 프렌드를 선언하고 있습니다...';
 
   @override
+  String roundComplete(int round) {
+    return '라운드 $round 완료!';
+  }
+
+  @override
+  String get cardDistribution5 => '5번째 카드가 배분됩니다.';
+
+  @override
+  String get cardDistribution6 => '6번째 카드가 배분됩니다.';
+
+  @override
+  String get cardDistribution7 => '마지막 7번째 카드가 배분됩니다.';
+
+  @override
+  String get goodLuck => 'GOOD LUCK!';
+
+  @override
+  String secondsRemaining(int seconds) {
+    return '$seconds초';
+  }
+
+  @override
   String get declarerTeamWins => '주공 팀 승리!';
 
   @override

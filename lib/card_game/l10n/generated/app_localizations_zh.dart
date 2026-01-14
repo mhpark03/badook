@@ -177,6 +177,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiDeclaringFriend => 'AI正在宣布朋友...';
 
   @override
+  String roundComplete(int round) {
+    return '第 $round 轮完成！';
+  }
+
+  @override
+  String get cardDistribution5 => '第5张牌将被发放。';
+
+  @override
+  String get cardDistribution6 => '第6张牌将被发放。';
+
+  @override
+  String get cardDistribution7 => '最后第7张牌将被发放。';
+
+  @override
+  String get goodLuck => '祝你好运！';
+
+  @override
+  String secondsRemaining(int seconds) {
+    return '$seconds秒';
+  }
+
+  @override
   String get declarerTeamWins => '庄家队获胜！';
 
   @override

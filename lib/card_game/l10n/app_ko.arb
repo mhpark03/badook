@@ -82,6 +82,22 @@
   "aiSelectingKitty": "AI가 키티를 선택하고 있습니다...",
   "aiSelectingCard": "AI가 카드를 선택하고 있습니다...",
   "aiDeclaringFriend": "AI가 프렌드를 선언하고 있습니다...",
+  "roundComplete": "라운드 {round} 완료!",
+  "@roundComplete": {
+    "placeholders": {
+      "round": {"type": "int"}
+    }
+  },
+  "cardDistribution5": "5번째 카드가 배분됩니다.",
+  "cardDistribution6": "6번째 카드가 배분됩니다.",
+  "cardDistribution7": "마지막 7번째 카드가 배분됩니다.",
+  "goodLuck": "GOOD LUCK!",
+  "secondsRemaining": "{seconds}초",
+  "@secondsRemaining": {
+    "placeholders": {
+      "seconds": {"type": "int"}
+    }
+  },
   "declarerTeamWins": "주공 팀 승리!",
   "defenderTeamWins": "수비 팀 승리!",
   "declarerTeam": "주공 팀",

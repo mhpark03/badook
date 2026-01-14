@@ -414,6 +414,42 @@ abstract class AppLocalizations {
   /// **'AI가 프렌드를 선언하고 있습니다...'**
   String get aiDeclaringFriend;
 
+  /// No description provided for @roundComplete.
+  ///
+  /// In ko, this message translates to:
+  /// **'라운드 {round} 완료!'**
+  String roundComplete(int round);
+
+  /// No description provided for @cardDistribution5.
+  ///
+  /// In ko, this message translates to:
+  /// **'5번째 카드가 배분됩니다.'**
+  String get cardDistribution5;
+
+  /// No description provided for @cardDistribution6.
+  ///
+  /// In ko, this message translates to:
+  /// **'6번째 카드가 배분됩니다.'**
+  String get cardDistribution6;
+
+  /// No description provided for @cardDistribution7.
+  ///
+  /// In ko, this message translates to:
+  /// **'마지막 7번째 카드가 배분됩니다.'**
+  String get cardDistribution7;
+
+  /// No description provided for @goodLuck.
+  ///
+  /// In ko, this message translates to:
+  /// **'GOOD LUCK!'**
+  String get goodLuck;
+
+  /// No description provided for @secondsRemaining.
+  ///
+  /// In ko, this message translates to:
+  /// **'{seconds}초'**
+  String secondsRemaining(int seconds);
+
   /// No description provided for @declarerTeamWins.
   ///
   /// In ko, this message translates to:

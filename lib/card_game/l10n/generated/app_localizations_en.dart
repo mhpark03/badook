@@ -177,6 +177,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiDeclaringFriend => 'AI is declaring friend...';
 
   @override
+  String roundComplete(int round) {
+    return 'Round $round Complete!';
+  }
+
+  @override
+  String get cardDistribution5 => '5th card will be dealt.';
+
+  @override
+  String get cardDistribution6 => '6th card will be dealt.';
+
+  @override
+  String get cardDistribution7 => 'Final 7th card will be dealt.';
+
+  @override
+  String get goodLuck => 'GOOD LUCK!';
+
+  @override
+  String secondsRemaining(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
   String get declarerTeamWins => 'Declarer Team Wins!';
 
   @override

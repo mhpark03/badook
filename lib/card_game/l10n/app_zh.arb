@@ -52,6 +52,22 @@
   "aiSelectingKitty": "AI正在选择底牌...",
   "aiSelectingCard": "AI正在选择卡牌...",
   "aiDeclaringFriend": "AI正在宣布朋友...",
+  "roundComplete": "第 {round} 轮完成！",
+  "@roundComplete": {
+    "placeholders": {
+      "round": {"type": "int"}
+    }
+  },
+  "cardDistribution5": "第5张牌将被发放。",
+  "cardDistribution6": "第6张牌将被发放。",
+  "cardDistribution7": "最后第7张牌将被发放。",
+  "goodLuck": "祝你好运！",
+  "secondsRemaining": "{seconds}秒",
+  "@secondsRemaining": {
+    "placeholders": {
+      "seconds": {"type": "int"}
+    }
+  },
   "declarerTeamWins": "庄家队获胜！",
   "defenderTeamWins": "防守队获胜！",
   "declarerTeam": "庄家队",

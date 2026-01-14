@@ -52,6 +52,22 @@
   "aiSelectingKitty": "AIがキティを選択中...",
   "aiSelectingCard": "AIがカードを選択中...",
   "aiDeclaringFriend": "AIがフレンドを宣言中...",
+  "roundComplete": "ラウンド {round} 完了！",
+  "@roundComplete": {
+    "placeholders": {
+      "round": {"type": "int"}
+    }
+  },
+  "cardDistribution5": "5枚目のカードが配られます。",
+  "cardDistribution6": "6枚目のカードが配られます。",
+  "cardDistribution7": "最後の7枚目のカードが配られます。",
+  "goodLuck": "GOOD LUCK!",
+  "secondsRemaining": "{seconds}秒",
+  "@secondsRemaining": {
+    "placeholders": {
+      "seconds": {"type": "int"}
+    }
+  },
   "declarerTeamWins": "宣言者チームの勝利！",
   "defenderTeamWins": "守備チームの勝利！",
   "declarerTeam": "宣言者チーム",

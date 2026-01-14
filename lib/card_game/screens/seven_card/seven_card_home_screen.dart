@@ -30,15 +30,18 @@ class _SevenCardHomeScreenState extends State<SevenCardHomeScreen> {
     super.didChangeDependencies();
     if (!_namesUpdated) {
       _namesUpdated = true;
-      final l10n = getL10n(context);
-      final statsService = Provider.of<SevenCardStatsService>(context, listen: false);
-      statsService.updateLocalizedNames([
-        l10n.player,
-        l10n.aiPlayer1,
-        l10n.aiPlayer2,
-        l10n.aiPlayer3,
-        l10n.aiPlayer4,
-      ]);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final l10n = getL10n(context);
+        final statsService = Provider.of<SevenCardStatsService>(context, listen: false);
+        statsService.updateLocalizedNames([
+          l10n.player,
+          l10n.aiPlayer1,
+          l10n.aiPlayer2,
+          l10n.aiPlayer3,
+          l10n.aiPlayer4,
+        ]);
+      });
     }
   }
 

@@ -52,6 +52,22 @@
   "aiSelectingKitty": "AI is selecting kitty...",
   "aiSelectingCard": "AI is selecting card...",
   "aiDeclaringFriend": "AI is declaring friend...",
+  "roundComplete": "Round {round} Complete!",
+  "@roundComplete": {
+    "placeholders": {
+      "round": {"type": "int"}
+    }
+  },
+  "cardDistribution5": "5th card will be dealt.",
+  "cardDistribution6": "6th card will be dealt.",
+  "cardDistribution7": "Final 7th card will be dealt.",
+  "goodLuck": "GOOD LUCK!",
+  "secondsRemaining": "{seconds}s",
+  "@secondsRemaining": {
+    "placeholders": {
+      "seconds": {"type": "int"}
+    }
+  },
   "declarerTeamWins": "Declarer Team Wins!",
   "defenderTeamWins": "Defender Team Wins!",
   "declarerTeam": "Declarer Team",
