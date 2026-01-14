@@ -379,7 +379,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get continueGame => '이어하기';
 
   @override
-  String get exitGame => '게임 종료';
+  String get exitGame => '나가기';
 
   @override
   String get exitGameConfirm => '게임을 종료하시겠습니까?\n현재 게임은 자동 저장됩니다.';
@@ -476,6 +476,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get close => '닫기';
+
+  @override
+  String get hint => '힌트';
+
+  @override
+  String get enableHintQuestion => '힌트를 활성화하시겠습니까?';
+
+  @override
+  String get newGameConfirm => '새 게임을 시작하시겠습니까?';
 
   @override
   String get dealMiss => '딜 미스';
@@ -587,6 +596,60 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get wins => '승리';
+
+  @override
+  String get betPing => '삥';
+
+  @override
+  String get betDdadang => '따당';
+
+  @override
+  String get betQuarter => '쿼터';
+
+  @override
+  String get betHalf => '하프';
+
+  @override
+  String get betFull => '풀';
+
+  @override
+  String get betDie => '다이';
+
+  @override
+  String get selectCardToReveal => '공개할 카드를 선택하세요';
+
+  @override
+  String get selectedCardWillBeRevealed => '선택한 카드가 상대에게 공개됩니다';
+
+  @override
+  String get totalBet => '총';
+
+  @override
+  String get bonus => '보너스';
+
+  @override
+  String get finalResult => '최종 결과';
+
+  @override
+  String get viewResultButton => '결과 확인';
+
+  @override
+  String get hintOff => '힌트 OFF';
+
+  @override
+  String get playerLabel => '플레이어';
+
+  @override
+  String get thisGame => '이번 게임';
+
+  @override
+  String get cumulative => '누적';
+
+  @override
+  String get bettingAmount => '베팅';
+
+  @override
+  String get otherPlayersBonus => '다른 플레이어';
 
   @override
   String get gameEnd => '게임 종료';
@@ -762,4 +825,302 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get heartsSubtitle => '4인 트릭 테이킹 게임';
+
+  @override
+  String get register => '등록';
+
+  @override
+  String get discardCard => '버리기';
+
+  @override
+  String get stopGame => '스톱';
+
+  @override
+  String get drawCard => '카드를 뽑으세요';
+
+  @override
+  String get discardOrRegister => '카드를 버리거나 등록하세요';
+
+  @override
+  String get noCards => '카드가 없습니다';
+
+  @override
+  String get addedToMeld => '멜드에 추가됨';
+
+  @override
+  String get noMeldToAttach => '붙일 멜드가 없습니다';
+
+  @override
+  String get invalidCombination => '유효하지 않은 조합입니다';
+
+  @override
+  String get drawFirst => '먼저 카드를 뽑으세요';
+
+  @override
+  String get selectCardToDiscard => '버릴 카드를 선택하세요';
+
+  @override
+  String get victory => '승리!';
+
+  @override
+  String get defeat => '패배';
+
+  @override
+  String get hulaVictory => '훌라로 승리! (x2)';
+
+  @override
+  String get handCards => '손패';
+
+  @override
+  String get myTurn => '내 차례';
+
+  @override
+  String get start => '시작';
+
+  @override
+  String get discardedCards => '버린 카드';
+
+  @override
+  String get thankYou => '땡큐';
+
+  @override
+  String get selectMethod => '방법을 선택하세요';
+
+  @override
+  String get register7Alone => '7 단독 등록';
+
+  @override
+  String get attachToMyMeld => '내 멜드에 붙이기';
+
+  @override
+  String get attachToOtherMeld => '멜드에 붙이기';
+
+  @override
+  String get gameRules => '게임 규칙';
+
+  @override
+  String get objective => '목표';
+
+  @override
+  String get objectiveDesc => '손패의 카드를 모두 등록하거나 버려서 가장 먼저 없애는 것이 목표입니다.';
+
+  @override
+  String get howToPlay => '진행 방법';
+
+  @override
+  String get howToPlayDesc => '매 턴마다 덱 또는 버린 더미에서 카드 1장을 뽑고, 등록 또는 버리기를 합니다.';
+
+  @override
+  String get meldTypes => '멜드 종류';
+
+  @override
+  String get thankYouMeld => '땡큐 멜드';
+
+  @override
+  String get thankYouMeldDesc => '버린 더미에서 7을 뽑으면 \"땡큐\"를 외치고 특별한 등록을 할 수 있습니다.';
+
+  @override
+  String get stopRule => '스톱';
+
+  @override
+  String get stopRuleDesc =>
+      '언제든 스톱을 외쳐 게임을 끝낼 수 있습니다. 남은 카드 점수가 가장 적은 사람이 승리합니다.';
+
+  @override
+  String get scoring => '점수 계산';
+
+  @override
+  String aiStartsFirst(Object name) {
+    return '$name이 먼저 시작합니다';
+  }
+
+  @override
+  String xWins(Object name) {
+    return '$name 승리!';
+  }
+
+  @override
+  String nMelds(Object count) {
+    return '$count개 멜드';
+  }
+
+  @override
+  String attachedToMeldSelf(Object card) {
+    return '$card 멜드에 붙임';
+  }
+
+  @override
+  String attachedToMeldPlayer(Object card) {
+    return '$card 플레이어 멜드에 붙임';
+  }
+
+  @override
+  String attachedToMeldOther(Object card, Object name) {
+    return '$card $name 멜드에 붙임';
+  }
+
+  @override
+  String drewCard(Object name) {
+    return '$name이 카드를 뽑음';
+  }
+
+  @override
+  String thankYouAttachSelf(Object card) {
+    return '땡큐! $card 내 멜드에 붙이기';
+  }
+
+  @override
+  String thankYouAttachOther(Object card, Object name) {
+    return '땡큐! $card $name 멜드에 붙이기';
+  }
+
+  @override
+  String nPlayersHula(Object n) {
+    return '훌라 ($n인)';
+  }
+
+  @override
+  String nCards(Object n) {
+    return '$n장';
+  }
+
+  @override
+  String get heartsBreaking => '하트 브레이킹';
+
+  @override
+  String get cardPass => '카드 패스';
+
+  @override
+  String trickNum(Object n) {
+    return '트릭 $n/13';
+  }
+
+  @override
+  String passToLeft(Object n) {
+    return '왼쪽으로 패스 ($n/3)';
+  }
+
+  @override
+  String get selectCardsToPass => '왼쪽으로 보낼 카드 3장을 선택하세요';
+
+  @override
+  String get allPointsExhausted => '모든 점수 카드 소진! 게임 종료';
+
+  @override
+  String get passRecommend => '패스 추천';
+
+  @override
+  String get recommend => '추천';
+
+  @override
+  String get hintEnabled => '힌트가 활성화되었습니다!';
+
+  @override
+  String get oneCard => '원카드';
+
+  @override
+  String oneCardTitle(Object n) {
+    return '원카드 (${n}P)';
+  }
+
+  @override
+  String get oneCardCall => '원카드!';
+
+  @override
+  String oneCardCountdown(Object n) {
+    return '원카드 ($n초)';
+  }
+
+  @override
+  String get cannotPlayCard => '이 카드는 낼 수 없습니다';
+
+  @override
+  String attackReceived(Object n) {
+    return '공격으로 $n장을 받았습니다';
+  }
+
+  @override
+  String get drewCardMsg => '카드를 뽑았습니다';
+
+  @override
+  String bankruptcy(Object n) {
+    return '파산! ($n장 보유)';
+  }
+
+  @override
+  String get selectSuit => '무늬를 선택하세요';
+
+  @override
+  String get clockwise => '시계';
+
+  @override
+  String get counterClockwise => '반시계';
+
+  @override
+  String get blackJoker => '흑백 조커';
+
+  @override
+  String get colorJoker => '컬러 조커';
+
+  @override
+  String get winRate => '승률';
+
+  @override
+  String get rulesObjective => '목표';
+
+  @override
+  String get rulesHowToPlay => '진행 방법';
+
+  @override
+  String get rulesScoring => '점수 계산';
+
+  @override
+  String get rulesTips => '게임 팁';
+
+  @override
+  String get rulesAttackCards => '공격 카드';
+
+  @override
+  String get rulesDefense => '방어';
+
+  @override
+  String get rulesSpecialCards => '특수 카드';
+
+  @override
+  String get restart => '다시 시작';
+
+  @override
+  String totalAttack(int n) {
+    return '총 $n장 공격';
+  }
+
+  @override
+  String get skipNextTurn => '다음 턴 건너뛰기';
+
+  @override
+  String get reverseDirection => '방향 반대';
+
+  @override
+  String get skipTwoTurns => '2턴 건너뛰기';
+
+  @override
+  String get changeSuit => '무늬 변경';
+
+  @override
+  String playerPlayedCard(String name) {
+    return '$name이(가) 카드를 냈습니다';
+  }
+
+  @override
+  String attackReceivedShort(int n) {
+    return '공격으로 $n장 받음';
+  }
+
+  @override
+  String get drewCardShort => '카드 뽑음';
+
+  @override
+  String bankruptcyShort(int n) {
+    return '파산! ($n장 보유)';
+  }
 }

@@ -777,7 +777,7 @@ abstract class AppLocalizations {
   /// No description provided for @exitGame.
   ///
   /// In ko, this message translates to:
-  /// **'게임 종료'**
+  /// **'나가기'**
   String get exitGame;
 
   /// No description provided for @exitGameConfirm.
@@ -959,6 +959,24 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'닫기'**
   String get close;
+
+  /// No description provided for @hint.
+  ///
+  /// In ko, this message translates to:
+  /// **'힌트'**
+  String get hint;
+
+  /// No description provided for @enableHintQuestion.
+  ///
+  /// In ko, this message translates to:
+  /// **'힌트를 활성화하시겠습니까?'**
+  String get enableHintQuestion;
+
+  /// No description provided for @newGameConfirm.
+  ///
+  /// In ko, this message translates to:
+  /// **'새 게임을 시작하시겠습니까?'**
+  String get newGameConfirm;
 
   /// No description provided for @dealMiss.
   ///
@@ -1175,6 +1193,114 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'승리'**
   String get wins;
+
+  /// No description provided for @betPing.
+  ///
+  /// In ko, this message translates to:
+  /// **'삥'**
+  String get betPing;
+
+  /// No description provided for @betDdadang.
+  ///
+  /// In ko, this message translates to:
+  /// **'따당'**
+  String get betDdadang;
+
+  /// No description provided for @betQuarter.
+  ///
+  /// In ko, this message translates to:
+  /// **'쿼터'**
+  String get betQuarter;
+
+  /// No description provided for @betHalf.
+  ///
+  /// In ko, this message translates to:
+  /// **'하프'**
+  String get betHalf;
+
+  /// No description provided for @betFull.
+  ///
+  /// In ko, this message translates to:
+  /// **'풀'**
+  String get betFull;
+
+  /// No description provided for @betDie.
+  ///
+  /// In ko, this message translates to:
+  /// **'다이'**
+  String get betDie;
+
+  /// No description provided for @selectCardToReveal.
+  ///
+  /// In ko, this message translates to:
+  /// **'공개할 카드를 선택하세요'**
+  String get selectCardToReveal;
+
+  /// No description provided for @selectedCardWillBeRevealed.
+  ///
+  /// In ko, this message translates to:
+  /// **'선택한 카드가 상대에게 공개됩니다'**
+  String get selectedCardWillBeRevealed;
+
+  /// No description provided for @totalBet.
+  ///
+  /// In ko, this message translates to:
+  /// **'총'**
+  String get totalBet;
+
+  /// No description provided for @bonus.
+  ///
+  /// In ko, this message translates to:
+  /// **'보너스'**
+  String get bonus;
+
+  /// No description provided for @finalResult.
+  ///
+  /// In ko, this message translates to:
+  /// **'최종 결과'**
+  String get finalResult;
+
+  /// No description provided for @viewResultButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'결과 확인'**
+  String get viewResultButton;
+
+  /// No description provided for @hintOff.
+  ///
+  /// In ko, this message translates to:
+  /// **'힌트 OFF'**
+  String get hintOff;
+
+  /// No description provided for @playerLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'플레이어'**
+  String get playerLabel;
+
+  /// No description provided for @thisGame.
+  ///
+  /// In ko, this message translates to:
+  /// **'이번 게임'**
+  String get thisGame;
+
+  /// No description provided for @cumulative.
+  ///
+  /// In ko, this message translates to:
+  /// **'누적'**
+  String get cumulative;
+
+  /// No description provided for @bettingAmount.
+  ///
+  /// In ko, this message translates to:
+  /// **'베팅'**
+  String get bettingAmount;
+
+  /// No description provided for @otherPlayersBonus.
+  ///
+  /// In ko, this message translates to:
+  /// **'다른 플레이어'**
+  String get otherPlayersBonus;
 
   /// No description provided for @gameEnd.
   ///
@@ -1499,6 +1625,516 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'4인 트릭 테이킹 게임'**
   String get heartsSubtitle;
+
+  /// No description provided for @register.
+  ///
+  /// In ko, this message translates to:
+  /// **'등록'**
+  String get register;
+
+  /// No description provided for @discardCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'버리기'**
+  String get discardCard;
+
+  /// No description provided for @stopGame.
+  ///
+  /// In ko, this message translates to:
+  /// **'스톱'**
+  String get stopGame;
+
+  /// No description provided for @drawCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드를 뽑으세요'**
+  String get drawCard;
+
+  /// No description provided for @discardOrRegister.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드를 버리거나 등록하세요'**
+  String get discardOrRegister;
+
+  /// No description provided for @noCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드가 없습니다'**
+  String get noCards;
+
+  /// No description provided for @addedToMeld.
+  ///
+  /// In ko, this message translates to:
+  /// **'멜드에 추가됨'**
+  String get addedToMeld;
+
+  /// No description provided for @noMeldToAttach.
+  ///
+  /// In ko, this message translates to:
+  /// **'붙일 멜드가 없습니다'**
+  String get noMeldToAttach;
+
+  /// No description provided for @invalidCombination.
+  ///
+  /// In ko, this message translates to:
+  /// **'유효하지 않은 조합입니다'**
+  String get invalidCombination;
+
+  /// No description provided for @drawFirst.
+  ///
+  /// In ko, this message translates to:
+  /// **'먼저 카드를 뽑으세요'**
+  String get drawFirst;
+
+  /// No description provided for @selectCardToDiscard.
+  ///
+  /// In ko, this message translates to:
+  /// **'버릴 카드를 선택하세요'**
+  String get selectCardToDiscard;
+
+  /// No description provided for @victory.
+  ///
+  /// In ko, this message translates to:
+  /// **'승리!'**
+  String get victory;
+
+  /// No description provided for @defeat.
+  ///
+  /// In ko, this message translates to:
+  /// **'패배'**
+  String get defeat;
+
+  /// No description provided for @hulaVictory.
+  ///
+  /// In ko, this message translates to:
+  /// **'훌라로 승리! (x2)'**
+  String get hulaVictory;
+
+  /// No description provided for @handCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'손패'**
+  String get handCards;
+
+  /// No description provided for @myTurn.
+  ///
+  /// In ko, this message translates to:
+  /// **'내 차례'**
+  String get myTurn;
+
+  /// No description provided for @start.
+  ///
+  /// In ko, this message translates to:
+  /// **'시작'**
+  String get start;
+
+  /// No description provided for @discardedCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'버린 카드'**
+  String get discardedCards;
+
+  /// No description provided for @thankYou.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐'**
+  String get thankYou;
+
+  /// No description provided for @selectMethod.
+  ///
+  /// In ko, this message translates to:
+  /// **'방법을 선택하세요'**
+  String get selectMethod;
+
+  /// No description provided for @register7Alone.
+  ///
+  /// In ko, this message translates to:
+  /// **'7 단독 등록'**
+  String get register7Alone;
+
+  /// No description provided for @attachToMyMeld.
+  ///
+  /// In ko, this message translates to:
+  /// **'내 멜드에 붙이기'**
+  String get attachToMyMeld;
+
+  /// No description provided for @attachToOtherMeld.
+  ///
+  /// In ko, this message translates to:
+  /// **'멜드에 붙이기'**
+  String get attachToOtherMeld;
+
+  /// No description provided for @gameRules.
+  ///
+  /// In ko, this message translates to:
+  /// **'게임 규칙'**
+  String get gameRules;
+
+  /// No description provided for @objective.
+  ///
+  /// In ko, this message translates to:
+  /// **'목표'**
+  String get objective;
+
+  /// No description provided for @objectiveDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'손패의 카드를 모두 등록하거나 버려서 가장 먼저 없애는 것이 목표입니다.'**
+  String get objectiveDesc;
+
+  /// No description provided for @howToPlay.
+  ///
+  /// In ko, this message translates to:
+  /// **'진행 방법'**
+  String get howToPlay;
+
+  /// No description provided for @howToPlayDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'매 턴마다 덱 또는 버린 더미에서 카드 1장을 뽑고, 등록 또는 버리기를 합니다.'**
+  String get howToPlayDesc;
+
+  /// No description provided for @meldTypes.
+  ///
+  /// In ko, this message translates to:
+  /// **'멜드 종류'**
+  String get meldTypes;
+
+  /// No description provided for @thankYouMeld.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐 멜드'**
+  String get thankYouMeld;
+
+  /// No description provided for @thankYouMeldDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'버린 더미에서 7을 뽑으면 \"땡큐\"를 외치고 특별한 등록을 할 수 있습니다.'**
+  String get thankYouMeldDesc;
+
+  /// No description provided for @stopRule.
+  ///
+  /// In ko, this message translates to:
+  /// **'스톱'**
+  String get stopRule;
+
+  /// No description provided for @stopRuleDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'언제든 스톱을 외쳐 게임을 끝낼 수 있습니다. 남은 카드 점수가 가장 적은 사람이 승리합니다.'**
+  String get stopRuleDesc;
+
+  /// No description provided for @scoring.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 계산'**
+  String get scoring;
+
+  /// No description provided for @aiStartsFirst.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}이 먼저 시작합니다'**
+  String aiStartsFirst(Object name);
+
+  /// No description provided for @xWins.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} 승리!'**
+  String xWins(Object name);
+
+  /// No description provided for @nMelds.
+  ///
+  /// In ko, this message translates to:
+  /// **'{count}개 멜드'**
+  String nMelds(Object count);
+
+  /// No description provided for @attachedToMeldSelf.
+  ///
+  /// In ko, this message translates to:
+  /// **'{card} 멜드에 붙임'**
+  String attachedToMeldSelf(Object card);
+
+  /// No description provided for @attachedToMeldPlayer.
+  ///
+  /// In ko, this message translates to:
+  /// **'{card} 플레이어 멜드에 붙임'**
+  String attachedToMeldPlayer(Object card);
+
+  /// No description provided for @attachedToMeldOther.
+  ///
+  /// In ko, this message translates to:
+  /// **'{card} {name} 멜드에 붙임'**
+  String attachedToMeldOther(Object card, Object name);
+
+  /// No description provided for @drewCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}이 카드를 뽑음'**
+  String drewCard(Object name);
+
+  /// No description provided for @thankYouAttachSelf.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐! {card} 내 멜드에 붙이기'**
+  String thankYouAttachSelf(Object card);
+
+  /// No description provided for @thankYouAttachOther.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐! {card} {name} 멜드에 붙이기'**
+  String thankYouAttachOther(Object card, Object name);
+
+  /// No description provided for @nPlayersHula.
+  ///
+  /// In ko, this message translates to:
+  /// **'훌라 ({n}인)'**
+  String nPlayersHula(Object n);
+
+  /// No description provided for @nCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'{n}장'**
+  String nCards(Object n);
+
+  /// No description provided for @heartsBreaking.
+  ///
+  /// In ko, this message translates to:
+  /// **'하트 브레이킹'**
+  String get heartsBreaking;
+
+  /// No description provided for @cardPass.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드 패스'**
+  String get cardPass;
+
+  /// No description provided for @trickNum.
+  ///
+  /// In ko, this message translates to:
+  /// **'트릭 {n}/13'**
+  String trickNum(Object n);
+
+  /// No description provided for @passToLeft.
+  ///
+  /// In ko, this message translates to:
+  /// **'왼쪽으로 패스 ({n}/3)'**
+  String passToLeft(Object n);
+
+  /// No description provided for @selectCardsToPass.
+  ///
+  /// In ko, this message translates to:
+  /// **'왼쪽으로 보낼 카드 3장을 선택하세요'**
+  String get selectCardsToPass;
+
+  /// No description provided for @allPointsExhausted.
+  ///
+  /// In ko, this message translates to:
+  /// **'모든 점수 카드 소진! 게임 종료'**
+  String get allPointsExhausted;
+
+  /// No description provided for @passRecommend.
+  ///
+  /// In ko, this message translates to:
+  /// **'패스 추천'**
+  String get passRecommend;
+
+  /// No description provided for @recommend.
+  ///
+  /// In ko, this message translates to:
+  /// **'추천'**
+  String get recommend;
+
+  /// No description provided for @hintEnabled.
+  ///
+  /// In ko, this message translates to:
+  /// **'힌트가 활성화되었습니다!'**
+  String get hintEnabled;
+
+  /// No description provided for @oneCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'원카드'**
+  String get oneCard;
+
+  /// No description provided for @oneCardTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'원카드 ({n}P)'**
+  String oneCardTitle(Object n);
+
+  /// No description provided for @oneCardCall.
+  ///
+  /// In ko, this message translates to:
+  /// **'원카드!'**
+  String get oneCardCall;
+
+  /// No description provided for @oneCardCountdown.
+  ///
+  /// In ko, this message translates to:
+  /// **'원카드 ({n}초)'**
+  String oneCardCountdown(Object n);
+
+  /// No description provided for @cannotPlayCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'이 카드는 낼 수 없습니다'**
+  String get cannotPlayCard;
+
+  /// No description provided for @attackReceived.
+  ///
+  /// In ko, this message translates to:
+  /// **'공격으로 {n}장을 받았습니다'**
+  String attackReceived(Object n);
+
+  /// No description provided for @drewCardMsg.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드를 뽑았습니다'**
+  String get drewCardMsg;
+
+  /// No description provided for @bankruptcy.
+  ///
+  /// In ko, this message translates to:
+  /// **'파산! ({n}장 보유)'**
+  String bankruptcy(Object n);
+
+  /// No description provided for @selectSuit.
+  ///
+  /// In ko, this message translates to:
+  /// **'무늬를 선택하세요'**
+  String get selectSuit;
+
+  /// No description provided for @clockwise.
+  ///
+  /// In ko, this message translates to:
+  /// **'시계'**
+  String get clockwise;
+
+  /// No description provided for @counterClockwise.
+  ///
+  /// In ko, this message translates to:
+  /// **'반시계'**
+  String get counterClockwise;
+
+  /// No description provided for @blackJoker.
+  ///
+  /// In ko, this message translates to:
+  /// **'흑백 조커'**
+  String get blackJoker;
+
+  /// No description provided for @colorJoker.
+  ///
+  /// In ko, this message translates to:
+  /// **'컬러 조커'**
+  String get colorJoker;
+
+  /// No description provided for @winRate.
+  ///
+  /// In ko, this message translates to:
+  /// **'승률'**
+  String get winRate;
+
+  /// No description provided for @rulesObjective.
+  ///
+  /// In ko, this message translates to:
+  /// **'목표'**
+  String get rulesObjective;
+
+  /// No description provided for @rulesHowToPlay.
+  ///
+  /// In ko, this message translates to:
+  /// **'진행 방법'**
+  String get rulesHowToPlay;
+
+  /// No description provided for @rulesScoring.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 계산'**
+  String get rulesScoring;
+
+  /// No description provided for @rulesTips.
+  ///
+  /// In ko, this message translates to:
+  /// **'게임 팁'**
+  String get rulesTips;
+
+  /// No description provided for @rulesAttackCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'공격 카드'**
+  String get rulesAttackCards;
+
+  /// No description provided for @rulesDefense.
+  ///
+  /// In ko, this message translates to:
+  /// **'방어'**
+  String get rulesDefense;
+
+  /// No description provided for @rulesSpecialCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'특수 카드'**
+  String get rulesSpecialCards;
+
+  /// No description provided for @restart.
+  ///
+  /// In ko, this message translates to:
+  /// **'다시 시작'**
+  String get restart;
+
+  /// No description provided for @totalAttack.
+  ///
+  /// In ko, this message translates to:
+  /// **'총 {n}장 공격'**
+  String totalAttack(int n);
+
+  /// No description provided for @skipNextTurn.
+  ///
+  /// In ko, this message translates to:
+  /// **'다음 턴 건너뛰기'**
+  String get skipNextTurn;
+
+  /// No description provided for @reverseDirection.
+  ///
+  /// In ko, this message translates to:
+  /// **'방향 반대'**
+  String get reverseDirection;
+
+  /// No description provided for @skipTwoTurns.
+  ///
+  /// In ko, this message translates to:
+  /// **'2턴 건너뛰기'**
+  String get skipTwoTurns;
+
+  /// No description provided for @changeSuit.
+  ///
+  /// In ko, this message translates to:
+  /// **'무늬 변경'**
+  String get changeSuit;
+
+  /// No description provided for @playerPlayedCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}이(가) 카드를 냈습니다'**
+  String playerPlayedCard(String name);
+
+  /// No description provided for @attackReceivedShort.
+  ///
+  /// In ko, this message translates to:
+  /// **'공격으로 {n}장 받음'**
+  String attackReceivedShort(int n);
+
+  /// No description provided for @drewCardShort.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드 뽑음'**
+  String get drewCardShort;
+
+  /// No description provided for @bankruptcyShort.
+  ///
+  /// In ko, this message translates to:
+  /// **'파산! ({n}장 보유)'**
+  String bankruptcyShort(int n);
 }
 
 class _AppLocalizationsDelegate

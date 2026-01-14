@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../widgets/banner_ad_widget.dart';
 import '../widgets/card_game_provider.dart';
 import 'home_screen.dart';
@@ -9,20 +10,6 @@ import 'onecard/onecard_home_screen.dart';
 import 'hearts/hearts_home_screen.dart';
 import '../../main.dart';
 
-// 기본 문자열
-class _DefaultStrings {
-  static const selectGame = '게임 선택';
-  static const appTitle = '마이티';
-  static const gameSubtitle = '5인 트럼프';
-  static const sevenCardTitle = '세븐카드';
-  static const sevenCardSubtitle = '포커 게임';
-  static const hiLoTitle = '하이로우';
-  static const hiLoSubtitle = '숫자 맞추기';
-  static const hulaTitle = '훌라';
-  static const hulaSubtitle = '3장 카드';
-  static const heartsTitle = '하트';
-  static const heartsSubtitle = '패스 게임';
-}
 
 class GameSelectionScreen extends StatelessWidget {
   final GameLanguage language;
@@ -36,6 +23,10 @@ class GameSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Provider에서 언어 상태 읽기
+    final languageProvider = context.watch<LanguageProvider>();
+    final currentLanguage = languageProvider.language;
+
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom;
@@ -66,43 +57,43 @@ class GameSelectionScreen extends StatelessWidget {
 
     final games = [
       _GameInfo(
-        title: _DefaultStrings.appTitle,
-        subtitle: _DefaultStrings.gameSubtitle,
+        title: L10n.get(currentLanguage, 'mighty'),
+        subtitle: L10n.get(currentLanguage, 'mightyDesc'),
         icon: Icons.style,
         color: Colors.green[700]!,
         screen: const HomeScreen(),
       ),
       _GameInfo(
-        title: _DefaultStrings.sevenCardTitle,
-        subtitle: _DefaultStrings.sevenCardSubtitle,
+        title: L10n.get(currentLanguage, 'sevenpoker'),
+        subtitle: L10n.get(currentLanguage, 'sevenpokerDesc'),
         icon: Icons.casino,
         color: Colors.blue[700]!,
         screen: const SevenCardHomeScreen(),
       ),
       _GameInfo(
-        title: _DefaultStrings.hiLoTitle,
-        subtitle: _DefaultStrings.hiLoSubtitle,
+        title: L10n.get(currentLanguage, 'highlow'),
+        subtitle: L10n.get(currentLanguage, 'highlowDesc'),
         icon: Icons.swap_vert,
         color: Colors.purple[700]!,
         screen: const HiLoHomeScreen(),
       ),
       _GameInfo(
-        title: _DefaultStrings.hulaTitle,
-        subtitle: _DefaultStrings.hulaSubtitle,
+        title: L10n.get(currentLanguage, 'hula'),
+        subtitle: L10n.get(currentLanguage, 'hulaDesc'),
         icon: Icons.style,
         color: Colors.teal[700]!,
         screen: const HulaHomeScreen(),
       ),
       _GameInfo(
-        title: '원카드',
-        subtitle: '4인 대전',
+        title: L10n.get(currentLanguage, 'onecard'),
+        subtitle: L10n.get(currentLanguage, 'onecardDesc'),
         icon: Icons.filter_1,
         color: Colors.orange[700]!,
         screen: const OneCardHomeScreen(),
       ),
       _GameInfo(
-        title: _DefaultStrings.heartsTitle,
-        subtitle: _DefaultStrings.heartsSubtitle,
+        title: L10n.get(currentLanguage, 'hearts'),
+        subtitle: L10n.get(currentLanguage, 'heartsDesc'),
         icon: Icons.favorite,
         color: Colors.red[700]!,
         screen: const HeartsHomeScreen(),
@@ -125,9 +116,9 @@ class GameSelectionScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildCommonAppBar(
         context: context,
-        title: L10n.get(language, 'cardGame'),
-        language: language,
-        onLanguageChanged: onLanguageChanged,
+        title: L10n.get(currentLanguage, 'cardGame'),
+        language: currentLanguage,
+        onLanguageChanged: languageProvider.setLanguage,
       ),
       backgroundColor: Colors.green[900],
       body: SafeArea(

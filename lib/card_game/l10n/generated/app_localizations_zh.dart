@@ -379,7 +379,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get continueGame => '继续';
 
   @override
-  String get exitGame => '退出游戏';
+  String get exitGame => '退出';
 
   @override
   String get exitGameConfirm => '退出游戏?\n当前游戏将被保存。';
@@ -473,6 +473,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get close => '关闭';
+
+  @override
+  String get hint => '提示';
+
+  @override
+  String get enableHintQuestion => '是否启用提示？';
+
+  @override
+  String get newGameConfirm => '是否开始新游戏？';
 
   @override
   String get dealMiss => '发牌失误';
@@ -584,6 +593,60 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get wins => '获胜';
+
+  @override
+  String get betPing => '底注';
+
+  @override
+  String get betDdadang => '加倍';
+
+  @override
+  String get betQuarter => '四分之一';
+
+  @override
+  String get betHalf => '一半';
+
+  @override
+  String get betFull => '全押';
+
+  @override
+  String get betDie => '弃牌';
+
+  @override
+  String get selectCardToReveal => '选择要公开的牌';
+
+  @override
+  String get selectedCardWillBeRevealed => '选择的牌将对对手公开';
+
+  @override
+  String get totalBet => '总计';
+
+  @override
+  String get bonus => '奖励';
+
+  @override
+  String get finalResult => '最终结果';
+
+  @override
+  String get viewResultButton => '查看结果';
+
+  @override
+  String get hintOff => '提示 OFF';
+
+  @override
+  String get playerLabel => '玩家';
+
+  @override
+  String get thisGame => '本局';
+
+  @override
+  String get cumulative => '累计';
+
+  @override
+  String get bettingAmount => '下注';
+
+  @override
+  String get otherPlayersBonus => '其他玩家';
 
   @override
   String get gameEnd => '游戏结束';
@@ -757,4 +820,301 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get heartsSubtitle => '4人吃墩游戏';
+
+  @override
+  String get register => '登记';
+
+  @override
+  String get discardCard => '弃牌';
+
+  @override
+  String get stopGame => '停止';
+
+  @override
+  String get drawCard => '请抽牌';
+
+  @override
+  String get discardOrRegister => '请弃牌或登记';
+
+  @override
+  String get noCards => '没有牌';
+
+  @override
+  String get addedToMeld => '已添加到组合';
+
+  @override
+  String get noMeldToAttach => '没有可添加的组合';
+
+  @override
+  String get invalidCombination => '无效的组合';
+
+  @override
+  String get drawFirst => '请先抽牌';
+
+  @override
+  String get selectCardToDiscard => '请选择要弃的牌';
+
+  @override
+  String get victory => '胜利！';
+
+  @override
+  String get defeat => '失败';
+
+  @override
+  String get hulaVictory => '胡拉胜利！(x2)';
+
+  @override
+  String get handCards => '手牌';
+
+  @override
+  String get myTurn => '我的回合';
+
+  @override
+  String get start => '开始';
+
+  @override
+  String get discardedCards => '弃牌堆';
+
+  @override
+  String get thankYou => '谢谢';
+
+  @override
+  String get selectMethod => '请选择方法';
+
+  @override
+  String get register7Alone => '单独登记7';
+
+  @override
+  String get attachToMyMeld => '添加到我的组合';
+
+  @override
+  String get attachToOtherMeld => '添加到组合';
+
+  @override
+  String get gameRules => '游戏规则';
+
+  @override
+  String get objective => '目标';
+
+  @override
+  String get objectiveDesc => '通过登记或弃牌，最先清空手牌者获胜。';
+
+  @override
+  String get howToPlay => '玩法';
+
+  @override
+  String get howToPlayDesc => '每回合从牌堆或弃牌堆抽一张牌，然后登记或弃牌。';
+
+  @override
+  String get meldTypes => '组合类型';
+
+  @override
+  String get thankYouMeld => '谢谢组合';
+
+  @override
+  String get thankYouMeldDesc => '从弃牌堆抽到7时，可以喊\"谢谢\"并进行特殊登记。';
+
+  @override
+  String get stopRule => '停止';
+
+  @override
+  String get stopRuleDesc => '可以随时喊停止结束游戏。剩余牌点数最少的人获胜。';
+
+  @override
+  String get scoring => '计分';
+
+  @override
+  String aiStartsFirst(Object name) {
+    return '$name先开始';
+  }
+
+  @override
+  String xWins(Object name) {
+    return '$name获胜！';
+  }
+
+  @override
+  String nMelds(Object count) {
+    return '$count个组合';
+  }
+
+  @override
+  String attachedToMeldSelf(Object card) {
+    return '$card添加到组合';
+  }
+
+  @override
+  String attachedToMeldPlayer(Object card) {
+    return '$card添加到玩家组合';
+  }
+
+  @override
+  String attachedToMeldOther(Object card, Object name) {
+    return '$card添加到$name的组合';
+  }
+
+  @override
+  String drewCard(Object name) {
+    return '$name抽了一张牌';
+  }
+
+  @override
+  String thankYouAttachSelf(Object card) {
+    return '谢谢！$card加到我的组合';
+  }
+
+  @override
+  String thankYouAttachOther(Object card, Object name) {
+    return '谢谢！$card加到$name的组合';
+  }
+
+  @override
+  String nPlayersHula(Object n) {
+    return 'Hula（$n人）';
+  }
+
+  @override
+  String nCards(Object n) {
+    return '$n张';
+  }
+
+  @override
+  String get heartsBreaking => '红心破冰';
+
+  @override
+  String get cardPass => '传牌';
+
+  @override
+  String trickNum(Object n) {
+    return '回合 $n/13';
+  }
+
+  @override
+  String passToLeft(Object n) {
+    return '向左传 ($n/3)';
+  }
+
+  @override
+  String get selectCardsToPass => '选择3张牌传给左边';
+
+  @override
+  String get allPointsExhausted => '所有分数牌用完！游戏结束';
+
+  @override
+  String get passRecommend => '推荐传牌';
+
+  @override
+  String get recommend => '推荐';
+
+  @override
+  String get hintEnabled => '提示已启用！';
+
+  @override
+  String get oneCard => 'UNO';
+
+  @override
+  String oneCardTitle(Object n) {
+    return 'UNO（$n人）';
+  }
+
+  @override
+  String get oneCardCall => 'UNO！';
+
+  @override
+  String oneCardCountdown(Object n) {
+    return 'UNO（$n秒）';
+  }
+
+  @override
+  String get cannotPlayCard => '不能出这张牌';
+
+  @override
+  String attackReceived(Object n) {
+    return '被攻击，抽了$n张牌';
+  }
+
+  @override
+  String get drewCardMsg => '抽了一张牌';
+
+  @override
+  String bankruptcy(Object n) {
+    return '破产！（持有$n张）';
+  }
+
+  @override
+  String get selectSuit => '选择花色';
+
+  @override
+  String get clockwise => '顺时针';
+
+  @override
+  String get counterClockwise => '逆时针';
+
+  @override
+  String get blackJoker => '黑白鬼牌';
+
+  @override
+  String get colorJoker => '彩色鬼牌';
+
+  @override
+  String get winRate => '胜率';
+
+  @override
+  String get rulesObjective => '目标';
+
+  @override
+  String get rulesHowToPlay => '玩法';
+
+  @override
+  String get rulesScoring => '计分';
+
+  @override
+  String get rulesTips => '提示';
+
+  @override
+  String get rulesAttackCards => '攻击牌';
+
+  @override
+  String get rulesDefense => '防御';
+
+  @override
+  String get rulesSpecialCards => '特殊牌';
+
+  @override
+  String get restart => '重新开始';
+
+  @override
+  String totalAttack(int n) {
+    return '总计$n张攻击';
+  }
+
+  @override
+  String get skipNextTurn => '跳过下一回合';
+
+  @override
+  String get reverseDirection => '反转方向';
+
+  @override
+  String get skipTwoTurns => '跳过2回合';
+
+  @override
+  String get changeSuit => '更换花色';
+
+  @override
+  String playerPlayedCard(String name) {
+    return '$name出了一张牌';
+  }
+
+  @override
+  String attackReceivedShort(int n) {
+    return '被攻击$n张';
+  }
+
+  @override
+  String get drewCardShort => '抽牌';
+
+  @override
+  String bankruptcyShort(int n) {
+    return '破产！（$n张）';
+  }
 }

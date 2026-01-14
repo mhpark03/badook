@@ -104,15 +104,16 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showHintDialog() {
+    final l10n = getL10n(context);
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('힌트'),
-        content: const Text('힌트를 활성화하시겠습니까?'),
+        title: Text(l10n.hint),
+        content: Text(l10n.enableHintQuestion),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('취소'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -122,7 +123,7 @@ class _GameScreenState extends State<GameScreen> {
               });
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('확인', style: TextStyle(color: Colors.black)),
+            child: Text(l10n.confirm, style: const TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -134,7 +135,7 @@ class _GameScreenState extends State<GameScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.newGame),
-        content: const Text('새 게임을 시작하시겠습니까?'),
+        content: Text(l10n.newGameConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),

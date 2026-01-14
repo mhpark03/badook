@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../l10n/board_game_strings.dart';
 import '../games/sudoku/screens/game_screen.dart';
@@ -22,6 +23,13 @@ class SudokuSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Provider에서 언어 상태 읽기
+    final languageProvider = context.watch<LanguageProvider>();
+    final currentLanguage = languageProvider.language;
+
+    // 현재 언어 설정
+    BoardGameStrings.currentLanguage = currentLanguage;
+
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom;
@@ -96,9 +104,9 @@ class SudokuSelectionScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildCommonAppBar(
         context: context,
-        title: L10n.get(language, 'sudoku'),
-        language: language,
-        onLanguageChanged: onLanguageChanged,
+        title: L10n.get(currentLanguage, 'sudoku'),
+        language: currentLanguage,
+        onLanguageChanged: languageProvider.setLanguage,
       ),
       backgroundColor: Colors.indigo[900],
       body: SafeArea(

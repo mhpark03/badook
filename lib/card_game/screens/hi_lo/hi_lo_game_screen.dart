@@ -103,7 +103,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.newGame),
-        content: const Text('새 게임을 시작하시겠습니까?'),
+        content: Text(l10n.newGameConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -135,15 +135,16 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
   }
 
   void _showHintDialog() {
+    final l10n = getL10n(context);
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('힌트'),
-        content: const Text('힌트를 활성화하시겠습니까?'),
+        title: Text(l10n.hint),
+        content: Text(l10n.enableHintQuestion),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('취소'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -153,7 +154,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
               });
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('확인', style: TextStyle(color: Colors.black)),
+            child: Text(l10n.confirm, style: const TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -180,7 +181,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
             actions: [
               IconButton(
                 icon: Icon(Icons.lightbulb, color: _showHint ? Colors.yellow : Colors.white),
-                tooltip: _showHint ? '힌트 OFF' : '힌트',
+                tooltip: _showHint ? l10n.hintOff : l10n.hint,
                 onPressed: _onHintButtonPressed,
               ),
               IconButton(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 import 'dart:collection';
 import 'dart:math';
 import 'dart:convert';
@@ -45,8 +46,32 @@ import 'yutnori/yutnori_screen.dart';
 // 장기 import
 import 'janggi/janggi_selection_screen.dart';
 
+// 보드게임 번역
+import 'board_game/l10n/board_game_strings.dart';
+
+// 언어 상태 관리 Provider
+class LanguageProvider extends ChangeNotifier {
+  GameLanguage _language = GameLanguage.korean;
+
+  GameLanguage get language => _language;
+
+  void setLanguage(GameLanguage lang) {
+    if (_language != lang) {
+      _language = lang;
+      // BoardGameStrings도 함께 업데이트
+      BoardGameStrings.currentLanguage = lang;
+      notifyListeners();
+    }
+  }
+}
+
 void main() {
-  runApp(const BadukApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => LanguageProvider(),
+      child: const BadukApp(),
+    ),
+  );
 }
 
 // 디바이스 성능 등급
@@ -154,11 +179,51 @@ class L10n {
       'aiHard': '어려움',
       'aiExpert': '최강',
       'hint': '힌트',
+      'hintOn': '힌트 ON',
+      'hintOff': '힌트 OFF',
       'hintMessage': '추천 위치가 표시되었습니다',
       'noHint': '추천할 수 없습니다',
+      'enableHintTitle': '힌트',
+      'enableHintMessage': '힌트를 활성화하시겠습니까?',
+      'hintEnabled': '힌트가 활성화되었습니다!',
+      'cancel': '취소',
+      'confirm': '확인',
+      'close': '닫기',
+      'newGameConfirm': '새 게임을 시작하시겠습니까?',
+      'endGameConfirm': '현재 게임을 종료하고 새 게임을 시작하시겠습니까?',
       'continue': '이어하기',
       'save': '저장',
       'load': '불러오기',
+      'restart': '다시 시작',
+      'selectGame': '게임 선택',
+      'viewResult': '결과 확인',
+      'initializing': '초기화 중...',
+      // 포커 베팅
+      'betPing': '삥',
+      'betCall': '콜',
+      'betDdadang': '따당',
+      'betDie': '다이',
+      'betCheck': '체크',
+      'betQuarter': '쿼터',
+      'betHalf': '하프',
+      'betFull': '풀',
+      // 훌라 게임
+      'register': '등록',
+      'discard': '버리기',
+      'stop': '스톱',
+      // 테이블 헤더
+      'player': '플레이어',
+      'thisGame': '이번 게임',
+      'winLoss': '승/패',
+      'cumulative': '누적',
+      'hand': '손패',
+      'score': '점수',
+      // 스도쿠
+      'quick': '빠른',
+      'memo': '메모',
+      'allMemo': '모든 메모',
+      'selectCellFirst': '셀을 먼저 선택하세요',
+      'cellAlreadyFilled': '이미 채워진 칸입니다',
       'noSavedGame': '저장된 게임이 없습니다',
       'gameSaved': '게임이 저장되었습니다',
       'gameLoaded': '게임을 불러왔습니다',
@@ -179,6 +244,9 @@ class L10n {
       'lifeDeathProblemsDesc': '문제 풀기',
       'problemList': '문제 목록',
       'problem': '문제',
+      'problemType': '유형',
+      'progress': '진행',
+      'video': '영상',
       'solveProblem': '문제 풀기',
       'difficulty': '난이도',
       'beginner': '입문',
@@ -218,11 +286,17 @@ class L10n {
       'help_yutnori': '[게임 방법]\n윷을 던져 나온 결과에 따라 말을 이동시킵니다.\n모든 말을 먼저 도착점에 들여보내면 승리합니다.\n\n[윷 결과]\n- 도: 1칸 이동\n- 개: 2칸 이동\n- 걸: 3칸 이동\n- 윷: 4칸 이동 + 한 번 더 던지기\n- 모: 5칸 이동 + 한 번 더 던지기\n\n[특수 규칙]\n- 상대 말을 잡으면 한 번 더 던질 수 있습니다\n- 같은 위치의 내 말은 업어서 함께 이동할 수 있습니다\n- 지름길을 활용하면 더 빨리 도착할 수 있습니다',
       // 하위 게임 이름
       'mighty': '마이티',
+      'mightyDesc': '5인 트럼프',
       'hearts': '하트',
+      'heartsDesc': '패스 게임',
       'hula': '훌라',
+      'hulaDesc': '3장 카드',
       'onecard': '원카드',
+      'onecardDesc': '4인 대전',
       'highlow': '하이로우',
+      'highlowDesc': '숫자 맞추기',
       'sevenpoker': '세븐포커',
+      'sevenpokerDesc': '포커 게임',
       'gomoku': '오목',
       'othello': '오델로',
       'tetris': '테트리스',
@@ -335,11 +409,51 @@ class L10n {
       'aiHard': 'Hard',
       'aiExpert': 'Expert',
       'hint': 'Hint',
+      'hintOn': 'Hint ON',
+      'hintOff': 'Hint OFF',
       'hintMessage': 'Recommended move shown',
       'noHint': 'No suggestion available',
+      'enableHintTitle': 'Hint',
+      'enableHintMessage': 'Do you want to enable hints?',
+      'hintEnabled': 'Hints enabled!',
+      'cancel': 'Cancel',
+      'confirm': 'OK',
+      'close': 'Close',
+      'newGameConfirm': 'Do you want to start a new game?',
+      'endGameConfirm': 'End current game and start a new one?',
       'continue': 'Continue',
       'save': 'Save',
       'load': 'Load',
+      'restart': 'Restart',
+      'selectGame': 'Select Game',
+      'viewResult': 'View Result',
+      'initializing': 'Initializing...',
+      // Poker betting
+      'betPing': 'Ante',
+      'betCall': 'Call',
+      'betDdadang': 'Raise',
+      'betDie': 'Fold',
+      'betCheck': 'Check',
+      'betQuarter': 'Quarter',
+      'betHalf': 'Half',
+      'betFull': 'Full',
+      // Hula game
+      'register': 'Meld',
+      'discard': 'Discard',
+      'stop': 'Stop',
+      // Table headers
+      'player': 'Player',
+      'thisGame': 'This Game',
+      'winLoss': 'W/L',
+      'cumulative': 'Total',
+      'hand': 'Hand',
+      'score': 'Score',
+      // Sudoku
+      'quick': 'Quick',
+      'memo': 'Memo',
+      'allMemo': 'All Memo',
+      'selectCellFirst': 'Select a cell first',
+      'cellAlreadyFilled': 'Cell already filled',
       'noSavedGame': 'No saved game',
       'gameSaved': 'Game saved',
       'gameLoaded': 'Game loaded',
@@ -360,6 +474,9 @@ class L10n {
       'lifeDeathProblemsDesc': 'Solve problems',
       'problemList': 'Problem List',
       'problem': 'Problem',
+      'problemType': 'Type',
+      'progress': 'Progress',
+      'video': 'Video',
       'solveProblem': 'Solve Problems',
       'difficulty': 'Difficulty',
       'beginner': 'Beginner',
@@ -399,11 +516,17 @@ class L10n {
       'help_yutnori': '[How to Play]\nThrow yut sticks and move pieces based on results.\nFirst to bring all pieces to the finish wins.\n\n[Yut Results]\n- Do: Move 1 space\n- Gae: Move 2 spaces\n- Geol: Move 3 spaces\n- Yut: Move 4 spaces + throw again\n- Mo: Move 5 spaces + throw again\n\n[Special Rules]\n- Capture opponent piece = throw again\n- Stack your pieces on same spot to move together\n- Use shortcuts to reach finish faster',
       // Sub-game names
       'mighty': 'Mighty',
+      'mightyDesc': '5-Player Trump',
       'hearts': 'Hearts',
+      'heartsDesc': 'Pass Game',
       'hula': 'Hula',
+      'hulaDesc': '3-Card Game',
       'onecard': 'One Card',
+      'onecardDesc': '4-Player Battle',
       'highlow': 'Hi-Lo',
+      'highlowDesc': 'Number Guessing',
       'sevenpoker': 'Seven Poker',
+      'sevenpokerDesc': 'Poker Game',
       'gomoku': 'Gomoku',
       'othello': 'Othello',
       'tetris': 'Tetris',
@@ -516,11 +639,51 @@ class L10n {
       'aiHard': '難しい',
       'aiExpert': '最強',
       'hint': 'ヒント',
+      'hintOn': 'ヒント ON',
+      'hintOff': 'ヒント OFF',
       'hintMessage': 'おすすめの手を表示しました',
       'noHint': '提案できません',
+      'enableHintTitle': 'ヒント',
+      'enableHintMessage': 'ヒントを有効にしますか？',
+      'hintEnabled': 'ヒントが有効になりました！',
+      'cancel': 'キャンセル',
+      'confirm': '確認',
+      'close': '閉じる',
+      'newGameConfirm': '新しいゲームを始めますか？',
+      'endGameConfirm': '現在のゲームを終了して新しいゲームを始めますか？',
       'continue': '続きから',
       'save': '保存',
       'load': '読込',
+      'restart': 'やり直し',
+      'selectGame': 'ゲーム選択',
+      'viewResult': '結果を見る',
+      'initializing': '初期化中...',
+      // ポーカーベッティング
+      'betPing': 'ビン',
+      'betCall': 'コール',
+      'betDdadang': 'タダン',
+      'betDie': 'ダイ',
+      'betCheck': 'チェック',
+      'betQuarter': 'クォーター',
+      'betHalf': 'ハーフ',
+      'betFull': 'フル',
+      // フラゲーム
+      'register': '登録',
+      'discard': '捨てる',
+      'stop': 'ストップ',
+      // テーブルヘッダー
+      'player': 'プレイヤー',
+      'thisGame': '今回',
+      'winLoss': '勝/敗',
+      'cumulative': '累計',
+      'hand': '手札',
+      'score': 'スコア',
+      // 数独
+      'quick': 'クイック',
+      'memo': 'メモ',
+      'allMemo': '全メモ',
+      'selectCellFirst': '先にセルを選択してください',
+      'cellAlreadyFilled': '既に埋まっているセルです',
       'noSavedGame': '保存されたゲームがありません',
       'gameSaved': 'ゲームを保存しました',
       'gameLoaded': 'ゲームを読み込みました',
@@ -541,6 +704,9 @@ class L10n {
       'lifeDeathProblemsDesc': '問題を解く',
       'problemList': '問題一覧',
       'problem': '問題',
+      'problemType': '種類',
+      'progress': '進行',
+      'video': '動画',
       'solveProblem': '問題を解く',
       'difficulty': '難易度',
       'beginner': '入門',
@@ -580,11 +746,17 @@ class L10n {
       'help_yutnori': '[遊び方]\nユッを投げて結果に従って駒を動かします。\nすべての駒を先にゴールさせれば勝ち。\n\n[ユッの結果]\n- ド：1マス移動\n- ゲ：2マス移動\n- ゴル：3マス移動\n- ユッ：4マス移動＋もう一回投げる\n- モ：5マス移動＋もう一回投げる\n\n[特殊ルール]\n- 相手の駒を取るともう一回投げられる\n- 同じ位置の自分の駒は一緒に動かせる\n- 近道を使うとより早くゴールできる',
       // サブゲーム名
       'mighty': 'マイティ',
+      'mightyDesc': '5人トランプ',
       'hearts': 'ハーツ',
+      'heartsDesc': 'パスゲーム',
       'hula': 'フラ',
+      'hulaDesc': '3枚カード',
       'onecard': 'ワンカード',
+      'onecardDesc': '4人対戦',
       'highlow': 'ハイロー',
+      'highlowDesc': '数字当て',
       'sevenpoker': 'セブンポーカー',
+      'sevenpokerDesc': 'ポーカーゲーム',
       'gomoku': '五目並べ',
       'othello': 'オセロ',
       'tetris': 'テトリス',
@@ -697,11 +869,51 @@ class L10n {
       'aiHard': '困难',
       'aiExpert': '最强',
       'hint': '提示',
+      'hintOn': '提示 ON',
+      'hintOff': '提示 OFF',
       'hintMessage': '已显示推荐位置',
       'noHint': '无法提供建议',
+      'enableHintTitle': '提示',
+      'enableHintMessage': '是否启用提示？',
+      'hintEnabled': '提示已启用！',
+      'cancel': '取消',
+      'confirm': '确认',
+      'close': '关闭',
+      'newGameConfirm': '是否开始新游戏？',
+      'endGameConfirm': '是否结束当前游戏并开始新游戏？',
       'continue': '继续游戏',
       'save': '保存',
       'load': '读取',
+      'restart': '重新开始',
+      'selectGame': '选择游戏',
+      'viewResult': '查看结果',
+      'initializing': '初始化中...',
+      // 扑克下注
+      'betPing': '底注',
+      'betCall': '跟注',
+      'betDdadang': '加倍',
+      'betDie': '弃牌',
+      'betCheck': '过牌',
+      'betQuarter': '四分之一',
+      'betHalf': '一半',
+      'betFull': '全押',
+      // Hula游戏
+      'register': '登记',
+      'discard': '弃牌',
+      'stop': '停止',
+      // 表格标题
+      'player': '玩家',
+      'thisGame': '本局',
+      'winLoss': '胜/负',
+      'cumulative': '累计',
+      'hand': '手牌',
+      'score': '分数',
+      // 数独
+      'quick': '快速',
+      'memo': '备注',
+      'allMemo': '全部备注',
+      'selectCellFirst': '请先选择一个格子',
+      'cellAlreadyFilled': '该格子已填写',
       'noSavedGame': '没有保存的游戏',
       'gameSaved': '游戏已保存',
       'gameLoaded': '游戏已读取',
@@ -722,6 +934,9 @@ class L10n {
       'lifeDeathProblemsDesc': '做题',
       'problemList': '题目列表',
       'problem': '题目',
+      'problemType': '类型',
+      'progress': '进度',
+      'video': '视频',
       'solveProblem': '做题',
       'difficulty': '难度',
       'beginner': '入门',
@@ -761,11 +976,17 @@ class L10n {
       'help_yutnori': '[游戏方法]\n投掷木棒，根据结果移动棋子。\n先将所有棋子移到终点者获胜。\n\n[投掷结果]\n- 道：移动1格\n- 盖：移动2格\n- 葛：移动3格\n- 柶：移动4格+再投一次\n- 模：移动5格+再投一次\n\n[特殊规则]\n- 吃掉对方棋子可以再投一次\n- 同一位置的己方棋子可以一起移动\n- 利用捷径可以更快到达终点',
       // 子游戏名称
       'mighty': 'Mighty',
+      'mightyDesc': '5人扑克',
       'hearts': '红心大战',
+      'heartsDesc': '传牌游戏',
       'hula': 'Hula',
+      'hulaDesc': '3张牌',
       'onecard': 'UNO',
+      'onecardDesc': '4人对战',
       'highlow': '高低',
+      'highlowDesc': '猜数字',
       'sevenpoker': '七张扑克',
+      'sevenpokerDesc': '扑克游戏',
       'gomoku': '五子棋',
       'othello': '黑白棋',
       'tetris': '俄罗斯方块',
@@ -857,13 +1078,17 @@ class L10n {
   }
 }
 
-// 공통 앱바 빌더
+// 공통 앱바 빌더 - Provider를 사용하여 언어 상태 관리
 AppBar buildCommonAppBar({
   required BuildContext context,
   required String title,
   required GameLanguage language,
   required Function(GameLanguage) onLanguageChanged,
 }) {
+  // Provider에서 언어 상태 읽기 (화면 전체에서 일관된 상태 유지)
+  final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+  final currentLanguage = languageProvider.language;
+
   return AppBar(
     title: Text(title),
     backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -875,14 +1100,14 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => AboutPage(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
           );
         },
         child: Text(
-          L10n.get(language, 'about'),
+          L10n.get(currentLanguage, 'about'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -892,15 +1117,15 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => GameModeSelector(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
             (route) => route.isFirst,
           );
         },
         child: Text(
-          L10n.get(language, 'appTitle'),
+          L10n.get(currentLanguage, 'appTitle'),
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.bold,
@@ -913,14 +1138,14 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => JanggiSelectionScreen(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
           );
         },
         child: Text(
-          L10n.get(language, 'janggi'),
+          L10n.get(currentLanguage, 'janggi'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -930,14 +1155,14 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => card_game.GameSelectionScreen(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
           );
         },
         child: Text(
-          L10n.get(language, 'cardGame'),
+          L10n.get(currentLanguage, 'cardGame'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -947,14 +1172,14 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => BoardGameSelectionScreen(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
           );
         },
         child: Text(
-          L10n.get(language, 'boardGame'),
+          L10n.get(currentLanguage, 'boardGame'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -964,23 +1189,23 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => SudokuSelectionScreen(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
           );
         },
         child: Text(
-          L10n.get(language, 'sudoku'),
+          L10n.get(currentLanguage, 'sudoku'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
       TextButton(
         onPressed: () {
-          _showYutnoriPlayerSelection(context, language, onLanguageChanged);
+          _showYutnoriPlayerSelection(context, currentLanguage, languageProvider.setLanguage);
         },
         child: Text(
-          L10n.get(language, 'yutnori'),
+          L10n.get(currentLanguage, 'yutnori'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -990,14 +1215,14 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => HelpPage(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
           );
         },
         child: Text(
-          L10n.get(language, 'help'),
+          L10n.get(currentLanguage, 'help'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -1007,14 +1232,14 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => PrivacyPolicyPage(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
           );
         },
         child: Text(
-          L10n.get(language, 'privacyPolicy'),
+          L10n.get(currentLanguage, 'privacyPolicy'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -1024,27 +1249,27 @@ AppBar buildCommonAppBar({
             context,
             MaterialPageRoute(
               builder: (context) => TermsOfServicePage(
-                language: language,
-                onLanguageChanged: onLanguageChanged,
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
               ),
             ),
           );
         },
         child: Text(
-          L10n.get(language, 'termsOfService'),
+          L10n.get(currentLanguage, 'termsOfService'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
       PopupMenuButton<GameLanguage>(
         icon: const Icon(Icons.language),
-        tooltip: L10n.get(language, 'language'),
-        onSelected: onLanguageChanged,
+        tooltip: L10n.get(currentLanguage, 'language'),
+        onSelected: languageProvider.setLanguage,
         itemBuilder: (context) => GameLanguage.values.map((lang) {
           return PopupMenuItem(
             value: lang,
             child: Row(
               children: [
-                if (lang == language)
+                if (lang == currentLanguage)
                   const Icon(Icons.check, size: 18)
                 else
                   const SizedBox(width: 18),
@@ -1067,7 +1292,6 @@ class BadukApp extends StatefulWidget {
 }
 
 class _BadukAppState extends State<BadukApp> {
-  GameLanguage _language = GameLanguage.korean;
   bool _benchmarkDone = false;
 
   @override
@@ -1085,24 +1309,21 @@ class _BadukAppState extends State<BadukApp> {
     }
   }
 
-  void _setLanguage(GameLanguage lang) {
-    setState(() {
-      _language = lang;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final languageProvider = context.watch<LanguageProvider>();
+    final language = languageProvider.language;
+
     return MaterialApp(
-      title: L10n.get(_language, 'appTitle'),
+      title: L10n.get(language, 'appTitle'),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
         useMaterial3: true,
       ),
       home: _benchmarkDone
           ? AboutPage(
-              language: _language,
-              onLanguageChanged: _setLanguage,
+              language: language,
+              onLanguageChanged: languageProvider.setLanguage,
             )
           : const Scaffold(
               body: Center(
@@ -1154,6 +1375,10 @@ class _GameModeSelectorState extends State<GameModeSelector> {
 
   @override
   Widget build(BuildContext context) {
+    // Provider에서 언어 상태 읽기
+    final languageProvider = context.watch<LanguageProvider>();
+    final language = languageProvider.language;
+
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom;
@@ -1198,9 +1423,9 @@ class _GameModeSelectorState extends State<GameModeSelector> {
     return Scaffold(
       appBar: buildCommonAppBar(
         context: context,
-        title: L10n.get(widget.language, 'appTitle'),
-        language: widget.language,
-        onLanguageChanged: widget.onLanguageChanged,
+        title: L10n.get(language, 'appTitle'),
+        language: language,
+        onLanguageChanged: languageProvider.setLanguage,
       ),
       backgroundColor: Colors.brown[800],
       body: SafeArea(
@@ -1222,8 +1447,8 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                         height: tileHeight,
                         child: _buildGameTile(
                           context: context,
-                          title: L10n.get(widget.language, 'vsAI'),
-                          subtitle: L10n.get(widget.language, 'vsAIDesc'),
+                          title: L10n.get(language, 'vsAI'),
+                          subtitle: L10n.get(language, 'vsAIDesc'),
                           icon: Icons.smart_toy,
                           color: Colors.brown[600]!,
                           iconSize: iconSize,
@@ -1234,7 +1459,7 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => AIDifficultySelector(
-                                  language: widget.language,
+                                  language: language,
                                 ),
                               ),
                             ).then((_) => _checkSavedGame());
@@ -1247,8 +1472,8 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                         height: tileHeight,
                         child: _buildGameTile(
                           context: context,
-                          title: L10n.get(widget.language, 'twoPlayerMode'),
-                          subtitle: L10n.get(widget.language, 'twoPlayerModeDesc'),
+                          title: L10n.get(language, 'twoPlayerMode'),
+                          subtitle: L10n.get(language, 'twoPlayerModeDesc'),
                           icon: Icons.people,
                           color: Colors.blueGrey[600]!,
                           iconSize: iconSize,
@@ -1260,7 +1485,7 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                               MaterialPageRoute(
                                 builder: (context) => BadukGame(
                                   vsAI: false,
-                                  language: widget.language,
+                                  language: language,
                                 ),
                               ),
                             );
@@ -1273,8 +1498,8 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                         height: tileHeight,
                         child: _buildGameTile(
                           context: context,
-                          title: L10n.get(widget.language, 'lifeDeathProblems'),
-                          subtitle: L10n.get(widget.language, 'lifeDeathProblemsDesc'),
+                          title: L10n.get(language, 'lifeDeathProblems'),
+                          subtitle: L10n.get(language, 'lifeDeathProblemsDesc'),
                           icon: Icons.extension,
                           color: Colors.green[700]!,
                           iconSize: iconSize,
@@ -1285,7 +1510,7 @@ class _GameModeSelectorState extends State<GameModeSelector> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => LifeDeathProblemSelector(
-                                  language: widget.language,
+                                  language: language,
                                 ),
                               ),
                             );
@@ -2409,9 +2634,13 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
 
   @override
   Widget build(BuildContext context) {
+    // Provider에서 언어 상태 읽기
+    final languageProvider = context.watch<LanguageProvider>();
+    final language = languageProvider.language;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(L10n.get(widget.language, 'lifeDeathProblems')),
+        title: Text(L10n.get(language, 'lifeDeathProblems')),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SingleChildScrollView(
@@ -2433,19 +2662,19 @@ class _LifeDeathProblemSelectorState extends State<LifeDeathProblemSelector> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                  child: Text('유형', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text(L10n.get(language, 'problemType'), style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-                  child: Text('진행', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                  child: Text(L10n.get(language, 'progress'), style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-                  child: Text('영상', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                  child: Text(L10n.get(language, 'video'), style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-                  child: Text('문제', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                  child: Text(L10n.get(language, 'problem'), style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                 ),
               ],
             ),
@@ -6997,12 +7226,16 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Provider에서 언어 상태 읽기
+    final languageProvider = context.watch<LanguageProvider>();
+    final currentLanguage = languageProvider.language;
+
     return Scaffold(
       appBar: buildCommonAppBar(
         context: context,
-        title: L10n.get(language, 'about'),
-        language: language,
-        onLanguageChanged: onLanguageChanged,
+        title: L10n.get(currentLanguage, 'about'),
+        language: currentLanguage,
+        onLanguageChanged: languageProvider.setLanguage,
       ),
       backgroundColor: Colors.green[800],
       body: SafeArea(
@@ -7014,7 +7247,7 @@ class AboutPage extends StatelessWidget {
               // 타이틀
               Center(
                 child: Text(
-                  L10n.get(language, 'aboutTitle'),
+                  L10n.get(currentLanguage, 'aboutTitle'),
                   style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -7046,7 +7279,7 @@ class AboutPage extends StatelessWidget {
                   ],
                 ),
                 child: Text(
-                  L10n.get(language, 'aboutContent'),
+                  L10n.get(currentLanguage, 'aboutContent'),
                   style: TextStyle(
                     fontSize: 16,
                     height: 1.8,
@@ -7275,15 +7508,19 @@ class _HelpPageState extends State<HelpPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Provider에서 언어 상태 읽기
+    final languageProvider = context.watch<LanguageProvider>();
+    final language = languageProvider.language;
+
     final screenWidth = MediaQuery.of(context).size.width;
     final isWideScreen = screenWidth > 600;
 
     return Scaffold(
       appBar: buildCommonAppBar(
         context: context,
-        title: L10n.get(widget.language, 'help'),
-        language: widget.language,
-        onLanguageChanged: widget.onLanguageChanged,
+        title: L10n.get(language, 'help'),
+        language: language,
+        onLanguageChanged: languageProvider.setLanguage,
       ),
       backgroundColor: Colors.green[800],
       body: SafeArea(

@@ -379,7 +379,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continueGame => 'Continue';
 
   @override
-  String get exitGame => 'Exit Game';
+  String get exitGame => 'Exit';
 
   @override
   String get exitGameConfirm => 'Exit the game?\nCurrent game will be saved.';
@@ -477,6 +477,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
+
+  @override
+  String get hint => 'Hint';
+
+  @override
+  String get enableHintQuestion => 'Do you want to enable hints?';
+
+  @override
+  String get newGameConfirm => 'Do you want to start a new game?';
 
   @override
   String get dealMiss => 'Deal Miss';
@@ -589,6 +598,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wins => 'Wins';
+
+  @override
+  String get betPing => 'Ante';
+
+  @override
+  String get betDdadang => 'Raise';
+
+  @override
+  String get betQuarter => 'Quarter';
+
+  @override
+  String get betHalf => 'Half';
+
+  @override
+  String get betFull => 'Full';
+
+  @override
+  String get betDie => 'Fold';
+
+  @override
+  String get selectCardToReveal => 'Select a card to reveal';
+
+  @override
+  String get selectedCardWillBeRevealed =>
+      'The selected card will be revealed to opponents';
+
+  @override
+  String get totalBet => 'Total';
+
+  @override
+  String get bonus => 'Bonus';
+
+  @override
+  String get finalResult => 'Final Result';
+
+  @override
+  String get viewResultButton => 'View Result';
+
+  @override
+  String get hintOff => 'Hint OFF';
+
+  @override
+  String get playerLabel => 'Player';
+
+  @override
+  String get thisGame => 'This Game';
+
+  @override
+  String get cumulative => 'Total';
+
+  @override
+  String get bettingAmount => 'Betting';
+
+  @override
+  String get otherPlayersBonus => 'Other players';
 
   @override
   String get gameEnd => 'Game End';
@@ -764,4 +828,305 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get heartsSubtitle => '4-Player Trick-Taking Game';
+
+  @override
+  String get register => 'Meld';
+
+  @override
+  String get discardCard => 'Discard';
+
+  @override
+  String get stopGame => 'Stop';
+
+  @override
+  String get drawCard => 'Draw a card';
+
+  @override
+  String get discardOrRegister => 'Discard or meld a card';
+
+  @override
+  String get noCards => 'No cards';
+
+  @override
+  String get addedToMeld => 'Added to meld';
+
+  @override
+  String get noMeldToAttach => 'No meld to attach to';
+
+  @override
+  String get invalidCombination => 'Invalid combination';
+
+  @override
+  String get drawFirst => 'Draw a card first';
+
+  @override
+  String get selectCardToDiscard => 'Select a card to discard';
+
+  @override
+  String get victory => 'Victory!';
+
+  @override
+  String get defeat => 'Defeat';
+
+  @override
+  String get hulaVictory => 'Hula victory! (x2)';
+
+  @override
+  String get handCards => 'Hand';
+
+  @override
+  String get myTurn => 'My Turn';
+
+  @override
+  String get start => 'Start';
+
+  @override
+  String get discardedCards => 'Discarded';
+
+  @override
+  String get thankYou => 'Thank You';
+
+  @override
+  String get selectMethod => 'Select method';
+
+  @override
+  String get register7Alone => 'Register 7 alone';
+
+  @override
+  String get attachToMyMeld => 'Attach to my meld';
+
+  @override
+  String get attachToOtherMeld => 'Attach to meld';
+
+  @override
+  String get gameRules => 'Game Rules';
+
+  @override
+  String get objective => 'Objective';
+
+  @override
+  String get objectiveDesc =>
+      'Be the first to discard all cards by melding or discarding them.';
+
+  @override
+  String get howToPlay => 'How to Play';
+
+  @override
+  String get howToPlayDesc =>
+      'Each turn, draw a card from the deck or discard pile, then meld or discard.';
+
+  @override
+  String get meldTypes => 'Meld Types';
+
+  @override
+  String get thankYouMeld => 'Thank You Meld';
+
+  @override
+  String get thankYouMeldDesc =>
+      'When you draw a 7 from the discard pile, you can call \"Thank You\" and make a special meld.';
+
+  @override
+  String get stopRule => 'Stop';
+
+  @override
+  String get stopRuleDesc =>
+      'Call Stop anytime to end the game. Player with lowest card points wins.';
+
+  @override
+  String get scoring => 'Scoring';
+
+  @override
+  String aiStartsFirst(Object name) {
+    return '$name starts first';
+  }
+
+  @override
+  String xWins(Object name) {
+    return '$name Wins!';
+  }
+
+  @override
+  String nMelds(Object count) {
+    return '$count melds';
+  }
+
+  @override
+  String attachedToMeldSelf(Object card) {
+    return '$card added to meld';
+  }
+
+  @override
+  String attachedToMeldPlayer(Object card) {
+    return '$card added to player\'s meld';
+  }
+
+  @override
+  String attachedToMeldOther(Object card, Object name) {
+    return '$card added to $name\'s meld';
+  }
+
+  @override
+  String drewCard(Object name) {
+    return '$name drew a card';
+  }
+
+  @override
+  String thankYouAttachSelf(Object card) {
+    return 'Thank You! $card to my meld';
+  }
+
+  @override
+  String thankYouAttachOther(Object card, Object name) {
+    return 'Thank You! $card to $name\'s meld';
+  }
+
+  @override
+  String nPlayersHula(Object n) {
+    return 'Hula (${n}P)';
+  }
+
+  @override
+  String nCards(Object n) {
+    return '$n cards';
+  }
+
+  @override
+  String get heartsBreaking => 'Hearts Breaking';
+
+  @override
+  String get cardPass => 'Card Pass';
+
+  @override
+  String trickNum(Object n) {
+    return 'Trick $n/13';
+  }
+
+  @override
+  String passToLeft(Object n) {
+    return 'Pass to Left ($n/3)';
+  }
+
+  @override
+  String get selectCardsToPass => 'Select 3 cards to pass to the left';
+
+  @override
+  String get allPointsExhausted => 'All point cards exhausted! Game over';
+
+  @override
+  String get passRecommend => 'Pass Recommend';
+
+  @override
+  String get recommend => 'Recommend';
+
+  @override
+  String get hintEnabled => 'Hint enabled!';
+
+  @override
+  String get oneCard => 'One Card';
+
+  @override
+  String oneCardTitle(Object n) {
+    return 'One Card (${n}P)';
+  }
+
+  @override
+  String get oneCardCall => 'One Card!';
+
+  @override
+  String oneCardCountdown(Object n) {
+    return 'One Card (${n}s)';
+  }
+
+  @override
+  String get cannotPlayCard => 'Cannot play this card';
+
+  @override
+  String attackReceived(Object n) {
+    return 'Received $n cards from attack';
+  }
+
+  @override
+  String get drewCardMsg => 'Drew a card';
+
+  @override
+  String bankruptcy(Object n) {
+    return 'Bankrupt! ($n cards)';
+  }
+
+  @override
+  String get selectSuit => 'Select a suit';
+
+  @override
+  String get clockwise => 'Clockwise';
+
+  @override
+  String get counterClockwise => 'Counter-clockwise';
+
+  @override
+  String get blackJoker => 'Black Joker';
+
+  @override
+  String get colorJoker => 'Color Joker';
+
+  @override
+  String get winRate => 'Win Rate';
+
+  @override
+  String get rulesObjective => 'Objective';
+
+  @override
+  String get rulesHowToPlay => 'How to Play';
+
+  @override
+  String get rulesScoring => 'Scoring';
+
+  @override
+  String get rulesTips => 'Tips';
+
+  @override
+  String get rulesAttackCards => 'Attack Cards';
+
+  @override
+  String get rulesDefense => 'Defense';
+
+  @override
+  String get rulesSpecialCards => 'Special Cards';
+
+  @override
+  String get restart => 'Restart';
+
+  @override
+  String totalAttack(int n) {
+    return '$n cards attack';
+  }
+
+  @override
+  String get skipNextTurn => 'Skip next turn';
+
+  @override
+  String get reverseDirection => 'Reverse direction';
+
+  @override
+  String get skipTwoTurns => 'Skip 2 turns';
+
+  @override
+  String get changeSuit => 'Change suit';
+
+  @override
+  String playerPlayedCard(String name) {
+    return '$name played a card';
+  }
+
+  @override
+  String attackReceivedShort(int n) {
+    return 'Received $n cards';
+  }
+
+  @override
+  String get drewCardShort => 'Drew card';
+
+  @override
+  String bankruptcyShort(int n) {
+    return 'Bankrupt! ($n cards)';
+  }
 }

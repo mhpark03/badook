@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../main.dart';
 import '../board_game/l10n/board_game_strings.dart';
 import 'janggi_screen.dart';
@@ -43,6 +44,13 @@ class _JanggiSelectionScreenState extends State<JanggiSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Provider에서 언어 상태 읽기
+    final languageProvider = context.watch<LanguageProvider>();
+    final language = languageProvider.language;
+
+    // 현재 언어 설정
+    BoardGameStrings.currentLanguage = language;
+
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom;
@@ -87,8 +95,8 @@ class _JanggiSelectionScreenState extends State<JanggiSelectionScreen> {
       appBar: buildCommonAppBar(
         context: context,
         title: 'games.janggi.name'.tr(),
-        language: widget.language,
-        onLanguageChanged: widget.onLanguageChanged,
+        language: language,
+        onLanguageChanged: languageProvider.setLanguage,
       ),
       backgroundColor: const Color(0xFF8B4513), // 장기판 색상
       body: SafeArea(

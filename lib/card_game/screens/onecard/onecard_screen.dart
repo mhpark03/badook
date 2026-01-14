@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../services/game_save_service.dart';
 import '../../../services/web_ad_helper.dart';
+import '../../l10n/l10n_helper.dart';
 
 // 카드 무늬
 enum Suit { spade, heart, diamond, club }
@@ -168,7 +169,10 @@ class OneCardScreen extends StatefulWidget {
 
 class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateMixin {
   // AI 이름
-  static const List<String> aiNames = ['민준', '서연', '지호'];
+  List<String> get aiNames {
+    final l10n = getL10n(context);
+    return [l10n.aiPlayer1, l10n.aiPlayer2, l10n.aiPlayer3];
+  }
 
   List<PlayingCard> deck = [];
   List<PlayingCard> discardPile = [];
@@ -354,7 +358,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
         playerCalledOneCard = true; // 더 이상 벌칙 없음
         _waitingForOneCard = false;
       });
-      _showMessage('${_getPlayerName(randomComputer)}: 원카드!');
+      _showMessage('${_getPlayerName(randomComputer)}: ${getL10n(context).oneCardCall}');
       HapticFeedback.heavyImpact();
       _saveGame();
 
@@ -534,7 +538,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     _cancelOneCardTimer();
 
     setState(() {});
-    _showMessage('이어하기');
+    _showMessage(getL10n(context).continueGame);
 
     // 컴퓨터 턴인 경우 컴퓨터가 진행
     if (currentTurn > 0) {
@@ -557,7 +561,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
 
   // 플레이어 이름
   String _getPlayerName(int turn) {
-    if (turn == 0) return '플레이어';
+    if (turn == 0) return getL10n(context).you;
     return aiNames[turn - 1];
   }
 
@@ -682,33 +686,34 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
       }
 
       // 카드 효과 처리
+      final l10n = getL10n(context);
       if (card.isAttack) {
         attackStack += card.attackPower;
-        pendingMessage = '$playerName: +${card.attackPower}! (총 $attackStack장 공격)';
+        pendingMessage = '$playerName: +${card.attackPower}! (${l10n.totalAttack(attackStack)})';
       } else if (card.isJump) {
         skipNextTurn = true;
-        pendingMessage = '$playerName: J! 다음 턴 건너뛰기';
+        pendingMessage = '$playerName: J! ${l10n.skipNextTurn}';
       } else if (card.isReverse) {
         // Q: 방향 반대 (2인용에서는 의미 없음)
         turnDirection *= -1;
-        pendingMessage = '$playerName: Q! 방향 반대';
+        pendingMessage = '$playerName: Q! ${l10n.reverseDirection}';
       } else if (card.isChain) {
         // K: 2턴 건너뛰기
         skipNextTurn = true; // 첫 번째 건너뛰기 (아래서 한 번 더 건너뜀)
-        pendingMessage = '$playerName: K! 2턴 건너뛰기';
+        pendingMessage = '$playerName: K! ${l10n.skipTwoTurns}';
       } else if (card.isChange) {
         if (newSuit != null) {
           declaredSuit = newSuit;
-          pendingMessage = '$playerName: 7! 무늬 변경: ${_getSuitName(newSuit)}';
+          pendingMessage = '$playerName: 7! ${l10n.changeSuit}: ${_getSuitName(newSuit)}';
         }
       } else {
-        pendingMessage = '$playerName이(가) 카드를 냈습니다';
+        pendingMessage = l10n.playerPlayedCard(playerName);
       }
 
       // 승리 체크
       if (playerHand.isEmpty) {
         gameOver = true;
-        winner = '플레이어';
+        winner = l10n.you;
         winnerIndex = 0;
         return;
       }
@@ -725,7 +730,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
       if (currentTurn > 0 && computerHands[currentTurn - 1].length == 1) {
         // 컴퓨터는 자동으로 원카드 외침
         computerCalledOneCard[currentTurn - 1] = true;
-        pendingMessage = '$playerName: ${'원카드'}';
+        pendingMessage = '$playerName: ${l10n.oneCardCall}';
       }
 
       // 카드가 2장 이상이면 원카드 상태 리셋
@@ -817,7 +822,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
       playerCalledOneCard = true;
       _waitingForOneCard = false;
     });
-    _showMessage('원카드');
+    _showMessage(getL10n(context).oneCardCall);
     HapticFeedback.heavyImpact();
 
     // 컴퓨터 턴 진행
@@ -834,24 +839,25 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     if (!isPlayerTurn || gameOver || waitingForNextTurn) return;
 
     String? pendingMessage;
+    final l10n = getL10n(context);
 
     setState(() {
       if (attackStack > 0) {
         // 공격 받기
         _drawCards(playerHand, attackStack);
-        pendingMessage = '공격으로 $attackStack장을 받았습니다';
+        pendingMessage = l10n.attackReceived(attackStack);
         attackStack = 0;
       } else {
         // 일반 드로우
         _drawCards(playerHand, 1);
-        pendingMessage = '카드를 뽑았습니다';
+        pendingMessage = l10n.drewCardMsg;
       }
 
       // 파산 체크
       if (playerHand.length >= bankruptcyLimit) {
         gameOver = true;
         winner = _getBankruptcyWinner();
-        pendingMessage = '파산! (${playerHand.length}장 보유)';
+        pendingMessage = l10n.bankruptcy(playerHand.length);
         return;
       }
 
@@ -893,7 +899,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
 
     // 클래스 변수에 승자 인덱스 저장
     winnerIndex = localWinnerIndex;
-    return localWinnerIndex == 0 ? '플레이어' : aiNames[localWinnerIndex - 1];
+    return localWinnerIndex == 0 ? getL10n(context).you : aiNames[localWinnerIndex - 1];
   }
 
   void _computerTurn(int computerIndex) {
@@ -902,6 +908,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     final computerHand = computerHands[computerIndex - 1];
     final playable = _getPlayableCards(computerHand);
     final computerName = _getPlayerName(computerIndex);
+    final l10n = getL10n(context);
 
     if (playable.isEmpty) {
       // 낼 카드 없음
@@ -910,11 +917,11 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
       setState(() {
         if (attackStack > 0) {
           _drawCards(computerHand, attackStack);
-          pendingMessage = '$computerName: 공격으로 $attackStack장 받음';
+          pendingMessage = '$computerName: ${l10n.attackReceivedShort(attackStack)}';
           attackStack = 0;
         } else {
           _drawCards(computerHand, 1);
-          pendingMessage = '$computerName: 카드 뽑음';
+          pendingMessage = '$computerName: ${l10n.drewCardShort}';
         }
 
         lastPlayedCard = null;
@@ -924,9 +931,9 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
         // 파산 체크
         if (computerHand.length >= bankruptcyLimit) {
           gameOver = true;
-          winner = '플레이어';
+          winner = l10n.you;
           winnerIndex = 0;
-          pendingMessage = '$computerName 파산! (${computerHand.length}장 보유)';
+          pendingMessage = '$computerName ${l10n.bankruptcyShort(computerHand.length)}';
           return;
         }
 
@@ -1006,15 +1013,16 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
   }
 
   String _getSuitName(Suit suit) {
+    final l10n = getL10n(context);
     switch (suit) {
       case Suit.spade:
-        return '스페이드';
+        return l10n.spade;
       case Suit.heart:
-        return '하트';
+        return l10n.heart;
       case Suit.diamond:
-        return '다이아몬드';
+        return l10n.diamond;
       case Suit.club:
-        return '클로버';
+        return l10n.club;
     }
   }
 
@@ -1025,7 +1033,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     final playable = _getPlayableCards(playerHand);
 
     if (!playable.contains(card)) {
-      _showMessage('이 카드는 낼 수 없습니다');
+      _showMessage(getL10n(context).cannotPlayCard);
       HapticFeedback.lightImpact();
       return;
     }
@@ -1073,7 +1081,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
         backgroundColor: Colors.green.shade800,
         foregroundColor: Colors.white,
         title: Text(
-          '원카드 (${playerCount}P)',
+          getL10n(context).oneCardTitle(playerCount),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -1081,7 +1089,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _restartGame,
-            tooltip: '다시 시작',
+            tooltip: getL10n(context).restart,
           ),
         ],
       ),
@@ -1158,7 +1166,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
           const SizedBox(height: 4),
           // 카드 수
           Text(
-            '${hand.length}장',
+            getL10n(context).nCards(hand.length),
             style: const TextStyle(color: Colors.white, fontSize: 11),
           ),
           const SizedBox(height: 8),
@@ -1238,7 +1246,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '${hand.length}장',
+                      getL10n(context).nCards(hand.length),
                       style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -1331,10 +1339,10 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                           ),
                           child: Text(
                             currentTurn == 0
-                                ? '내 차례'
+                                ? getL10n(context).myTurn
                                 : (waitingForNextTurn
                                     ? '${aiNames[currentTurn - 1]} ($_autoPlayCountdown)'
-                                    : '${aiNames[currentTurn - 1]} 차례'),
+                                    : getL10n(context).playerTurn(aiNames[currentTurn - 1])),
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -1355,9 +1363,9 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
-                              '시작',
-                              style: TextStyle(
+                            child: Text(
+                              getL10n(context).start,
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -1528,7 +1536,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            turnDirection == 1 ? '반시계' : '시계',
+                            turnDirection == 1 ? getL10n(context).counterClockwise : getL10n(context).clockwise,
                             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                           ),
                         ],
@@ -1629,7 +1637,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                     ),
                   ),
                   Text(
-                    card.isBlackJoker ? '흑백 조커' : '컬러 조커',
+                    card.isBlackJoker ? getL10n(context).blackJoker : getL10n(context).colorJoker,
                     style: TextStyle(
                       color: card.isBlackJoker ? Colors.grey.shade600 : Colors.red.shade400,
                       fontSize: 6 * sizeRatio,
@@ -1718,9 +1726,10 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     }
 
     // 타이머가 작동 중이면 남은 시간 표시
+    final l10n = getL10n(context);
     final buttonText = alreadyCalled
-        ? '원카드!'
-        : (_oneCardTimeLeft > 0 ? '원카드 ($_oneCardTimeLeft초)' : '원카드');
+        ? l10n.oneCardCall
+        : (_oneCardTimeLeft > 0 ? l10n.oneCardCountdown(_oneCardTimeLeft) : l10n.oneCard);
 
     return GestureDetector(
       onTap: alreadyCalled ? null : _callOneCard,
@@ -1824,7 +1833,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                 const Icon(Icons.person, color: Colors.white, size: 16),
                 const SizedBox(width: 4),
                 Text(
-                  '${playerHand.length}장',
+                  getL10n(context).nCards(playerHand.length),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,
@@ -1868,9 +1877,9 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                '무늬를 선택하세요',
-                style: TextStyle(
+              Text(
+                getL10n(context).selectSuit,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -1929,7 +1938,8 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     // 광고 표시
     WebAdHelper.showAd();
 
-    final isPlayerWinner = winner == '플레이어';
+    final l10n = getL10n(context);
+    final isPlayerWinner = winner == l10n.you;
 
     return Container(
       color: Colors.black54,
@@ -1955,7 +1965,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
               ),
               const SizedBox(height: 16),
               Text(
-                isPlayerWinner ? '승리' : '패배',
+                isPlayerWinner ? l10n.victory : l10n.defeat,
                 style: TextStyle(
                   color: isPlayerWinner ? Colors.amber : Colors.red,
                   fontSize: 28,
@@ -1964,7 +1974,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
               ),
               const SizedBox(height: 8),
               Text(
-                '${winner ?? ''} 승리!',
+                l10n.xWins(winner ?? ''),
                 style: TextStyle(
                   color: Colors.grey.shade400,
                   fontSize: 16,
@@ -1979,7 +1989,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
                 child: Text(
-                  '새 게임',
+                  l10n.newGame,
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),

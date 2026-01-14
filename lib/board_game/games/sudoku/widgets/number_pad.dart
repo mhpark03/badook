@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/board_game_strings.dart';
 
 class NumberPad extends StatelessWidget {
   final Function(int) onNumberTap;
@@ -162,8 +163,8 @@ class NumberPad extends StatelessWidget {
                 SizedBox(width: isCompact ? 4 : 8),
                 Text(
                   isQuickInputMode
-                    ? '빠른 입력: ${quickInputNumber!}'
-                    : '빠른 입력',
+                    ? 'games.sudoku.quickInputWithNum'.tr(namedArgs: {'num': quickInputNumber.toString()})
+                    : 'games.sudoku.quickInput'.tr(),
                   style: TextStyle(
                     fontSize: isCompact ? 12 : 14,
                     fontWeight: isQuickInputMode ? FontWeight.bold : FontWeight.normal,

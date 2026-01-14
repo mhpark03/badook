@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../models/samurai_game_state.dart';
 import '../models/samurai_sudoku_generator.dart';
+import '../../../l10n/board_game_strings.dart';
 
 class ExpandedBoardDialog extends StatefulWidget {
   final SamuraiGameState gameState;
@@ -115,7 +116,7 @@ class _ExpandedBoardDialogState extends State<ExpandedBoardDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '보드 ${widget.boardIndex + 1}',
+                    'games.sudoku.boardNum'.tr(namedArgs: {'num': (widget.boardIndex + 1).toString()}),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -127,7 +128,7 @@ class _ExpandedBoardDialogState extends State<ExpandedBoardDialog> {
                       // 빠른 입력 토글
                       _buildHeaderToggle(
                         icon: Icons.flash_on,
-                        label: '빠른',
+                        label: 'games.sudoku.quickInput'.tr(),
                         isActive: isQuickInputMode,
                         activeColor: Colors.orange,
                         onTap: () {
@@ -147,7 +148,7 @@ class _ExpandedBoardDialogState extends State<ExpandedBoardDialog> {
                       // 메모 모드 토글
                       _buildHeaderToggle(
                         icon: Icons.edit_note,
-                        label: '메모',
+                        label: 'games.sudoku.notes'.tr(),
                         isActive: isNoteMode,
                         activeColor: Colors.orange,
                         onTap: () {
@@ -204,8 +205,8 @@ class _ExpandedBoardDialogState extends State<ExpandedBoardDialog> {
                       const SizedBox(width: 6),
                       Text(
                         quickInputNumber != null
-                            ? '숫자 $quickInputNumber 선택됨 - 셀을 탭하여 입력'
-                            : '아래에서 숫자를 먼저 선택하세요',
+                            ? 'games.sudoku.quickInputSelected'.tr(namedArgs: {'num': quickInputNumber.toString()})
+                            : 'games.sudoku.selectNumberFirst'.tr(),
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.orange.shade700,
@@ -225,7 +226,7 @@ class _ExpandedBoardDialogState extends State<ExpandedBoardDialog> {
                 children: [
                   _buildFeatureButton(
                     icon: Icons.grid_on,
-                    label: '모든 메모',
+                    label: 'games.sudoku.allNotes'.tr(),
                     onTap: () {
                       widget.onFillAllNotes(widget.boardIndex);
                       setState(() {});
@@ -233,7 +234,7 @@ class _ExpandedBoardDialogState extends State<ExpandedBoardDialog> {
                   ),
                   _buildFeatureButton(
                     icon: Icons.lightbulb_outline,
-                    label: '힌트',
+                    label: 'common.hint'.tr(),
                     onTap: _onHint,
                     color: Colors.orange,
                   ),
@@ -629,14 +630,14 @@ class _ExpandedBoardDialogState extends State<ExpandedBoardDialog> {
   void _onHint() {
     if (selectedRow == null || selectedCol == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('셀을 먼저 선택하세요')),
+        SnackBar(content: Text('games.sudoku.selectCell'.tr())),
       );
       return;
     }
 
     if (widget.gameState.isFixed[widget.boardIndex][selectedRow!][selectedCol!]) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('이미 채워진 칸입니다')),
+        SnackBar(content: Text('common.alreadyFilled'.tr())),
       );
       return;
     }

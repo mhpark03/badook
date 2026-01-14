@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import '../main.dart';
 import '../board_game/l10n/board_game_strings.dart';
 import '../board_game/services/gemini_service.dart';
 import '../board_game/services/game_save_service.dart';
@@ -743,9 +745,9 @@ class _JanggiScreenState extends State<JanggiScreen> {
                   });
                   _startGame();
                 },
-                child: const Text(
-                  '게임 시작',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                child: Text(
+                  L10n.get(context.read<LanguageProvider>().language, 'startGame'),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

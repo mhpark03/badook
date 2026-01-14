@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../services/hearts/hearts_stats_service.dart';
 import '../../services/game_save_service.dart';
 import '../../../services/web_ad_helper.dart';
+import '../../l10n/l10n_helper.dart';
 
 enum Suit { spade, heart, diamond, club }
 
@@ -152,7 +153,10 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
   Timer? _messageTimer;
   bool _showHint = false; // 힌트 표시 여부
 
-  final playerNames = ['플레이어', '민준', '서연', '지호'];
+  List<String> get playerNames {
+    final l10n = getL10n(context);
+    return [l10n.you, l10n.aiPlayer1, l10n.aiPlayer2, l10n.aiPlayer3];
+  }
 
   @override
   void initState() {
@@ -1286,7 +1290,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
 
       if (gameEnded) {
         if (earlyEnd) {
-          _showMessage('모든 점수 카드 소진! 게임 종료');
+          _showMessage(getL10n(context).allPointsExhausted);
         }
         _endRound();
       } else {
@@ -1428,7 +1432,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
                             ),
                           ),
                           child: Text(
-                            '왼쪽으로 패스 (${selectedForPassing.length}/3)',
+                            getL10n(context).passToLeft(selectedForPassing.length),
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: isSmallScreen ? 14 : 16,
@@ -1469,8 +1473,8 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
           const SizedBox(width: 12),
           Text(
             phase == GamePhase.passing
-                ? '카드 패스'
-                : '트릭 $trickNumber/13',
+                ? getL10n(context).cardPass
+                : getL10n(context).trickNum(trickNumber),
             style: TextStyle(
               color: Colors.white,
               fontSize: isSmallScreen ? 14 : 16,
@@ -1484,7 +1488,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
                 Icon(Icons.favorite, color: Colors.red, size: isSmallScreen ? 16 : 20),
                 const SizedBox(width: 4),
                 Text(
-                  '하트 브레이킹',
+                  getL10n(context).heartsBreaking,
                   style: TextStyle(
                     color: Colors.red[300],
                     fontSize: isSmallScreen ? 11 : 13,
@@ -1503,7 +1507,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
                 size: isSmallScreen ? 16 : 18,
               ),
               label: Text(
-                _showHint ? '힌트 OFF' : '힌트',
+                _showHint ? getL10n(context).hintOff : getL10n(context).hint,
                 style: TextStyle(
                   color: _showHint ? Colors.yellow : Colors.green,
                   fontSize: isSmallScreen ? 11 : 13,
@@ -1525,7 +1529,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
               size: isSmallScreen ? 16 : 18,
             ),
             label: Text(
-              '새 게임',
+              getL10n(context).newGame,
               style: TextStyle(
                 color: Colors.amber,
                 fontSize: isSmallScreen ? 11 : 13,
@@ -1543,15 +1547,16 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
   }
 
   void _showNewGameDialog() {
+    final l10n = getL10n(context);
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('새 게임'),
-        content: const Text('현재 게임을 종료하고 새 게임을 시작하시겠습니까?'),
+        title: Text(l10n.newGame),
+        content: Text(l10n.newGameConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('취소'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -1559,7 +1564,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
               _startNewGame();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('확인', style: TextStyle(color: Colors.black)),
+            child: Text(l10n.confirm, style: const TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -1577,15 +1582,16 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
   }
 
   void _showHintDialog() {
+    final l10n = getL10n(context);
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('힌트'),
-        content: const Text('힌트를 활성화하시겠습니까?'),
+        title: Text(l10n.hint),
+        content: Text(l10n.enableHintQuestion),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('취소'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -1593,10 +1599,10 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
               setState(() {
                 _showHint = true;
               });
-              _showMessage('힌트가 활성화되었습니다!');
+              _showMessage(l10n.hintEnabled);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('확인', style: TextStyle(color: Colors.black)),
+            child: Text(l10n.confirm, style: const TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -1838,7 +1844,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
                       Icon(Icons.star, color: Colors.yellow, size: isSmallScreen ? 12 : 14),
                       const SizedBox(width: 2),
                       Text(
-                        recommendedForPassing.isNotEmpty ? '패스 추천' : '추천',
+                        recommendedForPassing.isNotEmpty ? getL10n(context).passRecommend : getL10n(context).recommend,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: isSmallScreen ? 10 : 11,
@@ -1855,7 +1861,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Text(
-                '왼쪽으로 보낼 카드 3장을 선택하세요',
+                getL10n(context).selectCardsToPass,
                 style: TextStyle(
                   color: Colors.amber,
                   fontSize: isSmallScreen ? 10 : 12,
@@ -1988,7 +1994,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
               ),
               const SizedBox(height: 16),
               Text(
-                isPlayerWinner ? '승리!' : '${playerNames[winnerId]} 승리',
+                isPlayerWinner ? getL10n(context).victory : getL10n(context).xWins(playerNames[winnerId]),
                 style: TextStyle(
                   color: isPlayerWinner ? Colors.amber : Colors.white,
                   fontSize: isSmallScreen ? 24 : 32,
@@ -2037,7 +2043,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
                       ),
                     ),
                     child: Text(
-                      '새 게임',
+                      getL10n(context).newGame,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: isSmallScreen ? 14 : 16,
@@ -2055,7 +2061,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
                       ),
                     ),
                     child: Text(
-                      '나가기',
+                      getL10n(context).exitGame,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: isSmallScreen ? 14 : 16,

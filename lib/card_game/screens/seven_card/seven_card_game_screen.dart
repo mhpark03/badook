@@ -111,7 +111,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.newGame),
-        content: const Text('새 게임을 시작하시겠습니까?'),
+        content: Text(l10n.newGameConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -143,15 +143,16 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
   }
 
   void _showHintDialog() {
+    final l10n = getL10n(context);
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('힌트'),
-        content: const Text('힌트를 활성화하시겠습니까?'),
+        title: Text(l10n.hint),
+        content: Text(l10n.enableHintQuestion),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('취소'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -161,7 +162,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               });
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            child: const Text('확인', style: TextStyle(color: Colors.black)),
+            child: Text(l10n.confirm, style: const TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -188,7 +189,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
             actions: [
               IconButton(
                 icon: Icon(Icons.lightbulb, color: _showHint ? Colors.yellow : Colors.white),
-                tooltip: _showHint ? '힌트 OFF' : '힌트',
+                tooltip: _showHint ? l10n.hintOff : l10n.hint,
                 onPressed: _onHintButtonPressed,
               ),
               IconButton(
@@ -1127,7 +1128,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
             children: [
               // 삥 (기본 판돈 - 보스만)
               _buildBetButton(
-                label: '삥',
+                label: l10n.betPing,
                 amount: state.getBingAmount(),
                 color: Colors.green,
                 onPressed: getAction('bing', () => controller.humanBing()),
@@ -1135,7 +1136,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               ),
               // 콜
               _buildBetButton(
-                label: '콜',
+                label: l10n.call,
                 amount: state.getCallAmount(),
                 color: Colors.cyan,
                 onPressed: getAction('call', () => controller.humanCall()),
@@ -1143,7 +1144,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               ),
               // 따당 (2배)
               _buildBetButton(
-                label: '따당',
+                label: l10n.betDdadang,
                 amount: state.getDdadangAmount(),
                 color: Colors.orange,
                 onPressed: getAction('ddadang', () => controller.humanDdadang()),
@@ -1151,7 +1152,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               ),
               // 다이 (폴드)
               _buildBetButton(
-                label: '다이',
+                label: l10n.betDie,
                 amount: null,
                 color: Colors.red,
                 onPressed: getAction('die', () => controller.humanDie()),
@@ -1166,7 +1167,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
             children: [
               // 체크 (보스만)
               _buildBetButton(
-                label: '체크',
+                label: l10n.check,
                 amount: null,
                 color: Colors.blue,
                 onPressed: getAction('check', () => controller.humanCheck()),
@@ -1174,7 +1175,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               ),
               // 쿼터 (25%)
               _buildBetButton(
-                label: '쿼터',
+                label: l10n.betQuarter,
                 amount: state.getQuarterAmount(),
                 color: Colors.teal,
                 onPressed: getAction('quarter', () => controller.humanQuarter()),
@@ -1182,7 +1183,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               ),
               // 하프 (50%)
               _buildBetButton(
-                label: '하프',
+                label: l10n.betHalf,
                 amount: state.getHalfAmount(),
                 color: Colors.indigo,
                 onPressed: getAction('half', () => controller.humanHalf()),
@@ -1190,7 +1191,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
               ),
               // 풀 (100%)
               _buildBetButton(
-                label: '풀',
+                label: l10n.betFull,
                 amount: state.getFullAmount(),
                 color: Colors.purple,
                 onPressed: getAction('full', () => controller.humanFull()),

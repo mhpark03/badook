@@ -379,7 +379,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get continueGame => '続ける';
 
   @override
-  String get exitGame => 'ゲーム終了';
+  String get exitGame => '終了';
 
   @override
   String get exitGameConfirm => 'ゲームを終了しますか?\n現在のゲームは保存されます。';
@@ -476,6 +476,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get close => '閉じる';
+
+  @override
+  String get hint => 'ヒント';
+
+  @override
+  String get enableHintQuestion => 'ヒントを有効にしますか？';
+
+  @override
+  String get newGameConfirm => '新しいゲームを始めますか？';
 
   @override
   String get dealMiss => 'ディールミス';
@@ -587,6 +596,60 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get wins => '勝利';
+
+  @override
+  String get betPing => 'ビン';
+
+  @override
+  String get betDdadang => 'タダン';
+
+  @override
+  String get betQuarter => 'クォーター';
+
+  @override
+  String get betHalf => 'ハーフ';
+
+  @override
+  String get betFull => 'フル';
+
+  @override
+  String get betDie => 'ダイ';
+
+  @override
+  String get selectCardToReveal => '公開するカードを選んでください';
+
+  @override
+  String get selectedCardWillBeRevealed => '選択したカードが相手に公開されます';
+
+  @override
+  String get totalBet => '合計';
+
+  @override
+  String get bonus => 'ボーナス';
+
+  @override
+  String get finalResult => '最終結果';
+
+  @override
+  String get viewResultButton => '結果を見る';
+
+  @override
+  String get hintOff => 'ヒント OFF';
+
+  @override
+  String get playerLabel => 'プレイヤー';
+
+  @override
+  String get thisGame => '今回';
+
+  @override
+  String get cumulative => '累計';
+
+  @override
+  String get bettingAmount => 'ベット';
+
+  @override
+  String get otherPlayersBonus => '他プレイヤー';
 
   @override
   String get gameEnd => 'ゲーム終了';
@@ -762,4 +825,301 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get heartsSubtitle => '4人トリックテイキングゲーム';
+
+  @override
+  String get register => '登録';
+
+  @override
+  String get discardCard => '捨てる';
+
+  @override
+  String get stopGame => 'ストップ';
+
+  @override
+  String get drawCard => 'カードを引いてください';
+
+  @override
+  String get discardOrRegister => 'カードを捨てるか登録してください';
+
+  @override
+  String get noCards => 'カードがありません';
+
+  @override
+  String get addedToMeld => 'メルドに追加しました';
+
+  @override
+  String get noMeldToAttach => '付けるメルドがありません';
+
+  @override
+  String get invalidCombination => '無効な組み合わせです';
+
+  @override
+  String get drawFirst => '先にカードを引いてください';
+
+  @override
+  String get selectCardToDiscard => '捨てるカードを選んでください';
+
+  @override
+  String get victory => '勝利！';
+
+  @override
+  String get defeat => '敗北';
+
+  @override
+  String get hulaVictory => 'フラで勝利！(x2)';
+
+  @override
+  String get handCards => '手札';
+
+  @override
+  String get myTurn => '自分の番';
+
+  @override
+  String get start => '開始';
+
+  @override
+  String get discardedCards => '捨てたカード';
+
+  @override
+  String get thankYou => 'タンキュー';
+
+  @override
+  String get selectMethod => '方法を選んでください';
+
+  @override
+  String get register7Alone => '7を単独登録';
+
+  @override
+  String get attachToMyMeld => '自分のメルドに付ける';
+
+  @override
+  String get attachToOtherMeld => 'メルドに付ける';
+
+  @override
+  String get gameRules => 'ゲームルール';
+
+  @override
+  String get objective => '目標';
+
+  @override
+  String get objectiveDesc => '手札のカードをすべて登録または捨てて最初になくすことが目標です。';
+
+  @override
+  String get howToPlay => '進め方';
+
+  @override
+  String get howToPlayDesc => '毎ターン、デッキまたは捨て札からカード1枚を引き、登録または捨てます。';
+
+  @override
+  String get meldTypes => 'メルドの種類';
+
+  @override
+  String get thankYouMeld => 'タンキューメルド';
+
+  @override
+  String get thankYouMeldDesc => '捨て札から7を引くと「タンキュー」を宣言して特別な登録ができます。';
+
+  @override
+  String get stopRule => 'ストップ';
+
+  @override
+  String get stopRuleDesc => 'いつでもストップを宣言してゲームを終了できます。残りカードの点数が最も少ない人が勝ちです。';
+
+  @override
+  String get scoring => '点数計算';
+
+  @override
+  String aiStartsFirst(Object name) {
+    return '$nameが先に開始';
+  }
+
+  @override
+  String xWins(Object name) {
+    return '$nameの勝利！';
+  }
+
+  @override
+  String nMelds(Object count) {
+    return '$count個メルド';
+  }
+
+  @override
+  String attachedToMeldSelf(Object card) {
+    return '$cardをメルドに追加';
+  }
+
+  @override
+  String attachedToMeldPlayer(Object card) {
+    return '$cardをプレイヤーのメルドに追加';
+  }
+
+  @override
+  String attachedToMeldOther(Object card, Object name) {
+    return '$cardを$nameのメルドに追加';
+  }
+
+  @override
+  String drewCard(Object name) {
+    return '$nameがカードを引いた';
+  }
+
+  @override
+  String thankYouAttachSelf(Object card) {
+    return 'タンキュー！$cardを自分のメルドに';
+  }
+
+  @override
+  String thankYouAttachOther(Object card, Object name) {
+    return 'タンキュー！$cardを$nameのメルドに';
+  }
+
+  @override
+  String nPlayersHula(Object n) {
+    return 'フラ（$n人）';
+  }
+
+  @override
+  String nCards(Object n) {
+    return '$n枚';
+  }
+
+  @override
+  String get heartsBreaking => 'ハートブレイキング';
+
+  @override
+  String get cardPass => 'カードパス';
+
+  @override
+  String trickNum(Object n) {
+    return 'トリック$n/13';
+  }
+
+  @override
+  String passToLeft(Object n) {
+    return '左へパス ($n/3)';
+  }
+
+  @override
+  String get selectCardsToPass => '左に渡すカード3枚を選んでください';
+
+  @override
+  String get allPointsExhausted => '得点カード終了！ゲーム終了';
+
+  @override
+  String get passRecommend => 'パス推奨';
+
+  @override
+  String get recommend => '推奨';
+
+  @override
+  String get hintEnabled => 'ヒントが有効になりました！';
+
+  @override
+  String get oneCard => 'ワンカード';
+
+  @override
+  String oneCardTitle(Object n) {
+    return 'ワンカード（$n人）';
+  }
+
+  @override
+  String get oneCardCall => 'ワンカード！';
+
+  @override
+  String oneCardCountdown(Object n) {
+    return 'ワンカード（$n秒）';
+  }
+
+  @override
+  String get cannotPlayCard => 'このカードは出せません';
+
+  @override
+  String attackReceived(Object n) {
+    return '攻撃で$n枚を受けました';
+  }
+
+  @override
+  String get drewCardMsg => 'カードを引きました';
+
+  @override
+  String bankruptcy(Object n) {
+    return '破産！（$n枚所持）';
+  }
+
+  @override
+  String get selectSuit => 'スートを選んでください';
+
+  @override
+  String get clockwise => '時計回り';
+
+  @override
+  String get counterClockwise => '反時計回り';
+
+  @override
+  String get blackJoker => '白黒ジョーカー';
+
+  @override
+  String get colorJoker => 'カラージョーカー';
+
+  @override
+  String get winRate => '勝率';
+
+  @override
+  String get rulesObjective => '目標';
+
+  @override
+  String get rulesHowToPlay => '遊び方';
+
+  @override
+  String get rulesScoring => '得点計算';
+
+  @override
+  String get rulesTips => 'ヒント';
+
+  @override
+  String get rulesAttackCards => '攻撃カード';
+
+  @override
+  String get rulesDefense => '防御';
+
+  @override
+  String get rulesSpecialCards => '特殊カード';
+
+  @override
+  String get restart => '再スタート';
+
+  @override
+  String totalAttack(int n) {
+    return '$n枚攻撃';
+  }
+
+  @override
+  String get skipNextTurn => '次のターンスキップ';
+
+  @override
+  String get reverseDirection => '方向反転';
+
+  @override
+  String get skipTwoTurns => '2ターンスキップ';
+
+  @override
+  String get changeSuit => 'スート変更';
+
+  @override
+  String playerPlayedCard(String name) {
+    return '$nameがカードを出した';
+  }
+
+  @override
+  String attackReceivedShort(int n) {
+    return '攻撃で$n枚';
+  }
+
+  @override
+  String get drewCardShort => 'カードを引いた';
+
+  @override
+  String bankruptcyShort(int n) {
+    return '破産！（$n枚）';
+  }
 }
