@@ -915,7 +915,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get register7Alone => '7を単独登録';
 
   @override
-  String get attachToMyMeld => '自分のメルドに付ける';
+  String attachToMyMeld(Object card) {
+    return '$cardを自分のメルドに';
+  }
 
   @override
   String get attachToOtherMeld => 'メルドに付ける';
@@ -1009,7 +1011,58 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get soloSevenRegistered => '7単独登録';
+
+  @override
+  String get sevenGroupRegistered => '7グループ登録';
+
+  @override
+  String get runRegistered => 'ラン登録';
+
+  @override
+  String get groupRegistered => 'グループ登録';
+
+  @override
+  String meldRegisteredWithCards(Object cards, Object type) {
+    return '$type登録 $cards';
+  }
+
+  @override
+  String drewCardWithCard(Object card) {
+    return '$cardを引きました';
+  }
+
+  @override
+  String playerStopped(Object name) {
+    return '$nameがストップ！';
+  }
+
+  @override
+  String discardCardMsg(Object card) {
+    return '$cardを捨てる';
+  }
+
+  @override
+  String thankYouDrawn(Object card, Object name) {
+    return '$name サンキュー！$card';
+  }
+
+  @override
+  String get bonusHand => 'ボーナスハンド！';
+
+  @override
+  String get inPossession => '（所持中）';
+
+  @override
+  String get fourPlayerGame => '4人対戦';
+
+  @override
   String get heartsBreaking => 'ハートブレイキング';
+
+  @override
+  String startsWithClub2(Object name) {
+    return '$nameがクラブ2でスタート';
+  }
 
   @override
   String get cardPass => 'カードパス';
@@ -1029,6 +1082,26 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get allPointsExhausted => '得点カード終了！ゲーム終了';
+
+  @override
+  String winsTrick(Object name, Object points) {
+    return '$nameがトリック獲得！(+$points点)';
+  }
+
+  @override
+  String shootTheMoonSuccess(Object name) {
+    return '$nameがシュートザムーン成功！';
+  }
+
+  @override
+  String playerScore(Object name, Object score) {
+    return '$name（$score点）';
+  }
+
+  @override
+  String nPoints(Object n) {
+    return '$n点';
+  }
 
   @override
   String get passRecommend => 'パス推奨';

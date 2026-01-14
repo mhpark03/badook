@@ -1331,9 +1331,9 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
                         ),
                         child: Column(
                           children: [
-                            const Text(
-                              '🎉 보너스 핸드!',
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
+                            Text(
+                              '🎉 ${getL10n(context).bonusHand}',
+                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
                             ),
                             Text(
                               getHandRankName(context, bonusInfo.handRank),

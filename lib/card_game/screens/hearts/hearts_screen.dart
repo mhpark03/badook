@@ -709,7 +709,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
     // 게임 상태 저장
     _saveGame();
 
-    _showMessage('${playerNames[startPlayer]}가 클럽 2로 시작합니다');
+    _showMessage(getL10n(context).startsWithClub2(playerNames[startPlayer]));
 
     if (startPlayer != 0) {
       Future.delayed(const Duration(milliseconds: 1000), () {
@@ -1261,7 +1261,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
     // 슛더문 상태 업데이트
     _updateShootMoonStatus();
 
-    _showMessage('${playerNames[winnerIndex]} 트릭 획득! (+$trickPoints점)');
+    _showMessage(getL10n(context).winsTrick(playerNames[winnerIndex], trickPoints.toString()));
 
     // winnerIndex를 final로 캡처하여 클로저 문제 방지
     final winner = winnerIndex;
@@ -1319,7 +1319,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
       // 슈팅 더 문 성공
       finalScores = [26, 26, 26, 26];
       finalScores[shooterIndex] = 0;
-      _showMessage('${playerNames[shooterIndex]} 슈팅 더 문 성공!');
+      _showMessage(getL10n(context).shootTheMoonSuccess(playerNames[shooterIndex]));
     } else {
       finalScores = List<int>.from(scores);
     }
@@ -1621,7 +1621,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '${playerNames[playerIndex]} (${scores[playerIndex]}점)',
+            getL10n(context).playerScore(playerNames[playerIndex], scores[playerIndex].toString()),
             style: TextStyle(
               color: currentPlayer == playerIndex ? Colors.amber : Colors.white70,
               fontSize: isSmallScreen ? 11 : 13,
@@ -1664,7 +1664,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
           RotatedBox(
             quarterTurns: playerIndex == 1 ? 1 : 3,
             child: Text(
-              '${playerNames[playerIndex]} (${scores[playerIndex]}점)',
+              getL10n(context).playerScore(playerNames[playerIndex], scores[playerIndex].toString()),
               style: TextStyle(
                 color: currentPlayer == playerIndex ? Colors.amber : Colors.white70,
                 fontSize: isSmallScreen ? 10 : 12,
@@ -1822,7 +1822,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${playerNames[0]} (${scores[0]}점)',
+                getL10n(context).playerScore(playerNames[0], scores[0].toString()),
                 style: TextStyle(
                   color: currentPlayer == 0 ? Colors.amber : Colors.white,
                   fontSize: isSmallScreen ? 12 : 14,
@@ -2018,7 +2018,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
                         ),
                       ),
                       Text(
-                        '${scores[i]}점',
+                        getL10n(context).nPoints(scores[i].toString()),
                         style: TextStyle(
                           color: i == winnerId ? Colors.amber : Colors.white,
                           fontSize: isSmallScreen ? 14 : 16,

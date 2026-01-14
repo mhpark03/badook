@@ -95,7 +95,7 @@ class _OneCardHomeScreenState extends State<OneCardHomeScreen> {
                         ),
                         SizedBox(height: isSmallScreen ? 2 : 4),
                         Text(
-                          '4인 대전',
+                          getL10n(context).fourPlayerGame,
                           style: TextStyle(
                             fontSize: subtitleSize,
                             color: Colors.white70,

@@ -910,7 +910,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get register7Alone => '单独登记7';
 
   @override
-  String get attachToMyMeld => '添加到我的组合';
+  String attachToMyMeld(Object card) {
+    return '$card加到我的组合';
+  }
 
   @override
   String get attachToOtherMeld => '添加到组合';
@@ -1004,7 +1006,58 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get soloSevenRegistered => '7单独注册';
+
+  @override
+  String get sevenGroupRegistered => '7组注册';
+
+  @override
+  String get runRegistered => '顺子注册';
+
+  @override
+  String get groupRegistered => '刻子注册';
+
+  @override
+  String meldRegisteredWithCards(Object cards, Object type) {
+    return '$type注册 $cards';
+  }
+
+  @override
+  String drewCardWithCard(Object card) {
+    return '抽到$card';
+  }
+
+  @override
+  String playerStopped(Object name) {
+    return '$name停止！';
+  }
+
+  @override
+  String discardCardMsg(Object card) {
+    return '$card弃牌';
+  }
+
+  @override
+  String thankYouDrawn(Object card, Object name) {
+    return '$name Thank You！$card';
+  }
+
+  @override
+  String get bonusHand => '奖励手牌！';
+
+  @override
+  String get inPossession => '（已拥有）';
+
+  @override
+  String get fourPlayerGame => '4人对战';
+
+  @override
   String get heartsBreaking => '红心破冰';
+
+  @override
+  String startsWithClub2(Object name) {
+    return '$name以梅花2开始';
+  }
 
   @override
   String get cardPass => '传牌';
@@ -1024,6 +1077,26 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get allPointsExhausted => '所有分数牌用完！游戏结束';
+
+  @override
+  String winsTrick(Object name, Object points) {
+    return '$name赢得此轮！(+$points分)';
+  }
+
+  @override
+  String shootTheMoonSuccess(Object name) {
+    return '$name全收成功！';
+  }
+
+  @override
+  String playerScore(Object name, Object score) {
+    return '$name（$score分）';
+  }
+
+  @override
+  String nPoints(Object n) {
+    return '$n分';
+  }
 
   @override
   String get passRecommend => '推荐传牌';

@@ -915,7 +915,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get register7Alone => '7 단독 등록';
 
   @override
-  String get attachToMyMeld => '내 멜드에 붙이기';
+  String attachToMyMeld(Object card) {
+    return '$card 내 멜드에 붙이기';
+  }
 
   @override
   String get attachToOtherMeld => '멜드에 붙이기';
@@ -1010,7 +1012,58 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get soloSevenRegistered => '7 단독 등록';
+
+  @override
+  String get sevenGroupRegistered => '7 그룹 등록';
+
+  @override
+  String get runRegistered => 'Run 등록됨';
+
+  @override
+  String get groupRegistered => 'Group 등록됨';
+
+  @override
+  String meldRegisteredWithCards(Object cards, Object type) {
+    return '$type 등록 $cards';
+  }
+
+  @override
+  String drewCardWithCard(Object card) {
+    return '$card을 뽑았습니다';
+  }
+
+  @override
+  String playerStopped(Object name) {
+    return '$name이 스톱!';
+  }
+
+  @override
+  String discardCardMsg(Object card) {
+    return '$card 버림';
+  }
+
+  @override
+  String thankYouDrawn(Object card, Object name) {
+    return '$name 땡큐! $card';
+  }
+
+  @override
+  String get bonusHand => '보너스 핸드!';
+
+  @override
+  String get inPossession => '(보유중)';
+
+  @override
+  String get fourPlayerGame => '4인 대전';
+
+  @override
   String get heartsBreaking => '하트 브레이킹';
+
+  @override
+  String startsWithClub2(Object name) {
+    return '$name가 클럽 2로 시작합니다';
+  }
 
   @override
   String get cardPass => '카드 패스';
@@ -1030,6 +1083,26 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get allPointsExhausted => '모든 점수 카드 소진! 게임 종료';
+
+  @override
+  String winsTrick(Object name, Object points) {
+    return '$name 트릭 획득! (+$points점)';
+  }
+
+  @override
+  String shootTheMoonSuccess(Object name) {
+    return '$name 슈팅 더 문 성공!';
+  }
+
+  @override
+  String playerScore(Object name, Object score) {
+    return '$name ($score점)';
+  }
+
+  @override
+  String nPoints(Object n) {
+    return '$n점';
+  }
 
   @override
   String get passRecommend => '패스 추천';

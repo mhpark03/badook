@@ -918,7 +918,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register7Alone => 'Register 7 alone';
 
   @override
-  String get attachToMyMeld => 'Attach to my meld';
+  String attachToMyMeld(Object card) {
+    return '$card attach to my meld';
+  }
 
   @override
   String get attachToOtherMeld => 'Attach to meld';
@@ -1016,7 +1018,58 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get soloSevenRegistered => '7 solo registered';
+
+  @override
+  String get sevenGroupRegistered => '7 group registered';
+
+  @override
+  String get runRegistered => 'Run registered';
+
+  @override
+  String get groupRegistered => 'Group registered';
+
+  @override
+  String meldRegisteredWithCards(Object cards, Object type) {
+    return '$type registered $cards';
+  }
+
+  @override
+  String drewCardWithCard(Object card) {
+    return 'Drew $card';
+  }
+
+  @override
+  String playerStopped(Object name) {
+    return '$name stopped!';
+  }
+
+  @override
+  String discardCardMsg(Object card) {
+    return '$card discarded';
+  }
+
+  @override
+  String thankYouDrawn(Object card, Object name) {
+    return '$name Thank You! $card';
+  }
+
+  @override
+  String get bonusHand => 'Bonus Hand!';
+
+  @override
+  String get inPossession => '(Owned)';
+
+  @override
+  String get fourPlayerGame => '4 Players';
+
+  @override
   String get heartsBreaking => 'Hearts Breaking';
+
+  @override
+  String startsWithClub2(Object name) {
+    return '$name starts with Club 2';
+  }
 
   @override
   String get cardPass => 'Card Pass';
@@ -1036,6 +1089,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allPointsExhausted => 'All point cards exhausted! Game over';
+
+  @override
+  String winsTrick(Object name, Object points) {
+    return '$name wins trick! (+${points}pts)';
+  }
+
+  @override
+  String shootTheMoonSuccess(Object name) {
+    return '$name shot the moon!';
+  }
+
+  @override
+  String playerScore(Object name, Object score) {
+    return '$name (${score}pts)';
+  }
+
+  @override
+  String nPoints(Object n) {
+    return '${n}pts';
+  }
 
   @override
   String get passRecommend => 'Pass Recommend';

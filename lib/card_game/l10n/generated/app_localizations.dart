@@ -1797,8 +1797,8 @@ abstract class AppLocalizations {
   /// No description provided for @attachToMyMeld.
   ///
   /// In ko, this message translates to:
-  /// **'내 멜드에 붙이기'**
-  String get attachToMyMeld;
+  /// **'{card} 내 멜드에 붙이기'**
+  String attachToMyMeld(Object card);
 
   /// No description provided for @attachToOtherMeld.
   ///
@@ -1938,11 +1938,89 @@ abstract class AppLocalizations {
   /// **'{n}장'**
   String nCards(Object n);
 
+  /// No description provided for @soloSevenRegistered.
+  ///
+  /// In ko, this message translates to:
+  /// **'7 단독 등록'**
+  String get soloSevenRegistered;
+
+  /// No description provided for @sevenGroupRegistered.
+  ///
+  /// In ko, this message translates to:
+  /// **'7 그룹 등록'**
+  String get sevenGroupRegistered;
+
+  /// No description provided for @runRegistered.
+  ///
+  /// In ko, this message translates to:
+  /// **'Run 등록됨'**
+  String get runRegistered;
+
+  /// No description provided for @groupRegistered.
+  ///
+  /// In ko, this message translates to:
+  /// **'Group 등록됨'**
+  String get groupRegistered;
+
+  /// No description provided for @meldRegisteredWithCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'{type} 등록 {cards}'**
+  String meldRegisteredWithCards(Object cards, Object type);
+
+  /// No description provided for @drewCardWithCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'{card}을 뽑았습니다'**
+  String drewCardWithCard(Object card);
+
+  /// No description provided for @playerStopped.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}이 스톱!'**
+  String playerStopped(Object name);
+
+  /// No description provided for @discardCardMsg.
+  ///
+  /// In ko, this message translates to:
+  /// **'{card} 버림'**
+  String discardCardMsg(Object card);
+
+  /// No description provided for @thankYouDrawn.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} 땡큐! {card}'**
+  String thankYouDrawn(Object card, Object name);
+
+  /// No description provided for @bonusHand.
+  ///
+  /// In ko, this message translates to:
+  /// **'보너스 핸드!'**
+  String get bonusHand;
+
+  /// No description provided for @inPossession.
+  ///
+  /// In ko, this message translates to:
+  /// **'(보유중)'**
+  String get inPossession;
+
+  /// No description provided for @fourPlayerGame.
+  ///
+  /// In ko, this message translates to:
+  /// **'4인 대전'**
+  String get fourPlayerGame;
+
   /// No description provided for @heartsBreaking.
   ///
   /// In ko, this message translates to:
   /// **'하트 브레이킹'**
   String get heartsBreaking;
+
+  /// No description provided for @startsWithClub2.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}가 클럽 2로 시작합니다'**
+  String startsWithClub2(Object name);
 
   /// No description provided for @cardPass.
   ///
@@ -1973,6 +2051,30 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'모든 점수 카드 소진! 게임 종료'**
   String get allPointsExhausted;
+
+  /// No description provided for @winsTrick.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} 트릭 획득! (+{points}점)'**
+  String winsTrick(Object name, Object points);
+
+  /// No description provided for @shootTheMoonSuccess.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} 슈팅 더 문 성공!'**
+  String shootTheMoonSuccess(Object name);
+
+  /// No description provided for @playerScore.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} ({score}점)'**
+  String playerScore(Object name, Object score);
+
+  /// No description provided for @nPoints.
+  ///
+  /// In ko, this message translates to:
+  /// **'{n}점'**
+  String nPoints(Object n);
 
   /// No description provided for @passRecommend.
   ///

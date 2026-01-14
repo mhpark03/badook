@@ -614,9 +614,9 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
               ),
               child: Column(
                 children: [
-                  const Text(
-                    '🎉 보너스 핸드! 🎉',
-                    style: TextStyle(
+                  Text(
+                    '🎉 ${getL10n(context).bonusHand} 🎉',
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -2071,9 +2071,9 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
                     ),
                     child: Column(
                       children: [
-                        const Text(
-                          '🎉 보너스 핸드!',
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
+                        Text(
+                          '🎉 ${getL10n(context).bonusHand}',
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                         Text(
                           getHandRankName(context,bonusInfo.handRank),
