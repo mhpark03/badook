@@ -85,6 +85,14 @@ class SevenCardStatsService extends ChangeNotifier {
     }
   }
 
+  /// 플레이어 이름을 로컬라이즈된 이름으로 업데이트
+  void updateLocalizedNames(List<String> names) {
+    for (int i = 0; i < _playerStats.length && i < names.length; i++) {
+      _playerStats[i].name = names[i];
+    }
+    notifyListeners();
+  }
+
   void _initDefaultStats() {
     _playerStats = [
       SevenCardPlayerStats(name: '플레이어'),
