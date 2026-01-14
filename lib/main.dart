@@ -49,11 +49,28 @@ import 'janggi/janggi_selection_screen.dart';
 // 보드게임 번역
 import 'board_game/l10n/board_game_strings.dart';
 
+// 카드게임 번역
+import 'card_game/l10n/generated/app_localizations.dart';
+
 // 언어 상태 관리 Provider
 class LanguageProvider extends ChangeNotifier {
   GameLanguage _language = GameLanguage.korean;
 
   GameLanguage get language => _language;
+
+  // GameLanguage를 Flutter Locale로 변환
+  Locale get locale {
+    switch (_language) {
+      case GameLanguage.korean:
+        return const Locale('ko');
+      case GameLanguage.english:
+        return const Locale('en');
+      case GameLanguage.japanese:
+        return const Locale('ja');
+      case GameLanguage.chinese:
+        return const Locale('zh');
+    }
+  }
 
   void setLanguage(GameLanguage lang) {
     if (_language != lang) {
@@ -1320,6 +1337,10 @@ class _BadukAppState extends State<BadukApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
         useMaterial3: true,
       ),
+      // 카드게임 다국어 지원
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: languageProvider.locale,
       home: _benchmarkDone
           ? AboutPage(
               language: language,
