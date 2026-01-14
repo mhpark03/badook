@@ -171,6 +171,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiSelectingKitty => 'AI正在选择底牌...';
 
   @override
+  String get aiSelectingCard => 'AI正在选择卡牌...';
+
+  @override
   String get aiDeclaringFriend => 'AI正在宣布朋友...';
 
   @override

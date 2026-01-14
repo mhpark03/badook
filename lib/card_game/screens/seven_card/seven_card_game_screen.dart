@@ -319,7 +319,7 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
                 const CircularProgressIndicator(color: Colors.amber),
                 const SizedBox(height: 16),
                 Text(
-                  'AI가 카드를 선택하고 있습니다...',
+                  getL10n(context).aiSelectingCard,
                   style: const TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],

@@ -306,15 +306,15 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
             ),
           )
         else
-          const Padding(
-            padding: EdgeInsets.all(24),
+          Padding(
+            padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                CircularProgressIndicator(color: Colors.amber),
-                SizedBox(height: 16),
+                const CircularProgressIndicator(color: Colors.amber),
+                const SizedBox(height: 16),
                 Text(
-                  'AI가 카드를 선택하고 있습니다...',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                  getL10n(context).aiSelectingCard,
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],
             ),

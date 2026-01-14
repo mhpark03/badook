@@ -50,6 +50,7 @@
   "declarer": "Declarer",
   "cards": "Cards: {count}",
   "aiSelectingKitty": "AI is selecting kitty...",
+  "aiSelectingCard": "AI is selecting card...",
   "aiDeclaringFriend": "AI is declaring friend...",
   "declarerTeamWins": "Declarer Team Wins!",
   "defenderTeamWins": "Defender Team Wins!",

@@ -50,6 +50,7 @@
   "declarer": "庄家",
   "cards": "牌: {count}",
   "aiSelectingKitty": "AI正在选择底牌...",
+  "aiSelectingCard": "AI正在选择卡牌...",
   "aiDeclaringFriend": "AI正在宣布朋友...",
   "declarerTeamWins": "庄家队获胜！",
   "defenderTeamWins": "防守队获胜！",

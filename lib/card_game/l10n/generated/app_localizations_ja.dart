@@ -171,6 +171,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get aiSelectingKitty => 'AIがキティを選択中...';
 
   @override
+  String get aiSelectingCard => 'AIがカードを選択中...';
+
+  @override
   String get aiDeclaringFriend => 'AIがフレンドを宣言中...';
 
   @override

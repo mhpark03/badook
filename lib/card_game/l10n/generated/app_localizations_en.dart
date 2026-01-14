@@ -171,6 +171,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiSelectingKitty => 'AI is selecting kitty...';
 
   @override
+  String get aiSelectingCard => 'AI is selecting card...';
+
+  @override
   String get aiDeclaringFriend => 'AI is declaring friend...';
 
   @override

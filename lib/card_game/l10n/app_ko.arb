@@ -80,6 +80,7 @@
     }
   },
   "aiSelectingKitty": "AI가 키티를 선택하고 있습니다...",
+  "aiSelectingCard": "AI가 카드를 선택하고 있습니다...",
   "aiDeclaringFriend": "AI가 프렌드를 선언하고 있습니다...",
   "declarerTeamWins": "주공 팀 승리!",
   "defenderTeamWins": "수비 팀 승리!",

@@ -50,6 +50,7 @@
   "declarer": "宣言者",
   "cards": "カード: {count}",
   "aiSelectingKitty": "AIがキティを選択中...",
+  "aiSelectingCard": "AIがカードを選択中...",
   "aiDeclaringFriend": "AIがフレンドを宣言中...",
   "declarerTeamWins": "宣言者チームの勝利！",
   "defenderTeamWins": "守備チームの勝利！",

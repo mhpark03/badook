@@ -171,6 +171,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get aiSelectingKitty => 'AI가 키티를 선택하고 있습니다...';
 
   @override
+  String get aiSelectingCard => 'AI가 카드를 선택하고 있습니다...';
+
+  @override
   String get aiDeclaringFriend => 'AI가 프렌드를 선언하고 있습니다...';
 
   @override

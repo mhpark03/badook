@@ -402,6 +402,12 @@ abstract class AppLocalizations {
   /// **'AI가 키티를 선택하고 있습니다...'**
   String get aiSelectingKitty;
 
+  /// No description provided for @aiSelectingCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'AI가 카드를 선택하고 있습니다...'**
+  String get aiSelectingCard;
+
   /// No description provided for @aiDeclaringFriend.
   ///
   /// In ko, this message translates to:
