@@ -479,5 +479,13 @@
       "rank": {"type": "String"}
     }
   },
-  "noLow": "No Low"
+  "noLow": "No Low",
+  "nthCard": "Card #{n}",
+  "@nthCard": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "betCheck": "Check",
+  "betCall": "Call"
 }

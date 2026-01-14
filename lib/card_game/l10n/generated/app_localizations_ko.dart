@@ -1384,4 +1384,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get noLow => '로우 없음';
+
+  @override
+  String nthCard(int n) {
+    return '$n번째 카드';
+  }
+
+  @override
+  String get betCheck => '체크';
+
+  @override
+  String get betCall => '콜';
 }

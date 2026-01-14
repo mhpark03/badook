@@ -1368,4 +1368,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noLow => '无低牌';
+
+  @override
+  String nthCard(int n) {
+    return '第$n张牌';
+  }
+
+  @override
+  String get betCheck => '过牌';
+
+  @override
+  String get betCall => '跟注';
 }

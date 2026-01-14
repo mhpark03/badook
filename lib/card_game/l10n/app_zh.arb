@@ -478,5 +478,13 @@
       "rank": {"type": "String"}
     }
   },
-  "noLow": "无低牌"
+  "noLow": "无低牌",
+  "nthCard": "第{n}张牌",
+  "@nthCard": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "betCheck": "过牌",
+  "betCall": "跟注"
 }

@@ -1378,4 +1378,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noLow => 'ロー無し';
+
+  @override
+  String nthCard(int n) {
+    return '$n枚目のカード';
+  }
+
+  @override
+  String get betCheck => 'チェック';
+
+  @override
+  String get betCall => 'コール';
 }

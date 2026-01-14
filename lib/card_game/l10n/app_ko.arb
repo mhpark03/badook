@@ -570,5 +570,13 @@
       "rank": {"type": "String"}
     }
   },
-  "noLow": "로우 없음"
+  "noLow": "로우 없음",
+  "nthCard": "{n}번째 카드",
+  "@nthCard": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "betCheck": "체크",
+  "betCall": "콜"
 }

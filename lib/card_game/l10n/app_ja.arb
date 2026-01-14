@@ -478,5 +478,13 @@
       "rank": {"type": "String"}
     }
   },
-  "noLow": "ロー無し"
+  "noLow": "ロー無し",
+  "nthCard": "{n}枚目のカード",
+  "@nthCard": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "betCheck": "チェック",
+  "betCall": "コール"
 }

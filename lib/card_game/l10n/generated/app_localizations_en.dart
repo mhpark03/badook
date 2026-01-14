@@ -1395,4 +1395,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noLow => 'No Low';
+
+  @override
+  String nthCard(int n) {
+    return 'Card #$n';
+  }
+
+  @override
+  String get betCheck => 'Check';
+
+  @override
+  String get betCall => 'Call';
 }

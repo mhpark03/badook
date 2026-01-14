@@ -2591,6 +2591,24 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'로우 없음'**
   String get noLow;
+
+  /// No description provided for @nthCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'{n}번째 카드'**
+  String nthCard(int n);
+
+  /// No description provided for @betCheck.
+  ///
+  /// In ko, this message translates to:
+  /// **'체크'**
+  String get betCheck;
+
+  /// No description provided for @betCall.
+  ///
+  /// In ko, this message translates to:
+  /// **'콜'**
+  String get betCall;
 }
 
 class _AppLocalizationsDelegate
