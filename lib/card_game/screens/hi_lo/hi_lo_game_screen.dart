@@ -656,9 +656,9 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildBonusInfoChip('팟', '+${state.pot}', Colors.green),
-                      _buildBonusInfoChip('보너스', '+${bonusInfo.bonusAmount * 4}', Colors.amber),
-                      _buildBonusInfoChip('총', '+${bonusInfo.totalWinnings}', Colors.purple),
+                      _buildBonusInfoChip(l10n.pot, '+${state.pot}', Colors.green),
+                      _buildBonusInfoChip(l10n.bonus, '+${bonusInfo.bonusAmount * 4}', Colors.amber),
+                      _buildBonusInfoChip(l10n.totalBet, '+${bonusInfo.totalWinnings}', Colors.purple),
                     ],
                   ),
                 ],
@@ -679,7 +679,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
                   const Icon(Icons.remove_circle, color: Colors.red, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    '다른 플레이어들: 각 -${bonusInfo.bonusAmount}',
+                    '${l10n.otherPlayersBonus}: -${bonusInfo.bonusAmount}',
                     style: const TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 ],
@@ -1401,7 +1401,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
             ],
           ),
           Text(
-            '총: ${opponent.totalBetInGame}',
+            '${l10n.totalBet}: ${opponent.totalBetInGame}',
             style: TextStyle(
               color: isFolded ? Colors.grey : Colors.amber,
               fontSize: sizes.infoFontSize,
@@ -1409,7 +1409,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
           ),
           if (opponent.lastAction != HiLoBettingAction.none)
             Text(
-              _getBettingActionText(opponent.lastAction, opponent.currentBet),
+              _getBettingActionText(context, opponent.lastAction, opponent.currentBet),
               style: TextStyle(
                 color: _getBettingActionColor(opponent.lastAction),
                 fontSize: sizes.infoFontSize,
@@ -1594,7 +1594,7 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
                 ],
               ),
               Text(
-                '총: ${player.totalBetInGame}',
+                '${l10n.totalBet}: ${player.totalBetInGame}',
                 style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: sizes.nameFontSize),
               ),
             ],
@@ -1868,28 +1868,28 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildBetButton(
-                label: '삥',
+                label: l10n.betPing,
                 amount: state.getBingAmount(),
                 color: Colors.green,
                 onPressed: getAction('bing', () => controller.humanBing()),
                 sizes: sizes,
               ),
               _buildBetButton(
-                label: '콜',
+                label: l10n.call,
                 amount: state.getCallAmount(),
                 color: Colors.cyan,
                 onPressed: getAction('call', () => controller.humanCall()),
                 sizes: sizes,
               ),
               _buildBetButton(
-                label: '따당',
+                label: l10n.betDdadang,
                 amount: state.getDdadangAmount(),
                 color: Colors.orange,
                 onPressed: getAction('ddadang', () => controller.humanDdadang()),
                 sizes: sizes,
               ),
               _buildBetButton(
-                label: '다이',
+                label: l10n.betDie,
                 amount: null,
                 color: Colors.red,
                 onPressed: getAction('die', () => controller.humanDie()),
@@ -1902,28 +1902,28 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildBetButton(
-                label: '체크',
+                label: l10n.check,
                 amount: null,
                 color: Colors.blue,
                 onPressed: getAction('check', () => controller.humanCheck()),
                 sizes: sizes,
               ),
               _buildBetButton(
-                label: '쿼터',
+                label: l10n.betQuarter,
                 amount: state.getQuarterAmount(),
                 color: Colors.teal,
                 onPressed: getAction('quarter', () => controller.humanQuarter()),
                 sizes: sizes,
               ),
               _buildBetButton(
-                label: '하프',
+                label: l10n.betHalf,
                 amount: state.getHalfAmount(),
                 color: Colors.indigo,
                 onPressed: getAction('half', () => controller.humanHalf()),
                 sizes: sizes,
               ),
               _buildBetButton(
-                label: '풀',
+                label: l10n.betFull,
                 amount: state.getFullAmount(),
                 color: Colors.purple,
                 onPressed: getAction('full', () => controller.humanFull()),
@@ -2115,10 +2115,10 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
                     children: [
                       Row(
                         children: [
-                          const Expanded(flex: 3, child: Text('플레이어', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-                          const Expanded(flex: 2, child: Text('이번 게임', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-                          const Expanded(flex: 2, child: Text('승/패', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-                          const Expanded(flex: 2, child: Text('누적', textAlign: TextAlign.right, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+                          Expanded(flex: 3, child: Text(getL10n(context).playerLabel, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+                          Expanded(flex: 2, child: Text(getL10n(context).thisGame, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+                          Expanded(flex: 2, child: Text(getL10n(context).winLoss, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+                          Expanded(flex: 2, child: Text(getL10n(context).cumulative, textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
                         ],
                       ),
                       const Divider(height: 8),
@@ -2602,24 +2602,25 @@ class _HiLoGameScreenState extends State<HiLoGameScreen> with TickerProviderStat
     }
   }
 
-  String _getBettingActionText(HiLoBettingAction action, int amount) {
+  String _getBettingActionText(BuildContext context, HiLoBettingAction action, int amount) {
+    final l10n = getL10n(context);
     switch (action) {
       case HiLoBettingAction.bing:
-        return '삥 ($amount)';
+        return '${l10n.betPing} ($amount)';
       case HiLoBettingAction.check:
-        return '체크';
+        return l10n.check;
       case HiLoBettingAction.call:
-        return '콜 ($amount)';
+        return '${l10n.call} ($amount)';
       case HiLoBettingAction.ddadang:
-        return '따당 ($amount)';
+        return '${l10n.betDdadang} ($amount)';
       case HiLoBettingAction.quarter:
-        return '쿼터 ($amount)';
+        return '${l10n.betQuarter} ($amount)';
       case HiLoBettingAction.half:
-        return '하프 ($amount)';
+        return '${l10n.betHalf} ($amount)';
       case HiLoBettingAction.full:
-        return '풀 ($amount)';
+        return '${l10n.betFull} ($amount)';
       case HiLoBettingAction.die:
-        return '다이';
+        return l10n.betDie;
       case HiLoBettingAction.none:
         return '';
     }

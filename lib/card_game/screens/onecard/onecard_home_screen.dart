@@ -79,7 +79,7 @@ class _OneCardHomeScreenState extends State<OneCardHomeScreen> {
 
                         // 타이틀
                         Text(
-                          '원카드',
+                          l10n.oneCard,
                           style: TextStyle(
                             fontSize: titleSize,
                             fontWeight: FontWeight.bold,
@@ -216,7 +216,7 @@ class _OneCardHomeScreenState extends State<OneCardHomeScreen> {
                                             Expanded(
                                               flex: 2,
                                               child: Text(
-                                                '승률',
+                                                l10n.winRate,
                                                 textAlign: TextAlign.right,
                                                 style: TextStyle(
                                                   color: Colors.white70,
@@ -291,7 +291,8 @@ class _OneCardHomeScreenState extends State<OneCardHomeScreen> {
     final isHuman = playerIndex == 0;
     final winRate = playerStats.winRate;
     final winRateColor = winRate >= 0.5 ? Colors.lightGreenAccent : Colors.redAccent;
-    final playerNames = ['플레이어', '민준', '서연', '지호'];
+    final l10n = getL10n(context);
+    final playerNames = [l10n.player, l10n.aiPlayer1, l10n.aiPlayer2, l10n.aiPlayer3];
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -407,10 +408,10 @@ class _OneCardHomeScreenState extends State<OneCardHomeScreen> {
                   children: [
                     const Icon(Icons.menu_book, color: Colors.amber, size: 24),
                     const SizedBox(width: 8),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        '게임 규칙',
-                        style: TextStyle(
+                        l10n.gameRules,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -433,19 +434,19 @@ class _OneCardHomeScreenState extends State<OneCardHomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildGuideSection('목표', '손에 든 카드를 가장 먼저 모두 내려놓는 것이 목표입니다.', Icons.info_outline, titleSize, textSize),
+                      _buildGuideSection(l10n.onecardGuideObjectiveTitle, l10n.onecardGuideObjective, Icons.info_outline, titleSize, textSize),
                       const SizedBox(height: 16),
-                      _buildGuideSection('카드 내기', '이전에 낸 카드와 같은 무늬 또는 같은 숫자의 카드를 낼 수 있습니다.', Icons.style, titleSize, textSize),
+                      _buildGuideSection(l10n.onecardGuidePlayCardTitle, l10n.onecardGuidePlayCard, Icons.style, titleSize, textSize),
                       const SizedBox(height: 16),
-                      _buildGuideSection('공격 카드', '• 2: +2장 공격\n• A: +3장 공격 (♠A는 +5장)\n• 조커: +5장(흑백) / +7장(컬러)', Icons.bolt, titleSize, textSize, Colors.red),
+                      _buildGuideSection(l10n.onecardGuideAttackTitle, l10n.onecardGuideAttack, Icons.bolt, titleSize, textSize, Colors.red),
                       const SizedBox(height: 16),
-                      _buildGuideSection('특수 카드', '• J: 다음 순서 건너뛰기\n• Q: 방향 반대\n• K: 2턴 건너뛰기\n• 7: 무늬 변경', Icons.star, titleSize, textSize, Colors.amber),
+                      _buildGuideSection(l10n.onecardGuideSpecialTitle, l10n.onecardGuideSpecial, Icons.star, titleSize, textSize, Colors.amber),
                       const SizedBox(height: 16),
-                      _buildGuideSection('조커 방어', '조커로 공격받으면 조커로만 방어할 수 있습니다.', Icons.shield, titleSize, textSize, Colors.cyan),
+                      _buildGuideSection(l10n.onecardGuideJokerDefenseTitle, l10n.onecardGuideJokerDefense, Icons.shield, titleSize, textSize, Colors.cyan),
                       const SizedBox(height: 16),
-                      _buildGuideSection('원카드!', '손패가 1장 남으면 "원카드!" 버튼을 눌러야 합니다.\n누르지 않으면 패널티로 2장을 받습니다.', Icons.warning, titleSize, textSize, Colors.orange),
+                      _buildGuideSection(l10n.onecardGuideOneCardTitle, l10n.onecardGuideOneCard, Icons.warning, titleSize, textSize, Colors.orange),
                       const SizedBox(height: 16),
-                      _buildGuideSection('파산', '손패가 20장 이상이 되면 파산! 가장 적은 카드를 가진 플레이어가 승리합니다.', Icons.dangerous, titleSize, textSize, Colors.redAccent),
+                      _buildGuideSection(l10n.onecardGuideBankruptTitle, l10n.onecardGuideBankrupt, Icons.dangerous, titleSize, textSize, Colors.redAccent),
                     ],
                   ),
                 ),
@@ -464,9 +465,9 @@ class _OneCardHomeScreenState extends State<OneCardHomeScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      '확인',
-                      style: TextStyle(
+                    child: Text(
+                      l10n.confirm,
+                      style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),

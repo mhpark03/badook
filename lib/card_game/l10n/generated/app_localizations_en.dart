@@ -1129,4 +1129,198 @@ class AppLocalizationsEn extends AppLocalizations {
   String bankruptcyShort(int n) {
     return 'Bankrupt! ($n cards)';
   }
+
+  @override
+  String get heartsGuideObjectiveTitle => 'Objective';
+
+  @override
+  String get heartsGuideObjective =>
+      'Avoid collecting Hearts and the Queen of Spades to get the lowest score.';
+
+  @override
+  String get heartsGuideHowToPlayTitle => 'How to Play';
+
+  @override
+  String get heartsGuideHowToPlay =>
+      '• 4 players, 13 cards each\n• Pass 3 cards to the left at start\n• Player with 2 of Clubs leads first\n• Play 13 tricks avoiding point cards';
+
+  @override
+  String get heartsGuideScoringTitle => 'Scoring';
+
+  @override
+  String get heartsGuideScoring =>
+      '• Hearts: 1 point each (13 total)\n• Queen of Spades (♠Q): 13 points\n• Total: 26 points\n• Lowest score wins!';
+
+  @override
+  String get heartsGuideBreakingTitle => 'Breaking Hearts';
+
+  @override
+  String get heartsGuideBreaking =>
+      'Hearts cannot be played on the first trick.\nHearts can only lead after being played.';
+
+  @override
+  String get heartsGuideShootMoonTitle => 'Shoot the Moon';
+
+  @override
+  String get heartsGuideShootMoon =>
+      'If one player takes all Hearts and the Queen of Spades:\n• That player: 0 points\n• Others: 26 points each';
+
+  @override
+  String get heartsGuideTipsTitle => 'Strategy Tips';
+
+  @override
+  String get heartsGuideTips =>
+      '• Discard high cards early\n• Watch out for the Queen of Spades\n• Force opponents to take point cards';
+
+  @override
+  String get onecardGuideObjectiveTitle => 'Objective';
+
+  @override
+  String get onecardGuideObjective => 'Be the first to play all your cards.';
+
+  @override
+  String get onecardGuidePlayCardTitle => 'Playing Cards';
+
+  @override
+  String get onecardGuidePlayCard =>
+      'Play a card matching the previous card\'s suit or rank.';
+
+  @override
+  String get onecardGuideAttackTitle => 'Attack Cards';
+
+  @override
+  String get onecardGuideAttack =>
+      '• 2: +2 cards attack\n• A: +3 cards attack (♠A is +5)\n• Joker: +5 (B&W) / +7 (Color)';
+
+  @override
+  String get onecardGuideSpecialTitle => 'Special Cards';
+
+  @override
+  String get onecardGuideSpecial =>
+      '• J: Skip next player\n• Q: Reverse direction\n• K: Skip 2 turns\n• 7: Change suit';
+
+  @override
+  String get onecardGuideJokerDefenseTitle => 'Joker Defense';
+
+  @override
+  String get onecardGuideJokerDefense =>
+      'Joker attacks can only be blocked with another Joker.';
+
+  @override
+  String get onecardGuideOneCardTitle => 'One Card!';
+
+  @override
+  String get onecardGuideOneCard =>
+      'Press \"One Card!\" when you have 1 card left.\nFailing to do so results in a 2-card penalty.';
+
+  @override
+  String get onecardGuideBankruptTitle => 'Bankruptcy';
+
+  @override
+  String get onecardGuideBankrupt =>
+      'Having 20+ cards means bankruptcy! Player with fewest cards wins.';
+
+  @override
+  String get hulaGuideObjectiveTitle => 'Objective';
+
+  @override
+  String get hulaGuideObjective =>
+      'Be the first to meld or discard all your cards.';
+
+  @override
+  String get hulaGuideHowToPlayTitle => 'How to Play';
+
+  @override
+  String get hulaGuideHowToPlay =>
+      'Each turn, draw a card from deck or discard pile, then meld or discard.';
+
+  @override
+  String get hulaGuideMeldTypesTitle => 'Meld Types';
+
+  @override
+  String get hulaGuideMeldTypes =>
+      '• Run: 3+ cards of same suit in sequence (e.g., ♠3-4-5)\n• Group: 3+ cards of same rank, different suits (e.g., ♠7-♥7-♦7)';
+
+  @override
+  String get hulaGuideSevenRuleTitle => 'Seven Rule';
+
+  @override
+  String get hulaGuideSevenRule => '7s can be melded alone.';
+
+  @override
+  String get hulaGuideThankYouTitle => 'Thank You';
+
+  @override
+  String get hulaGuideThankYou =>
+      'Drawing a 7 from discard pile lets you say \"Thank You\" and make a special meld.';
+
+  @override
+  String get hulaGuideStopTitle => 'Stop';
+
+  @override
+  String get hulaGuideStop =>
+      'Call Stop anytime to end the game.\nPlayer with lowest remaining card points wins.';
+
+  @override
+  String get hulaGuideCardPointsTitle => 'Card Points';
+
+  @override
+  String get hulaGuideCardPoints =>
+      'A=1pt, 2~9=face value, J=10pt, Q=11pt, K=12pt';
+
+  @override
+  String get hulaGuideScoringTitle => 'Scoring';
+
+  @override
+  String get hulaGuideScoring =>
+      '• Winner: Gets sum of differences from other hands\n• Losers: Lose points equal to difference from winner\n• Hula (win without melding): Double points';
+
+  @override
+  String get hulaGuideStopPenaltyTitle => 'Stop Failure Penalty';
+
+  @override
+  String get hulaGuideStopPenalty =>
+      'If you call Stop but don\'t have the lowest:\n• You pay all points the winner would get\n• Other players don\'t lose points';
+
+  @override
+  String thankYouRegisterAlone(String card) {
+    return 'Thank You! $card registered alone';
+  }
+
+  @override
+  String thankYouAttachToMyMeld(String card) {
+    return 'Thank You! $card attached to my meld';
+  }
+
+  @override
+  String thankYouAttachToOtherMeld(String card, String playerName) {
+    return 'Thank You! $card attached to $playerName\'s meld';
+  }
+
+  @override
+  String thankYouNewMeld(String description) {
+    return 'Thank You! $description';
+  }
+
+  @override
+  String get onecardGuideInGameObjective =>
+      'First player to play all cards wins.\nYou must call \"One Card\" before playing your last card.';
+
+  @override
+  String get onecardGuideHowToPlayInGame =>
+      'Play a card matching the suit or rank.\nIf you can\'t play, draw from the deck.';
+
+  @override
+  String get onecardGuideDefenseTitle => 'Defense';
+
+  @override
+  String get onecardGuideDefense =>
+      'Block attacks with matching attack cards.\nBlocked attacks stack to the next player.';
+
+  @override
+  String get onecardGuideTipsTitle => 'Game Tips';
+
+  @override
+  String get onecardGuideTips =>
+      '• Save attack cards for defense\n• 2-card penalty for not calling One Card!\n• 20+ cards = bankruptcy loss';
 }

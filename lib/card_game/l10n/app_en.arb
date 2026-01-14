@@ -367,5 +367,80 @@
     "placeholders": {
       "n": {"type": "int"}
     }
-  }
+  },
+  "heartsGuideObjectiveTitle": "Objective",
+  "heartsGuideObjective": "Avoid collecting Hearts and the Queen of Spades to get the lowest score.",
+  "heartsGuideHowToPlayTitle": "How to Play",
+  "heartsGuideHowToPlay": "• 4 players, 13 cards each\n• Pass 3 cards to the left at start\n• Player with 2 of Clubs leads first\n• Play 13 tricks avoiding point cards",
+  "heartsGuideScoringTitle": "Scoring",
+  "heartsGuideScoring": "• Hearts: 1 point each (13 total)\n• Queen of Spades (♠Q): 13 points\n• Total: 26 points\n• Lowest score wins!",
+  "heartsGuideBreakingTitle": "Breaking Hearts",
+  "heartsGuideBreaking": "Hearts cannot be played on the first trick.\nHearts can only lead after being played.",
+  "heartsGuideShootMoonTitle": "Shoot the Moon",
+  "heartsGuideShootMoon": "If one player takes all Hearts and the Queen of Spades:\n• That player: 0 points\n• Others: 26 points each",
+  "heartsGuideTipsTitle": "Strategy Tips",
+  "heartsGuideTips": "• Discard high cards early\n• Watch out for the Queen of Spades\n• Force opponents to take point cards",
+  "onecardGuideObjectiveTitle": "Objective",
+  "onecardGuideObjective": "Be the first to play all your cards.",
+  "onecardGuidePlayCardTitle": "Playing Cards",
+  "onecardGuidePlayCard": "Play a card matching the previous card's suit or rank.",
+  "onecardGuideAttackTitle": "Attack Cards",
+  "onecardGuideAttack": "• 2: +2 cards attack\n• A: +3 cards attack (♠A is +5)\n• Joker: +5 (B&W) / +7 (Color)",
+  "onecardGuideSpecialTitle": "Special Cards",
+  "onecardGuideSpecial": "• J: Skip next player\n• Q: Reverse direction\n• K: Skip 2 turns\n• 7: Change suit",
+  "onecardGuideJokerDefenseTitle": "Joker Defense",
+  "onecardGuideJokerDefense": "Joker attacks can only be blocked with another Joker.",
+  "onecardGuideOneCardTitle": "One Card!",
+  "onecardGuideOneCard": "Press \"One Card!\" when you have 1 card left.\nFailing to do so results in a 2-card penalty.",
+  "onecardGuideBankruptTitle": "Bankruptcy",
+  "onecardGuideBankrupt": "Having 20+ cards means bankruptcy! Player with fewest cards wins.",
+  "hulaGuideObjectiveTitle": "Objective",
+  "hulaGuideObjective": "Be the first to meld or discard all your cards.",
+  "hulaGuideHowToPlayTitle": "How to Play",
+  "hulaGuideHowToPlay": "Each turn, draw a card from deck or discard pile, then meld or discard.",
+  "hulaGuideMeldTypesTitle": "Meld Types",
+  "hulaGuideMeldTypes": "• Run: 3+ cards of same suit in sequence (e.g., ♠3-4-5)\n• Group: 3+ cards of same rank, different suits (e.g., ♠7-♥7-♦7)",
+  "hulaGuideSevenRuleTitle": "Seven Rule",
+  "hulaGuideSevenRule": "7s can be melded alone.",
+  "hulaGuideThankYouTitle": "Thank You",
+  "hulaGuideThankYou": "Drawing a 7 from discard pile lets you say \"Thank You\" and make a special meld.",
+  "hulaGuideStopTitle": "Stop",
+  "hulaGuideStop": "Call Stop anytime to end the game.\nPlayer with lowest remaining card points wins.",
+  "hulaGuideCardPointsTitle": "Card Points",
+  "hulaGuideCardPoints": "A=1pt, 2~9=face value, J=10pt, Q=11pt, K=12pt",
+  "hulaGuideScoringTitle": "Scoring",
+  "hulaGuideScoring": "• Winner: Gets sum of differences from other hands\n• Losers: Lose points equal to difference from winner\n• Hula (win without melding): Double points",
+  "hulaGuideStopPenaltyTitle": "Stop Failure Penalty",
+  "hulaGuideStopPenalty": "If you call Stop but don't have the lowest:\n• You pay all points the winner would get\n• Other players don't lose points",
+  "thankYouRegisterAlone": "Thank You! {card} registered alone",
+  "@thankYouRegisterAlone": {
+    "placeholders": {
+      "card": {"type": "String"}
+    }
+  },
+  "thankYouAttachToMyMeld": "Thank You! {card} attached to my meld",
+  "@thankYouAttachToMyMeld": {
+    "placeholders": {
+      "card": {"type": "String"}
+    }
+  },
+  "thankYouAttachToOtherMeld": "Thank You! {card} attached to {playerName}'s meld",
+  "@thankYouAttachToOtherMeld": {
+    "placeholders": {
+      "card": {"type": "String"},
+      "playerName": {"type": "String"}
+    }
+  },
+  "thankYouNewMeld": "Thank You! {description}",
+  "@thankYouNewMeld": {
+    "placeholders": {
+      "description": {"type": "String"}
+    }
+  },
+  "onecardGuideInGameObjective": "First player to play all cards wins.\nYou must call \"One Card\" before playing your last card.",
+  "onecardGuideHowToPlayInGame": "Play a card matching the suit or rank.\nIf you can't play, draw from the deck.",
+  "onecardGuideDefenseTitle": "Defense",
+  "onecardGuideDefense": "Block attacks with matching attack cards.\nBlocked attacks stack to the next player.",
+  "onecardGuideTipsTitle": "Game Tips",
+  "onecardGuideTips": "• Save attack cards for defense\n• 2-card penalty for not calling One Card!\n• 20+ cards = bankruptcy loss"
 }

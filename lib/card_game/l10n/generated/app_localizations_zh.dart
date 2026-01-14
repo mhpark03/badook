@@ -1117,4 +1117,183 @@ class AppLocalizationsZh extends AppLocalizations {
   String bankruptcyShort(int n) {
     return '破产！（$n张）';
   }
+
+  @override
+  String get heartsGuideObjectiveTitle => '目标';
+
+  @override
+  String get heartsGuideObjective => '避免收集红心和黑桃皇后，争取最低分。';
+
+  @override
+  String get heartsGuideHowToPlayTitle => '玩法';
+
+  @override
+  String get heartsGuideHowToPlay =>
+      '• 4人游戏，每人13张牌\n• 开始时向左边玩家传递3张牌\n• 持有梅花2的玩家先出\n• 进行13轮，避免拿到计分牌';
+
+  @override
+  String get heartsGuideScoringTitle => '计分';
+
+  @override
+  String get heartsGuideScoring =>
+      '• 红心: 每张1分（共13分）\n• 黑桃皇后 (♠Q): 13分\n• 总计: 26分\n• 最低分获胜！';
+
+  @override
+  String get heartsGuideBreakingTitle => '红心破冰';
+
+  @override
+  String get heartsGuideBreaking => '第一轮不能出红心。\n红心被出过后才能作为领牌。';
+
+  @override
+  String get heartsGuideShootMoonTitle => '全收';
+
+  @override
+  String get heartsGuideShootMoon =>
+      '如果一位玩家收集所有红心和黑桃皇后:\n• 该玩家: 0分\n• 其他玩家: 各26分';
+
+  @override
+  String get heartsGuideTipsTitle => '策略提示';
+
+  @override
+  String get heartsGuideTips => '• 尽早打出高牌\n• 小心黑桃皇后\n• 让对手吃进计分牌';
+
+  @override
+  String get onecardGuideObjectiveTitle => '目标';
+
+  @override
+  String get onecardGuideObjective => '第一个出完手中所有牌。';
+
+  @override
+  String get onecardGuidePlayCardTitle => '出牌规则';
+
+  @override
+  String get onecardGuidePlayCard => '出与上一张牌相同花色或数字的牌。';
+
+  @override
+  String get onecardGuideAttackTitle => '攻击牌';
+
+  @override
+  String get onecardGuideAttack =>
+      '• 2: +2张攻击\n• A: +3张攻击 (♠A是+5张)\n• 小丑: +5张(黑白) / +7张(彩色)';
+
+  @override
+  String get onecardGuideSpecialTitle => '特殊牌';
+
+  @override
+  String get onecardGuideSpecial =>
+      '• J: 跳过下一位\n• Q: 反转方向\n• K: 跳过2回合\n• 7: 更换花色';
+
+  @override
+  String get onecardGuideJokerDefenseTitle => '小丑防御';
+
+  @override
+  String get onecardGuideJokerDefense => '被小丑攻击时只能用小丑防御。';
+
+  @override
+  String get onecardGuideOneCardTitle => 'UNO！';
+
+  @override
+  String get onecardGuideOneCard => '剩1张牌时需要按\"UNO！\"按钮。\n否则罚抽2张牌。';
+
+  @override
+  String get onecardGuideBankruptTitle => '破产';
+
+  @override
+  String get onecardGuideBankrupt => '手牌20张以上就破产！牌最少的玩家获胜。';
+
+  @override
+  String get hulaGuideObjectiveTitle => '目标';
+
+  @override
+  String get hulaGuideObjective => '第一个将手牌全部打出或组合出去。';
+
+  @override
+  String get hulaGuideHowToPlayTitle => '玩法';
+
+  @override
+  String get hulaGuideHowToPlay => '每回合从牌堆或弃牌堆抽一张牌，然后组合或弃牌。';
+
+  @override
+  String get hulaGuideMeldTypesTitle => '组合类型';
+
+  @override
+  String get hulaGuideMeldTypes =>
+      '• 顺子: 同花色连续数字3张以上 (如: ♠3-4-5)\n• 刻子: 相同数字不同花色3张以上 (如: ♠7-♥7-♦7)';
+
+  @override
+  String get hulaGuideSevenRuleTitle => '7的特殊规则';
+
+  @override
+  String get hulaGuideSevenRule => '7可以单独组合出去。';
+
+  @override
+  String get hulaGuideThankYouTitle => 'Thank You';
+
+  @override
+  String get hulaGuideThankYou => '从弃牌堆抽到7时可以喊\"Thank You\"并进行特殊组合。';
+
+  @override
+  String get hulaGuideStopTitle => '停止';
+
+  @override
+  String get hulaGuideStop => '随时可以喊停止结束游戏。\n剩余牌分数最低的玩家获胜。';
+
+  @override
+  String get hulaGuideCardPointsTitle => '牌点数';
+
+  @override
+  String get hulaGuideCardPoints => 'A=1分, 2~9=数字分, J=10分, Q=11分, K=12分';
+
+  @override
+  String get hulaGuideScoringTitle => '计分';
+
+  @override
+  String get hulaGuideScoring =>
+      '• 赢家: 获得与其他玩家手牌差值的总和\n• 输家: 扣除与赢家的手牌差值\n• Hula(无组合获胜): 分数翻倍';
+
+  @override
+  String get hulaGuideStopPenaltyTitle => '停止失败惩罚';
+
+  @override
+  String get hulaGuideStopPenalty =>
+      '喊停止但不是最低分时:\n• 喊停止的人承担赢家应得的所有分数\n• 其他玩家不扣分';
+
+  @override
+  String thankYouRegisterAlone(String card) {
+    return '谢谢！$card 单独登记';
+  }
+
+  @override
+  String thankYouAttachToMyMeld(String card) {
+    return '谢谢！$card 附加到我的组合';
+  }
+
+  @override
+  String thankYouAttachToOtherMeld(String card, String playerName) {
+    return '谢谢！$card 附加到$playerName的组合';
+  }
+
+  @override
+  String thankYouNewMeld(String description) {
+    return '谢谢！$description';
+  }
+
+  @override
+  String get onecardGuideInGameObjective =>
+      '第一个出完所有牌的玩家获胜。\n出最后一张牌前必须喊\"UNO\"。';
+
+  @override
+  String get onecardGuideHowToPlayInGame => '可以出同花色或同数字的牌。\n无法出牌时从牌堆抽牌。';
+
+  @override
+  String get onecardGuideDefenseTitle => '防御';
+
+  @override
+  String get onecardGuideDefense => '被攻击时可以用相同攻击牌防御。\n防御后攻击累积传给下一位。';
+
+  @override
+  String get onecardGuideTipsTitle => '游戏技巧';
+
+  @override
+  String get onecardGuideTips => '• 攻击牌留着防御用\n• 不喊UNO罚抽2张！\n• 20张以上破产输';
 }

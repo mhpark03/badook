@@ -366,5 +366,80 @@
     "placeholders": {
       "n": {"type": "int"}
     }
-  }
+  },
+  "heartsGuideObjectiveTitle": "目标",
+  "heartsGuideObjective": "避免收集红心和黑桃皇后，争取最低分。",
+  "heartsGuideHowToPlayTitle": "玩法",
+  "heartsGuideHowToPlay": "• 4人游戏，每人13张牌\n• 开始时向左边玩家传递3张牌\n• 持有梅花2的玩家先出\n• 进行13轮，避免拿到计分牌",
+  "heartsGuideScoringTitle": "计分",
+  "heartsGuideScoring": "• 红心: 每张1分（共13分）\n• 黑桃皇后 (♠Q): 13分\n• 总计: 26分\n• 最低分获胜！",
+  "heartsGuideBreakingTitle": "红心破冰",
+  "heartsGuideBreaking": "第一轮不能出红心。\n红心被出过后才能作为领牌。",
+  "heartsGuideShootMoonTitle": "全收",
+  "heartsGuideShootMoon": "如果一位玩家收集所有红心和黑桃皇后:\n• 该玩家: 0分\n• 其他玩家: 各26分",
+  "heartsGuideTipsTitle": "策略提示",
+  "heartsGuideTips": "• 尽早打出高牌\n• 小心黑桃皇后\n• 让对手吃进计分牌",
+  "onecardGuideObjectiveTitle": "目标",
+  "onecardGuideObjective": "第一个出完手中所有牌。",
+  "onecardGuidePlayCardTitle": "出牌规则",
+  "onecardGuidePlayCard": "出与上一张牌相同花色或数字的牌。",
+  "onecardGuideAttackTitle": "攻击牌",
+  "onecardGuideAttack": "• 2: +2张攻击\n• A: +3张攻击 (♠A是+5张)\n• 小丑: +5张(黑白) / +7张(彩色)",
+  "onecardGuideSpecialTitle": "特殊牌",
+  "onecardGuideSpecial": "• J: 跳过下一位\n• Q: 反转方向\n• K: 跳过2回合\n• 7: 更换花色",
+  "onecardGuideJokerDefenseTitle": "小丑防御",
+  "onecardGuideJokerDefense": "被小丑攻击时只能用小丑防御。",
+  "onecardGuideOneCardTitle": "UNO！",
+  "onecardGuideOneCard": "剩1张牌时需要按\"UNO！\"按钮。\n否则罚抽2张牌。",
+  "onecardGuideBankruptTitle": "破产",
+  "onecardGuideBankrupt": "手牌20张以上就破产！牌最少的玩家获胜。",
+  "hulaGuideObjectiveTitle": "目标",
+  "hulaGuideObjective": "第一个将手牌全部打出或组合出去。",
+  "hulaGuideHowToPlayTitle": "玩法",
+  "hulaGuideHowToPlay": "每回合从牌堆或弃牌堆抽一张牌，然后组合或弃牌。",
+  "hulaGuideMeldTypesTitle": "组合类型",
+  "hulaGuideMeldTypes": "• 顺子: 同花色连续数字3张以上 (如: ♠3-4-5)\n• 刻子: 相同数字不同花色3张以上 (如: ♠7-♥7-♦7)",
+  "hulaGuideSevenRuleTitle": "7的特殊规则",
+  "hulaGuideSevenRule": "7可以单独组合出去。",
+  "hulaGuideThankYouTitle": "Thank You",
+  "hulaGuideThankYou": "从弃牌堆抽到7时可以喊\"Thank You\"并进行特殊组合。",
+  "hulaGuideStopTitle": "停止",
+  "hulaGuideStop": "随时可以喊停止结束游戏。\n剩余牌分数最低的玩家获胜。",
+  "hulaGuideCardPointsTitle": "牌点数",
+  "hulaGuideCardPoints": "A=1分, 2~9=数字分, J=10分, Q=11分, K=12分",
+  "hulaGuideScoringTitle": "计分",
+  "hulaGuideScoring": "• 赢家: 获得与其他玩家手牌差值的总和\n• 输家: 扣除与赢家的手牌差值\n• Hula(无组合获胜): 分数翻倍",
+  "hulaGuideStopPenaltyTitle": "停止失败惩罚",
+  "hulaGuideStopPenalty": "喊停止但不是最低分时:\n• 喊停止的人承担赢家应得的所有分数\n• 其他玩家不扣分",
+  "thankYouRegisterAlone": "谢谢！{card} 单独登记",
+  "@thankYouRegisterAlone": {
+    "placeholders": {
+      "card": {"type": "String"}
+    }
+  },
+  "thankYouAttachToMyMeld": "谢谢！{card} 附加到我的组合",
+  "@thankYouAttachToMyMeld": {
+    "placeholders": {
+      "card": {"type": "String"}
+    }
+  },
+  "thankYouAttachToOtherMeld": "谢谢！{card} 附加到{playerName}的组合",
+  "@thankYouAttachToOtherMeld": {
+    "placeholders": {
+      "card": {"type": "String"},
+      "playerName": {"type": "String"}
+    }
+  },
+  "thankYouNewMeld": "谢谢！{description}",
+  "@thankYouNewMeld": {
+    "placeholders": {
+      "description": {"type": "String"}
+    }
+  },
+  "onecardGuideInGameObjective": "第一个出完所有牌的玩家获胜。\n出最后一张牌前必须喊\"UNO\"。",
+  "onecardGuideHowToPlayInGame": "可以出同花色或同数字的牌。\n无法出牌时从牌堆抽牌。",
+  "onecardGuideDefenseTitle": "防御",
+  "onecardGuideDefense": "被攻击时可以用相同攻击牌防御。\n防御后攻击累积传给下一位。",
+  "onecardGuideTipsTitle": "游戏技巧",
+  "onecardGuideTips": "• 攻击牌留着防御用\n• 不喊UNO罚抽2张！\n• 20张以上破产输"
 }

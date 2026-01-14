@@ -366,5 +366,80 @@
     "placeholders": {
       "n": {"type": "int"}
     }
-  }
+  },
+  "heartsGuideObjectiveTitle": "目的",
+  "heartsGuideObjective": "ハートとスペードのクイーンを避けて最低点を目指しましょう。",
+  "heartsGuideHowToPlayTitle": "遊び方",
+  "heartsGuideHowToPlay": "• 4人で各13枚ずつ配ります\n• 開始時に左のプレイヤーに3枚渡します\n• クラブの2を持つ人が先攻\n• 13トリックで得点カードを避けます",
+  "heartsGuideScoringTitle": "得点計算",
+  "heartsGuideScoring": "• ハート: 各1点（計13点）\n• スペードのクイーン (♠Q): 13点\n• 合計: 26点\n• 最低点が勝ち！",
+  "heartsGuideBreakingTitle": "ハートブレイク",
+  "heartsGuideBreaking": "最初のトリックではハートを出せません。\nハートが一度出た後からリードできます。",
+  "heartsGuideShootMoonTitle": "シュート・ザ・ムーン",
+  "heartsGuideShootMoon": "1人が全てのハートとスペードのクイーンを取ると:\n• そのプレイヤー: 0点\n• 他のプレイヤー: 各26点",
+  "heartsGuideTipsTitle": "戦略のヒント",
+  "heartsGuideTips": "• 高いカードは早めに捨てましょう\n• スペードのクイーンに注意\n• 相手に得点カードを取らせましょう",
+  "onecardGuideObjectiveTitle": "目的",
+  "onecardGuideObjective": "手札のカードを最初に全て出し切ることが目標です。",
+  "onecardGuidePlayCardTitle": "カードの出し方",
+  "onecardGuidePlayCard": "前に出されたカードと同じスートか同じ数字のカードを出せます。",
+  "onecardGuideAttackTitle": "攻撃カード",
+  "onecardGuideAttack": "• 2: +2枚攻撃\n• A: +3枚攻撃 (♠Aは+5枚)\n• ジョーカー: +5枚(白黒) / +7枚(カラー)",
+  "onecardGuideSpecialTitle": "特殊カード",
+  "onecardGuideSpecial": "• J: 次の順番をスキップ\n• Q: 方向を反転\n• K: 2ターンスキップ\n• 7: スート変更",
+  "onecardGuideJokerDefenseTitle": "ジョーカー防御",
+  "onecardGuideJokerDefense": "ジョーカーで攻撃されたらジョーカーでしか防御できません。",
+  "onecardGuideOneCardTitle": "ワンカード！",
+  "onecardGuideOneCard": "手札が1枚になったら「ワンカード！」ボタンを押す必要があります。\n押さないとペナルティで2枚引きます。",
+  "onecardGuideBankruptTitle": "破産",
+  "onecardGuideBankrupt": "手札が20枚以上になると破産！カードが最も少ないプレイヤーが勝ちます。",
+  "hulaGuideObjectiveTitle": "目的",
+  "hulaGuideObjective": "手札のカードを全てメルドか捨てて最初になくすことが目標です。",
+  "hulaGuideHowToPlayTitle": "遊び方",
+  "hulaGuideHowToPlay": "毎ターン、デッキか捨て札から1枚引いて、メルドか捨てます。",
+  "hulaGuideMeldTypesTitle": "メルドの種類",
+  "hulaGuideMeldTypes": "• ラン: 同じスートの連続した数字3枚以上 (例: ♠3-4-5)\n• グループ: 同じ数字で異なるスート3枚以上 (例: ♠7-♥7-♦7)",
+  "hulaGuideSevenRuleTitle": "7の特別ルール",
+  "hulaGuideSevenRule": "7は単独でメルドできます。",
+  "hulaGuideThankYouTitle": "サンキュー",
+  "hulaGuideThankYou": "捨て札から7を引くと「サンキュー」と言って特別なメルドができます。",
+  "hulaGuideStopTitle": "ストップ",
+  "hulaGuideStop": "いつでもストップを宣言してゲームを終了できます。\n残りカードのポイントが最も低い人が勝ちです。",
+  "hulaGuideCardPointsTitle": "カードポイント",
+  "hulaGuideCardPoints": "A=1点, 2~9=数字点, J=10点, Q=11点, K=12点",
+  "hulaGuideScoringTitle": "得点計算",
+  "hulaGuideScoring": "• 勝者: 他プレイヤーとの差の合計を獲得\n• 敗者: 勝者との差分を減点\n• フーラ(メルドなしで勝利): ポイント2倍",
+  "hulaGuideStopPenaltyTitle": "ストップ失敗ペナルティ",
+  "hulaGuideStopPenalty": "ストップしたが最低点でない場合:\n• 勝者が得るポイント全てをストップした人が負担\n• 他のプレイヤーは減点なし",
+  "thankYouRegisterAlone": "サンキュー！{card} 単独登録",
+  "@thankYouRegisterAlone": {
+    "placeholders": {
+      "card": {"type": "String"}
+    }
+  },
+  "thankYouAttachToMyMeld": "サンキュー！{card} 自分のメルドに追加",
+  "@thankYouAttachToMyMeld": {
+    "placeholders": {
+      "card": {"type": "String"}
+    }
+  },
+  "thankYouAttachToOtherMeld": "サンキュー！{card} {playerName}のメルドに追加",
+  "@thankYouAttachToOtherMeld": {
+    "placeholders": {
+      "card": {"type": "String"},
+      "playerName": {"type": "String"}
+    }
+  },
+  "thankYouNewMeld": "サンキュー！{description}",
+  "@thankYouNewMeld": {
+    "placeholders": {
+      "description": {"type": "String"}
+    }
+  },
+  "onecardGuideInGameObjective": "最初に全てのカードを出した人が勝ちです。\n最後の1枚を出す前に「ワンカード」と宣言してください。",
+  "onecardGuideHowToPlayInGame": "同じスートか同じ数字のカードを出せます。\n出せない場合はデッキからカードを引きます。",
+  "onecardGuideDefenseTitle": "防御",
+  "onecardGuideDefense": "攻撃されたら同じ攻撃カードで防げます。\n防ぐと攻撃が累積して次の人に回ります。",
+  "onecardGuideTipsTitle": "ゲームのコツ",
+  "onecardGuideTips": "• 攻撃カードは防御用に取っておきましょう\n• ワンカードを言わないと2枚ペナルティ！\n• 20枚以上になると破産負け"
 }

@@ -806,7 +806,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
               ),
             ),
             const SizedBox(width: 8),
-            Text('${'땡큐'} ${'방법을 선택하세요'}'),
+            Text('${getL10n(context).thankYou} ${getL10n(context).selectMethod}'),
           ],
         ),
         content: SizedBox(
@@ -836,7 +836,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('취소'),
+            child: Text(getL10n(context).cancel),
           ),
         ],
       ),
@@ -878,18 +878,19 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
     final card = discardPile.removeLast();
     String meldMessage = '';
 
+    final l10n = getL10n(context);
     switch (option.type) {
       case ThankYouType.seven:
         playerMelds.add(Meld(cards: [card], isRun: false));
-        meldMessage = '땡큐! ${card.suitSymbol}7 단독 등록';
+        meldMessage = l10n.thankYouRegisterAlone('${card.suitSymbol}7');
 
       case ThankYouType.attachPlayer:
         _attachToMeld(option.meldIndex!, card);
-        meldMessage = '땡큐! ${card.suitSymbol}${card.rankString} 내 멜드에 붙이기';
+        meldMessage = l10n.thankYouAttachToMyMeld('${card.suitSymbol}${card.rankString}');
 
       case ThankYouType.attachComputer:
         _attachToMeldList(option.meldIndex!, card, computerMelds[option.computerIndex!]);
-        meldMessage = '땡큐! ${card.suitSymbol}${card.rankString} ${aiNames[option.computerIndex!]} 멜드에 붙이기';
+        meldMessage = l10n.thankYouAttachToOtherMeld('${card.suitSymbol}${card.rankString}', aiNames[option.computerIndex!]);
 
       case ThankYouType.newMeld:
         final newMeldCards = [...option.handCards, card];
@@ -901,7 +902,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
           newMeldCards.sort((a, b) => a.rank.compareTo(b.rank));
         }
         playerMelds.add(Meld(cards: newMeldCards, isRun: option.isRun));
-        meldMessage = '땡큐! ${option.description}';
+        meldMessage = l10n.thankYouNewMeld(option.description);
     }
 
     setState(() {
@@ -2882,7 +2883,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
       gameOver = true;
       winnerIndex = winnerIdx;
       if (winnerIdx == 0) {
-        winner = '플레이어';
+        winner = getL10n(context).player;
       } else {
         winner = aiNames[winnerIdx - 1];
       }
@@ -3048,14 +3049,14 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
               Navigator.pop(context);
               _initGame();
             },
-            child: const Text('새 게임'),
+            child: Text(getL10n(context).newGame),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               Navigator.pop(context);
             },
-            child: const Text('닫기'),
+            child: Text(getL10n(context).close),
           ),
         ],
       ),
@@ -3155,8 +3156,8 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
                           ),
                           child: Text(
                             currentTurn == 0
-                                ? '내 차례'
-                                : (waitingForNextTurn ? '${aiNames[currentTurn - 1]} ($_autoPlayCountdown)' : '${aiNames[currentTurn - 1]} 차례'),
+                                ? getL10n(context).myTurn
+                                : (waitingForNextTurn ? '${aiNames[currentTurn - 1]} ($_autoPlayCountdown)' : getL10n(context).playerTurn(aiNames[currentTurn - 1])),
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -3177,9 +3178,9 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
-                              '시작',
-                              style: TextStyle(
+                            child: Text(
+                              getL10n(context).start,
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -3470,7 +3471,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
                       child: discardPile.isEmpty
                           ? Center(
                               child: Text(
-                                '버린 카드',
+                                getL10n(context).discardedCards,
                                 style: const TextStyle(color: Colors.grey),
                               ),
                             )

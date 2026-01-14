@@ -2135,6 +2135,330 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'파산! ({n}장 보유)'**
   String bankruptcyShort(int n);
+
+  /// No description provided for @heartsGuideObjectiveTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'목표'**
+  String get heartsGuideObjectiveTitle;
+
+  /// No description provided for @heartsGuideObjective.
+  ///
+  /// In ko, this message translates to:
+  /// **'하트 카드와 스페이드 퀸을 피해 가장 낮은 점수를 얻는 것이 목표입니다.'**
+  String get heartsGuideObjective;
+
+  /// No description provided for @heartsGuideHowToPlayTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'진행 방법'**
+  String get heartsGuideHowToPlayTitle;
+
+  /// No description provided for @heartsGuideHowToPlay.
+  ///
+  /// In ko, this message translates to:
+  /// **'• 4명이 플레이하며 각자 13장씩 받습니다\n• 게임 시작 시 3장을 왼쪽 플레이어에게 전달\n• 클럽 2를 가진 플레이어가 먼저 시작\n• 13트릭을 진행하며 점수 카드를 피합니다'**
+  String get heartsGuideHowToPlay;
+
+  /// No description provided for @heartsGuideScoringTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 계산'**
+  String get heartsGuideScoringTitle;
+
+  /// No description provided for @heartsGuideScoring.
+  ///
+  /// In ko, this message translates to:
+  /// **'• 하트 카드: 각 1점 (총 13점)\n• 스페이드 퀸 (♠Q): 13점\n• 총점: 26점\n• 낮은 점수가 승리!'**
+  String get heartsGuideScoring;
+
+  /// No description provided for @heartsGuideBreakingTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'하트 브레이킹'**
+  String get heartsGuideBreakingTitle;
+
+  /// No description provided for @heartsGuideBreaking.
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 트릭에서는 하트를 낼 수 없습니다.\n하트가 한 번 나온 후에야 하트로 시작할 수 있습니다.'**
+  String get heartsGuideBreaking;
+
+  /// No description provided for @heartsGuideShootMoonTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'슈팅 더 문'**
+  String get heartsGuideShootMoonTitle;
+
+  /// No description provided for @heartsGuideShootMoon.
+  ///
+  /// In ko, this message translates to:
+  /// **'한 플레이어가 모든 하트와 스페이드 퀸을 획득하면:\n• 그 플레이어: 0점\n• 다른 플레이어: 각 26점'**
+  String get heartsGuideShootMoon;
+
+  /// No description provided for @heartsGuideTipsTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'전략 팁'**
+  String get heartsGuideTipsTitle;
+
+  /// No description provided for @heartsGuideTips.
+  ///
+  /// In ko, this message translates to:
+  /// **'• 높은 카드는 일찍 버리세요\n• 스페이드 퀸을 조심하세요\n• 상대방에게 점수 카드를 먹이세요'**
+  String get heartsGuideTips;
+
+  /// No description provided for @onecardGuideObjectiveTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'목표'**
+  String get onecardGuideObjectiveTitle;
+
+  /// No description provided for @onecardGuideObjective.
+  ///
+  /// In ko, this message translates to:
+  /// **'손에 든 카드를 가장 먼저 모두 내려놓는 것이 목표입니다.'**
+  String get onecardGuideObjective;
+
+  /// No description provided for @onecardGuidePlayCardTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드 내기'**
+  String get onecardGuidePlayCardTitle;
+
+  /// No description provided for @onecardGuidePlayCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'이전에 낸 카드와 같은 무늬 또는 같은 숫자의 카드를 낼 수 있습니다.'**
+  String get onecardGuidePlayCard;
+
+  /// No description provided for @onecardGuideAttackTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'공격 카드'**
+  String get onecardGuideAttackTitle;
+
+  /// No description provided for @onecardGuideAttack.
+  ///
+  /// In ko, this message translates to:
+  /// **'• 2: +2장 공격\n• A: +3장 공격 (♠A는 +5장)\n• 조커: +5장(흑백) / +7장(컬러)'**
+  String get onecardGuideAttack;
+
+  /// No description provided for @onecardGuideSpecialTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'특수 카드'**
+  String get onecardGuideSpecialTitle;
+
+  /// No description provided for @onecardGuideSpecial.
+  ///
+  /// In ko, this message translates to:
+  /// **'• J: 다음 순서 건너뛰기\n• Q: 방향 반대\n• K: 2턴 건너뛰기\n• 7: 무늬 변경'**
+  String get onecardGuideSpecial;
+
+  /// No description provided for @onecardGuideJokerDefenseTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'조커 방어'**
+  String get onecardGuideJokerDefenseTitle;
+
+  /// No description provided for @onecardGuideJokerDefense.
+  ///
+  /// In ko, this message translates to:
+  /// **'조커로 공격받으면 조커로만 방어할 수 있습니다.'**
+  String get onecardGuideJokerDefense;
+
+  /// No description provided for @onecardGuideOneCardTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'원카드!'**
+  String get onecardGuideOneCardTitle;
+
+  /// No description provided for @onecardGuideOneCard.
+  ///
+  /// In ko, this message translates to:
+  /// **'손패가 1장 남으면 \"원카드!\" 버튼을 눌러야 합니다.\n누르지 않으면 패널티로 2장을 받습니다.'**
+  String get onecardGuideOneCard;
+
+  /// No description provided for @onecardGuideBankruptTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'파산'**
+  String get onecardGuideBankruptTitle;
+
+  /// No description provided for @onecardGuideBankrupt.
+  ///
+  /// In ko, this message translates to:
+  /// **'손패가 20장 이상이 되면 파산! 가장 적은 카드를 가진 플레이어가 승리합니다.'**
+  String get onecardGuideBankrupt;
+
+  /// No description provided for @hulaGuideObjectiveTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'목표'**
+  String get hulaGuideObjectiveTitle;
+
+  /// No description provided for @hulaGuideObjective.
+  ///
+  /// In ko, this message translates to:
+  /// **'손패의 카드를 모두 등록하거나 버려서 가장 먼저 없애는 것이 목표입니다.'**
+  String get hulaGuideObjective;
+
+  /// No description provided for @hulaGuideHowToPlayTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'진행 방법'**
+  String get hulaGuideHowToPlayTitle;
+
+  /// No description provided for @hulaGuideHowToPlay.
+  ///
+  /// In ko, this message translates to:
+  /// **'매 턴마다 덱 또는 버린 더미에서 카드 1장을 뽑고, 등록 또는 버리기를 합니다.'**
+  String get hulaGuideHowToPlay;
+
+  /// No description provided for @hulaGuideMeldTypesTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'멜드 종류'**
+  String get hulaGuideMeldTypesTitle;
+
+  /// No description provided for @hulaGuideMeldTypes.
+  ///
+  /// In ko, this message translates to:
+  /// **'• Run: 같은 무늬의 연속된 숫자 3장 이상 (예: ♠3-4-5)\n• Group: 같은 숫자 다른 무늬 3장 이상 (예: ♠7-♥7-♦7)'**
+  String get hulaGuideMeldTypes;
+
+  /// No description provided for @hulaGuideSevenRuleTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'7의 특수 규칙'**
+  String get hulaGuideSevenRuleTitle;
+
+  /// No description provided for @hulaGuideSevenRule.
+  ///
+  /// In ko, this message translates to:
+  /// **'7은 단독으로 등록할 수 있습니다.'**
+  String get hulaGuideSevenRule;
+
+  /// No description provided for @hulaGuideThankYouTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐'**
+  String get hulaGuideThankYouTitle;
+
+  /// No description provided for @hulaGuideThankYou.
+  ///
+  /// In ko, this message translates to:
+  /// **'버린 더미에서 7을 뽑으면 \"땡큐\"를 외치고 특별한 등록을 할 수 있습니다.'**
+  String get hulaGuideThankYou;
+
+  /// No description provided for @hulaGuideStopTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'스톱'**
+  String get hulaGuideStopTitle;
+
+  /// No description provided for @hulaGuideStop.
+  ///
+  /// In ko, this message translates to:
+  /// **'언제든 스톱을 외쳐 게임을 끝낼 수 있습니다.\n남은 카드 점수가 가장 적은 사람이 승리합니다.'**
+  String get hulaGuideStop;
+
+  /// No description provided for @hulaGuideCardPointsTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드 점수'**
+  String get hulaGuideCardPointsTitle;
+
+  /// No description provided for @hulaGuideCardPoints.
+  ///
+  /// In ko, this message translates to:
+  /// **'A=1점, 2~9=숫자점, J=10점, Q=11점, K=12점'**
+  String get hulaGuideCardPoints;
+
+  /// No description provided for @hulaGuideScoringTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 계산'**
+  String get hulaGuideScoringTitle;
+
+  /// No description provided for @hulaGuideScoring.
+  ///
+  /// In ko, this message translates to:
+  /// **'• 승자: 다른 플레이어 손패와의 차이 합계를 획득\n• 패자: 승자와의 손패 차이만큼 감점\n• 훌라(등록 없이 승리): 점수 2배'**
+  String get hulaGuideScoring;
+
+  /// No description provided for @hulaGuideStopPenaltyTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'스톱 실패 페널티'**
+  String get hulaGuideStopPenaltyTitle;
+
+  /// No description provided for @hulaGuideStopPenalty.
+  ///
+  /// In ko, this message translates to:
+  /// **'스톱을 외쳤지만 최저 점수가 아닌 경우:\n• 승자가 받을 점수 전부를 스톱한 사람이 부담\n• 다른 플레이어는 감점 없음'**
+  String get hulaGuideStopPenalty;
+
+  /// No description provided for @thankYouRegisterAlone.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐! {card} 단독 등록'**
+  String thankYouRegisterAlone(String card);
+
+  /// No description provided for @thankYouAttachToMyMeld.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐! {card} 내 멜드에 붙이기'**
+  String thankYouAttachToMyMeld(String card);
+
+  /// No description provided for @thankYouAttachToOtherMeld.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐! {card} {playerName} 멜드에 붙이기'**
+  String thankYouAttachToOtherMeld(String card, String playerName);
+
+  /// No description provided for @thankYouNewMeld.
+  ///
+  /// In ko, this message translates to:
+  /// **'땡큐! {description}'**
+  String thankYouNewMeld(String description);
+
+  /// No description provided for @onecardGuideInGameObjective.
+  ///
+  /// In ko, this message translates to:
+  /// **'손에 든 카드를 가장 먼저 모두 내려놓는 사람이 승리합니다.\n마지막 카드를 내기 전 \"원카드\"를 외쳐야 합니다.'**
+  String get onecardGuideInGameObjective;
+
+  /// No description provided for @onecardGuideHowToPlayInGame.
+  ///
+  /// In ko, this message translates to:
+  /// **'같은 무늬 또는 같은 숫자의 카드를 낼 수 있습니다.\n낼 수 있는 카드가 없으면 덱에서 카드를 뽑습니다.'**
+  String get onecardGuideHowToPlayInGame;
+
+  /// No description provided for @onecardGuideDefenseTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'방어'**
+  String get onecardGuideDefenseTitle;
+
+  /// No description provided for @onecardGuideDefense.
+  ///
+  /// In ko, this message translates to:
+  /// **'공격을 받으면 같은 공격 카드로 막을 수 있습니다.\n막으면 공격이 누적되어 다음 사람에게 넘어갑니다.'**
+  String get onecardGuideDefense;
+
+  /// No description provided for @onecardGuideTipsTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'게임 팁'**
+  String get onecardGuideTipsTitle;
+
+  /// No description provided for @onecardGuideTips.
+  ///
+  /// In ko, this message translates to:
+  /// **'• 공격 카드는 방어용으로 아껴두세요\n• 원카드를 외치지 않으면 벌칙 2장!\n• 20장 이상 모이면 파산 패배'**
+  String get onecardGuideTips;
 }
 
 class _AppLocalizationsDelegate

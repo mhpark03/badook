@@ -1122,4 +1122,188 @@ class AppLocalizationsJa extends AppLocalizations {
   String bankruptcyShort(int n) {
     return '破産！（$n枚）';
   }
+
+  @override
+  String get heartsGuideObjectiveTitle => '目的';
+
+  @override
+  String get heartsGuideObjective => 'ハートとスペードのクイーンを避けて最低点を目指しましょう。';
+
+  @override
+  String get heartsGuideHowToPlayTitle => '遊び方';
+
+  @override
+  String get heartsGuideHowToPlay =>
+      '• 4人で各13枚ずつ配ります\n• 開始時に左のプレイヤーに3枚渡します\n• クラブの2を持つ人が先攻\n• 13トリックで得点カードを避けます';
+
+  @override
+  String get heartsGuideScoringTitle => '得点計算';
+
+  @override
+  String get heartsGuideScoring =>
+      '• ハート: 各1点（計13点）\n• スペードのクイーン (♠Q): 13点\n• 合計: 26点\n• 最低点が勝ち！';
+
+  @override
+  String get heartsGuideBreakingTitle => 'ハートブレイク';
+
+  @override
+  String get heartsGuideBreaking => '最初のトリックではハートを出せません。\nハートが一度出た後からリードできます。';
+
+  @override
+  String get heartsGuideShootMoonTitle => 'シュート・ザ・ムーン';
+
+  @override
+  String get heartsGuideShootMoon =>
+      '1人が全てのハートとスペードのクイーンを取ると:\n• そのプレイヤー: 0点\n• 他のプレイヤー: 各26点';
+
+  @override
+  String get heartsGuideTipsTitle => '戦略のヒント';
+
+  @override
+  String get heartsGuideTips =>
+      '• 高いカードは早めに捨てましょう\n• スペードのクイーンに注意\n• 相手に得点カードを取らせましょう';
+
+  @override
+  String get onecardGuideObjectiveTitle => '目的';
+
+  @override
+  String get onecardGuideObjective => '手札のカードを最初に全て出し切ることが目標です。';
+
+  @override
+  String get onecardGuidePlayCardTitle => 'カードの出し方';
+
+  @override
+  String get onecardGuidePlayCard => '前に出されたカードと同じスートか同じ数字のカードを出せます。';
+
+  @override
+  String get onecardGuideAttackTitle => '攻撃カード';
+
+  @override
+  String get onecardGuideAttack =>
+      '• 2: +2枚攻撃\n• A: +3枚攻撃 (♠Aは+5枚)\n• ジョーカー: +5枚(白黒) / +7枚(カラー)';
+
+  @override
+  String get onecardGuideSpecialTitle => '特殊カード';
+
+  @override
+  String get onecardGuideSpecial =>
+      '• J: 次の順番をスキップ\n• Q: 方向を反転\n• K: 2ターンスキップ\n• 7: スート変更';
+
+  @override
+  String get onecardGuideJokerDefenseTitle => 'ジョーカー防御';
+
+  @override
+  String get onecardGuideJokerDefense => 'ジョーカーで攻撃されたらジョーカーでしか防御できません。';
+
+  @override
+  String get onecardGuideOneCardTitle => 'ワンカード！';
+
+  @override
+  String get onecardGuideOneCard =>
+      '手札が1枚になったら「ワンカード！」ボタンを押す必要があります。\n押さないとペナルティで2枚引きます。';
+
+  @override
+  String get onecardGuideBankruptTitle => '破産';
+
+  @override
+  String get onecardGuideBankrupt => '手札が20枚以上になると破産！カードが最も少ないプレイヤーが勝ちます。';
+
+  @override
+  String get hulaGuideObjectiveTitle => '目的';
+
+  @override
+  String get hulaGuideObjective => '手札のカードを全てメルドか捨てて最初になくすことが目標です。';
+
+  @override
+  String get hulaGuideHowToPlayTitle => '遊び方';
+
+  @override
+  String get hulaGuideHowToPlay => '毎ターン、デッキか捨て札から1枚引いて、メルドか捨てます。';
+
+  @override
+  String get hulaGuideMeldTypesTitle => 'メルドの種類';
+
+  @override
+  String get hulaGuideMeldTypes =>
+      '• ラン: 同じスートの連続した数字3枚以上 (例: ♠3-4-5)\n• グループ: 同じ数字で異なるスート3枚以上 (例: ♠7-♥7-♦7)';
+
+  @override
+  String get hulaGuideSevenRuleTitle => '7の特別ルール';
+
+  @override
+  String get hulaGuideSevenRule => '7は単独でメルドできます。';
+
+  @override
+  String get hulaGuideThankYouTitle => 'サンキュー';
+
+  @override
+  String get hulaGuideThankYou => '捨て札から7を引くと「サンキュー」と言って特別なメルドができます。';
+
+  @override
+  String get hulaGuideStopTitle => 'ストップ';
+
+  @override
+  String get hulaGuideStop =>
+      'いつでもストップを宣言してゲームを終了できます。\n残りカードのポイントが最も低い人が勝ちです。';
+
+  @override
+  String get hulaGuideCardPointsTitle => 'カードポイント';
+
+  @override
+  String get hulaGuideCardPoints => 'A=1点, 2~9=数字点, J=10点, Q=11点, K=12点';
+
+  @override
+  String get hulaGuideScoringTitle => '得点計算';
+
+  @override
+  String get hulaGuideScoring =>
+      '• 勝者: 他プレイヤーとの差の合計を獲得\n• 敗者: 勝者との差分を減点\n• フーラ(メルドなしで勝利): ポイント2倍';
+
+  @override
+  String get hulaGuideStopPenaltyTitle => 'ストップ失敗ペナルティ';
+
+  @override
+  String get hulaGuideStopPenalty =>
+      'ストップしたが最低点でない場合:\n• 勝者が得るポイント全てをストップした人が負担\n• 他のプレイヤーは減点なし';
+
+  @override
+  String thankYouRegisterAlone(String card) {
+    return 'サンキュー！$card 単独登録';
+  }
+
+  @override
+  String thankYouAttachToMyMeld(String card) {
+    return 'サンキュー！$card 自分のメルドに追加';
+  }
+
+  @override
+  String thankYouAttachToOtherMeld(String card, String playerName) {
+    return 'サンキュー！$card $playerNameのメルドに追加';
+  }
+
+  @override
+  String thankYouNewMeld(String description) {
+    return 'サンキュー！$description';
+  }
+
+  @override
+  String get onecardGuideInGameObjective =>
+      '最初に全てのカードを出した人が勝ちです。\n最後の1枚を出す前に「ワンカード」と宣言してください。';
+
+  @override
+  String get onecardGuideHowToPlayInGame =>
+      '同じスートか同じ数字のカードを出せます。\n出せない場合はデッキからカードを引きます。';
+
+  @override
+  String get onecardGuideDefenseTitle => '防御';
+
+  @override
+  String get onecardGuideDefense => '攻撃されたら同じ攻撃カードで防げます。\n防ぐと攻撃が累積して次の人に回ります。';
+
+  @override
+  String get onecardGuideTipsTitle => 'ゲームのコツ';
+
+  @override
+  String get onecardGuideTips =>
+      '• 攻撃カードは防御用に取っておきましょう\n• ワンカードを言わないと2枚ペナルティ！\n• 20枚以上になると破産負け';
 }

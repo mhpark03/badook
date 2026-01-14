@@ -1123,4 +1123,193 @@ class AppLocalizationsKo extends AppLocalizations {
   String bankruptcyShort(int n) {
     return '파산! ($n장 보유)';
   }
+
+  @override
+  String get heartsGuideObjectiveTitle => '목표';
+
+  @override
+  String get heartsGuideObjective => '하트 카드와 스페이드 퀸을 피해 가장 낮은 점수를 얻는 것이 목표입니다.';
+
+  @override
+  String get heartsGuideHowToPlayTitle => '진행 방법';
+
+  @override
+  String get heartsGuideHowToPlay =>
+      '• 4명이 플레이하며 각자 13장씩 받습니다\n• 게임 시작 시 3장을 왼쪽 플레이어에게 전달\n• 클럽 2를 가진 플레이어가 먼저 시작\n• 13트릭을 진행하며 점수 카드를 피합니다';
+
+  @override
+  String get heartsGuideScoringTitle => '점수 계산';
+
+  @override
+  String get heartsGuideScoring =>
+      '• 하트 카드: 각 1점 (총 13점)\n• 스페이드 퀸 (♠Q): 13점\n• 총점: 26점\n• 낮은 점수가 승리!';
+
+  @override
+  String get heartsGuideBreakingTitle => '하트 브레이킹';
+
+  @override
+  String get heartsGuideBreaking =>
+      '첫 트릭에서는 하트를 낼 수 없습니다.\n하트가 한 번 나온 후에야 하트로 시작할 수 있습니다.';
+
+  @override
+  String get heartsGuideShootMoonTitle => '슈팅 더 문';
+
+  @override
+  String get heartsGuideShootMoon =>
+      '한 플레이어가 모든 하트와 스페이드 퀸을 획득하면:\n• 그 플레이어: 0점\n• 다른 플레이어: 각 26점';
+
+  @override
+  String get heartsGuideTipsTitle => '전략 팁';
+
+  @override
+  String get heartsGuideTips =>
+      '• 높은 카드는 일찍 버리세요\n• 스페이드 퀸을 조심하세요\n• 상대방에게 점수 카드를 먹이세요';
+
+  @override
+  String get onecardGuideObjectiveTitle => '목표';
+
+  @override
+  String get onecardGuideObjective => '손에 든 카드를 가장 먼저 모두 내려놓는 것이 목표입니다.';
+
+  @override
+  String get onecardGuidePlayCardTitle => '카드 내기';
+
+  @override
+  String get onecardGuidePlayCard => '이전에 낸 카드와 같은 무늬 또는 같은 숫자의 카드를 낼 수 있습니다.';
+
+  @override
+  String get onecardGuideAttackTitle => '공격 카드';
+
+  @override
+  String get onecardGuideAttack =>
+      '• 2: +2장 공격\n• A: +3장 공격 (♠A는 +5장)\n• 조커: +5장(흑백) / +7장(컬러)';
+
+  @override
+  String get onecardGuideSpecialTitle => '특수 카드';
+
+  @override
+  String get onecardGuideSpecial =>
+      '• J: 다음 순서 건너뛰기\n• Q: 방향 반대\n• K: 2턴 건너뛰기\n• 7: 무늬 변경';
+
+  @override
+  String get onecardGuideJokerDefenseTitle => '조커 방어';
+
+  @override
+  String get onecardGuideJokerDefense => '조커로 공격받으면 조커로만 방어할 수 있습니다.';
+
+  @override
+  String get onecardGuideOneCardTitle => '원카드!';
+
+  @override
+  String get onecardGuideOneCard =>
+      '손패가 1장 남으면 \"원카드!\" 버튼을 눌러야 합니다.\n누르지 않으면 패널티로 2장을 받습니다.';
+
+  @override
+  String get onecardGuideBankruptTitle => '파산';
+
+  @override
+  String get onecardGuideBankrupt =>
+      '손패가 20장 이상이 되면 파산! 가장 적은 카드를 가진 플레이어가 승리합니다.';
+
+  @override
+  String get hulaGuideObjectiveTitle => '목표';
+
+  @override
+  String get hulaGuideObjective => '손패의 카드를 모두 등록하거나 버려서 가장 먼저 없애는 것이 목표입니다.';
+
+  @override
+  String get hulaGuideHowToPlayTitle => '진행 방법';
+
+  @override
+  String get hulaGuideHowToPlay =>
+      '매 턴마다 덱 또는 버린 더미에서 카드 1장을 뽑고, 등록 또는 버리기를 합니다.';
+
+  @override
+  String get hulaGuideMeldTypesTitle => '멜드 종류';
+
+  @override
+  String get hulaGuideMeldTypes =>
+      '• Run: 같은 무늬의 연속된 숫자 3장 이상 (예: ♠3-4-5)\n• Group: 같은 숫자 다른 무늬 3장 이상 (예: ♠7-♥7-♦7)';
+
+  @override
+  String get hulaGuideSevenRuleTitle => '7의 특수 규칙';
+
+  @override
+  String get hulaGuideSevenRule => '7은 단독으로 등록할 수 있습니다.';
+
+  @override
+  String get hulaGuideThankYouTitle => '땡큐';
+
+  @override
+  String get hulaGuideThankYou =>
+      '버린 더미에서 7을 뽑으면 \"땡큐\"를 외치고 특별한 등록을 할 수 있습니다.';
+
+  @override
+  String get hulaGuideStopTitle => '스톱';
+
+  @override
+  String get hulaGuideStop =>
+      '언제든 스톱을 외쳐 게임을 끝낼 수 있습니다.\n남은 카드 점수가 가장 적은 사람이 승리합니다.';
+
+  @override
+  String get hulaGuideCardPointsTitle => '카드 점수';
+
+  @override
+  String get hulaGuideCardPoints => 'A=1점, 2~9=숫자점, J=10점, Q=11점, K=12점';
+
+  @override
+  String get hulaGuideScoringTitle => '점수 계산';
+
+  @override
+  String get hulaGuideScoring =>
+      '• 승자: 다른 플레이어 손패와의 차이 합계를 획득\n• 패자: 승자와의 손패 차이만큼 감점\n• 훌라(등록 없이 승리): 점수 2배';
+
+  @override
+  String get hulaGuideStopPenaltyTitle => '스톱 실패 페널티';
+
+  @override
+  String get hulaGuideStopPenalty =>
+      '스톱을 외쳤지만 최저 점수가 아닌 경우:\n• 승자가 받을 점수 전부를 스톱한 사람이 부담\n• 다른 플레이어는 감점 없음';
+
+  @override
+  String thankYouRegisterAlone(String card) {
+    return '땡큐! $card 단독 등록';
+  }
+
+  @override
+  String thankYouAttachToMyMeld(String card) {
+    return '땡큐! $card 내 멜드에 붙이기';
+  }
+
+  @override
+  String thankYouAttachToOtherMeld(String card, String playerName) {
+    return '땡큐! $card $playerName 멜드에 붙이기';
+  }
+
+  @override
+  String thankYouNewMeld(String description) {
+    return '땡큐! $description';
+  }
+
+  @override
+  String get onecardGuideInGameObjective =>
+      '손에 든 카드를 가장 먼저 모두 내려놓는 사람이 승리합니다.\n마지막 카드를 내기 전 \"원카드\"를 외쳐야 합니다.';
+
+  @override
+  String get onecardGuideHowToPlayInGame =>
+      '같은 무늬 또는 같은 숫자의 카드를 낼 수 있습니다.\n낼 수 있는 카드가 없으면 덱에서 카드를 뽑습니다.';
+
+  @override
+  String get onecardGuideDefenseTitle => '방어';
+
+  @override
+  String get onecardGuideDefense =>
+      '공격을 받으면 같은 공격 카드로 막을 수 있습니다.\n막으면 공격이 누적되어 다음 사람에게 넘어갑니다.';
+
+  @override
+  String get onecardGuideTipsTitle => '게임 팁';
+
+  @override
+  String get onecardGuideTips =>
+      '• 공격 카드는 방어용으로 아껴두세요\n• 원카드를 외치지 않으면 벌칙 2장!\n• 20장 이상 모이면 파산 패배';
 }

@@ -291,7 +291,8 @@ class _HeartsHomeScreenState extends State<HeartsHomeScreen> {
     final isHuman = playerIndex == 0;
     // Hearts에서는 점수가 낮을수록 좋음
     final scoreColor = playerStats.totalScore <= 0 ? Colors.lightGreenAccent : Colors.redAccent;
-    final playerNames = ['플레이어', '민준', '서연', '지호'];
+    final l10n = getL10n(context);
+    final playerNames = [l10n.player, l10n.aiPlayer1, l10n.aiPlayer2, l10n.aiPlayer3];
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -405,10 +406,10 @@ class _HeartsHomeScreenState extends State<HeartsHomeScreen> {
                   children: [
                     const Icon(Icons.menu_book, color: Colors.amber, size: 24),
                     const SizedBox(width: 8),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        '게임 규칙',
-                        style: TextStyle(
+                        l10n.gameRules,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -431,17 +432,17 @@ class _HeartsHomeScreenState extends State<HeartsHomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildGuideSection('목표', '하트 카드와 스페이드 퀸을 피해 가장 낮은 점수를 얻는 것이 목표입니다.', Icons.info_outline, titleSize, textSize),
+                      _buildGuideSection(l10n.heartsGuideObjectiveTitle, l10n.heartsGuideObjective, Icons.info_outline, titleSize, textSize),
                       const SizedBox(height: 16),
-                      _buildGuideSection('진행 방법', '• 4명이 플레이하며 각자 13장씩 받습니다\n• 게임 시작 시 3장을 왼쪽 플레이어에게 전달\n• 클럽 2를 가진 플레이어가 먼저 시작\n• 13트릭을 진행하며 점수 카드를 피합니다', Icons.play_arrow, titleSize, textSize),
+                      _buildGuideSection(l10n.heartsGuideHowToPlayTitle, l10n.heartsGuideHowToPlay, Icons.play_arrow, titleSize, textSize),
                       const SizedBox(height: 16),
-                      _buildGuideSection('점수 계산', '• 하트 카드: 각 1점 (총 13점)\n• 스페이드 퀸 (♠Q): 13점\n• 총점: 26점\n• 낮은 점수가 승리!', Icons.calculate, titleSize, textSize, Colors.pink),
+                      _buildGuideSection(l10n.heartsGuideScoringTitle, l10n.heartsGuideScoring, Icons.calculate, titleSize, textSize, Colors.pink),
                       const SizedBox(height: 16),
-                      _buildGuideSection('하트 브레이킹', '첫 트릭에서는 하트를 낼 수 없습니다.\n하트가 한 번 나온 후에야 하트로 시작할 수 있습니다.', Icons.favorite, titleSize, textSize, Colors.red),
+                      _buildGuideSection(l10n.heartsGuideBreakingTitle, l10n.heartsGuideBreaking, Icons.favorite, titleSize, textSize, Colors.red),
                       const SizedBox(height: 16),
-                      _buildGuideSection('슈팅 더 문', '한 플레이어가 모든 하트와 스페이드 퀸을 획득하면:\n• 그 플레이어: 0점\n• 다른 플레이어: 각 26점', Icons.star, titleSize, textSize, Colors.amber),
+                      _buildGuideSection(l10n.heartsGuideShootMoonTitle, l10n.heartsGuideShootMoon, Icons.star, titleSize, textSize, Colors.amber),
                       const SizedBox(height: 16),
-                      _buildGuideSection('전략 팁', '• 높은 카드는 일찍 버리세요\n• 스페이드 퀸을 조심하세요\n• 상대방에게 점수 카드를 먹이세요', Icons.lightbulb, titleSize, textSize, Colors.cyan),
+                      _buildGuideSection(l10n.heartsGuideTipsTitle, l10n.heartsGuideTips, Icons.lightbulb, titleSize, textSize, Colors.cyan),
                     ],
                   ),
                 ),
@@ -460,9 +461,9 @@ class _HeartsHomeScreenState extends State<HeartsHomeScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      '확인',
-                      style: TextStyle(
+                    child: Text(
+                      l10n.confirm,
+                      style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),

@@ -178,7 +178,7 @@ class _GameScreenState extends State<GameScreen> {
             actions: [
               IconButton(
                 icon: Icon(Icons.lightbulb, color: _showHint ? Colors.yellow : Colors.white),
-                tooltip: _showHint ? '힌트 OFF' : '힌트',
+                tooltip: _showHint ? l10n.hintOff : l10n.hint,
                 onPressed: _onHintButtonPressed,
               ),
               IconButton(
@@ -2029,7 +2029,7 @@ class _GameScreenState extends State<GameScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  '조커 선공: ${_getSuitSymbol(trick.jokerLeadSuit!)}',
+                  '${l10n.jokerLeadSuitTitle}: ${_getSuitSymbol(trick.jokerLeadSuit!)}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
