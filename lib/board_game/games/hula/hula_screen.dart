@@ -128,11 +128,11 @@ class ThankYouOption {
   String get description {
     switch (type) {
       case ThankYouType.seven:
-        return '${discardCard.suitSymbol}7 단독 등록';
+        return 'games.hula.soloSeven'.tr(namedArgs: {'suit': discardCard.suitSymbol});
       case ThankYouType.attachPlayer:
-        return '${discardCard.suitSymbol}${discardCard.rankString} 내 멜드에 붙이기';
+        return 'games.hula.attachToMyMeld'.tr(namedArgs: {'card': '${discardCard.suitSymbol}${discardCard.rankString}'});
       case ThankYouType.attachComputer:
-        return '${discardCard.suitSymbol}${discardCard.rankString} 컴퓨터${computerIndex! + 1} 멜드에 붙이기';
+        return 'games.hula.attachToComputerMeld'.tr(namedArgs: {'card': '${discardCard.suitSymbol}${discardCard.rankString}', 'n': '${computerIndex! + 1}'});
       case ThankYouType.newMeld:
         final allCards = [...handCards, discardCard];
         if (isRun) {

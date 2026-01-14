@@ -2755,15 +2755,15 @@ class _JanggiScreenState extends State<JanggiScreen> {
 
     if (widget.gameMode == JanggiGameMode.vsHuman) {
       title = '$winner ${'common.win'.tr()}!';
-      message = '$winner가 승리하였습니다!';
+      message = 'games.janggi.winnerMessage'.tr(namedArgs: {'name': winner});
       icon = Icons.emoji_events;
     } else if (isPlayerWin) {
       title = 'common.congratulations'.tr();
-      message = '${'common.player'.tr()}($winner)가 ${'common.computer'.tr()}를 이겼습니다!';
+      message = 'games.janggi.playerBeatsComputer'.tr(namedArgs: {'player': 'common.player'.tr(), 'winner': winner, 'computer': 'common.computer'.tr()});
       icon = Icons.celebration;
     } else {
       title = 'common.lose'.tr();
-      message = '${'common.computer'.tr()}($winner)에게 졌습니다.\n${'common.tryAgain'.tr()}';
+      message = '${'games.janggi.lostToComputer'.tr(namedArgs: {'computer': 'common.computer'.tr(), 'winner': winner})}\n${'common.tryAgain'.tr()}';
       icon = Icons.sentiment_dissatisfied;
     }
 

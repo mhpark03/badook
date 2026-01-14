@@ -86,7 +86,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
     for (int i = 0; i < digitCount; i++) {
       if (i != selectedIndex && inputDigits[i] == digitStr) {
         setState(() {
-          errorMessage = '이미 사용된 숫자입니다';
+          errorMessage = 'games.baseball.duplicateNumber'.tr();
         });
         HapticFeedback.lightImpact();
         return;
@@ -170,7 +170,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
     // 모든 자리가 입력되었는지 확인
     if (inputDigits.any((d) => d == null)) {
       setState(() {
-        errorMessage = '모든 자리를 입력하세요';
+        errorMessage = 'games.baseball.enterAllDigits'.tr();
       });
       return;
     }

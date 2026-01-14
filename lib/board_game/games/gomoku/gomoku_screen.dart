@@ -71,6 +71,7 @@ class _GomokuScreenState extends State<GomokuScreen> {
   );
   bool isBlackTurn = true; // 흑돌 차례 여부
   bool gameOver = false;
+  bool isPlayerWin = false; // 플레이어 승리 여부
   String gameMessage = '';
   List<List<int>>? winningStones;
   int? lastMoveRow; // 마지막 수 행
@@ -230,7 +231,7 @@ class _GomokuScreenState extends State<GomokuScreen> {
   // 메시지 위젯 빌드 (아이콘 포함)
   Widget _buildMessageWidget() {
     final textColor = gameOver
-        ? (gameMessage.contains('축하') ? Colors.green : Colors.red)
+        ? (isPlayerWin ? Colors.green : Colors.red)
         : Colors.amber;
 
     // 게임 종료 시에는 텍스트만 표시
@@ -349,16 +350,19 @@ class _GomokuScreenState extends State<GomokuScreen> {
   void _setWinMessage(Stone winner) {
     switch (widget.gameMode) {
       case GameMode.vsComputerWhite:
-        gameMessage = winner == Stone.black
+        isPlayerWin = winner == Stone.black;
+        gameMessage = isPlayerWin
             ? 'games.gomoku.youWin'.tr()
             : 'common.computerWins'.tr();
         break;
       case GameMode.vsComputerBlack:
-        gameMessage = winner == Stone.white
+        isPlayerWin = winner == Stone.white;
+        gameMessage = isPlayerWin
             ? 'games.gomoku.youWin'.tr()
             : 'common.computerWins'.tr();
         break;
       case GameMode.vsPerson:
+        isPlayerWin = true; // 2인 모드에서는 누가 이기든 축하
         gameMessage = winner == Stone.black
             ? 'games.gomoku.blackWins'.tr()
             : 'games.gomoku.whiteWins'.tr();
@@ -1438,7 +1442,7 @@ class _GomokuScreenState extends State<GomokuScreen> {
           ),
           const SizedBox(height: 2),
           Text(
-            isBlack ? '(흑)' : '(백)',
+            '(${isBlack ? 'games.gomoku.black'.tr() : 'games.gomoku.white'.tr()})',
             style: TextStyle(
               color: isCurrentTurn ? Colors.amber.shade200 : Colors.grey.shade600,
               fontSize: 13,

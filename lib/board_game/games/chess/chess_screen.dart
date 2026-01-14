@@ -94,6 +94,7 @@ class _ChessScreenState extends State<ChessScreen> {
   late List<List<ChessPiece?>> board;
   bool isWhiteTurn = true;
   bool gameOver = false;
+  bool isPlayerWin = false;
   String gameMessage = '';
   List<int>? selectedSquare;
   List<List<int>> validMoves = [];
@@ -487,16 +488,19 @@ class _ChessScreenState extends State<ChessScreen> {
     WebAdHelper.showAd();
     switch (widget.gameMode) {
       case ChessGameMode.vsComputerWhite:
-        gameMessage = winner == PieceColor.white
+        isPlayerWin = winner == PieceColor.white;
+        gameMessage = isPlayerWin
             ? '${'games.chess.checkmate'.tr()} ${'common.youWin'.tr()}'
             : '${'games.chess.checkmate'.tr()} ${'common.computerWins'.tr()}';
         break;
       case ChessGameMode.vsComputerBlack:
-        gameMessage = winner == PieceColor.black
+        isPlayerWin = winner == PieceColor.black;
+        gameMessage = isPlayerWin
             ? '${'games.chess.checkmate'.tr()} ${'common.youWin'.tr()}'
             : '${'games.chess.checkmate'.tr()} ${'common.computerWins'.tr()}';
         break;
       case ChessGameMode.vsPerson:
+        isPlayerWin = true; // 2인 모드에서는 누가 이기든 축하
         gameMessage = winner == PieceColor.white
             ? '${'games.chess.checkmate'.tr()} ${'games.chess.whiteWins'.tr()}'
             : '${'games.chess.checkmate'.tr()} ${'games.chess.blackWins'.tr()}';
@@ -994,7 +998,7 @@ class _ChessScreenState extends State<ChessScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 decoration: BoxDecoration(
                   color: gameOver
-                      ? (gameMessage.contains('당신이')
+                      ? (isPlayerWin
                           ? Colors.green.withValues(alpha: 0.3)
                           : Colors.red.withValues(alpha: 0.3))
                       : isInCheck
@@ -1003,7 +1007,7 @@ class _ChessScreenState extends State<ChessScreen> {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: gameOver
-                        ? (gameMessage.contains('당신이') ? Colors.green : Colors.red)
+                        ? (isPlayerWin ? Colors.green : Colors.red)
                         : isInCheck
                             ? Colors.orange
                             : Colors.brown.shade400,
@@ -1016,7 +1020,7 @@ class _ChessScreenState extends State<ChessScreen> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: gameOver
-                        ? (gameMessage.contains('당신이') ? Colors.green : Colors.red)
+                        ? (isPlayerWin ? Colors.green : Colors.red)
                         : isInCheck
                             ? Colors.orange
                             : Colors.brown.shade200,

@@ -618,22 +618,22 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
         });
       } else if (card.isJump) {
         skipNextTurn = true;
-        pendingMessage = '$playerName: J! 다음 턴 건너뛰기';
+        pendingMessage = 'games.onecard.jumpEffect'.tr(namedArgs: {'player': playerName});
       } else if (card.isReverse) {
         // Q: 방향 반대 (2인용에서는 의미 없음)
         turnDirection *= -1;
-        pendingMessage = '$playerName: Q! 방향 반대';
+        pendingMessage = 'games.onecard.reverseEffect'.tr(namedArgs: {'player': playerName});
       } else if (card.isChain) {
         // K: 2턴 건너뛰기
         skipNextTurn = true; // 첫 번째 건너뛰기 (아래서 한 번 더 건너뜀)
-        pendingMessage = '$playerName: K! 2턴 건너뛰기';
+        pendingMessage = 'games.onecard.chainEffect'.tr(namedArgs: {'player': playerName});
       } else if (card.isChange) {
         if (newSuit != null) {
           declaredSuit = newSuit;
-          pendingMessage = '$playerName: 7! 무늬 변경: ${_getSuitName(newSuit)}';
+          pendingMessage = 'games.onecard.changeEffect'.tr(namedArgs: {'player': playerName, 'suit': _getSuitName(newSuit)});
         }
       } else {
-        pendingMessage = '$playerName이(가) 카드를 냈습니다';
+        pendingMessage = 'games.onecard.playedCard'.tr(namedArgs: {'player': playerName});
       }
 
       // 승리 체크

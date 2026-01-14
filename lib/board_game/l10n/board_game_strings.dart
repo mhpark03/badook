@@ -225,6 +225,8 @@ class BoardGameStrings {
     'games.baseball.rulesExampleDesc': '정답이 123일 때\n132 → 1S 2B\n456 → 0S 0B',
     'games.baseball.rulesTips': '팁',
     'games.baseball.rulesTipsDesc': '힌트를 분석하여 숫자를 추론하세요!',
+    'games.baseball.duplicateNumber': '이미 사용된 숫자입니다',
+    'games.baseball.enterAllDigits': '모든 자리를 입력하세요',
 
     // Chess
     'games.chess.name': '체스',
@@ -292,6 +294,9 @@ class BoardGameStrings {
     'games.janggi.startGame': '게임 시작',
     'games.janggi.drawConfirm': '무승부로 게임을 종료하시겠습니까?\n\n반복되는 장군 등의 상황에서\n무승부를 선언할 수 있습니다.',
     'games.janggi.drawResult': '게임이 무승부로 종료되었습니다.',
+    'games.janggi.winnerMessage': '{name}가 승리하였습니다!',
+    'games.janggi.playerBeatsComputer': '{player}({winner})가 {computer}를 이겼습니다!',
+    'games.janggi.lostToComputer': '{computer}({winner})에게 졌습니다.',
 
     // Minesweeper
     'games.minesweeper.name': '지뢰찾기',
@@ -492,6 +497,9 @@ class BoardGameStrings {
     'games.hula.name': '훌라',
     'games.hula.subtitle': '카드 게임',
     'games.hula.description': '카드를 모아 세트를 만드세요',
+    'games.hula.soloSeven': '{suit}7 단독 등록',
+    'games.hula.attachToMyMeld': '{card} 내 멜드에 붙이기',
+    'games.hula.attachToComputerMeld': '{card} 컴퓨터{n} 멜드에 붙이기',
 
     // OneCard
     'games.onecard.name': '원카드',
@@ -509,6 +517,13 @@ class BoardGameStrings {
     'games.onecard.diamond': '다이아몬드',
     'games.onecard.club': '클로버',
     'games.onecard.cantPlayCard': '이 카드는 낼 수 없습니다',
+    'games.onecard.uno': '원카드!',
+    'games.onecard.attackMessage': '{player}: 공격! +{power} (총 {total}장)',
+    'games.onecard.jumpEffect': '{player}: J! 다음 턴 건너뛰기',
+    'games.onecard.reverseEffect': '{player}: Q! 방향 반대',
+    'games.onecard.chainEffect': '{player}: K! 2턴 건너뛰기',
+    'games.onecard.changeEffect': '{player}: 7! 무늬 변경: {suit}',
+    'games.onecard.playedCard': '{player}이(가) 카드를 냈습니다',
   };
 
   // 일본어 문자열
@@ -731,6 +746,8 @@ class BoardGameStrings {
     'games.baseball.rulesExampleDesc': '正解が123の場合\n132 → 1S 2B\n456 → 0S 0B',
     'games.baseball.rulesTips': 'ヒント',
     'games.baseball.rulesTipsDesc': 'ヒントを分析して数字を推論してください！',
+    'games.baseball.duplicateNumber': 'すでに使用された数字です',
+    'games.baseball.enterAllDigits': 'すべての桁を入力してください',
 
     // Chess
     'games.chess.name': 'チェス',
@@ -798,6 +815,9 @@ class BoardGameStrings {
     'games.janggi.startGame': 'ゲーム開始',
     'games.janggi.drawConfirm': '引き分けでゲームを終了しますか？\n\n繰り返し将軍などの状況で\n引き分けを宣言できます。',
     'games.janggi.drawResult': '引き分けでゲームが終了しました。',
+    'games.janggi.winnerMessage': '{name}の勝利です！',
+    'games.janggi.playerBeatsComputer': '{player}({winner})が{computer}に勝ちました！',
+    'games.janggi.lostToComputer': '{computer}({winner})に負けました。',
 
     // Minesweeper
     'games.minesweeper.name': 'マインスイーパー',
@@ -998,6 +1018,9 @@ class BoardGameStrings {
     'games.hula.name': 'フラ',
     'games.hula.subtitle': 'カードゲーム',
     'games.hula.description': 'カードを集めてセットを作ってください',
+    'games.hula.soloSeven': '{suit}7 単独登録',
+    'games.hula.attachToMyMeld': '{card} 自分のメルドに付ける',
+    'games.hula.attachToComputerMeld': '{card} コンピュータ{n}のメルドに付ける',
 
     // OneCard
     'games.onecard.name': 'ワンカード',
@@ -1015,6 +1038,13 @@ class BoardGameStrings {
     'games.onecard.diamond': 'ダイヤ',
     'games.onecard.club': 'クラブ',
     'games.onecard.cantPlayCard': 'このカードは出せません',
+    'games.onecard.uno': 'ワンカード！',
+    'games.onecard.attackMessage': '{player}: 攻撃! +{power} (合計{total}枚)',
+    'games.onecard.jumpEffect': '{player}: J! 次のターンをスキップ',
+    'games.onecard.reverseEffect': '{player}: Q! 方向転換',
+    'games.onecard.chainEffect': '{player}: K! 2ターンスキップ',
+    'games.onecard.changeEffect': '{player}: 7! スート変更: {suit}',
+    'games.onecard.playedCard': '{player}がカードを出しました',
   };
 
   // 영어 문자열
@@ -1237,6 +1267,8 @@ class BoardGameStrings {
     'games.baseball.rulesExampleDesc': 'If answer is 123:\n132 → 1S 2B\n456 → 0S 0B',
     'games.baseball.rulesTips': 'Tips',
     'games.baseball.rulesTipsDesc': 'Analyze hints to deduce the number!',
+    'games.baseball.duplicateNumber': 'Number already used',
+    'games.baseball.enterAllDigits': 'Enter all digits',
 
     // Chess
     'games.chess.name': 'Chess',
@@ -1304,6 +1336,9 @@ class BoardGameStrings {
     'games.janggi.startGame': 'Start Game',
     'games.janggi.drawConfirm': 'End the game as a draw?\n\nYou can declare a draw in situations\nlike repeated check.',
     'games.janggi.drawResult': 'The game ended in a draw.',
+    'games.janggi.winnerMessage': '{name} wins!',
+    'games.janggi.playerBeatsComputer': '{player}({winner}) beat {computer}!',
+    'games.janggi.lostToComputer': 'Lost to {computer}({winner}).',
 
     // Minesweeper
     'games.minesweeper.name': 'Minesweeper',
@@ -1500,6 +1535,9 @@ class BoardGameStrings {
     'games.hula.name': 'Hula',
     'games.hula.subtitle': 'Card Game',
     'games.hula.description': 'Collect cards to make sets',
+    'games.hula.soloSeven': '{suit}7 Solo registration',
+    'games.hula.attachToMyMeld': '{card} Attach to my meld',
+    'games.hula.attachToComputerMeld': '{card} Attach to Computer{n} meld',
 
     // OneCard
     'games.onecard.name': 'OneCard',
@@ -1517,6 +1555,13 @@ class BoardGameStrings {
     'games.onecard.diamond': 'Diamond',
     'games.onecard.club': 'Club',
     'games.onecard.cantPlayCard': 'Cannot play this card',
+    'games.onecard.uno': 'UNO!',
+    'games.onecard.attackMessage': '{player}: Attack! +{power} ({total} total)',
+    'games.onecard.jumpEffect': '{player}: J! Skip next turn',
+    'games.onecard.reverseEffect': '{player}: Q! Direction reversed',
+    'games.onecard.chainEffect': '{player}: K! Skip 2 turns',
+    'games.onecard.changeEffect': '{player}: 7! Suit changed to {suit}',
+    'games.onecard.playedCard': '{player} played a card',
   };
 
   // 중국어 문자열 (간체)
@@ -1610,11 +1655,41 @@ class BoardGameStrings {
     'games.janggi.startGame': '开始游戏',
     'games.janggi.drawConfirm': '以平局结束游戏吗？\n\n在重复将军等情况下\n可以宣布平局。',
     'games.janggi.drawResult': '游戏以平局结束。',
+    'games.janggi.winnerMessage': '{name}获胜！',
+    'games.janggi.playerBeatsComputer': '{player}({winner})战胜了{computer}！',
+    'games.janggi.lostToComputer': '输给了{computer}({winner})。',
 
     // Gomoku
     'games.gomoku.name': '五子棋',
     'games.gomoku.subtitle': '五连',
     'games.gomoku.description': '先连成五子获胜',
+
+    // Baseball
+    'games.baseball.name': '数字棒球',
+    'games.baseball.subtitle': '猜数字',
+    'games.baseball.description': '猜测数字找出答案',
+    'games.baseball.easyDesc': '3位数字',
+    'games.baseball.hardDesc': '4位数字',
+    'games.baseball.digitCount': '{count}位数字',
+    'games.baseball.strike': '好球',
+    'games.baseball.ball': '坏球',
+    'games.baseball.strikeDesc': '数字和位置都对',
+    'games.baseball.ballDesc': '只有数字对',
+    'games.baseball.correct': '正确！',
+    'games.baseball.attempts': '{count}次猜中！',
+    'games.baseball.guessInstruction': '请输入{count}位数字',
+    'games.baseball.noDuplicates': '数字不能重复',
+    'games.baseball.rulesTitle': '游戏方法',
+    'games.baseball.rulesObjective': '目标',
+    'games.baseball.rulesObjectiveDesc': '猜出电脑设定的数字。',
+    'games.baseball.rulesStrikeBall': '好球/坏球',
+    'games.baseball.rulesStrikeBallDesc': '好球：数字和位置都正确\n坏球：数字正确但位置不对',
+    'games.baseball.rulesExample': '示例',
+    'games.baseball.rulesExampleDesc': '答案是123时：\n132 → 1S 2B\n456 → 0S 0B',
+    'games.baseball.rulesTips': '提示',
+    'games.baseball.rulesTipsDesc': '分析提示来推断数字！',
+    'games.baseball.duplicateNumber': '已使用的数字',
+    'games.baseball.enterAllDigits': '请输入所有数字',
 
     // Othello
     'games.othello.name': '黑白棋',
@@ -1648,6 +1723,14 @@ class BoardGameStrings {
     'games.solitaire.subtitle': '卡牌游戏',
     'games.solitaire.description': '整理卡牌完成四个基础堆',
 
+    // Hula
+    'games.hula.name': '呼啦',
+    'games.hula.subtitle': '卡牌游戏',
+    'games.hula.description': '收集卡牌组成套牌',
+    'games.hula.soloSeven': '{suit}7 单独登记',
+    'games.hula.attachToMyMeld': '{card} 附加到我的牌组',
+    'games.hula.attachToComputerMeld': '{card} 附加到电脑{n}的牌组',
+
     // OneCard
     'games.onecard.name': 'OneCard',
     'games.onecard.subtitle': '卡牌游戏',
@@ -1664,6 +1747,13 @@ class BoardGameStrings {
     'games.onecard.diamond': '方块',
     'games.onecard.club': '梅花',
     'games.onecard.cantPlayCard': '这张牌无法出',
+    'games.onecard.uno': 'UNO!',
+    'games.onecard.attackMessage': '{player}: 攻击! +{power} (共{total}张)',
+    'games.onecard.jumpEffect': '{player}: J! 跳过下一回合',
+    'games.onecard.reverseEffect': '{player}: Q! 方向反转',
+    'games.onecard.chainEffect': '{player}: K! 跳过2回合',
+    'games.onecard.changeEffect': '{player}: 7! 花色变更: {suit}',
+    'games.onecard.playedCard': '{player}出牌了',
   };
 
   // 언어별 문자열 맵
