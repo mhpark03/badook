@@ -41,6 +41,7 @@ import 'board_game/games/number_sums/screens/number_sums_game_screen.dart';
 import 'board_game/games/number_sums/models/number_sums_generator.dart';
 
 // 윷놀이 import
+import 'board_game/games/yutnori/yutnori_home_screen.dart';
 import 'yutnori/yutnori_screen.dart';
 
 // 장기 import
@@ -1219,7 +1220,10 @@ AppBar buildCommonAppBar({
       ),
       TextButton(
         onPressed: () {
-          _showYutnoriPlayerSelection(context, currentLanguage, languageProvider.setLanguage);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const YutnoriHomeScreen()),
+          );
         },
         child: Text(
           L10n.get(currentLanguage, 'yutnori'),
@@ -7194,46 +7198,6 @@ class InfoMenuPage extends StatelessWidget {
   }
 }
 
-// 윷놀이 플레이어 수 선택 다이얼로그
-void _showYutnoriPlayerSelection(BuildContext context, GameLanguage language, Function(GameLanguage) onLanguageChanged) {
-  final playerLabels = {
-    2: '2인 (1:1)',
-    3: '3인',
-    4: '4인',
-  };
-  final playerLabelsEn = {
-    2: '2 Players (1v1)',
-    3: '3 Players',
-    4: '4 Players',
-  };
-
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text(L10n.get(language, 'yutnori')),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (int i = 2; i <= 4; i++)
-            ListTile(
-              title: Text(language == GameLanguage.korean ? playerLabels[i]! : playerLabelsEn[i]!),
-              leading: Icon(Icons.people, color: Colors.brown.shade600),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => YutnoriScreen(playerCount: i),
-                  ),
-                );
-              },
-            ),
-        ],
-      ),
-    ),
-  );
-}
-
 // 앱 소개 페이지
 class AboutPage extends StatelessWidget {
   final GameLanguage language;
@@ -7522,7 +7486,9 @@ class _HelpPageState extends State<HelpPage> {
         ));
         break;
       case 'yutnori':
-        _showYutnoriPlayerSelection(context, widget.language, widget.onLanguageChanged);
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const YutnoriHomeScreen(),
+        ));
         break;
     }
   }

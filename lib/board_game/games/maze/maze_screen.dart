@@ -453,33 +453,45 @@ class _MazeScreenState extends State<MazeScreen> {
   }
 
   Widget _buildLandscapeInfoBox(String label, String value) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.black26,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.purple.withValues(alpha: 0.3)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.grey.shade400,
-              fontSize: 10,
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 사용 가능한 너비에 따라 글자 크기 조정
+        final availableWidth = constraints.maxWidth;
+        final labelSize = (availableWidth * 0.1).clamp(12.0, 16.0);
+        final valueSize = (availableWidth * 0.18).clamp(20.0, 32.0);
+
+        return Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(
+            horizontal: availableWidth * 0.08,
+            vertical: availableWidth * 0.05,
           ),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          decoration: BoxDecoration(
+            color: Colors.black26,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.purple.withValues(alpha: 0.3)),
           ),
-        ],
-      ),
+          child: Column(
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: labelSize,
+                ),
+              ),
+              Text(
+                value,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: valueSize,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

@@ -74,6 +74,36 @@ class PlayingCard {
 
 enum GamePhase { passing, playing, roundEnd }
 
+// 점선 그리기용 CustomPainter
+class _DottedLinePainter extends CustomPainter {
+  final Color color;
+
+  _DottedLinePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1;
+
+    const dashWidth = 3.0;
+    const dashSpace = 3.0;
+    double startX = 0;
+
+    while (startX < size.width) {
+      canvas.drawLine(
+        Offset(startX, 0),
+        Offset(startX + dashWidth, 0),
+        paint,
+      );
+      startX += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
 // 반응형 사이즈 헬퍼
 class _HeartsResponsiveSizes {
   final double screenHeight;
@@ -88,23 +118,27 @@ class _HeartsResponsiveSizes {
   late final double aiCardOverlap;
 
   _HeartsResponsiveSizes(this.screenHeight, this.screenWidth) {
-    final baseUnit = screenHeight / 100;
-    final widthUnit = screenWidth / 100;
+    // 플레이어 카드 크기를 기준으로 계산
+    const horizontalPadding = 16.0;
+    final availableWidth = screenWidth - (horizontalPadding * 2);
+    const maxCardsPerRow = 7;
+    const overlapRatio = 0.35;
+    final baseCardWidth = availableWidth / (maxCardsPerRow - (maxCardsPerRow - 1) * overlapRatio);
+    final maxCardHeightFromScreen = screenHeight * 0.18;
+    final baseCardHeight = baseCardWidth * 1.35;
 
-    // 중앙 트릭 영역 카드
-    centerCardWidth = (widthUnit * 12).clamp(40.0, 70.0);
-    centerCardHeight = (baseUnit * 11).clamp(58.0, 95.0);
+    // 플레이어 카드 (기준 크기)
+    playerCardHeight = baseCardHeight.clamp(40.0, maxCardHeightFromScreen);
+    playerCardWidth = playerCardHeight / 1.35;
 
-    // 플레이어 카드
-    playerCardWidth = (widthUnit * 8).clamp(32.0, 55.0);
-    playerCardHeight = (baseUnit * 9).clamp(45.0, 75.0);
+    // 중앙 트릭 카드 (플레이어 카드의 85%)
+    centerCardWidth = playerCardWidth * 0.85;
+    centerCardHeight = playerCardHeight * 0.85;
 
-    // AI 카드 (상단)
-    aiCardWidth = (widthUnit * 7).clamp(24.0, 40.0);
-    aiCardHeight = (baseUnit * 6).clamp(32.0, 52.0);
+    // AI 카드 (플레이어 카드의 55%)
+    aiCardWidth = playerCardWidth * 0.55;
+    aiCardHeight = playerCardHeight * 0.55;
     aiCardOverlap = aiCardWidth * 0.6;
-
-    // AI 카드 (좌우)
   }
 }
 
@@ -630,8 +664,9 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
       return 500 + card.rank; // 위험 - 패스
     }
 
-    // 높은 하트 (10+): 하트가 많고 낮은 하트가 충분하면 방어 가능
-    if (card.isHeart && card.rank >= 10) {
+    // 높은 하트 (J 이상): 하트가 많고 낮은 하트가 충분하면 방어 가능
+    // ★ 하트 10은 중간급으로 방어용으로 보유 가치 있음
+    if (card.isHeart && card.rank >= 11) {
       // 낮은 하트가 대부분이면 높은 하트를 내지 않고 방어 가능
       // 조건: 하트 4장 이상 + 낮은 하트가 (전체 하트 - 1) 이상 = 높은 하트 1장 이하
       if (heartCount >= 4 && lowHeartCount >= heartCount - 1) return 15 + card.rank; // 안전 - 보유
@@ -640,8 +675,15 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
       return 300 + card.rank; // 위험 - 패스
     }
 
-    // 다른 높은 카드 (K, Q, A) - 보이드 타겟이 아닌 경우
-    if (card.rank >= 12) return 100 + card.rank;
+    // 하트 10: 상대방이 넘기는 고액 하트 방어용으로 보유 가치 있음
+    if (card.isHeart && card.rank == 10) {
+      if (heartCount >= 3) return 25 + card.rank; // 방어 가능 - 보유
+      return 80 + card.rank; // 비교적 안전 - 보유
+    }
+
+    // 다른 높은 카드 (K, Q, A) - 트릭을 따먹을 위험이 높아 패스 우선
+    // ★ 하트 10보다 다이아/클럽 고액권을 먼저 패스
+    if (card.rank >= 12) return 200 + card.rank;
 
     // 낮은 카드는 보유
     return card.rank;
@@ -1674,107 +1716,162 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
     final hand = hands[playerIndex];
     final cardWidth = sizes.aiCardWidth;
     final cardHeight = sizes.aiCardHeight;
-    final overlap = sizes.aiCardOverlap * 0.75; // 세로 배치시 더 촘촘하게
+    // 카드가 90도 회전되므로 가로/세로가 바뀜
+    final rotatedCardWidth = cardHeight; // 회전 후 가로 크기
+    final rotatedCardHeight = cardWidth; // 회전 후 세로 크기
 
-    return Container(
-      width: sizes.aiCardWidth * 2,
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          RotatedBox(
-            quarterTurns: playerIndex == 1 ? 1 : 3,
-            child: Text(
-              getL10n(context).playerScore(playerNames[playerIndex], scores[playerIndex].toString()),
-              style: TextStyle(
-                color: currentPlayer == playerIndex ? Colors.amber : Colors.white70,
-                fontSize: isSmallScreen ? 10 : 12,
-                fontWeight: currentPlayer == playerIndex ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: hand.length * overlap + cardHeight,
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                for (int i = 0; i < hand.length; i++)
-                  Positioned(
-                    top: i * overlap,
-                    child: Transform.rotate(
-                      angle: playerIndex == 1 ? -pi / 2 : pi / 2,
-                      child: _buildCardBack(cardWidth, cardHeight),
-                    ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 사용 가능한 높이
+        final availableHeight = constraints.maxHeight - 30; // 텍스트 + 여백
+
+        // 카드 오버랩을 사용 가능한 공간에 맞게 동적으로 계산
+        final maxOverlap = rotatedCardHeight * 0.4;
+        final neededHeight = hand.length * maxOverlap + rotatedCardHeight;
+        final overlap = neededHeight > availableHeight && hand.length > 1
+            ? (availableHeight - rotatedCardHeight) / hand.length
+            : maxOverlap;
+
+        return SizedBox(
+          width: rotatedCardWidth + 8,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RotatedBox(
+                quarterTurns: playerIndex == 1 ? 1 : 3,
+                child: Text(
+                  getL10n(context).playerScore(playerNames[playerIndex], scores[playerIndex].toString()),
+                  style: TextStyle(
+                    color: currentPlayer == playerIndex ? Colors.amber : Colors.white70,
+                    fontSize: isSmallScreen ? 9 : 11,
+                    fontWeight: currentPlayer == playerIndex ? FontWeight.bold : FontWeight.normal,
                   ),
-              ],
-            ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Expanded(
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  clipBehavior: Clip.hardEdge,
+                  children: [
+                    for (int i = 0; i < hand.length; i++)
+                      Positioned(
+                        top: i * overlap,
+                        child: Transform.rotate(
+                          angle: playerIndex == 1 ? -pi / 2 : pi / 2,
+                          child: _buildCardBack(cardWidth, cardHeight),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   Widget _buildCenterArea(bool isSmallScreen, _HeartsResponsiveSizes sizes) {
-    final cardWidth = sizes.centerCardWidth;
-    final cardHeight = sizes.centerCardHeight;
-
     // 패싱 페이즈일 때는 빈 공간 반환 (테스트 패널은 오버레이로 표시)
     if (phase == GamePhase.passing) {
       return const SizedBox.shrink();
     }
 
-    return Center(
-      child: SizedBox(
-        width: cardWidth * 3,
-        height: cardHeight * 2.5,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // 트릭 카드들
-            // 위 (플레이어 2)
-            if (currentTrick[2] != null)
-              Positioned(
-                top: 0,
-                child: _buildPlayingCard(currentTrick[2]!, cardWidth, cardHeight, false),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 사용 가능한 공간
+        final availableWidth = constraints.maxWidth;
+        final availableHeight = constraints.maxHeight;
+
+        // sizes에서 계산된 카드 크기 사용 (플레이어 카드의 85%)
+        var cardWidth = sizes.centerCardWidth;
+        var cardHeight = sizes.centerCardHeight;
+
+        // 레이아웃: 가로 3장, 세로 2.5장 필요
+        const horizontalCards = 3.0;
+        const verticalCards = 2.5;
+
+        // 오버플로우 방지: 사용 가능한 공간에 맞게 축소
+        final maxCardWidth = availableWidth / horizontalCards;
+        final maxCardHeight = availableHeight / verticalCards;
+
+        if (cardWidth > maxCardWidth) {
+          cardWidth = maxCardWidth;
+          cardHeight = cardWidth * 1.35;
+        }
+        if (cardHeight > maxCardHeight) {
+          cardHeight = maxCardHeight;
+          cardWidth = cardHeight / 1.35;
+        }
+
+        // 실제 영역 크기
+        final areaWidth = cardWidth * horizontalCards;
+        final areaHeight = cardHeight * verticalCards;
+
+        return ClipRect(
+          child: Center(
+            child: SizedBox(
+              width: areaWidth,
+              height: areaHeight,
+              child: Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  // 트릭 카드들
+                  // 위 (플레이어 2)
+                  if (currentTrick[2] != null)
+                    Positioned(
+                      top: 0,
+                      child: _buildPlayingCard(currentTrick[2]!, cardWidth, cardHeight, false),
+                    ),
+                  // 왼쪽 (플레이어 1)
+                  if (currentTrick[1] != null)
+                    Positioned(
+                      left: 0,
+                      child: _buildPlayingCard(currentTrick[1]!, cardWidth, cardHeight, false),
+                    ),
+                  // 오른쪽 (플레이어 3)
+                  if (currentTrick[3] != null)
+                    Positioned(
+                      right: 0,
+                      child: _buildPlayingCard(currentTrick[3]!, cardWidth, cardHeight, false),
+                    ),
+                  // 아래 (플레이어 0)
+                  if (currentTrick[0] != null)
+                    Positioned(
+                      bottom: 0,
+                      child: _buildPlayingCard(currentTrick[0]!, cardWidth, cardHeight, false),
+                    ),
+                ],
               ),
-            // 왼쪽 (플레이어 1)
-            if (currentTrick[1] != null)
-              Positioned(
-                left: 0,
-                child: _buildPlayingCard(currentTrick[1]!, cardWidth, cardHeight, false),
-              ),
-            // 오른쪽 (플레이어 3)
-            if (currentTrick[3] != null)
-              Positioned(
-                right: 0,
-                child: _buildPlayingCard(currentTrick[3]!, cardWidth, cardHeight, false),
-              ),
-            // 아래 (플레이어 0)
-            if (currentTrick[0] != null)
-              Positioned(
-                bottom: 0,
-                child: _buildPlayingCard(currentTrick[0]!, cardWidth, cardHeight, false),
-              ),
-          ],
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildPlayerHand(bool isSmallScreen, _HeartsResponsiveSizes sizes) {
     final hand = hands[0];
     final screenWidth = sizes.screenWidth;
+    final screenHeight = sizes.screenHeight;
     final horizontalPadding = isSmallScreen ? 12.0 : 16.0;
     final availableWidth = screenWidth - (horizontalPadding * 2);
 
-    // 7장이 한 줄에 들어가도록 카드 크기 계산 - sizes 기반으로 조정
-    final maxCardsPerRow = 7;
-    final overlapRatio = 0.35; // 카드 겹침 비율 (35% 겹침)
+    // 7장이 한 줄에 들어가도록 카드 크기 계산
+    const maxCardsPerRow = 7;
+    const overlapRatio = 0.35;
     final baseCardWidth = availableWidth / (maxCardsPerRow - (maxCardsPerRow - 1) * overlapRatio);
-    final cardWidth = baseCardWidth.clamp(sizes.playerCardWidth * 0.8, sizes.playerCardWidth * 1.5);
-    final cardHeight = cardWidth * 1.35;
-    final cardStep = cardWidth * (1 - overlapRatio); // 카드 간 간격
+
+    // 화면 높이에 따른 최대 카드 높이 제한 (화면의 약 18% 이하)
+    final maxCardHeightFromScreen = screenHeight * 0.18;
+    final baseCardHeight = baseCardWidth * 1.35;
+
+    // 카드 크기 결정 (기본 크기 사용, 화면이 작으면 축소)
+    final cardHeight = baseCardHeight.clamp(40.0, maxCardHeightFromScreen);
+    final cardWidth = cardHeight / 1.35;
+    final cardStep = cardWidth * (1 - overlapRatio);
 
     final playable = phase == GamePhase.playing && currentPlayer == 0 && !isProcessingTrick
         ? _getPlayableCards(0)
@@ -2025,27 +2122,42 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
               const SizedBox(height: 24),
               // 점수 표시
               ...List.generate(4, (i) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                final isWinner = i == winnerId;
+                final textColor = isWinner ? Colors.amber : Colors.white;
+                final textStyle = TextStyle(
+                  color: textColor,
+                  fontSize: isSmallScreen ? 14 : 16,
+                  fontWeight: isWinner ? FontWeight.bold : FontWeight.normal,
+                );
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 3),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: isWinner ? Colors.amber.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        playerNames[i],
-                        style: TextStyle(
-                          color: i == winnerId ? Colors.amber : Colors.white,
-                          fontSize: isSmallScreen ? 14 : 16,
-                          fontWeight: i == winnerId ? FontWeight.bold : FontWeight.normal,
+                      Text(playerNames[i], style: textStyle),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          height: 1,
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: textColor.withValues(alpha: 0.3),
+                                width: 1,
+                                style: BorderStyle.solid,
+                              ),
+                            ),
+                          ),
+                          child: CustomPaint(
+                            painter: _DottedLinePainter(color: textColor.withValues(alpha: 0.4)),
+                          ),
                         ),
                       ),
-                      Text(
-                        getL10n(context).nPoints(scores[i].toString()),
-                        style: TextStyle(
-                          color: i == winnerId ? Colors.amber : Colors.white,
-                          fontSize: isSmallScreen ? 14 : 16,
-                          fontWeight: i == winnerId ? FontWeight.bold : FontWeight.normal,
-                        ),
-                      ),
+                      Text(getL10n(context).nPoints(scores[i].toString()), style: textStyle),
                     ],
                   ),
                 );

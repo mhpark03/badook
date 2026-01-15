@@ -891,6 +891,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     return GestureDetector(
       onTap: () => _onCellTap(row, col),
       onLongPress: () => _onCellLongPress(row, col),
+      onSecondaryTap: () => _onCellLongPress(row, col), // 마우스 오른쪽 클릭
       child: Container(
         decoration: BoxDecoration(
           color: _getCellColor(cell),

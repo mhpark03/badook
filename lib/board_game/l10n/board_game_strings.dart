@@ -32,6 +32,7 @@ class BoardGameStrings {
     'common.adLoadingFreeHint': '힌트를 사용합니다',
     'common.adLoadingFree': '무료로 진행합니다',
     'common.failureCount': '오답 횟수: {count}회',
+    'common.elapsedTime': '경과 시간: {time}',
     'common.computer': '컴퓨터',
     'common.player': '플레이어',
     'common.you': '나',
@@ -46,6 +47,10 @@ class BoardGameStrings {
     'common.zoomIn': '확대',
     'common.zoomOut': '축소',
     'common.resetZoom': '초기화',
+    'common.continue': '계속하기',
+
+    // Dialog
+    'dialog.continueMessage': '계속하시겠습니까?',
 
     // App common
     'app.continue': '이어하기',
@@ -98,6 +103,9 @@ class BoardGameStrings {
     'games.tetris.resume': '계속',
     'games.tetris.selectStartLevel': '시작 레벨 선택',
     'games.tetris.levelValue': 'Lv {level}',
+    'games.tetris.scoreValue': '점수: {score}',
+    'games.tetris.levelValueColon': '레벨: {level}',
+    'games.tetris.linesValue': '줄: {lines}',
     'games.tetris.start': '시작',
     'games.tetris.startGame': '게임 시작',
     'games.tetris.cancel': '취소',
@@ -360,6 +368,8 @@ class BoardGameStrings {
     'games.bubble.rulesScoringDesc': '많은 버블을 한번에 터트릴수록 높은 점수!',
     'games.bubble.rulesTips': '팁',
     'games.bubble.rulesTipsDesc': '벽을 이용해 버블을 반사시킬 수 있습니다.',
+    'games.bubble.finalScore': '최종 점수: {score}',
+    'games.bubble.highScoreLabel': '최고 점수: {score}',
 
     // Mole
     'games.mole.name': '두더지잡기',
@@ -372,6 +382,8 @@ class BoardGameStrings {
     'games.mole.start': '시작',
     'games.mole.playing': '진행중',
     'games.mole.gameOver': '게임 오버',
+    'games.mole.finalScore': '최종 점수: {score}',
+    'games.mole.highScoreLabel': '최고 점수: {score}',
     'games.mole.rulesTitle': '게임 방법',
     'games.mole.rulesObjective': '목표',
     'games.mole.rulesObjectiveDesc': '제한 시간 내에 최대한 많은 두더지를 잡으세요.',
@@ -399,6 +411,8 @@ class BoardGameStrings {
     'games.sudoku.quickInput': '빠른입력',
     'games.sudoku.quickInputWithNum': '빠른 입력: {num}',
     'games.sudoku.quickInputSelected': '숫자 {num} 선택됨 - 셀을 탭하여 입력',
+    'games.sudoku.quickInputGuide': '숫자 {num} - 셀을 탭하여 입력',
+    'games.sudoku.quickInputNoteGuide': '숫자 {num} - 셀을 탭하여 메모 추가/제거',
     'games.sudoku.selectNumberFirst': '아래에서 숫자를 먼저 선택하세요',
     'games.sudoku.notes': '메모',
     'games.sudoku.allNotes': '모든 메모',
@@ -492,6 +506,12 @@ class BoardGameStrings {
     'games.yutnori.rulesSpecialDesc': '윷이나 모가 나오면 한 번 더 던질 수 있습니다. 상대 말을 잡으면 한 번 더 던집니다.',
     'games.yutnori.rulesTips': '게임 팁',
     'games.yutnori.rulesTipsDesc': '말을 업으면 함께 이동합니다. 지름길을 활용하세요!',
+    'games.yutnori.selectPlayers': '인원 선택',
+    'games.yutnori.players2': '2인 (1:1)',
+    'games.yutnori.players3': '3인',
+    'games.yutnori.players4': '4인',
+    'games.yutnori.continueGame': '이어하기',
+    'games.yutnori.newGame': '새 게임',
 
     // Hula
     'games.hula.name': '훌라',
@@ -553,6 +573,7 @@ class BoardGameStrings {
     'common.adLoadingFreeHint': 'ヒントを使用します',
     'common.adLoadingFree': '無料で続行します',
     'common.failureCount': '間違い回数：{count}回',
+    'common.elapsedTime': '経過時間：{time}',
     'common.computer': 'コンピュータ',
     'common.player': 'プレイヤー',
     'common.you': 'あなた',
@@ -567,6 +588,10 @@ class BoardGameStrings {
     'common.zoomIn': '拡大',
     'common.zoomOut': '縮小',
     'common.resetZoom': 'リセット',
+    'common.continue': '続ける',
+
+    // Dialog
+    'dialog.continueMessage': '続けますか？',
 
     // App common
     'app.continue': '続ける',
@@ -619,6 +644,9 @@ class BoardGameStrings {
     'games.tetris.resume': '続ける',
     'games.tetris.selectStartLevel': '開始レベル選択',
     'games.tetris.levelValue': 'Lv {level}',
+    'games.tetris.scoreValue': 'スコア: {score}',
+    'games.tetris.levelValueColon': 'レベル: {level}',
+    'games.tetris.linesValue': 'ライン: {lines}',
     'games.tetris.start': 'スタート',
     'games.tetris.startGame': 'ゲーム開始',
     'games.tetris.cancel': 'キャンセル',
@@ -881,6 +909,8 @@ class BoardGameStrings {
     'games.bubble.rulesScoringDesc': '多くのバブルを一度に割るほど高得点！',
     'games.bubble.rulesTips': 'ヒント',
     'games.bubble.rulesTipsDesc': '壁を利用してバブルを反射させることができます。',
+    'games.bubble.finalScore': '最終スコア: {score}',
+    'games.bubble.highScoreLabel': 'ハイスコア: {score}',
 
     // Mole
     'games.mole.name': 'もぐらたたき',
@@ -893,6 +923,8 @@ class BoardGameStrings {
     'games.mole.start': 'スタート',
     'games.mole.playing': 'プレイ中',
     'games.mole.gameOver': 'ゲームオーバー',
+    'games.mole.finalScore': '最終スコア: {score}',
+    'games.mole.highScoreLabel': 'ハイスコア: {score}',
     'games.mole.rulesTitle': '遊び方',
     'games.mole.rulesObjective': '目標',
     'games.mole.rulesObjectiveDesc': '制限時間内にできるだけ多くのもぐらを叩いてください。',
@@ -920,6 +952,8 @@ class BoardGameStrings {
     'games.sudoku.quickInput': 'クイック入力',
     'games.sudoku.quickInputWithNum': 'クイック入力: {num}',
     'games.sudoku.quickInputSelected': '数字{num}選択済み - セルをタップして入力',
+    'games.sudoku.quickInputGuide': '数字{num} - セルをタップして入力',
+    'games.sudoku.quickInputNoteGuide': '数字{num} - セルをタップしてメモ追加/削除',
     'games.sudoku.selectNumberFirst': '下から数字を選択してください',
     'games.sudoku.notes': 'メモ',
     'games.sudoku.allNotes': '全メモ',
@@ -1013,6 +1047,12 @@ class BoardGameStrings {
     'games.yutnori.rulesSpecialDesc': 'ユッやモが出るともう一度投げられます。相手の駒を取るともう一度投げます。',
     'games.yutnori.rulesTips': 'ゲームのヒント',
     'games.yutnori.rulesTipsDesc': '駒を重ねると一緒に移動します。近道を活用してください！',
+    'games.yutnori.selectPlayers': 'プレイヤー数選択',
+    'games.yutnori.players2': '2人 (1:1)',
+    'games.yutnori.players3': '3人',
+    'games.yutnori.players4': '4人',
+    'games.yutnori.continueGame': '続きから',
+    'games.yutnori.newGame': '新規ゲーム',
 
     // Hula
     'games.hula.name': 'フラ',
@@ -1074,6 +1114,7 @@ class BoardGameStrings {
     'common.adLoadingFreeHint': 'Using hint',
     'common.adLoadingFree': 'Continue for free',
     'common.failureCount': 'Mistakes: {count}',
+    'common.elapsedTime': 'Time: {time}',
     'common.computer': 'Computer',
     'common.player': 'Player',
     'common.you': 'You',
@@ -1088,6 +1129,10 @@ class BoardGameStrings {
     'common.zoomIn': 'Zoom In',
     'common.zoomOut': 'Zoom Out',
     'common.resetZoom': 'Reset',
+    'common.continue': 'Continue',
+
+    // Dialog
+    'dialog.continueMessage': 'Do you want to continue?',
 
     // App common
     'app.continue': 'Continue',
@@ -1140,6 +1185,9 @@ class BoardGameStrings {
     'games.tetris.resume': 'Resume',
     'games.tetris.selectStartLevel': 'Select Start Level',
     'games.tetris.levelValue': 'Lv {level}',
+    'games.tetris.scoreValue': 'Score: {score}',
+    'games.tetris.levelValueColon': 'Level: {level}',
+    'games.tetris.linesValue': 'Lines: {lines}',
     'games.tetris.start': 'Start',
     'games.tetris.startGame': 'Start Game',
     'games.tetris.cancel': 'Cancel',
@@ -1402,6 +1450,8 @@ class BoardGameStrings {
     'games.bubble.rulesScoringDesc': 'More bubbles popped at once = Higher score!',
     'games.bubble.rulesTips': 'Tips',
     'games.bubble.rulesTipsDesc': 'Use walls to bounce bubbles.',
+    'games.bubble.finalScore': 'Final Score: {score}',
+    'games.bubble.highScoreLabel': 'High Score: {score}',
 
     // Mole
     'games.mole.name': 'Whack-a-Mole',
@@ -1414,6 +1464,8 @@ class BoardGameStrings {
     'games.mole.start': 'Start',
     'games.mole.playing': 'Playing',
     'games.mole.gameOver': 'Game Over',
+    'games.mole.finalScore': 'Final Score: {score}',
+    'games.mole.highScoreLabel': 'High Score: {score}',
     'games.mole.rulesTitle': 'How to Play',
     'games.mole.rulesObjective': 'Objective',
     'games.mole.rulesObjectiveDesc': 'Whack as many moles as possible within time limit.',
@@ -1440,6 +1492,8 @@ class BoardGameStrings {
     'games.sudoku.quickInput': 'Quick Input',
     'games.sudoku.quickInputWithNum': 'Quick Input: {num}',
     'games.sudoku.quickInputSelected': 'Number {num} selected - Tap cell to input',
+    'games.sudoku.quickInputGuide': 'Number {num} - Tap cell to input',
+    'games.sudoku.quickInputNoteGuide': 'Number {num} - Tap cell to add/remove note',
     'games.sudoku.selectNumberFirst': 'Select a number below first',
     'games.sudoku.notes': 'Notes',
     'games.sudoku.allNotes': 'All Notes',
@@ -1530,6 +1584,12 @@ class BoardGameStrings {
     'games.yutnori.rulesSpecialDesc': 'Yut or Mo gives another throw. Capturing gives another throw.',
     'games.yutnori.rulesTips': 'Tips',
     'games.yutnori.rulesTipsDesc': 'Stack pieces to move together. Use shortcuts!',
+    'games.yutnori.selectPlayers': 'Select Players',
+    'games.yutnori.players2': '2 Players (1v1)',
+    'games.yutnori.players3': '3 Players',
+    'games.yutnori.players4': '4 Players',
+    'games.yutnori.continueGame': 'Continue',
+    'games.yutnori.newGame': 'New Game',
 
     // Hula
     'games.hula.name': 'Hula',
@@ -1591,6 +1651,7 @@ class BoardGameStrings {
     'common.adLoadingFreeHint': '使用提示',
     'common.adLoadingFree': '免费继续',
     'common.failureCount': '错误次数：{count}',
+    'common.elapsedTime': '用时：{time}',
     'common.computer': '电脑',
     'common.player': '玩家',
     'common.you': '你',
@@ -1605,6 +1666,10 @@ class BoardGameStrings {
     'common.zoomIn': '放大',
     'common.zoomOut': '缩小',
     'common.resetZoom': '重置',
+    'common.continue': '继续',
+
+    // Dialog
+    'dialog.continueMessage': '要继续吗？',
 
     // App common
     'app.continue': '继续',
@@ -1700,6 +1765,25 @@ class BoardGameStrings {
     'games.tetris.name': '俄罗斯方块',
     'games.tetris.subtitle': '堆积方块',
     'games.tetris.description': '旋转方块完成行消除',
+    'games.tetris.level': '等级',
+    'games.tetris.lines': '行',
+    'games.tetris.score': '分数',
+    'games.tetris.next': '下一个',
+    'games.tetris.gameOver': '游戏结束',
+    'games.tetris.gameOverTitle': '游戏结束',
+    'games.tetris.newGame': '新游戏',
+    'games.tetris.pause': '暂停',
+    'games.tetris.paused': '已暂停',
+    'games.tetris.resume': '继续',
+    'games.tetris.selectStartLevel': '选择起始等级',
+    'games.tetris.levelValue': 'Lv {level}',
+    'games.tetris.scoreValue': '分数: {score}',
+    'games.tetris.levelValueColon': '等级: {level}',
+    'games.tetris.linesValue': '行: {lines}',
+    'games.tetris.start': '开始',
+    'games.tetris.startGame': '开始游戏',
+    'games.tetris.cancel': '取消',
+    'games.tetris.playAgain': '再来一次',
 
     // Minesweeper
     'games.minesweeper.name': '扫雷',
@@ -1713,6 +1797,8 @@ class BoardGameStrings {
     'games.sudoku.quickInput': '快速输入',
     'games.sudoku.quickInputWithNum': '快速输入: {num}',
     'games.sudoku.quickInputSelected': '数字{num}已选 - 点击格子输入',
+    'games.sudoku.quickInputGuide': '数字{num} - 点击格子输入',
+    'games.sudoku.quickInputNoteGuide': '数字{num} - 点击格子添加/删除笔记',
     'games.sudoku.selectNumberFirst': '请先选择数字',
     'games.sudoku.notes': '笔记',
     'games.sudoku.allNotes': '全部笔记',

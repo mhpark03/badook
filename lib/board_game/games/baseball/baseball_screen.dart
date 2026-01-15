@@ -442,13 +442,12 @@ class _BaseballScreenState extends State<BaseballScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // 웹/데스크톱 화면 감지 (가로가 넓은 경우)
-    final isWideScreen = screenWidth > 800;
-
     // 동적 크기 계산
-    final leftPanelWidth = isWideScreen ? screenWidth * 0.15 : 140.0;
-    final rightPanelWidth = isWideScreen ? screenWidth * 0.25 : 210.0;
-    final scaleFactor = isWideScreen ? min(screenHeight / 500, screenWidth / 1000) : 1.0;
+    final scaleFactor = min(screenHeight / 400, screenWidth / 900).clamp(1.0, 2.5);
+
+    // 패널 너비 동적 계산
+    final leftPanelWidth = (screenWidth * 0.18).clamp(160.0, 320.0);
+    final rightPanelWidth = (screenWidth * 0.28).clamp(220.0, 400.0);
 
     return Scaffold(
       body: Container(
@@ -458,43 +457,43 @@ class _BaseballScreenState extends State<BaseballScreen> {
             children: [
               // 왼쪽 패널: 뒤로가기, 제목, 정보
               SizedBox(
-                width: leftPanelWidth.clamp(140.0, 250.0),
+                width: leftPanelWidth,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 8),
                     Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.arrow_back, color: Colors.white70),
+                          icon: Icon(Icons.arrow_back, color: Colors.white70, size: 24 * scaleFactor),
                           onPressed: () => Navigator.pop(context),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    const Icon(Icons.sports_baseball, color: Colors.deepOrange, size: 28),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 8 * scaleFactor),
+                    Icon(Icons.sports_baseball, color: Colors.deepOrange, size: 32 * scaleFactor),
+                    SizedBox(height: 4 * scaleFactor),
                     Text(
                       'games.baseball.name'.tr(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 20 * scaleFactor,
                         color: Colors.orange.shade100,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 16),
-                    _buildCompactInfo(),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 20 * scaleFactor),
+                    _buildCompactInfo(scaleFactor: scaleFactor),
+                    SizedBox(height: 16 * scaleFactor),
                     // 힌트 버튼
                     if (!gameOver)
                       GestureDetector(
                         onTap: _showHintAdDialog,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.symmetric(horizontal: 16 * scaleFactor, vertical: 10 * scaleFactor),
+                          margin: EdgeInsets.symmetric(horizontal: 8 * scaleFactor),
                           decoration: BoxDecoration(
                             color: Colors.amber.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8 * scaleFactor),
                             border: Border.all(
                               color: Colors.amber.withValues(alpha: 0.5),
                             ),
@@ -502,28 +501,27 @@ class _BaseballScreenState extends State<BaseballScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.lightbulb_outline,
                                 color: Colors.amber,
-                                size: 18,
+                                size: 20 * scaleFactor,
                               ),
-                              const SizedBox(width: 6),
+                              SizedBox(width: 6 * scaleFactor),
                               Text(
                                 'common.hint'.tr(),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Colors.amber,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 13,
+                                  fontSize: 15 * scaleFactor,
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                    const Spacer(),
                     if (gameOver) ...[
-                      _buildCompactResultMessage(),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 16 * scaleFactor),
+                      _buildCompactResultMessage(scaleFactor: scaleFactor),
                     ],
                   ],
                 ),
@@ -531,35 +529,39 @@ class _BaseballScreenState extends State<BaseballScreen> {
               // 중앙: 기록 목록
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: isWideScreen ? 40 : 24),
+                  padding: EdgeInsets.symmetric(horizontal: 24 * scaleFactor),
                   child: _buildGuessHistory(isLandscape: true, scaleFactor: scaleFactor),
                 ),
               ),
               // 오른쪽 패널: 입력 박스 + 숫자 버튼
               SizedBox(
-                width: rightPanelWidth.clamp(210.0, 350.0),
+                width: rightPanelWidth,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: isWideScreen ? 16 : 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.refresh, color: Colors.white70, size: isWideScreen ? 28 : 24),
+                          icon: Icon(Icons.help_outline, color: Colors.white70, size: 24 * scaleFactor),
+                          onPressed: _showRulesDialog,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.refresh, color: Colors.white70, size: 24 * scaleFactor),
                           onPressed: _restartGame,
                         ),
                       ],
                     ),
-                    const Spacer(),
+                    SizedBox(height: 16 * scaleFactor),
                     // 입력 박스
                     if (!gameOver)
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: isWideScreen ? 16 : 8, vertical: 8),
+                        padding: EdgeInsets.symmetric(horizontal: 8 * scaleFactor, vertical: 8 * scaleFactor),
                         child: _buildDigitBoxes(isLandscape: true, scaleFactor: scaleFactor),
                       ),
+                    SizedBox(height: 8 * scaleFactor),
                     // 숫자 패드 (3x4)
                     if (!gameOver) _buildNumberPad(isLandscape: true, scaleFactor: scaleFactor),
-                    const Spacer(),
                   ],
                 ),
               ),
@@ -907,59 +909,64 @@ class _BaseballScreenState extends State<BaseballScreen> {
     );
   }
 
-  Widget _buildCompactInfo() {
+  Widget _buildCompactInfo({double scaleFactor = 1.0}) {
+    final iconSize = 18.0 * scaleFactor;
+    final fontSize = 16.0 * scaleFactor;
+    final padding = 14.0 * scaleFactor;
+    final spacing = 10.0 * scaleFactor;
+
     return Container(
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.all(padding),
+      margin: EdgeInsets.symmetric(horizontal: 8 * scaleFactor),
       decoration: BoxDecoration(
         color: Colors.black38,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12 * scaleFactor),
       ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.tag, color: Colors.deepOrange, size: 16),
-              const SizedBox(width: 4),
+              Icon(Icons.tag, color: Colors.deepOrange, size: iconSize),
+              SizedBox(width: 4 * scaleFactor),
               Text(
                 _getDifficultyText(),
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: fontSize,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: spacing),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.format_list_numbered, color: Colors.blue, size: 16),
-              const SizedBox(width: 4),
+              Icon(Icons.format_list_numbered, color: Colors.blue, size: iconSize),
+              SizedBox(width: 4 * scaleFactor),
               Text(
                 '${guessHistory.length}/$maxAttempts',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: fontSize,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: spacing),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.lightbulb_outline, color: Colors.amber, size: 16),
-              const SizedBox(width: 4),
+              Icon(Icons.lightbulb_outline, color: Colors.amber, size: iconSize),
+              SizedBox(width: 4 * scaleFactor),
               Text(
                 _getHintedAnswer(),
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: fontSize,
                 ),
               ),
             ],
@@ -969,18 +976,18 @@ class _BaseballScreenState extends State<BaseballScreen> {
     );
   }
 
-  Widget _buildCompactResultMessage() {
+  Widget _buildCompactResultMessage({double scaleFactor = 1.0}) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      padding: const EdgeInsets.all(12),
+      margin: EdgeInsets.symmetric(horizontal: 8 * scaleFactor),
+      padding: EdgeInsets.all(14 * scaleFactor),
       decoration: BoxDecoration(
         color: gameWon
             ? Colors.green.withValues(alpha: 0.2)
             : Colors.red.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12 * scaleFactor),
         border: Border.all(
           color: gameWon ? Colors.green : Colors.red,
-          width: 2,
+          width: 2 * scaleFactor,
         ),
       ),
       child: Column(
@@ -988,14 +995,14 @@ class _BaseballScreenState extends State<BaseballScreen> {
           Icon(
             gameWon ? Icons.emoji_events : Icons.sentiment_very_dissatisfied,
             color: gameWon ? Colors.amber : Colors.red,
-            size: 24,
+            size: 28 * scaleFactor,
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4 * scaleFactor),
           Text(
             gameWon ? 'games.baseball.correct'.tr() : 'common.gameOver'.tr(),
             style: TextStyle(
               color: gameWon ? Colors.green : Colors.red,
-              fontSize: 14,
+              fontSize: 16 * scaleFactor,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -1003,7 +1010,7 @@ class _BaseballScreenState extends State<BaseballScreen> {
             gameWon ? 'games.baseball.attempts'.tr(namedArgs: {'count': guessHistory.length.toString()}) : secretNumber,
             style: TextStyle(
               color: Colors.grey.shade400,
-              fontSize: 12,
+              fontSize: 14 * scaleFactor,
             ),
           ),
         ],

@@ -714,7 +714,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
       if (_checkWin(currentPlayer) && !rankings.contains(currentPlayer)) {
         rankings.add(currentPlayer);
         final rank = rankings.length;
-        gameMessage = '${_getPlayerName(currentPlayer)} ${'games.yutnori.rankComplete'.tr(args: [rank.toString()])}';
+        gameMessage = '${_getPlayerName(currentPlayer)} ${'games.yutnori.rankComplete'.tr(namedArgs: {'rank': rank.toString()})}';
       }
 
       // 게임 종료 확인: 플레이어 완료 또는 다른 모든 플레이어 완료
@@ -722,10 +722,10 @@ class _YutnoriScreenState extends State<YutnoriScreen>
         gameOver = true;
         final playerRank = rankings.indexOf(0) + 1;
         if (playerRank > 0) {
-          winner = 'games.yutnori.rankPlace'.tr(args: [playerRank.toString()]);
+          winner = 'games.yutnori.rankPlace'.tr(namedArgs: {'rank': playerRank.toString()});
         } else {
           // 플레이어가 아직 완료하지 않은 경우 (다른 모두가 완료)
-          winner = 'games.yutnori.rankPlace'.tr(args: [(rankings.length + 1).toString()]);
+          winner = 'games.yutnori.rankPlace'.tr(namedArgs: {'rank': (rankings.length + 1).toString()});
         }
         gameMessage = '${'games.yutnori.gameOver'.tr()}! ${'games.yutnori.myRank'.tr()}: $winner';
       } else if (pendingMoves.isEmpty && !canThrowYut) {
@@ -3529,7 +3529,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '${'games.yutnori.rankPlace'.tr(args: [rank.toString()])}: ',
+              '${'games.yutnori.rankPlace'.tr(namedArgs: {'rank': rank.toString()})}: ',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: isPlayer ? FontWeight.bold : FontWeight.normal,
@@ -3591,7 +3591,7 @@ class _YutnoriScreenState extends State<YutnoriScreen>
               ),
               const SizedBox(height: 8),
               Text(
-                '${'games.yutnori.myRank'.tr()}: ${'games.yutnori.rankPlace'.tr(args: [playerRank.toString()])}',
+                '${'games.yutnori.myRank'.tr()}: ${'games.yutnori.rankPlace'.tr(namedArgs: {'rank': playerRank.toString()})}',
                 style: TextStyle(
                   color: isFirstPlace ? Colors.amber.shade800 : Colors.blue.shade800,
                   fontSize: 24,
