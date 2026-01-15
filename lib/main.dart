@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -56,6 +57,7 @@ import 'card_game/l10n/generated/app_localizations.dart';
 // 언어 상태 관리 Provider
 class LanguageProvider extends ChangeNotifier {
   GameLanguage _language = GameLanguage.korean;
+  bool _initialized = false;
 
   GameLanguage get language => _language;
 
@@ -73,11 +75,57 @@ class LanguageProvider extends ChangeNotifier {
     }
   }
 
-  void setLanguage(GameLanguage lang) {
+  // 앱 시작 시 언어 초기화
+  Future<void> initLanguage() async {
+    if (_initialized) return;
+    _initialized = true;
+
+    final prefs = await SharedPreferences.getInstance();
+    final savedLang = prefs.getString('app_language');
+
+    if (savedLang != null) {
+      // 저장된 언어 설정이 있으면 사용
+      _language = GameLanguage.values.firstWhere(
+        (e) => e.name == savedLang,
+        orElse: () => _detectSystemLanguage(),
+      );
+    } else {
+      // 저장된 설정이 없으면 시스템 언어 감지
+      _language = _detectSystemLanguage();
+    }
+
+    BoardGameStrings.currentLanguage = _language;
+    notifyListeners();
+  }
+
+  // 시스템/브라우저 언어 감지
+  GameLanguage _detectSystemLanguage() {
+    final locale = ui.PlatformDispatcher.instance.locale;
+    final langCode = locale.languageCode.toLowerCase();
+
+    switch (langCode) {
+      case 'ko':
+        return GameLanguage.korean;
+      case 'ja':
+        return GameLanguage.japanese;
+      case 'zh':
+        return GameLanguage.chinese;
+      case 'en':
+      default:
+        return GameLanguage.english;
+    }
+  }
+
+  void setLanguage(GameLanguage lang) async {
     if (_language != lang) {
       _language = lang;
       // BoardGameStrings도 함께 업데이트
       BoardGameStrings.currentLanguage = lang;
+
+      // 언어 설정 저장
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('app_language', lang.name);
+
       notifyListeners();
     }
   }
@@ -1313,19 +1361,25 @@ class BadukApp extends StatefulWidget {
 }
 
 class _BadukAppState extends State<BadukApp> {
-  bool _benchmarkDone = false;
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
-    _runBenchmark();
+    _initialize();
   }
 
-  Future<void> _runBenchmark() async {
+  Future<void> _initialize() async {
+    // 언어 초기화 (시스템 언어 감지)
+    final languageProvider = context.read<LanguageProvider>();
+    await languageProvider.initLanguage();
+
+    // 성능 벤치마크
     await DeviceBenchmark.measurePerformance();
+
     if (mounted) {
       setState(() {
-        _benchmarkDone = true;
+        _initialized = true;
       });
     }
   }
@@ -1345,7 +1399,7 @@ class _BadukAppState extends State<BadukApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: languageProvider.locale,
-      home: _benchmarkDone
+      home: _initialized
           ? AboutPage(
               language: language,
               onLanguageChanged: languageProvider.setLanguage,
