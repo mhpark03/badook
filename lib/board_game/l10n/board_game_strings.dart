@@ -48,6 +48,7 @@ class BoardGameStrings {
     'common.zoomOut': '축소',
     'common.resetZoom': '초기화',
     'common.continue': '계속하기',
+    'common.exit': '나가기',
 
     // Dialog
     'dialog.continueMessage': '계속하시겠습니까?',
@@ -315,6 +316,7 @@ class BoardGameStrings {
     'games.minesweeper.win': '승리!',
     'games.minesweeper.gameOver': '게임 오버',
     'games.minesweeper.mineExploded': '지뢰가 폭발했습니다!',
+    'games.minesweeper.victoryMessage': '모든 지뢰를 찾았습니다!',
     'games.minesweeper.rulesTitle': '게임 방법',
     'games.minesweeper.rulesObjective': '목표',
     'games.minesweeper.rulesObjectiveDesc': '지뢰가 없는 모든 칸을 열어야 합니다.',
@@ -589,6 +591,7 @@ class BoardGameStrings {
     'common.zoomOut': '縮小',
     'common.resetZoom': 'リセット',
     'common.continue': '続ける',
+    'common.exit': '終了',
 
     // Dialog
     'dialog.continueMessage': '続けますか？',
@@ -856,6 +859,7 @@ class BoardGameStrings {
     'games.minesweeper.win': '勝利！',
     'games.minesweeper.gameOver': 'ゲームオーバー',
     'games.minesweeper.mineExploded': '地雷が爆発しました！',
+    'games.minesweeper.victoryMessage': 'すべての地雷を見つけました！',
     'games.minesweeper.rulesTitle': '遊び方',
     'games.minesweeper.rulesObjective': '目標',
     'games.minesweeper.rulesObjectiveDesc': '地雷のないすべてのマスを開ける必要があります。',
@@ -1130,6 +1134,7 @@ class BoardGameStrings {
     'common.zoomOut': 'Zoom Out',
     'common.resetZoom': 'Reset',
     'common.continue': 'Continue',
+    'common.exit': 'Exit',
 
     // Dialog
     'dialog.continueMessage': 'Do you want to continue?',
@@ -1397,6 +1402,7 @@ class BoardGameStrings {
     'games.minesweeper.win': 'Win!',
     'games.minesweeper.gameOver': 'Game Over',
     'games.minesweeper.mineExploded': 'Mine exploded!',
+    'games.minesweeper.victoryMessage': 'You found all the mines!',
     'games.minesweeper.rulesTitle': 'How to Play',
     'games.minesweeper.rulesObjective': 'Objective',
     'games.minesweeper.rulesObjectiveDesc': 'Open all cells that don\'t have mines.',
@@ -1667,6 +1673,7 @@ class BoardGameStrings {
     'common.zoomOut': '缩小',
     'common.resetZoom': '重置',
     'common.continue': '继续',
+    'common.exit': '退出',
 
     // Dialog
     'dialog.continueMessage': '要继续吗？',
@@ -1789,6 +1796,21 @@ class BoardGameStrings {
     'games.minesweeper.name': '扫雷',
     'games.minesweeper.subtitle': '躲避炸弹',
     'games.minesweeper.description': '打开所有不含地雷的格子',
+    'games.minesweeper.mines': '地雷',
+    'games.minesweeper.progress': '进度',
+    'games.minesweeper.win': '胜利！',
+    'games.minesweeper.gameOver': '游戏结束',
+    'games.minesweeper.mineExploded': '地雷爆炸了！',
+    'games.minesweeper.victoryMessage': '找到了所有地雷！',
+    'games.minesweeper.rulesTitle': '游戏方法',
+    'games.minesweeper.rulesObjective': '目标',
+    'games.minesweeper.rulesObjectiveDesc': '打开所有不含地雷的格子。',
+    'games.minesweeper.rulesControls': '操作',
+    'games.minesweeper.rulesControlsDesc': '点击打开格子，长按标记旗帜',
+    'games.minesweeper.rulesNumbers': '数字',
+    'games.minesweeper.rulesNumbersDesc': '数字表示周围8格中的地雷数量。',
+    'games.minesweeper.rulesTips': '提示',
+    'games.minesweeper.rulesTipsDesc': '使用旗帜标记地雷位置。',
 
     // Sudoku
     'games.sudoku.name': '数独',

@@ -7562,7 +7562,7 @@ class _HelpPageState extends State<HelpPage> {
             onSelected: (selected) {
               if (selected) setState(() => _selectedGameKey = game['key']);
             },
-            selectedColor: game['color'] as Color,
+            selectedColor: Colors.blue.shade600,
             labelStyle: TextStyle(
               color: isSelected ? Colors.white : Colors.black87,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -7591,9 +7591,9 @@ class _HelpPageState extends State<HelpPage> {
               return Theme(
                 data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
-                  leading: Icon(game['icon'] as IconData, color: color),
+                  leading: Icon(game['icon'] as IconData, color: Colors.black87),
                   title: Text(L10n.get(widget.language, game['key']),
-                      style: TextStyle(fontWeight: FontWeight.bold, color: color)),
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
                   initiallyExpanded: isExpanded,
                   onExpansionChanged: (expanded) {
                     setState(() {
@@ -7607,35 +7607,47 @@ class _HelpPageState extends State<HelpPage> {
                   children: (game['subGames'] as List).map<Widget>((subGame) {
                     final subKey = subGame['key'] as String;
                     final isSubSelected = subKey == _selectedGameKey;
-                    return ListTile(
-                      contentPadding: const EdgeInsets.only(left: 56, right: 16),
-                      leading: Icon(subGame['icon'] as IconData,
-                          size: 20, color: isSubSelected ? color : Colors.grey),
-                      title: Text(L10n.get(widget.language, subKey),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: isSubSelected ? FontWeight.bold : FontWeight.normal,
-                            color: isSubSelected ? color : Colors.black87,
-                          )),
-                      selected: isSubSelected,
-                      selectedTileColor: color.withValues(alpha: 0.1),
-                      onTap: () => setState(() => _selectedGameKey = subKey),
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: isSubSelected ? Border(
+                          left: BorderSide(color: Colors.blue.shade700, width: 4),
+                        ) : null,
+                        color: isSubSelected ? Colors.blue.shade50 : null,
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.only(left: 52, right: 16),
+                        leading: Icon(subGame['icon'] as IconData,
+                            size: 20, color: isSubSelected ? Colors.blue.shade700 : Colors.grey),
+                        title: Text(L10n.get(widget.language, subKey),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: isSubSelected ? FontWeight.bold : FontWeight.normal,
+                              color: isSubSelected ? Colors.blue.shade700 : Colors.black87,
+                            )),
+                        onTap: () => setState(() => _selectedGameKey = subKey),
+                      ),
                     );
                   }).toList(),
                 ),
               );
             } else {
-              return ListTile(
-                leading: Icon(game['icon'] as IconData,
-                    color: isSelected ? color : Colors.grey),
-                title: Text(L10n.get(widget.language, game['key']),
-                    style: TextStyle(
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? color : Colors.black87,
-                    )),
-                selected: isSelected,
-                selectedTileColor: color.withValues(alpha: 0.1),
-                onTap: () => setState(() => _selectedGameKey = game['key']),
+              return Container(
+                decoration: BoxDecoration(
+                  border: isSelected ? Border(
+                    left: BorderSide(color: Colors.blue.shade700, width: 4),
+                  ) : null,
+                  color: isSelected ? Colors.blue.shade50 : null,
+                ),
+                child: ListTile(
+                  leading: Icon(game['icon'] as IconData,
+                      color: isSelected ? Colors.blue.shade700 : Colors.grey),
+                  title: Text(L10n.get(widget.language, game['key']),
+                      style: TextStyle(
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected ? Colors.blue.shade700 : Colors.black87,
+                      )),
+                  onTap: () => setState(() => _selectedGameKey = game['key']),
+                ),
               );
             }
           }).toList(),

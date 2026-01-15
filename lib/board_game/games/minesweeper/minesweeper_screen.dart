@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import '../../l10n/board_game_strings.dart';
 import '../../services/game_save_service.dart';
@@ -79,6 +81,11 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   int elapsedSeconds = 0;
   DateTime? startTime;
 
+  // 롱프레스 상태 추적 (탭과 롱프레스 구분)
+  Timer? _longPressTimer;
+  bool _longPressTriggered = false;
+  static const _longPressDuration = Duration(milliseconds: 400);
+
   @override
   void initState() {
     super.initState();
@@ -88,6 +95,12 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     } else {
       _initBoard();
     }
+  }
+
+  @override
+  void dispose() {
+    _longPressTimer?.cancel();
+    super.dispose();
   }
 
   void _setupDifficulty() {
@@ -332,7 +345,77 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
       WebAdHelper.showAd();
       HapticFeedback.heavyImpact();
       MinesweeperScreen.clearSavedGame();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showVictoryDialog();
+      });
     }
+  }
+
+  void _showVictoryDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            const Icon(Icons.emoji_events, color: Colors.amber, size: 32),
+            const SizedBox(width: 8),
+            Text('common.win'.tr(), style: const TextStyle(color: Colors.green)),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'games.minesweeper.victoryMessage'.tr(),
+              style: const TextStyle(color: Colors.white70, fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.flag, color: Colors.red, size: 20),
+                const SizedBox(width: 4),
+                Text(
+                  '$totalMines ${'games.minesweeper.mines'.tr()}',
+                  style: const TextStyle(color: Colors.white70),
+                ),
+                const SizedBox(width: 16),
+                const Icon(Icons.grid_on, color: Colors.blueGrey, size: 20),
+                const SizedBox(width: 4),
+                Text(
+                  '${rows}x$cols',
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: Text('common.exit'.tr(), style: const TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _restartGame();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+            ),
+            child: Text('app.restart'.tr()),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _saveGame() async {
@@ -888,10 +971,45 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   Widget _buildCell(int row, int col) {
     final cell = board[row][col];
 
-    return GestureDetector(
-      onTap: () => _onCellTap(row, col),
-      onLongPress: () => _onCellLongPress(row, col),
-      onSecondaryTap: () => _onCellLongPress(row, col), // 마우스 오른쪽 클릭
+    return Listener(
+      onPointerDown: (event) {
+        // 마우스 오른쪽 버튼 클릭 시 즉시 깃발 처리
+        if (event.kind == PointerDeviceKind.mouse &&
+            event.buttons == kSecondaryMouseButton) {
+          _onCellLongPress(row, col);
+          return;
+        }
+
+        // 왼쪽 버튼 또는 터치: 롱프레스 타이머 시작
+        _longPressTriggered = false;
+        _longPressTimer?.cancel();
+        _longPressTimer = Timer(_longPressDuration, () {
+          _longPressTriggered = true;
+          _onCellLongPress(row, col);
+        });
+      },
+      onPointerUp: (event) {
+        _longPressTimer?.cancel();
+        _longPressTimer = null;
+
+        // 오른쪽 버튼은 이미 처리됨
+        if (event.kind == PointerDeviceKind.mouse &&
+            (event.buttons == kSecondaryMouseButton ||
+             event.pointer == 0)) {
+          // 오른쪽 버튼 up은 무시 (이미 down에서 처리)
+        }
+
+        // 롱프레스가 이미 트리거되지 않았으면 일반 탭 처리
+        if (!_longPressTriggered) {
+          _onCellTap(row, col);
+        }
+        _longPressTriggered = false;
+      },
+      onPointerCancel: (_) {
+        _longPressTimer?.cancel();
+        _longPressTimer = null;
+        _longPressTriggered = false;
+      },
       child: Container(
         decoration: BoxDecoration(
           color: _getCellColor(cell),

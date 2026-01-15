@@ -68,6 +68,12 @@
   <script src="flutter_bootstrap.js" async></script>
 
   <script>
+    // 우클릭 메뉴 비활성화
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    });
+
     // 디버그 모드 감지 (localhost 또는 127.0.0.1)
     var isDebugMode = window.location.hostname === 'localhost' ||
                       window.location.hostname === '127.0.0.1' ||
