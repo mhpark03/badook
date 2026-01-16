@@ -657,12 +657,24 @@ class AIPlayer {
     // 최상위 카드가 있는 무늬 (버리기 우선순위 낮춤)
     final topSuits = _getSuitsWithTopCards(hand, state);
 
+    // 마이티 카드 확인 (기루다에 따라 다름)
+    final mightyCard = state.mighty;
+    bool isMightyCard(PlayingCard c) {
+      return c.suit == mightyCard.suit && c.rank == mightyCard.rank;
+    }
+
     hand.sort((a, b) {
       // 1. 조커/마이티는 절대 버리지 않음
-      if (a.isJoker || a.isMighty) return 1;
-      if (b.isJoker || b.isMighty) return -1;
+      if (a.isJoker || isMightyCard(a)) return 1;
+      if (b.isJoker || isMightyCard(b)) return -1;
 
-      // 2. 조커가 있으면 조커콜 카드 우선 버림
+      // 2. A, K 등 최상위 카드는 버리기 우선순위 낮춤
+      bool aIsTop = a.rank == Rank.ace || a.rank == Rank.king;
+      bool bIsTop = b.rank == Rank.ace || b.rank == Rank.king;
+      if (aIsTop && !bIsTop) return 1;
+      if (!aIsTop && bIsTop) return -1;
+
+      // 3. 조커가 있으면 조커콜 카드 우선 버림
       if (hasJoker) {
         bool aIsJokerCall = a.suit == jokerCallCard.suit && a.rank == jokerCallCard.rank;
         bool bIsJokerCall = b.suit == jokerCallCard.suit && b.rank == jokerCallCard.rank;
@@ -670,23 +682,23 @@ class AIPlayer {
         if (!aIsJokerCall && bIsJokerCall) return 1;
       }
 
-      // 3. 최종 기루다는 버리지 않음
+      // 4. 최종 기루다는 버리지 않음
       if (finalGiruda != null) {
         if (a.suit == finalGiruda && b.suit != finalGiruda) return 1;
         if (a.suit != finalGiruda && b.suit == finalGiruda) return -1;
       }
 
-      // 4. 점수 카드는 버리지 않음
+      // 5. 점수 카드는 버리지 않음
       if (a.isPointCard && !b.isPointCard) return 1;
       if (!a.isPointCard && b.isPointCard) return -1;
 
-      // 5. 최상위 카드가 있는 무늬는 버리기 우선순위 낮춤
+      // 6. 최상위 카드가 있는 무늬는 버리기 우선순위 낮춤
       bool aHasTop = a.suit != null && topSuits.contains(a.suit);
       bool bHasTop = b.suit != null && topSuits.contains(b.suit);
       if (aHasTop && !bHasTop) return 1;
       if (!aHasTop && bHasTop) return -1;
 
-      // 6. 카드 수가 적은 무늬 우선 버림 (컷 가능성 높임)
+      // 7. 카드 수가 적은 무늬 우선 버림 (컷 가능성 높임)
       int aCount = suitCount[a.suit] ?? 0;
       int bCount = suitCount[b.suit] ?? 0;
       if (aCount != bCount) {
