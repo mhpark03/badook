@@ -1198,7 +1198,10 @@ class _JanggiScreenState extends State<JanggiScreen> {
       while (newRow >= 0 && newRow < 10 && newCol >= 0 && newCol < 9) {
         final target = board[newRow][newCol];
         if (!jumped) {
-          if (target != null && target.type != JanggiPieceType.po) {
+          if (target != null) {
+            if (target.type == JanggiPieceType.po) {
+              break; // 포는 다른 포를 뛰어넘을 수 없음
+            }
             jumped = true;
           }
         } else {
@@ -1905,11 +1908,11 @@ class _JanggiScreenState extends State<JanggiScreen> {
   String get _difficultyName {
     switch (_difficulty) {
       case JanggiDifficulty.easy:
-        return 'common.easy'.tr();
+        return 'games.janggi.beginner'.tr();
       case JanggiDifficulty.normal:
-        return 'common.normal'.tr();
+        return 'games.janggi.intermediate'.tr();
       case JanggiDifficulty.hard:
-        return 'common.hard'.tr();
+        return 'games.janggi.advanced'.tr();
     }
   }
 

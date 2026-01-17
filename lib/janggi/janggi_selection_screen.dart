@@ -191,7 +191,7 @@ class _JanggiSelectionScreenState extends State<JanggiSelectionScreen> {
           children: [
             _buildDifficultyButton(
               context,
-              title: 'common.easy'.tr(),
+              title: 'games.janggi.beginner'.tr(),
               subtitle: 'games.janggi.playAsCho'.tr(),
               onTap: () {
                 Navigator.pop(context);
@@ -209,7 +209,7 @@ class _JanggiSelectionScreenState extends State<JanggiSelectionScreen> {
             const SizedBox(height: 8),
             _buildDifficultyButton(
               context,
-              title: 'common.normal'.tr(),
+              title: 'games.janggi.intermediate'.tr(),
               subtitle: 'games.janggi.playAsCho'.tr(),
               onTap: () {
                 Navigator.pop(context);
@@ -227,7 +227,7 @@ class _JanggiSelectionScreenState extends State<JanggiSelectionScreen> {
             const SizedBox(height: 8),
             _buildDifficultyButton(
               context,
-              title: 'common.hard'.tr(),
+              title: 'games.janggi.advanced'.tr(),
               subtitle: 'games.janggi.playAsCho'.tr(),
               onTap: () {
                 Navigator.pop(context);

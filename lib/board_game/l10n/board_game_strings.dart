@@ -306,6 +306,11 @@ class BoardGameStrings {
     'games.janggi.winnerMessage': '{name}가 승리하였습니다!',
     'games.janggi.playerBeatsComputer': '{player}({winner})가 {computer}를 이겼습니다!',
     'games.janggi.lostToComputer': '{computer}({winner})에게 졌습니다.',
+    'games.janggi.blockedMove': '이동 불가',
+    'games.janggi.blockedMoveDesc': '이 위치로 이동하면 자동 장군이 되어 이동할 수 없습니다.',
+    'games.janggi.beginner': '초급',
+    'games.janggi.intermediate': '중급',
+    'games.janggi.advanced': '고급',
 
     // Minesweeper
     'games.minesweeper.name': '지뢰찾기',
@@ -849,6 +854,11 @@ class BoardGameStrings {
     'games.janggi.winnerMessage': '{name}の勝利です！',
     'games.janggi.playerBeatsComputer': '{player}({winner})が{computer}に勝ちました！',
     'games.janggi.lostToComputer': '{computer}({winner})に負けました。',
+    'games.janggi.blockedMove': '移動不可',
+    'games.janggi.blockedMoveDesc': 'この位置に移動すると自動将軍になるため移動できません。',
+    'games.janggi.beginner': '初級',
+    'games.janggi.intermediate': '中級',
+    'games.janggi.advanced': '上級',
 
     // Minesweeper
     'games.minesweeper.name': 'マインスイーパー',
@@ -1392,6 +1402,11 @@ class BoardGameStrings {
     'games.janggi.winnerMessage': '{name} wins!',
     'games.janggi.playerBeatsComputer': '{player}({winner}) beat {computer}!',
     'games.janggi.lostToComputer': 'Lost to {computer}({winner}).',
+    'games.janggi.blockedMove': 'Move Blocked',
+    'games.janggi.blockedMoveDesc': 'Cannot move here as it would put your general in check.',
+    'games.janggi.beginner': 'Beginner',
+    'games.janggi.intermediate': 'Intermediate',
+    'games.janggi.advanced': 'Advanced',
 
     // Minesweeper
     'games.minesweeper.name': 'Minesweeper',
@@ -1730,6 +1745,11 @@ class BoardGameStrings {
     'games.janggi.winnerMessage': '{name}获胜！',
     'games.janggi.playerBeatsComputer': '{player}({winner})战胜了{computer}！',
     'games.janggi.lostToComputer': '输给了{computer}({winner})。',
+    'games.janggi.blockedMove': '无法移动',
+    'games.janggi.blockedMoveDesc': '移动到此位置会使您的将被将军，无法移动。',
+    'games.janggi.beginner': '初级',
+    'games.janggi.intermediate': '中级',
+    'games.janggi.advanced': '高级',
 
     // Gomoku
     'games.gomoku.name': '五子棋',
