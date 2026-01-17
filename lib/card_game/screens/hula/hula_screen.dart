@@ -2141,6 +2141,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
     final melds = computerMelds[computerIndex];
 
     // 훌라 가능성 확인 후 등록 여부 결정 (스톱 위험도 포함)
+    // 훌라 시도 중이면 7도 등록하지 않음 (0점이므로 손해 없음)
     final shouldRegister = _shouldRegisterMelds(hand, melds, computerIndex: computerIndex + 1);
 
     if (!shouldRegister) {
@@ -2151,34 +2152,40 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
     // 등록할 멜드 수집
     final meldsToRegister = <Map<String, dynamic>>[];
 
-    // 일반 멜드 찾기
+    // 7 카드 먼저 등록 (가장 우선순위)
     final testHand = List<PlayingCard>.from(hand);
-    List<PlayingCard>? bestMeld;
-    while ((bestMeld = _findBestMeld(testHand)) != null) {
-      final isRun = _isValidRun(bestMeld!);
-      meldsToRegister.add({'cards': List<PlayingCard>.from(bestMeld), 'isRun': isRun, 'type': 'meld'});
-      for (final card in bestMeld) {
-        testHand.remove(card);
-      }
-    }
-
-    // 7 카드 찾기
     final sevens = testHand.where((c) => _isSeven(c)).toList();
-    if (sevens.length >= 3) {
-      final decision = _decideSevensStrategy(sevens, testHand);
-      if (decision == 'group') {
-        meldsToRegister.add({'cards': sevens.take(3).toList(), 'isRun': false, 'type': '7group'});
-        for (final seven in sevens.skip(3)) {
-          meldsToRegister.add({'cards': [seven], 'isRun': false, 'type': '7'});
+    if (sevens.isNotEmpty) {
+      if (sevens.length >= 3) {
+        final decision = _decideSevensStrategy(sevens, testHand);
+        if (decision == 'group') {
+          meldsToRegister.add({'cards': sevens.take(3).toList(), 'isRun': false, 'type': '7group'});
+          for (final seven in sevens.skip(3)) {
+            meldsToRegister.add({'cards': [seven], 'isRun': false, 'type': '7'});
+          }
+        } else {
+          for (final seven in sevens) {
+            meldsToRegister.add({'cards': [seven], 'isRun': false, 'type': '7'});
+          }
         }
       } else {
         for (final seven in sevens) {
           meldsToRegister.add({'cards': [seven], 'isRun': false, 'type': '7'});
         }
       }
-    } else {
+      // testHand에서 7 제거
       for (final seven in sevens) {
-        meldsToRegister.add({'cards': [seven], 'isRun': false, 'type': '7'});
+        testHand.remove(seven);
+      }
+    }
+
+    // 일반 멜드 찾기 (7 카드 제외된 상태)
+    List<PlayingCard>? bestMeld;
+    while ((bestMeld = _findBestMeld(testHand)) != null) {
+      final isRun = _isValidRun(bestMeld!);
+      meldsToRegister.add({'cards': List<PlayingCard>.from(bestMeld), 'isRun': isRun, 'type': 'meld'});
+      for (final card in bestMeld) {
+        testHand.remove(card);
       }
     }
 
@@ -2333,9 +2340,10 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
     final hand = computerHands[computerIndex];
     final melds = computerMelds[computerIndex];
 
-    // 손에 7이 있으면 먼저 등록
+    // 손에 7이 있고, 이미 멜드가 있으면 (훌라 불가능) 7 등록
+    // 훌라 시도 중(melds.isEmpty)이면 7을 손에 보유 (0점이므로 손해 없음)
     final sevens = hand.where((c) => _isSeven(c)).toList();
-    if (sevens.isNotEmpty) {
+    if (sevens.isNotEmpty && melds.isNotEmpty) {
       final seven = sevens.first;
       hand.remove(seven);
       melds.add(Meld(cards: [seven], isRun: false));
