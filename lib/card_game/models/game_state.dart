@@ -558,6 +558,17 @@ class GameState {
     startNewTrick();
   }
 
+  // 풀(20) 선언: 모든 트릭을 이기겠다는 선언 (점수 2배)
+  void declareFull() {
+    if (currentBid != null) {
+      currentBid = Bid(
+        playerId: currentBid!.playerId,
+        suit: currentBid!.suit,
+        tricks: 20,
+      );
+    }
+  }
+
   void startNewTrick() {
     currentTrick = Trick(
       trickNumber: currentTrickNumber,

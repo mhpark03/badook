@@ -951,9 +951,10 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
           final highestInSuit = suitCards.first;
           final remainingHigher = _countRemainingHigherCards(highestInSuit, playerIndex);
 
-          if (remainingHigher == 0) {
+          // ★ 스페이드 Q는 sureWins에서 제외 (가장 나중에 따야 함)
+          if (remainingHigher == 0 && !highestInSuit.isQueenOfSpades) {
             sureWins.add(highestInSuit);
-          } else if (remainingHigher == 1 && suitCards.length >= 2) {
+          } else if (remainingHigher == 1 && suitCards.length >= 2 && !highestInSuit.isQueenOfSpades) {
             // K로 A 유도 가능
             final secondHighest = suitCards[1];
             final remainingAfterFlush = _countRemainingHigherCards(secondHighest, playerIndex) - 1;
@@ -1091,10 +1092,12 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
       if (shootMoonThreat != null && hasPointsInTrick) {
         // 현재 트릭에 점수 카드가 있고, 위협 플레이어가 이길 것 같으면
         // 내가 이길 수 있으면 이겨서 점수를 가져옴 (슛더문 방지)
-        if (canWin.isNotEmpty) {
-          // 가장 낮은 승리 카드로 이기기
-          canWin.sort((a, b) => a.rank.compareTo(b.rank));
-          return canWin.first;
+        // ★ 단, 스페이드 Q로 이기면 13점 벌점이므로 Q 제외
+        final canWinWithoutQueen = canWin.where((c) => !c.isQueenOfSpades).toList();
+        if (canWinWithoutQueen.isNotEmpty) {
+          // 가장 낮은 승리 카드로 이기기 (Q 제외)
+          canWinWithoutQueen.sort((a, b) => a.rank.compareTo(b.rank));
+          return canWinWithoutQueen.first;
         }
       }
 
@@ -1130,6 +1133,23 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
         }
         cantWin.sort((a, b) => b.rank.compareTo(a.rank));
         return cantWin.first;
+      }
+
+      // ★ 스페이드 Q가 아직 안 나왔을 때 A/K 피하기
+      // 스페이드 리드 시 A/K를 내면 Q를 가진 플레이어가 Q를 버릴 수 있음
+      // 단, 내가 Q를 갖고 있으면 A/K를 내도 안전함
+      if (leadSuit == Suit.spade) {
+        final queenOfSpadesPlayed = playedCards.any((c) => c.isQueenOfSpades);
+        final iHaveQueen = sameSuitCards.any((c) => c.isQueenOfSpades);
+        if (!queenOfSpadesPlayed && !iHaveQueen) {
+          // Q가 아직 안 나왔고 내가 Q가 없으면 A/K(rank >= 13) 피하기
+          final safeSpades = sameSuitCards.where((c) => c.rank < 13).toList();
+          if (safeSpades.isNotEmpty) {
+            safeSpades.sort((a, b) => a.rank.compareTo(b.rank));
+            return safeSpades.first;
+          }
+          // A/K만 있으면 가장 낮은 카드 (어쩔 수 없음)
+        }
       }
 
       // 낮은 카드로 안전하게 (Q 제외)
