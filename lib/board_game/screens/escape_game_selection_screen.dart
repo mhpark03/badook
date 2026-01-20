@@ -2,20 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../l10n/board_game_strings.dart';
-import '../games/tetris/tetris_screen.dart';
-import '../games/minesweeper/minesweeper_screen.dart';
-import '../games/bubble/bubble_screen.dart';
-import '../games/mole/mole_screen.dart';
-import '../games/gomoku/gomoku_screen.dart';
-import '../games/othello/othello_screen.dart';
-import '../games/solitaire/solitaire_screen.dart';
-import '../games/baseball/baseball_screen.dart';
+import '../games/maze/maze_screen.dart';
+import '../games/arrow_maze/arrow_maze_screen.dart';
 
-class BoardGameSelectionScreen extends StatelessWidget {
+class EscapeGameSelectionScreen extends StatelessWidget {
   final GameLanguage language;
   final Function(GameLanguage) onLanguageChanged;
 
-  const BoardGameSelectionScreen({
+  const EscapeGameSelectionScreen({
     super.key,
     required this.language,
     required this.onLanguageChanged,
@@ -60,60 +54,18 @@ class BoardGameSelectionScreen extends StatelessWidget {
 
     final games = [
       _GameInfo(
-        title: 'games.tetris.name'.tr(),
-        subtitle: 'games.tetris.subtitle'.tr(),
-        icon: Icons.grid_view_rounded,
-        color: Colors.cyan[700]!,
-        screen: const TetrisScreen(),
+        title: 'games.maze.name'.tr(),
+        subtitle: 'games.maze.subtitle'.tr(),
+        icon: Icons.grid_4x4,
+        color: Colors.purple[700]!,
+        onTap: (context) => _showMazeDialog(context),
       ),
       _GameInfo(
-        title: 'games.minesweeper.name'.tr(),
-        subtitle: 'games.minesweeper.subtitle'.tr(),
-        icon: Icons.terrain,
-        color: Colors.blueGrey[700]!,
-        onTap: (context) => _showMinesweeperDialog(context),
-      ),
-      _GameInfo(
-        title: 'games.bubble.name'.tr(),
-        subtitle: 'games.bubble.subtitle'.tr(),
-        icon: Icons.bubble_chart,
-        color: Colors.pink[700]!,
-        screen: const BubbleScreen(),
-      ),
-      _GameInfo(
-        title: 'games.mole.name'.tr(),
-        subtitle: 'games.mole.subtitle'.tr(),
-        icon: Icons.pest_control,
-        color: Colors.brown[700]!,
-        screen: const MoleScreen(),
-      ),
-      _GameInfo(
-        title: 'games.gomoku.name'.tr(),
-        subtitle: 'games.gomoku.subtitle'.tr(),
-        icon: Icons.grid_on,
-        color: Colors.amber[800]!,
-        onTap: (context) => _showGomokuDialog(context),
-      ),
-      _GameInfo(
-        title: 'games.othello.name'.tr(),
-        subtitle: 'games.othello.subtitle'.tr(),
-        icon: Icons.radio_button_checked,
-        color: Colors.green[800]!,
-        onTap: (context) => _showOthelloDialog(context),
-      ),
-      _GameInfo(
-        title: 'games.solitaire.name'.tr(),
-        subtitle: 'games.solitaire.subtitle'.tr(),
-        icon: Icons.style,
-        color: Colors.red[800]!,
-        onTap: (context) => _showSolitaireDialog(context),
-      ),
-      _GameInfo(
-        title: 'games.baseball.name'.tr(),
-        subtitle: 'games.baseball.subtitle'.tr(),
-        icon: Icons.pin,
-        color: Colors.orange[800]!,
-        onTap: (context) => _showBaseballDialog(context),
+        title: 'games.arrowMaze.name'.tr(),
+        subtitle: 'games.arrowMaze.subtitle'.tr(),
+        icon: Icons.arrow_forward,
+        color: Colors.teal[700]!,
+        onTap: (context) => _showArrowMazeDialog(context),
       ),
     ];
 
@@ -128,19 +80,19 @@ class BoardGameSelectionScreen extends StatelessWidget {
       tileWidth = 130;
       tileHeight = 110;
     } else {
-      // 4열: (화면너비 - 좌우패딩*2 - 간격*3) / 4
-      tileWidth = (screenWidth - padding * 2 - spacing * 3) / 4;
+      // 2열: (화면너비 - 좌우패딩*2 - 간격*1) / 2
+      tileWidth = (screenWidth - padding * 2 - spacing) / 2;
       tileHeight = isSmallScreen ? 90 : 105;
     }
 
     return Scaffold(
       appBar: buildCommonAppBar(
         context: context,
-        title: L10n.get(currentLanguage, 'boardGame'),
+        title: L10n.get(currentLanguage, 'escapeGame'),
         language: currentLanguage,
         onLanguageChanged: languageProvider.setLanguage,
       ),
-      backgroundColor: Colors.indigo[900],
+      backgroundColor: Colors.blueGrey[900],
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
@@ -170,7 +122,7 @@ class BoardGameSelectionScreen extends StatelessWidget {
     );
   }
 
-  void _showMinesweeperDialog(BuildContext context) {
+  void _showMazeDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -186,14 +138,14 @@ class BoardGameSelectionScreen extends StatelessWidget {
             _buildDifficultyButton(
               context,
               title: 'common.easy'.tr(),
-              subtitle: '9x9, 10 ${'games.minesweeper.mines'.tr()}',
+              subtitle: '10x10',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MinesweeperScreen(
-                      difficulty: MinesweeperDifficulty.easy,
+                    builder: (context) => const MazeScreen(
+                      difficulty: MazeDifficulty.easy,
                     ),
                   ),
                 );
@@ -203,14 +155,14 @@ class BoardGameSelectionScreen extends StatelessWidget {
             _buildDifficultyButton(
               context,
               title: 'common.normal'.tr(),
-              subtitle: '16x16, 40 ${'games.minesweeper.mines'.tr()}',
+              subtitle: '15x15',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MinesweeperScreen(
-                      difficulty: MinesweeperDifficulty.medium,
+                    builder: (context) => const MazeScreen(
+                      difficulty: MazeDifficulty.medium,
                     ),
                   ),
                 );
@@ -220,14 +172,14 @@ class BoardGameSelectionScreen extends StatelessWidget {
             _buildDifficultyButton(
               context,
               title: 'common.hard'.tr(),
-              subtitle: '16x24, 75 ${'games.minesweeper.mines'.tr()}',
+              subtitle: '20x20',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MinesweeperScreen(
-                      difficulty: MinesweeperDifficulty.hard,
+                    builder: (context) => const MazeScreen(
+                      difficulty: MazeDifficulty.hard,
                     ),
                   ),
                 );
@@ -239,163 +191,7 @@ class BoardGameSelectionScreen extends StatelessWidget {
     );
   }
 
-  void _showGomokuDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text(
-          'dialog.selectMode'.tr(),
-          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildDifficultyButton(
-              context,
-              title: 'vs.vsComputer'.tr(),
-              subtitle: 'games.gomoku.playAsBlack'.tr(),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GomokuScreen(
-                      gameMode: GameMode.vsComputerWhite,
-                    ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildDifficultyButton(
-              context,
-              title: 'vs.twoPlayer'.tr(),
-              subtitle: 'games.gomoku.twoPlayerDesc'.tr(),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GomokuScreen(
-                      gameMode: GameMode.vsPerson,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showOthelloDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text(
-          'dialog.selectMode'.tr(),
-          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildDifficultyButton(
-              context,
-              title: 'vs.vsComputer'.tr(),
-              subtitle: 'games.othello.playAsBlack'.tr(),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OthelloScreen(
-                      gameMode: OthelloGameMode.vsComputerWhite,
-                    ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildDifficultyButton(
-              context,
-              title: 'vs.twoPlayer'.tr(),
-              subtitle: 'games.othello.twoPlayerDesc'.tr(),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OthelloScreen(
-                      gameMode: OthelloGameMode.vsPerson,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showSolitaireDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: Text(
-          'dialog.selectMode'.tr(),
-          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildDifficultyButton(
-              context,
-              title: 'games.solitaire.draw1'.tr(),
-              subtitle: 'games.solitaire.draw1Desc'.tr(),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SolitaireScreen(
-                      initialDrawCount: 1,
-                    ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildDifficultyButton(
-              context,
-              title: 'games.solitaire.draw3'.tr(),
-              subtitle: 'games.solitaire.draw3Desc'.tr(),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SolitaireScreen(
-                      initialDrawCount: 3,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showBaseballDialog(BuildContext context) {
+  void _showArrowMazeDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -411,14 +207,31 @@ class BoardGameSelectionScreen extends StatelessWidget {
             _buildDifficultyButton(
               context,
               title: 'common.easy'.tr(),
-              subtitle: 'games.baseball.easyDesc'.tr(),
+              subtitle: '10x10',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BaseballScreen(
-                      difficulty: BaseballDifficulty.easy,
+                    builder: (context) => const ArrowMazeScreen(
+                      difficulty: ArrowMazeDifficulty.easy,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'common.normal'.tr(),
+              subtitle: '30x30',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ArrowMazeScreen(
+                      difficulty: ArrowMazeDifficulty.medium,
                     ),
                   ),
                 );
@@ -428,14 +241,14 @@ class BoardGameSelectionScreen extends StatelessWidget {
             _buildDifficultyButton(
               context,
               title: 'common.hard'.tr(),
-              subtitle: 'games.baseball.hardDesc'.tr(),
+              subtitle: '50x50',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BaseballScreen(
-                      difficulty: BaseballDifficulty.hard,
+                    builder: (context) => const ArrowMazeScreen(
+                      difficulty: ArrowMazeDifficulty.hard,
                     ),
                   ),
                 );

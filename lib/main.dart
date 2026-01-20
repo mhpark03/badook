@@ -20,6 +20,7 @@ import 'card_game/widgets/card_game_provider.dart';
 
 // 보드게임 import
 import 'board_game/screens/board_game_selection_screen.dart';
+import 'board_game/screens/escape_game_selection_screen.dart';
 import 'board_game/games/tetris/tetris_screen.dart';
 import 'board_game/games/minesweeper/minesweeper_screen.dart';
 import 'board_game/games/maze/maze_screen.dart';
@@ -342,6 +343,7 @@ class L10n {
       'cardGame': '카드게임',
       'janggi': '장기',
       'boardGame': '보드게임',
+      'escapeGame': '탈출게임',
       'sudoku': '스도쿠',
       'yutnori': '윷놀이',
       // 게임별 도움말
@@ -406,7 +408,7 @@ class L10n {
       'termsOfService': '이용약관',
       'info': '정보',
       'aboutTitle': '게임 앱 소개',
-      'aboutContent': '다양한 게임을 즐길 수 있는 무료 게임 모음 앱입니다.\n\n[바둑]\n약 4,000년 역사의 전략 보드게임. 흑과 백이 번갈아 돌을 놓아 더 많은 영역을 차지하는 것이 목표입니다.\n- AI 대국, 2인 대국, 사활 문제\n\n[장기]\n한국의 전통 전략 보드게임. 각 16개의 기물을 움직여 상대편의 왕(장)을 잡는 것이 목표입니다.\n- AI 대국, 2인 대국\n\n[카드게임]\n- 마이티: 5인용 트릭테이킹 게임. 여당과 야당으로 나뉘어 점수를 겨룹니다.\n- 하트: 하트 카드와 스페이드Q를 피하며 최저 점수를 노리는 게임.\n- 훌라: 같은 숫자나 연속된 숫자 조합을 만들어 먼저 패를 버리면 승리.\n- 원카드: UNO와 유사한 게임. 같은 숫자나 무늬의 카드를 내며 먼저 패를 없애면 승리.\n- 하이로우: 다음 카드가 높을지 낮을지 맞추는 게임.\n- 세븐포커: 7장의 카드로 족보를 만들어 겨루는 포커 게임.\n\n[보드게임]\n- 오목: 먼저 5개를 연속으로 놓으면 승리.\n- 오델로: 상대 돌을 뒤집어 더 많은 돌을 확보하는 게임.\n- 테트리스: 떨어지는 블록을 쌓아 줄을 완성하면 사라지는 퍼즐 게임.\n- 지뢰찾기: 숫자 힌트로 지뢰 위치를 추리하는 게임.\n- 솔리테어: 카드를 규칙에 맞게 정리하는 1인용 카드 게임.\n- 미로: 출구를 찾아 미로를 탈출하는 게임.\n- 버블: 같은 색 버블 3개 이상을 맞춰 터뜨리는 게임.\n- 두더지 잡기: 구멍에서 올라오는 두더지를 빠르게 잡는 게임.\n- 숫자야구: 3자리 숫자를 추리하는 논리 게임.\n- 화살표 미로: 화살표를 탭하여 모두 제거하는 퍼즐 게임.\n\n[스도쿠]\n9x9 칸에 1~9 숫자를 중복 없이 채우는 논리 퍼즐.\n- 클래식: 기본 스도쿠. 가로, 세로, 3x3 박스에 같은 숫자 금지.\n- 사무라이: 5개의 스도쿠가 겹쳐진 대형 퍼즐.\n- 킬러: 점선 영역 내 숫자 합이 주어진 숫자와 일치해야 함.\n- 숫자합: 인접한 칸의 합이 힌트로 주어지는 변형.\n\n[전통게임]\n- 윷놀이: 윷을 던져 도/개/걸/윷/모에 따라 말을 이동시켜 먼저 나오면 승리.\n\n모든 게임은 오프라인에서 무료로 즐길 수 있습니다.',
+      'aboutContent': '다양한 게임을 즐길 수 있는 무료 게임 모음 앱입니다.\n\n[바둑]\n약 4,000년 역사의 전략 보드게임. 흑과 백이 번갈아 돌을 놓아 더 많은 영역을 차지하는 것이 목표입니다.\n- AI 대국, 2인 대국, 사활 문제\n\n[장기]\n한국의 전통 전략 보드게임. 각 16개의 기물을 움직여 상대편의 왕(장)을 잡는 것이 목표입니다.\n- AI 대국, 2인 대국\n\n[카드게임]\n- 마이티: 5인용 트릭테이킹 게임. 여당과 야당으로 나뉘어 점수를 겨룹니다.\n- 하트: 하트 카드와 스페이드Q를 피하며 최저 점수를 노리는 게임.\n- 훌라: 같은 숫자나 연속된 숫자 조합을 만들어 먼저 패를 버리면 승리.\n- 원카드: UNO와 유사한 게임. 같은 숫자나 무늬의 카드를 내며 먼저 패를 없애면 승리.\n- 하이로우: 다음 카드가 높을지 낮을지 맞추는 게임.\n- 세븐포커: 7장의 카드로 족보를 만들어 겨루는 포커 게임.\n\n[보드게임]\n- 오목: 먼저 5개를 연속으로 놓으면 승리.\n- 오델로: 상대 돌을 뒤집어 더 많은 돌을 확보하는 게임.\n- 테트리스: 떨어지는 블록을 쌓아 줄을 완성하면 사라지는 퍼즐 게임.\n- 지뢰찾기: 숫자 힌트로 지뢰 위치를 추리하는 게임.\n- 솔리테어: 카드를 규칙에 맞게 정리하는 1인용 카드 게임.\n- 버블: 같은 색 버블 3개 이상을 맞춰 터뜨리는 게임.\n- 두더지 잡기: 구멍에서 올라오는 두더지를 빠르게 잡는 게임.\n- 숫자야구: 3자리 숫자를 추리하는 논리 게임.\n\n[탈출게임]\n- 미로: 출구를 찾아 미로를 탈출하는 게임.\n- 화살표 미로: 화살표를 탭하여 모두 제거하는 퍼즐 게임.\n\n[스도쿠]\n9x9 칸에 1~9 숫자를 중복 없이 채우는 논리 퍼즐.\n- 클래식: 기본 스도쿠. 가로, 세로, 3x3 박스에 같은 숫자 금지.\n- 사무라이: 5개의 스도쿠가 겹쳐진 대형 퍼즐.\n- 킬러: 점선 영역 내 숫자 합이 주어진 숫자와 일치해야 함.\n- 숫자합: 인접한 칸의 합이 힌트로 주어지는 변형.\n\n[전통게임]\n- 윷놀이: 윷을 던져 도/개/걸/윷/모에 따라 말을 이동시켜 먼저 나오면 승리.\n\n모든 게임은 오프라인에서 무료로 즐길 수 있습니다.',
       'helpTitle': '게임 방법',
       'helpRules': '기본 규칙',
       'helpRulesContent': '• 흑이 먼저 시작합니다\n• 빈 교차점에 돌을 놓습니다\n• 상대 돌을 완전히 둘러싸면 잡을 수 있습니다\n• 더 많은 영역을 차지한 쪽이 승리합니다\n• 백은 6.5점의 덤을 받습니다',
@@ -574,6 +576,7 @@ class L10n {
       'cardGame': 'Card Game',
       'janggi': 'Janggi',
       'boardGame': 'Board Game',
+      'escapeGame': 'Escape Game',
       'sudoku': 'Sudoku',
       'yutnori': 'Yut Nori',
       // Game help
@@ -638,7 +641,7 @@ class L10n {
       'termsOfService': 'Terms of Service',
       'info': 'Info',
       'aboutTitle': 'About This App',
-      'aboutContent': 'A free game collection app with various games.\n\n[Go (Baduk)]\nA strategic board game with 4,000 years of history. Players take turns placing stones to control more territory.\n- AI match, 2-player, Life & Death problems\n\n[Janggi]\nKorean traditional strategy board game. Move 16 pieces to capture the opponent\'s king.\n- AI match, 2-player mode\n\n[Card Games]\n- Mighty: 5-player trick-taking game with government vs opposition teams.\n- Hearts: Avoid hearts and Queen of Spades to get the lowest score.\n- Hula: Make sets of same numbers or sequences to discard all cards first.\n- OneCard: Similar to UNO. Match numbers or suits to empty your hand first.\n- HiLo: Guess if the next card will be higher or lower.\n- Seven Poker: Create poker hands with 7 cards.\n\n[Board Games]\n- Gomoku: First to place 5 stones in a row wins.\n- Othello: Flip opponent\'s pieces to control the board.\n- Tetris: Stack falling blocks to complete and clear lines.\n- Minesweeper: Use number hints to find hidden mines.\n- Solitaire: Single-player card game to arrange cards by rules.\n- Maze: Find the exit and escape the maze.\n- Bubble: Match 3 or more same-colored bubbles to pop them.\n- Whack-a-Mole: Quickly hit moles as they pop up from holes.\n- Number Baseball: Logic game to guess a 3-digit number.\n- Arrow Maze: Puzzle game where you tap arrows to remove them all.\n\n[Sudoku]\nFill a 9x9 grid with numbers 1-9 without repetition.\n- Classic: Standard sudoku. No duplicates in rows, columns, or 3x3 boxes.\n- Samurai: 5 overlapping sudoku grids in one large puzzle.\n- Killer: Numbers in dotted cages must sum to the given total.\n- Sum: Adjacent cells have sum hints as clues.\n\n[Traditional Games]\n- Yut Nori: Throw yut sticks and move pieces based on results (Do/Gae/Geol/Yut/Mo).\n\nAll games are free to play offline.',
+      'aboutContent': 'A free game collection app with various games.\n\n[Go (Baduk)]\nA strategic board game with 4,000 years of history. Players take turns placing stones to control more territory.\n- AI match, 2-player, Life & Death problems\n\n[Janggi]\nKorean traditional strategy board game. Move 16 pieces to capture the opponent\'s king.\n- AI match, 2-player mode\n\n[Card Games]\n- Mighty: 5-player trick-taking game with government vs opposition teams.\n- Hearts: Avoid hearts and Queen of Spades to get the lowest score.\n- Hula: Make sets of same numbers or sequences to discard all cards first.\n- OneCard: Similar to UNO. Match numbers or suits to empty your hand first.\n- HiLo: Guess if the next card will be higher or lower.\n- Seven Poker: Create poker hands with 7 cards.\n\n[Board Games]\n- Gomoku: First to place 5 stones in a row wins.\n- Othello: Flip opponent\'s pieces to control the board.\n- Tetris: Stack falling blocks to complete and clear lines.\n- Minesweeper: Use number hints to find hidden mines.\n- Solitaire: Single-player card game to arrange cards by rules.\n- Bubble: Match 3 or more same-colored bubbles to pop them.\n- Whack-a-Mole: Quickly hit moles as they pop up from holes.\n- Number Baseball: Logic game to guess a 3-digit number.\n\n[Escape Games]\n- Maze: Find the exit and escape the maze.\n- Arrow Maze: Puzzle game where you tap arrows to remove them all.\n\n[Sudoku]\nFill a 9x9 grid with numbers 1-9 without repetition.\n- Classic: Standard sudoku. No duplicates in rows, columns, or 3x3 boxes.\n- Samurai: 5 overlapping sudoku grids in one large puzzle.\n- Killer: Numbers in dotted cages must sum to the given total.\n- Sum: Adjacent cells have sum hints as clues.\n\n[Traditional Games]\n- Yut Nori: Throw yut sticks and move pieces based on results (Do/Gae/Geol/Yut/Mo).\n\nAll games are free to play offline.',
       'helpTitle': 'How to Play',
       'helpRules': 'Basic Rules',
       'helpRulesContent': '• Black plays first\n• Place stones on empty intersections\n• Surround opponent stones to capture them\n• Control more territory to win\n• White receives 6.5 points komi',
@@ -806,6 +809,7 @@ class L10n {
       'cardGame': 'カードゲーム',
       'janggi': '将棋',
       'boardGame': 'ボードゲーム',
+      'escapeGame': '脱出ゲーム',
       'sudoku': '数独',
       'yutnori': 'ユンノリ',
       // ゲームヘルプ
@@ -870,7 +874,7 @@ class L10n {
       'termsOfService': '利用規約',
       'info': '情報',
       'aboutTitle': 'アプリ紹介',
-      'aboutContent': '様々なゲームを楽しめる無料ゲームコレクションアプリです。\n\n[囲碁]\n約4,000年の歴史を持つ戦略ボードゲーム。黒と白が交互に石を置き、より多くの領域を確保します。\n- AI対局、二人対局、詰碁問題\n\n[将棋]\n韓国の伝統的な戦略ボードゲーム。16個の駒を動かして相手の王を取ります。\n- AI対局、二人対局\n\n[カードゲーム]\n- マイティ: 5人用トリックテイキングゲーム。与党と野党に分かれて得点を競います。\n- ハーツ: ハートとスペードQを避けて最低点を目指すゲーム。\n- フラ: 同じ数字や連続した数字の組み合わせを作り、先に手札をなくせば勝ち。\n- ワンカード: UNOに似たゲーム。同じ数字か柄のカードを出して先に手札をなくす。\n- ハイロー: 次のカードが高いか低いかを当てるゲーム。\n- セブンポーカー: 7枚のカードで役を作って勝負するポーカー。\n\n[ボードゲーム]\n- 五目並べ: 先に5つ並べれば勝ち。\n- オセロ: 相手の石をひっくり返して多くの石を確保するゲーム。\n- テトリス: 落ちてくるブロックを積み、列を揃えて消すパズルゲーム。\n- マインスイーパー: 数字のヒントで地雷の位置を推理するゲーム。\n- ソリティア: ルールに従ってカードを並べる一人用カードゲーム。\n- 迷路: 出口を見つけて脱出するゲーム。\n- バブル: 同じ色のバブルを3つ以上揃えて消すゲーム。\n- モグラたたき: 穴から出てくるモグラを素早く叩くゲーム。\n- ナンバーベースボール: 3桁の数字を推理するロジックゲーム。\n- 矢印迷路: 矢印をタップしてすべて除去するパズルゲーム。\n\n[数独]\n9x9マスに1~9の数字を重複なく埋めるパズル。\n- クラシック: 基本の数独。縦、横、3x3ボックスに同じ数字は入れません。\n- サムライ: 5つの数独が重なった大型パズル。\n- キラー: 点線の領域内の数字の合計が指定された数になる必要があります。\n- 数字合計: 隣接するマスの合計がヒントとして与えられます。\n\n[伝統ゲーム]\n- ユンノリ: ユッを投げてド/ゲ/ゴル/ユッ/モに従って駒を動かし、先に出れば勝ち。\n\nすべてのゲームはオフラインで無料でプレイできます。',
+      'aboutContent': '様々なゲームを楽しめる無料ゲームコレクションアプリです。\n\n[囲碁]\n約4,000年の歴史を持つ戦略ボードゲーム。黒と白が交互に石を置き、より多くの領域を確保します。\n- AI対局、二人対局、詰碁問題\n\n[将棋]\n韓国の伝統的な戦略ボードゲーム。16個の駒を動かして相手の王を取ります。\n- AI対局、二人対局\n\n[カードゲーム]\n- マイティ: 5人用トリックテイキングゲーム。与党と野党に分かれて得点を競います。\n- ハーツ: ハートとスペードQを避けて最低点を目指すゲーム。\n- フラ: 同じ数字や連続した数字の組み合わせを作り、先に手札をなくせば勝ち。\n- ワンカード: UNOに似たゲーム。同じ数字か柄のカードを出して先に手札をなくす。\n- ハイロー: 次のカードが高いか低いかを当てるゲーム。\n- セブンポーカー: 7枚のカードで役を作って勝負するポーカー。\n\n[ボードゲーム]\n- 五目並べ: 先に5つ並べれば勝ち。\n- オセロ: 相手の石をひっくり返して多くの石を確保するゲーム。\n- テトリス: 落ちてくるブロックを積み、列を揃えて消すパズルゲーム。\n- マインスイーパー: 数字のヒントで地雷の位置を推理するゲーム。\n- ソリティア: ルールに従ってカードを並べる一人用カードゲーム。\n- バブル: 同じ色のバブルを3つ以上揃えて消すゲーム。\n- モグラたたき: 穴から出てくるモグラを素早く叩くゲーム。\n- ナンバーベースボール: 3桁の数字を推理するロジックゲーム。\n\n[脱出ゲーム]\n- 迷路: 出口を見つけて脱出するゲーム。\n- 矢印迷路: 矢印をタップしてすべて除去するパズルゲーム。\n\n[数独]\n9x9マスに1~9の数字を重複なく埋めるパズル。\n- クラシック: 基本の数独。縦、横、3x3ボックスに同じ数字は入れません。\n- サムライ: 5つの数独が重なった大型パズル。\n- キラー: 点線の領域内の数字の合計が指定された数になる必要があります。\n- 数字合計: 隣接するマスの合計がヒントとして与えられます。\n\n[伝統ゲーム]\n- ユンノリ: ユッを投げてド/ゲ/ゴル/ユッ/モに従って駒を動かし、先に出れば勝ち。\n\nすべてのゲームはオフラインで無料でプレイできます。',
       'helpTitle': '遊び方',
       'helpRules': '基本ルール',
       'helpRulesContent': '• 黒が先手です\n• 空いている交点に石を置きます\n• 相手の石を完全に囲むと取れます\n• より多くの領域を確保した方が勝ちです\n• 白には6.5目のコミがあります',
@@ -1038,6 +1042,7 @@ class L10n {
       'cardGame': '卡牌游戏',
       'janggi': '象棋',
       'boardGame': '桌游',
+      'escapeGame': '逃脱游戏',
       'sudoku': '数独',
       'yutnori': '掷柶游戏',
       // 游戏帮助
@@ -1102,7 +1107,7 @@ class L10n {
       'termsOfService': '服务条款',
       'info': '信息',
       'aboutTitle': '应用介绍',
-      'aboutContent': '一款包含多种游戏的免费游戏合集应用。\n\n[围棋]\n拥有约4000年历史的策略棋盘游戏。黑白双方交替落子，目标是占领更多领地。\n- AI对弈、双人对弈、死活题\n\n[象棋]\n韩国传统策略棋盘游戏。移动16个棋子，目标是将死对方的王。\n- AI对弈、双人对弈\n\n[纸牌游戏]\n- Mighty: 5人墩牌游戏，分为执政党和在野党进行得分竞争。\n- 红心大战: 避开红心和黑桃Q，争取最低分的游戏。\n- Hula: 组成相同数字或连续数字的组合，先出完手牌者获胜。\n- UNO: 出相同数字或花色的牌，先出完手牌者获胜。\n- 高低: 猜测下一张牌是高还是低的游戏。\n- 七张扑克: 用7张牌组成牌型进行比拼。\n\n[棋盘游戏]\n- 五子棋: 先连成5子者获胜。\n- 黑白棋: 翻转对方棋子，占据更多棋盘。\n- 俄罗斯方块: 堆叠下落的方块，完成一行即可消除。\n- 扫雷: 根据数字提示推理地雷位置。\n- 纸牌接龙: 按规则整理纸牌的单人游戏。\n- 迷宫: 找到出口逃离迷宫。\n- 泡泡: 将3个以上相同颜色的泡泡连在一起消除。\n- 打地鼠: 快速敲打从洞里冒出的地鼠。\n- 数字棒球: 猜测3位数字的逻辑游戏。\n- 箭头迷宫: 点击箭头将它们全部移除的益智游戏。\n\n[数独]\n在9x9格子中填入1-9数字，不能重复。\n- 经典: 基本数独。每行、每列、每个3x3宫格内数字不能相同。\n- 武士: 5个数独重叠的大型拼图。\n- 杀手: 虚线区域内数字之和必须等于指定数字。\n- 数字和: 相邻格子的和作为提示。\n\n[传统游戏]\n- 掷柶游戏: 投掷木棒，根据结果(道/盖/葛/柶/模)移动棋子，先出者获胜。\n\n所有游戏均可离线免费游玩。',
+      'aboutContent': '一款包含多种游戏的免费游戏合集应用。\n\n[围棋]\n拥有约4000年历史的策略棋盘游戏。黑白双方交替落子，目标是占领更多领地。\n- AI对弈、双人对弈、死活题\n\n[象棋]\n韩国传统策略棋盘游戏。移动16个棋子，目标是将死对方的王。\n- AI对弈、双人对弈\n\n[纸牌游戏]\n- Mighty: 5人墩牌游戏，分为执政党和在野党进行得分竞争。\n- 红心大战: 避开红心和黑桃Q，争取最低分的游戏。\n- Hula: 组成相同数字或连续数字的组合，先出完手牌者获胜。\n- UNO: 出相同数字或花色的牌，先出完手牌者获胜。\n- 高低: 猜测下一张牌是高还是低的游戏。\n- 七张扑克: 用7张牌组成牌型进行比拼。\n\n[棋盘游戏]\n- 五子棋: 先连成5子者获胜。\n- 黑白棋: 翻转对方棋子，占据更多棋盘。\n- 俄罗斯方块: 堆叠下落的方块，完成一行即可消除。\n- 扫雷: 根据数字提示推理地雷位置。\n- 纸牌接龙: 按规则整理纸牌的单人游戏。\n- 泡泡: 将3个以上相同颜色的泡泡连在一起消除。\n- 打地鼠: 快速敲打从洞里冒出的地鼠。\n- 数字棒球: 猜测3位数字的逻辑游戏。\n\n[逃脱游戏]\n- 迷宫: 找到出口逃离迷宫。\n- 箭头迷宫: 点击箭头将它们全部移除的益智游戏。\n\n[数独]\n在9x9格子中填入1-9数字，不能重复。\n- 经典: 基本数独。每行、每列、每个3x3宫格内数字不能相同。\n- 武士: 5个数独重叠的大型拼图。\n- 杀手: 虚线区域内数字之和必须等于指定数字。\n- 数字和: 相邻格子的和作为提示。\n\n[传统游戏]\n- 掷柶游戏: 投掷木棒，根据结果(道/盖/葛/柶/模)移动棋子，先出者获胜。\n\n所有游戏均可离线免费游玩。',
       'helpTitle': '游戏方法',
       'helpRules': '基本规则',
       'helpRulesContent': '• 黑棋先行\n• 在空的交叉点上落子\n• 完全包围对方的棋子可以提子\n• 占领更多领地者获胜\n• 白棋有6.5目的贴目',
@@ -1255,6 +1260,23 @@ AppBar buildCommonAppBar({
         },
         child: Text(
           L10n.get(currentLanguage, 'boardGame'),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EscapeGameSelectionScreen(
+                language: currentLanguage,
+                onLanguageChanged: languageProvider.setLanguage,
+              ),
+            ),
+          );
+        },
+        child: Text(
+          L10n.get(currentLanguage, 'escapeGame'),
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
       ),
@@ -7360,7 +7382,7 @@ class HelpPage extends StatefulWidget {
 
 class _HelpPageState extends State<HelpPage> {
   String _selectedGameKey = 'baduk';
-  final Set<String> _expandedCategories = {'cardGame', 'boardGame', 'sudoku'};
+  final Set<String> _expandedCategories = {'cardGame', 'boardGame', 'escapeGame', 'sudoku'};
 
   List<Map<String, dynamic>> _getGameList() {
     return [
@@ -7385,10 +7407,15 @@ class _HelpPageState extends State<HelpPage> {
           {'key': 'tetris', 'icon': Icons.view_module},
           {'key': 'minesweeper', 'icon': Icons.flag},
           {'key': 'solitaire', 'icon': Icons.style},
-          {'key': 'maze', 'icon': Icons.route},
           {'key': 'bubble', 'icon': Icons.bubble_chart},
           {'key': 'whackamole', 'icon': Icons.pest_control},
           {'key': 'baseball', 'icon': Icons.sports_baseball},
+        ],
+      },
+      {
+        'key': 'escapeGame', 'icon': Icons.exit_to_app, 'color': Colors.blueGrey,
+        'subGames': [
+          {'key': 'maze', 'icon': Icons.route},
           {'key': 'arrowmaze', 'icon': Icons.arrow_forward},
         ],
       },
@@ -7469,6 +7496,11 @@ class _HelpPageState extends State<HelpPage> {
       case 'boardGame':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => BoardGameSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
+        ));
+        break;
+      case 'escapeGame':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => EscapeGameSelectionScreen(language: widget.language, onLanguageChanged: widget.onLanguageChanged),
         ));
         break;
       case 'gomoku':
