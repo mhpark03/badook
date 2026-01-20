@@ -135,15 +135,18 @@ class BoardGameSelectionScreen extends StatelessWidget {
 
     final double tileWidth;
     final double tileHeight;
+    final double spacing = isSmallScreen ? 10 : 16;
+    final double padding = isSmallScreen ? 12 : 16;
     if (screenWidth >= 900) {
-      tileWidth = 200;
-      tileHeight = 160;
+      tileWidth = 175;
+      tileHeight = 140;
     } else if (screenWidth >= 600) {
-      tileWidth = 160;
-      tileHeight = 130;
+      tileWidth = 130;
+      tileHeight = 110;
     } else {
-      tileWidth = (screenWidth - 48) / 2;
-      tileHeight = isSmallScreen ? 100 : 120;
+      // 4열: (화면너비 - 좌우패딩*2 - 간격*3) / 4
+      tileWidth = (screenWidth - padding * 2 - spacing * 3) / 4;
+      tileHeight = isSmallScreen ? 90 : 105;
     }
 
     return Scaffold(
@@ -161,8 +164,8 @@ class BoardGameSelectionScreen extends StatelessWidget {
             child: Container(
               constraints: BoxConstraints(maxWidth: maxContentWidth),
               child: Wrap(
-                spacing: isSmallScreen ? 10 : 16,
-                runSpacing: isSmallScreen ? 10 : 16,
+                spacing: spacing,
+                runSpacing: spacing,
                 alignment: WrapAlignment.center,
                 children: games.map((game) => SizedBox(
                   width: tileWidth,
