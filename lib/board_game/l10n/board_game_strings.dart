@@ -373,6 +373,22 @@ class BoardGameStrings {
     'games.maze.rulesTips': '팁',
     'games.maze.rulesTipsDesc': '막다른 길에서는 돌아가야 합니다.',
 
+    // Parking
+    'games.parking.name': '주차장 탈출',
+    'games.parking.subtitle': '차량 빼내기',
+    'games.parking.description': '막힌 차들을 빼내세요',
+    'games.parking.time': '시간',
+    'games.parking.carsLabel': '차량',
+    'games.parking.carsCount': '{count}대',
+    'games.parking.cleared': '모든 차량을 탈출시켰습니다!',
+    'games.parking.instruction': '차량을 탭하여 탈출시키세요',
+    'games.parking.rulesObjective': '목표',
+    'games.parking.rulesObjectiveDesc': '모든 차량을 주차장에서 탈출시키세요.',
+    'games.parking.rulesControls': '조작',
+    'games.parking.rulesControlsDesc': '탈출 가능한 차량을 탭하면 자동으로 빠져나갑니다.',
+    'games.parking.rulesTips': '팁',
+    'games.parking.rulesTipsDesc': '차량이 바라보는 방향으로만 탈출할 수 있습니다. 막힌 차량은 흔들립니다.',
+
     // Bubble
     'games.bubble.name': '버블팝',
     'games.bubble.subtitle': '버블 터트리기',
@@ -940,6 +956,22 @@ class BoardGameStrings {
     'games.maze.rulesButtonsDesc': '画面下部のボタンでも移動できます。',
     'games.maze.rulesTips': 'ヒント',
     'games.maze.rulesTipsDesc': '行き止まりでは引き返す必要があります。',
+
+    // Parking
+    'games.parking.name': '駐車場脱出',
+    'games.parking.subtitle': '車を出す',
+    'games.parking.description': '詰まった車を出してください',
+    'games.parking.time': '時間',
+    'games.parking.carsLabel': '車両',
+    'games.parking.carsCount': '{count}台',
+    'games.parking.cleared': 'すべての車両を脱出させました！',
+    'games.parking.instruction': '車両をタップして脱出させてください',
+    'games.parking.rulesObjective': '目標',
+    'games.parking.rulesObjectiveDesc': 'すべての車両を駐車場から脱出させてください。',
+    'games.parking.rulesControls': '操作',
+    'games.parking.rulesControlsDesc': '脱出可能な車両をタップすると自動的に出ていきます。',
+    'games.parking.rulesTips': 'ヒント',
+    'games.parking.rulesTipsDesc': '車両は向いている方向にのみ脱出できます。詰まった車両は揺れます。',
 
     // Bubble
     'games.bubble.name': 'バブルポップ',
@@ -1509,6 +1541,22 @@ class BoardGameStrings {
     'games.maze.rulesTips': 'Tips',
     'games.maze.rulesTipsDesc': 'Turn back at dead ends.',
 
+    // Parking
+    'games.parking.name': 'Parking Escape',
+    'games.parking.subtitle': 'Get cars out',
+    'games.parking.description': 'Get the blocked cars out',
+    'games.parking.time': 'Time',
+    'games.parking.carsLabel': 'Cars',
+    'games.parking.carsCount': '{count} cars',
+    'games.parking.cleared': 'All cars escaped!',
+    'games.parking.instruction': 'Tap cars to make them escape',
+    'games.parking.rulesObjective': 'Objective',
+    'games.parking.rulesObjectiveDesc': 'Get all cars out of the parking lot.',
+    'games.parking.rulesControls': 'Controls',
+    'games.parking.rulesControlsDesc': 'Tap an unblocked car to make it exit automatically.',
+    'games.parking.rulesTips': 'Tips',
+    'games.parking.rulesTipsDesc': 'Cars can only exit in the direction they face. Blocked cars shake.',
+
     // Bubble
     'games.bubble.name': 'Bubble Pop',
     'games.bubble.subtitle': 'Pop Bubbles',
@@ -1860,6 +1908,22 @@ class BoardGameStrings {
     'games.arrowMaze.help3': '• 每次碰撞错误计数增加',
     'games.arrowMaze.help4': '• 移除所有箭头即可通关！',
     'games.arrowMaze.help5': '• 无错误通关即为完美！',
+
+    // Parking
+    'games.parking.name': '停车场逃脱',
+    'games.parking.subtitle': '移出车辆',
+    'games.parking.description': '把堵住的车开出去',
+    'games.parking.time': '时间',
+    'games.parking.carsLabel': '车辆',
+    'games.parking.carsCount': '{count}辆',
+    'games.parking.cleared': '所有车辆已逃脱！',
+    'games.parking.instruction': '点击车辆使其逃脱',
+    'games.parking.rulesObjective': '目标',
+    'games.parking.rulesObjectiveDesc': '将所有车辆从停车场开出去。',
+    'games.parking.rulesControls': '操作',
+    'games.parking.rulesControlsDesc': '点击未被阻挡的车辆，它会自动驶出。',
+    'games.parking.rulesTips': '提示',
+    'games.parking.rulesTipsDesc': '车辆只能朝其面向的方向逃脱。被阻挡的车辆会晃动。',
 
     // Othello
     'games.othello.name': '黑白棋',
