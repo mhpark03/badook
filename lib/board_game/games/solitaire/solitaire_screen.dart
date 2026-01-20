@@ -68,7 +68,12 @@ class PlayingCard {
 }
 
 class SolitaireScreen extends StatefulWidget {
-  const SolitaireScreen({super.key});
+  final int? initialDrawCount; // null이면 모드 선택 다이얼로그 표시
+
+  const SolitaireScreen({
+    super.key,
+    this.initialDrawCount,
+  });
 
   @override
   State<SolitaireScreen> createState() => _SolitaireScreenState();
@@ -239,6 +244,9 @@ class _SolitaireScreenState extends State<SolitaireScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showContinueDialog();
       });
+    } else if (widget.initialDrawCount != null) {
+      // 선택 화면에서 모드를 지정한 경우 바로 시작
+      _startNewGame(widget.initialDrawCount!);
     } else {
       // 새 게임: 카드 뽑기 모드 선택
       WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -115,7 +115,7 @@ class BoardGameSelectionScreen extends StatelessWidget {
         subtitle: 'games.solitaire.subtitle'.tr(),
         icon: Icons.style,
         color: Colors.red[800]!,
-        screen: const SolitaireScreen(),
+        onTap: (context) => _showSolitaireDialog(context),
       ),
       _GameInfo(
         title: 'games.baseball.name'.tr(),
@@ -417,6 +417,58 @@ class BoardGameSelectionScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => const OthelloScreen(
                       gameMode: OthelloGameMode.vsPerson,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showSolitaireDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        title: Text(
+          'dialog.selectMode'.tr(),
+          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDifficultyButton(
+              context,
+              title: 'games.solitaire.draw1'.tr(),
+              subtitle: 'games.solitaire.draw1Desc'.tr(),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SolitaireScreen(
+                      initialDrawCount: 1,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'games.solitaire.draw3'.tr(),
+              subtitle: 'games.solitaire.draw3Desc'.tr(),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SolitaireScreen(
+                      initialDrawCount: 3,
                     ),
                   ),
                 );
