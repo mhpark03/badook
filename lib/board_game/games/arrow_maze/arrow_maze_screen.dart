@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../services/web_ad_helper.dart';
 import '../../l10n/board_game_strings.dart';
 import 'models/game_state.dart';
 import 'widgets/game_board.dart';
@@ -259,6 +260,9 @@ class _ArrowMazeScreenState extends State<ArrowMazeScreen> {
   }
 
   Widget _buildLevelCompleteOverlay(ArrowMazeGameState gameState) {
+    // 광고 표시
+    WebAdHelper.showAd();
+
     return Container(
       color: Colors.black54,
       child: Center(
