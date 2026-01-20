@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../../services/game_save_service.dart';
+import '../../services/onecard/onecard_stats_service.dart';
 import '../../../services/web_ad_helper.dart';
 import '../../l10n/l10n_helper.dart';
 
@@ -193,6 +195,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
   bool gameOver = false;
   String? winner;
   int? winnerIndex; // 승자 인덱스 (0 = 플레이어, 1+ = 컴퓨터)
+  bool _statsRecorded = false; // 통계 기록 여부
 
   // 공격 스택
   int attackStack = 0;
@@ -417,6 +420,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     gameOver = false;
     winner = null;
     winnerIndex = null;
+    _statsRecorded = false;
     attackStack = 0;
     declaredSuit = null;
     skipNextTurn = false;
@@ -431,6 +435,23 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
     gameMessage = null;
     _messageTimeLeft = 0;
     selectedCardIndex = null;
+  }
+
+  // 게임 결과 통계 기록
+  void _recordGameStats() {
+    if (_statsRecorded || winnerIndex == null) return;
+    _statsRecorded = true;
+
+    try {
+      final statsService = Provider.of<OneCardStatsService>(context, listen: false);
+      statsService.recordGameResult(
+        winnerId: winnerIndex!,
+        playerCount: playerCount,
+      );
+    } catch (e) {
+      // Provider가 없는 경우 무시 (통계는 기록되지 않지만 게임은 계속)
+      debugPrint('Failed to record game stats: $e');
+    }
   }
 
   // 게임 상태 저장
@@ -715,6 +736,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
         gameOver = true;
         winner = l10n.you;
         winnerIndex = 0;
+        _recordGameStats();
         return;
       }
       for (int i = 0; i < computerHands.length; i++) {
@@ -722,6 +744,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
           gameOver = true;
           winner = aiNames[i];
           winnerIndex = i + 1;
+          _recordGameStats();
           return;
         }
       }
@@ -857,6 +880,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
       if (playerHand.length >= bankruptcyLimit) {
         gameOver = true;
         winner = _getBankruptcyWinner();
+        _recordGameStats();
         pendingMessage = l10n.bankruptcy(playerHand.length);
         return;
       }
@@ -933,6 +957,7 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
           gameOver = true;
           winner = l10n.you;
           winnerIndex = 0;
+          _recordGameStats();
           pendingMessage = '$computerName ${l10n.bankruptcyShort(computerHand.length)}';
           return;
         }
@@ -1066,6 +1091,15 @@ class _OneCardScreenState extends State<OneCardScreen> with TickerProviderStateM
       _initGame();
     });
     HapticFeedback.mediumImpact();
+
+    // 컴퓨터 턴인 경우 컴퓨터가 진행 (이전 게임 승자가 AI인 경우)
+    if (currentTurn > 0 && !gameOver) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted && !gameOver && currentTurn > 0) {
+          _computerTurn(currentTurn);
+        }
+      });
+    }
   }
 
   @override
