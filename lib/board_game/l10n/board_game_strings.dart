@@ -237,6 +237,24 @@ class BoardGameStrings {
     'games.baseball.duplicateNumber': '이미 사용된 숫자입니다',
     'games.baseball.enterAllDigits': '모든 자리를 입력하세요',
 
+    // Arrow Maze
+    'games.arrowMaze.name': '화살표 미로',
+    'games.arrowMaze.subtitle': '화살표 퍼즐',
+    'games.arrowMaze.description': '화살표를 탭하여 모두 제거하세요',
+    'games.arrowMaze.time': '시간',
+    'games.arrowMaze.errors': '오류',
+    'games.arrowMaze.collision': '충돌! 화살표가 원위치로 돌아갑니다',
+    'games.arrowMaze.flying': '화살표가 날아갑니다...',
+    'games.arrowMaze.tapArrow': '화살표를 탭하세요 (남은 화살표: {count})',
+    'games.arrowMaze.loading': '레벨 생성 중...',
+    'games.arrowMaze.cleared': '{difficulty} 클리어!',
+    'games.arrowMaze.perfect': '완벽!',
+    'games.arrowMaze.help1': '• 화살표를 탭하면 화살표 방향으로 날아갑니다',
+    'games.arrowMaze.help2': '• 날아가는 화살표가 다른 화살표와 부딪히면 원위치로 돌아갑니다',
+    'games.arrowMaze.help3': '• 충돌할 때마다 오류 카운트가 증가합니다',
+    'games.arrowMaze.help4': '• 모든 화살표를 제거하면 클리어!',
+    'games.arrowMaze.help5': '• 오류 없이 클리어하면 완벽!',
+
     // Chess
     'games.chess.name': '체스',
     'games.chess.subtitle': '전략 게임',
@@ -784,6 +802,24 @@ class BoardGameStrings {
     'games.baseball.rulesTipsDesc': 'ヒントを分析して数字を推論してください！',
     'games.baseball.duplicateNumber': 'すでに使用された数字です',
     'games.baseball.enterAllDigits': 'すべての桁を入力してください',
+
+    // Arrow Maze
+    'games.arrowMaze.name': '矢印迷路',
+    'games.arrowMaze.subtitle': '矢印パズル',
+    'games.arrowMaze.description': '矢印をタップしてすべて除去してください',
+    'games.arrowMaze.time': '時間',
+    'games.arrowMaze.errors': 'エラー',
+    'games.arrowMaze.collision': '衝突！矢印が元の位置に戻ります',
+    'games.arrowMaze.flying': '矢印が飛んでいます...',
+    'games.arrowMaze.tapArrow': '矢印をタップしてください (残り: {count})',
+    'games.arrowMaze.loading': 'レベル生成中...',
+    'games.arrowMaze.cleared': '{difficulty} クリア！',
+    'games.arrowMaze.perfect': '完璧！',
+    'games.arrowMaze.help1': '• 矢印をタップすると、その方向に飛んでいきます',
+    'games.arrowMaze.help2': '• 飛んでいる矢印が他の矢印にぶつかると、元の位置に戻ります',
+    'games.arrowMaze.help3': '• 衝突するたびにエラーカウントが増加します',
+    'games.arrowMaze.help4': '• すべての矢印を除去するとクリア！',
+    'games.arrowMaze.help5': '• エラーなしでクリアすると完璧！',
 
     // Chess
     'games.chess.name': 'チェス',
@@ -1333,6 +1369,24 @@ class BoardGameStrings {
     'games.baseball.duplicateNumber': 'Number already used',
     'games.baseball.enterAllDigits': 'Enter all digits',
 
+    // Arrow Maze
+    'games.arrowMaze.name': 'Arrow Maze',
+    'games.arrowMaze.subtitle': 'Arrow Puzzle',
+    'games.arrowMaze.description': 'Tap arrows to remove them all',
+    'games.arrowMaze.time': 'Time',
+    'games.arrowMaze.errors': 'Errors',
+    'games.arrowMaze.collision': 'Collision! Arrow returning to position',
+    'games.arrowMaze.flying': 'Arrow is flying...',
+    'games.arrowMaze.tapArrow': 'Tap an arrow (Remaining: {count})',
+    'games.arrowMaze.loading': 'Generating level...',
+    'games.arrowMaze.cleared': '{difficulty} Cleared!',
+    'games.arrowMaze.perfect': 'Perfect!',
+    'games.arrowMaze.help1': '• Tap an arrow to make it fly in its direction',
+    'games.arrowMaze.help2': '• If a flying arrow hits another arrow, it returns to its position',
+    'games.arrowMaze.help3': '• Error count increases with each collision',
+    'games.arrowMaze.help4': '• Clear by removing all arrows!',
+    'games.arrowMaze.help5': '• Clear without errors for Perfect!',
+
     // Chess
     'games.chess.name': 'Chess',
     'games.chess.subtitle': 'Strategy Game',
@@ -1782,6 +1836,24 @@ class BoardGameStrings {
     'games.baseball.rulesTipsDesc': '分析提示来推断数字！',
     'games.baseball.duplicateNumber': '已使用的数字',
     'games.baseball.enterAllDigits': '请输入所有数字',
+
+    // Arrow Maze
+    'games.arrowMaze.name': '箭头迷宫',
+    'games.arrowMaze.subtitle': '箭头谜题',
+    'games.arrowMaze.description': '点击箭头将它们全部移除',
+    'games.arrowMaze.time': '时间',
+    'games.arrowMaze.errors': '错误',
+    'games.arrowMaze.collision': '碰撞！箭头返回原位',
+    'games.arrowMaze.flying': '箭头飞行中...',
+    'games.arrowMaze.tapArrow': '点击箭头 (剩余: {count})',
+    'games.arrowMaze.loading': '生成关卡中...',
+    'games.arrowMaze.cleared': '{difficulty} 通关！',
+    'games.arrowMaze.perfect': '完美！',
+    'games.arrowMaze.help1': '• 点击箭头，箭头会向其指向的方向飞去',
+    'games.arrowMaze.help2': '• 飞行中的箭头碰到其他箭头会返回原位',
+    'games.arrowMaze.help3': '• 每次碰撞错误计数增加',
+    'games.arrowMaze.help4': '• 移除所有箭头即可通关！',
+    'games.arrowMaze.help5': '• 无错误通关即为完美！',
 
     // Othello
     'games.othello.name': '黑白棋',

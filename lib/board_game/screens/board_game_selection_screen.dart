@@ -11,6 +11,7 @@ import '../games/gomoku/gomoku_screen.dart';
 import '../games/othello/othello_screen.dart';
 import '../games/solitaire/solitaire_screen.dart';
 import '../games/baseball/baseball_screen.dart';
+import '../games/arrow_maze/arrow_maze_screen.dart';
 
 class BoardGameSelectionScreen extends StatelessWidget {
   final GameLanguage language;
@@ -122,6 +123,13 @@ class BoardGameSelectionScreen extends StatelessWidget {
         icon: Icons.pin,
         color: Colors.orange[800]!,
         onTap: (context) => _showBaseballDialog(context),
+      ),
+      _GameInfo(
+        title: 'games.arrowMaze.name'.tr(),
+        subtitle: 'games.arrowMaze.subtitle'.tr(),
+        icon: Icons.arrow_forward,
+        color: Colors.teal[700]!,
+        onTap: (context) => _showArrowMazeDialog(context),
       ),
     ];
 
@@ -458,6 +466,75 @@ class BoardGameSelectionScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => const BaseballScreen(
                       difficulty: BaseballDifficulty.hard,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showArrowMazeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        title: Text(
+          'dialog.selectDifficulty'.tr(),
+          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDifficultyButton(
+              context,
+              title: 'common.easy'.tr(),
+              subtitle: '10x10',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ArrowMazeScreen(
+                      difficulty: ArrowMazeDifficulty.easy,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'common.normal'.tr(),
+              subtitle: '30x30',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ArrowMazeScreen(
+                      difficulty: ArrowMazeDifficulty.medium,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'common.hard'.tr(),
+              subtitle: '50x50',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ArrowMazeScreen(
+                      difficulty: ArrowMazeDifficulty.hard,
                     ),
                   ),
                 );
