@@ -36,43 +36,8 @@ class _ArrowMazeScreenState extends State<ArrowMazeScreen> {
     super.dispose();
   }
 
-  void _showHintWithAd() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2D2D44),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        title: Text(
-          'dialog.hintTitle'.tr(),
-          style: const TextStyle(color: Color(0xFF4ECDC4)),
-        ),
-        content: Text(
-          'dialog.hintMessage'.tr(),
-          style: const TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'common.cancel'.tr(),
-              style: const TextStyle(color: Colors.white54),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _gameState.showHint();
-            },
-            child: Text(
-              'common.confirm'.tr(),
-              style: const TextStyle(color: Color(0xFF4ECDC4)),
-            ),
-          ),
-        ],
-      ),
-    );
+  void _showHint() {
+    _gameState.showHint();
   }
 
   @override
@@ -101,7 +66,7 @@ class _ArrowMazeScreenState extends State<ArrowMazeScreen> {
             ),
             IconButton(
               icon: const Icon(Icons.lightbulb_outline),
-              onPressed: () => _showHintWithAd(),
+              onPressed: _showHint,
               tooltip: 'common.hint'.tr(),
             ),
             IconButton(
