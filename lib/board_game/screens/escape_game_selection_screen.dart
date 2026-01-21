@@ -6,6 +6,8 @@ import '../games/maze/maze_screen.dart';
 import '../games/arrow_maze/arrow_maze_screen.dart';
 import '../games/parking_jam/parking_screen.dart';
 import '../games/parking_jam/models/parking_models.dart';
+import '../games/car_escape/car_escape_screen.dart';
+import '../games/car_escape/models/car_escape_models.dart';
 
 class EscapeGameSelectionScreen extends StatelessWidget {
   final GameLanguage language;
@@ -75,6 +77,13 @@ class EscapeGameSelectionScreen extends StatelessWidget {
         icon: Icons.directions_car,
         color: Colors.orange[700]!,
         onTap: (context) => _showParkingDialog(context),
+      ),
+      _GameInfo(
+        title: 'games.carEscape.name'.tr(),
+        subtitle: 'games.carEscape.subtitle'.tr(),
+        icon: Icons.alt_route,
+        color: Colors.green[700]!,
+        onTap: (context) => _showCarEscapeDialog(context),
       ),
     ];
 
@@ -327,6 +336,75 @@ class EscapeGameSelectionScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => const ParkingScreen(
                       difficulty: ParkingDifficulty.hard,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showCarEscapeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        title: Text(
+          'dialog.selectDifficulty'.tr(),
+          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDifficultyButton(
+              context,
+              title: 'common.easy'.tr(),
+              subtitle: '5x5',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CarEscapeScreen(
+                      difficulty: CarEscapeDifficulty.easy,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'common.normal'.tr(),
+              subtitle: '8x8',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CarEscapeScreen(
+                      difficulty: CarEscapeDifficulty.medium,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'common.hard'.tr(),
+              subtitle: '12x12',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CarEscapeScreen(
+                      difficulty: CarEscapeDifficulty.hard,
                     ),
                   ),
                 );
