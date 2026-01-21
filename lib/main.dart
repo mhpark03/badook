@@ -48,7 +48,6 @@ import 'board_game/games/number_sums/screens/number_sums_game_screen.dart';
 import 'board_game/games/number_sums/models/number_sums_generator.dart';
 
 // 윷놀이 import
-import 'board_game/games/yutnori/yutnori_home_screen.dart';
 import 'yutnori/yutnori_screen.dart';
 
 // 장기 import
@@ -1321,7 +1320,7 @@ AppBar buildCommonAppBar({
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const YutnoriHomeScreen()),
+            MaterialPageRoute(builder: (context) => const YutnoriScreen()),
           );
         },
         child: Text(
@@ -7620,7 +7619,7 @@ class _HelpPageState extends State<HelpPage> {
         break;
       case 'yutnori':
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const YutnoriHomeScreen(),
+          builder: (context) => const YutnoriScreen(),
         ));
         break;
     }
