@@ -291,6 +291,7 @@
   "myTurn": "My Turn",
   "start": "Start",
   "discardedCards": "Discarded",
+  "emptyDiscardPile": "No\nDiscards",
   "thankYou": "Thank You",
   "selectMethod": "Select method",
   "register7Alone": "Register 7 alone",

@@ -290,6 +290,7 @@
   "myTurn": "我的回合",
   "start": "开始",
   "discardedCards": "弃牌堆",
+  "emptyDiscardPile": "无\n弃牌",
   "thankYou": "谢谢",
   "selectMethod": "请选择方法",
   "register7Alone": "单独登记7",

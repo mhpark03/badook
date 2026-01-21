@@ -382,6 +382,7 @@
   "myTurn": "내 차례",
   "start": "시작",
   "discardedCards": "버린 카드",
+  "emptyDiscardPile": "버린 카드\n없음",
   "thankYou": "땡큐",
   "selectMethod": "방법을 선택하세요",
   "register7Alone": "7 단독 등록",

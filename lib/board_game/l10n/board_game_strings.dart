@@ -576,38 +576,6 @@ class BoardGameStrings {
     'games.yutnori.players4': '4인',
     'games.yutnori.continueGame': '이어하기',
     'games.yutnori.newGame': '새 게임',
-
-    // Hula
-    'games.hula.name': '훌라',
-    'games.hula.subtitle': '카드 게임',
-    'games.hula.description': '카드를 모아 세트를 만드세요',
-    'games.hula.soloSeven': '{suit}7 단독 등록',
-    'games.hula.attachToMyMeld': '{card} 내 멜드에 붙이기',
-    'games.hula.attachToComputerMeld': '{card} 컴퓨터{n} 멜드에 붙이기',
-
-    // OneCard
-    'games.onecard.name': '원카드',
-    'games.onecard.subtitle': '카드 게임',
-    'games.onecard.description': '카드를 먼저 버리세요',
-    'games.onecard.oneCard': '원카드',
-    'games.onecard.oneCardCall': '원카드!',
-    'games.onecard.oneCardTimer': '원카드\n({seconds}초)',
-    'games.onecard.oneCardTimerShort': '원카드 ({seconds}초)',
-    'games.onecard.selectSuit': '무늬를 선택하세요',
-    'games.onecard.clockwise': '시계',
-    'games.onecard.counterClockwise': '반시계',
-    'games.onecard.spade': '스페이드',
-    'games.onecard.heart': '하트',
-    'games.onecard.diamond': '다이아몬드',
-    'games.onecard.club': '클로버',
-    'games.onecard.cantPlayCard': '이 카드는 낼 수 없습니다',
-    'games.onecard.uno': '원카드!',
-    'games.onecard.attackMessage': '{player}: 공격! +{power} (총 {total}장)',
-    'games.onecard.jumpEffect': '{player}: J! 다음 턴 건너뛰기',
-    'games.onecard.reverseEffect': '{player}: Q! 방향 반대',
-    'games.onecard.chainEffect': '{player}: K! 2턴 건너뛰기',
-    'games.onecard.changeEffect': '{player}: 7! 무늬 변경: {suit}',
-    'games.onecard.playedCard': '{player}이(가) 카드를 냈습니다',
   };
 
   // 일본어 문자열
@@ -1181,38 +1149,6 @@ class BoardGameStrings {
     'games.yutnori.players4': '4人',
     'games.yutnori.continueGame': '続きから',
     'games.yutnori.newGame': '新規ゲーム',
-
-    // Hula
-    'games.hula.name': 'フラ',
-    'games.hula.subtitle': 'カードゲーム',
-    'games.hula.description': 'カードを集めてセットを作ってください',
-    'games.hula.soloSeven': '{suit}7 単独登録',
-    'games.hula.attachToMyMeld': '{card} 自分のメルドに付ける',
-    'games.hula.attachToComputerMeld': '{card} コンピュータ{n}のメルドに付ける',
-
-    // OneCard
-    'games.onecard.name': 'ワンカード',
-    'games.onecard.subtitle': 'カードゲーム',
-    'games.onecard.description': '先にカードを捨ててください',
-    'games.onecard.oneCard': 'ワンカード',
-    'games.onecard.oneCardCall': 'ワンカード！',
-    'games.onecard.oneCardTimer': 'ワンカード\n({seconds}秒)',
-    'games.onecard.oneCardTimerShort': 'ワンカード ({seconds}秒)',
-    'games.onecard.selectSuit': 'スートを選んでください',
-    'games.onecard.clockwise': '時計回り',
-    'games.onecard.counterClockwise': '反時計回り',
-    'games.onecard.spade': 'スペード',
-    'games.onecard.heart': 'ハート',
-    'games.onecard.diamond': 'ダイヤ',
-    'games.onecard.club': 'クラブ',
-    'games.onecard.cantPlayCard': 'このカードは出せません',
-    'games.onecard.uno': 'ワンカード！',
-    'games.onecard.attackMessage': '{player}: 攻撃! +{power} (合計{total}枚)',
-    'games.onecard.jumpEffect': '{player}: J! 次のターンをスキップ',
-    'games.onecard.reverseEffect': '{player}: Q! 方向転換',
-    'games.onecard.chainEffect': '{player}: K! 2ターンスキップ',
-    'games.onecard.changeEffect': '{player}: 7! スート変更: {suit}',
-    'games.onecard.playedCard': '{player}がカードを出しました',
   };
 
   // 영어 문자열
@@ -1782,38 +1718,6 @@ class BoardGameStrings {
     'games.yutnori.players4': '4 Players',
     'games.yutnori.continueGame': 'Continue',
     'games.yutnori.newGame': 'New Game',
-
-    // Hula
-    'games.hula.name': 'Hula',
-    'games.hula.subtitle': 'Card Game',
-    'games.hula.description': 'Collect cards to make sets',
-    'games.hula.soloSeven': '{suit}7 Solo registration',
-    'games.hula.attachToMyMeld': '{card} Attach to my meld',
-    'games.hula.attachToComputerMeld': '{card} Attach to Computer{n} meld',
-
-    // OneCard
-    'games.onecard.name': 'OneCard',
-    'games.onecard.subtitle': 'Card Game',
-    'games.onecard.description': 'Be first to discard all cards',
-    'games.onecard.oneCard': 'UNO',
-    'games.onecard.oneCardCall': 'UNO!',
-    'games.onecard.oneCardTimer': 'UNO\n({seconds}s)',
-    'games.onecard.oneCardTimerShort': 'UNO ({seconds}s)',
-    'games.onecard.selectSuit': 'Select a suit',
-    'games.onecard.clockwise': 'Clockwise',
-    'games.onecard.counterClockwise': 'Counter-clockwise',
-    'games.onecard.spade': 'Spade',
-    'games.onecard.heart': 'Heart',
-    'games.onecard.diamond': 'Diamond',
-    'games.onecard.club': 'Club',
-    'games.onecard.cantPlayCard': 'Cannot play this card',
-    'games.onecard.uno': 'UNO!',
-    'games.onecard.attackMessage': '{player}: Attack! +{power} ({total} total)',
-    'games.onecard.jumpEffect': '{player}: J! Skip next turn',
-    'games.onecard.reverseEffect': '{player}: Q! Direction reversed',
-    'games.onecard.chainEffect': '{player}: K! Skip 2 turns',
-    'games.onecard.changeEffect': '{player}: 7! Suit changed to {suit}',
-    'games.onecard.playedCard': '{player} played a card',
   };
 
   // 중국어 문자열 (간체)
@@ -2080,38 +1984,6 @@ class BoardGameStrings {
     'games.solitaire.draw1Desc': '简单 - 一次抽1张',
     'games.solitaire.draw3': '抽3张',
     'games.solitaire.draw3Desc': '困难 - 一次抽3张',
-
-    // Hula
-    'games.hula.name': '呼啦',
-    'games.hula.subtitle': '卡牌游戏',
-    'games.hula.description': '收集卡牌组成套牌',
-    'games.hula.soloSeven': '{suit}7 单独登记',
-    'games.hula.attachToMyMeld': '{card} 附加到我的牌组',
-    'games.hula.attachToComputerMeld': '{card} 附加到电脑{n}的牌组',
-
-    // OneCard
-    'games.onecard.name': 'OneCard',
-    'games.onecard.subtitle': '卡牌游戏',
-    'games.onecard.description': '先出完所有牌',
-    'games.onecard.oneCard': 'UNO',
-    'games.onecard.oneCardCall': 'UNO!',
-    'games.onecard.oneCardTimer': 'UNO\n({seconds}秒)',
-    'games.onecard.oneCardTimerShort': 'UNO ({seconds}秒)',
-    'games.onecard.selectSuit': '请选择花色',
-    'games.onecard.clockwise': '顺时针',
-    'games.onecard.counterClockwise': '逆时针',
-    'games.onecard.spade': '黑桃',
-    'games.onecard.heart': '红桃',
-    'games.onecard.diamond': '方块',
-    'games.onecard.club': '梅花',
-    'games.onecard.cantPlayCard': '这张牌无法出',
-    'games.onecard.uno': 'UNO!',
-    'games.onecard.attackMessage': '{player}: 攻击! +{power} (共{total}张)',
-    'games.onecard.jumpEffect': '{player}: J! 跳过下一回合',
-    'games.onecard.reverseEffect': '{player}: Q! 方向反转',
-    'games.onecard.chainEffect': '{player}: K! 跳过2回合',
-    'games.onecard.changeEffect': '{player}: 7! 花色变更: {suit}',
-    'games.onecard.playedCard': '{player}出牌了',
   };
 
   // 언어별 문자열 맵

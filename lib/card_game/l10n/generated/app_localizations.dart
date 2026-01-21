@@ -1776,6 +1776,12 @@ abstract class AppLocalizations {
   /// **'버린 카드'**
   String get discardedCards;
 
+  /// No description provided for @emptyDiscardPile.
+  ///
+  /// In ko, this message translates to:
+  /// **'버린 카드\n없음'**
+  String get emptyDiscardPile;
+
   /// No description provided for @thankYou.
   ///
   /// In ko, this message translates to:

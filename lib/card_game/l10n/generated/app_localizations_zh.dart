@@ -901,6 +901,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discardedCards => '弃牌堆';
 
   @override
+  String get emptyDiscardPile => '无\n弃牌';
+
+  @override
   String get thankYou => '谢谢';
 
   @override

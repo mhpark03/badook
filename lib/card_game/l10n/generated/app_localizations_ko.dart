@@ -906,6 +906,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get discardedCards => '버린 카드';
 
   @override
+  String get emptyDiscardPile => '버린 카드\n없음';
+
+  @override
   String get thankYou => '땡큐';
 
   @override

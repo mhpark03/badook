@@ -906,6 +906,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get discardedCards => '捨てたカード';
 
   @override
+  String get emptyDiscardPile => '捨て札\nなし';
+
+  @override
   String get thankYou => 'タンキュー';
 
   @override

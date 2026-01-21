@@ -290,6 +290,7 @@
   "myTurn": "自分の番",
   "start": "開始",
   "discardedCards": "捨てたカード",
+  "emptyDiscardPile": "捨て札\nなし",
   "thankYou": "タンキュー",
   "selectMethod": "方法を選んでください",
   "register7Alone": "7を単独登録",
