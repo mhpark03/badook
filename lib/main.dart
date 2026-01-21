@@ -33,6 +33,8 @@ import 'board_game/games/baseball/baseball_screen.dart';
 import 'board_game/games/arrow_maze/arrow_maze_screen.dart';
 import 'board_game/games/parking_jam/parking_screen.dart';
 import 'board_game/games/parking_jam/models/parking_models.dart';
+import 'board_game/games/car_escape/car_escape_screen.dart';
+import 'board_game/games/car_escape/models/car_escape_models.dart';
 
 // 스도쿠 import
 import 'board_game/screens/sudoku_selection_screen.dart';
@@ -401,6 +403,7 @@ class L10n {
       'help_baseball': '[게임 방법]\n상대가 정한 3자리 숫자를 추리하는 게임입니다.\n\n[용어]\n- 스트라이크(S): 숫자와 위치 모두 일치\n- 볼(B): 숫자는 있지만 위치가 다름\n- 아웃: 숫자가 없음\n\n[예시]\n정답이 123일 때:\n- 123 입력 → 3S (정답!)\n- 132 입력 → 1S 2B\n- 456 입력 → 0S 0B (아웃)\n\n[규칙]\n- 각 자리 숫자는 중복 불가 (0~9)\n- 제한된 시도 횟수 내에 맞추기\n\n[전략]\n- 처음에 0, 1, 2로 시작해 숫자 범위 좁히기',
       'help_arrowmaze': '[게임 방법]\n화살표를 탭하여 모두 제거하는 퍼즐 게임입니다.\n\n[규칙]\n- 화살표를 탭하면 화살표 방향으로 날아갑니다\n- 날아가는 화살표가 다른 화살표와 충돌하면 원위치로 돌아옵니다\n- 충돌할 때마다 오류 카운트가 증가합니다\n- 모든 화살표를 제거하면 클리어!\n\n[난이도]\n- 쉬움: 10x10 그리드\n- 보통: 30x30 그리드\n- 어려움: 50x50 그리드\n\n[팁]\n- 힌트 버튼으로 탈출 가능한 화살표를 확인하세요\n- 오류 없이 클리어하면 완벽!',
       'help_parking': '[게임 방법]\n막힌 차들을 탭하여 주차장에서 탈출시키는 퍼즐 게임입니다.\n\n[규칙]\n- 차량을 탭하면 차량이 바라보는 방향으로 탈출합니다\n- 앞에 다른 차가 막고 있으면 탈출할 수 없습니다 (흔들림)\n- 막힌 차량을 탭하면 막고 있는 차량이 표시됩니다\n- 모든 차량을 탈출시키면 클리어!\n\n[난이도]\n- 쉬움: 10x10 그리드, 25~30대\n- 보통: 15x15 그리드, 50~60대\n- 어려움: 20x20 그리드, 85~100대\n\n[팁]\n- 힌트 버튼으로 탈출 가능한 차량을 확인하세요\n- 차량의 방향을 보고 탈출 순서를 계획하세요',
+      'help_carescape': '[게임 방법]\n교차로를 통해 차량을 탈출시키는 퍼즐 게임입니다.\n\n[규칙]\n- 차량을 탭하면 차량 위 화살표 방향대로 회전하며 탈출합니다\n- 앞에 다른 차가 막고 있으면 탈출할 수 없습니다 (흔들림)\n- 모든 차량을 탈출시키면 클리어!\n\n[회전 타입]\n- ↑ 직진: 교차로에서 직진\n- ← 좌회전: 교차로에서 좌회전\n- → 우회전: 교차로에서 우회전\n- ↩ 유턴: 두 교차로를 거쳐 유턴\n\n[난이도]\n- 쉬움: 5x5 그리드, 4개 교차로\n- 보통: 8x8 그리드, 6개 교차로\n- 어려움: 12x12 그리드, 12개 교차로\n\n[팁]\n- 화살표를 보고 차량이 어디로 갈지 예측하세요\n- 막힌 차량부터 경로를 역추적하세요',
       'help_sudoku_classic': '[클래식 스도쿠]\n기본 스도쿠 규칙을 따릅니다.\n\n[규칙]\n- 9x9 칸에 1~9 숫자 배치\n- 각 가로줄에 1~9 한 번씩\n- 각 세로줄에 1~9 한 번씩\n- 각 3x3 박스에 1~9 한 번씩\n\n[난이도]\n- 초급: 빈 칸 적음, 논리적 추론만으로 해결\n- 중급: 약간의 가정 필요\n- 고급: 고급 기법 필요\n- 전문가: 복잡한 체인 기법 필요\n\n[팁]\n- 확실한 숫자부터 채우기\n- 후보 숫자 메모 기능 활용',
       'help_sudoku_samurai': '[사무라이 스도쿠]\n5개의 스도쿠가 겹쳐진 대형 퍼즐입니다.\n\n[구조]\n- 중앙 1개 + 모서리 4개 = 총 5개 스도쿠\n- 모서리 스도쿠는 중앙과 3x3 박스를 공유\n\n[규칙]\n- 각 스도쿠는 기본 규칙 적용\n- 겹치는 영역은 두 스도쿠 규칙 모두 만족\n\n[전략]\n- 겹치는 영역부터 해결하면 효율적\n- 한 스도쿠의 답이 다른 스도쿠에 영향',
       'help_sudoku_killer': '[킬러 스도쿠]\n점선 영역(케이지) 내 숫자 합이 조건입니다.\n\n[규칙]\n- 기본 스도쿠 규칙 적용\n- 점선 영역 내 숫자 합 = 표시된 숫자\n- 같은 영역 내 숫자 중복 불가\n\n[예시]\n- 2칸 합 3 = 1+2\n- 2칸 합 17 = 8+9\n- 3칸 합 6 = 1+2+3\n\n[전략]\n- 합이 정해진 조합이 하나뿐인 케이지 먼저\n- 큰 케이지는 가능한 조합 좁히기',
@@ -636,6 +639,7 @@ class L10n {
       'help_baseball': '[How to Play]\nGuess the secret 3-digit number.\n\n[Terms]\n- Strike (S): Correct digit in correct position\n- Ball (B): Correct digit in wrong position\n- Out: Digit not in the number\n\n[Example]\nIf answer is 123:\n- Input 123 -> 3S (Correct!)\n- Input 132 -> 1S 2B\n- Input 456 -> 0S 0B (Out)\n\n[Rules]\n- Each digit is unique (0-9)\n- Guess within limited attempts\n\n[Strategy]\nStart with 0, 1, 2 to narrow down digits!',
       'help_arrowmaze': '[How to Play]\nTap arrows to remove them all from the board.\n\n[Rules]\n- Tap an arrow to make it fly in its direction\n- If a flying arrow hits another arrow, it returns to its position\n- Error count increases with each collision\n- Clear by removing all arrows!\n\n[Difficulty]\n- Easy: 10x10 grid\n- Normal: 30x30 grid\n- Hard: 50x50 grid\n\n[Tips]\n- Use the hint button to find escapable arrows\n- Clear without errors for Perfect!',
       'help_parking': '[How to Play]\nTap blocked cars to escape them from the parking lot.\n\n[Rules]\n- Tap a car to make it exit in the direction it faces\n- Cars cannot exit if blocked by other cars (they shake)\n- Tapping a blocked car highlights the blocking car\n- Clear by removing all cars!\n\n[Difficulty]\n- Easy: 10x10 grid, 25-30 cars\n- Normal: 15x15 grid, 50-60 cars\n- Hard: 20x20 grid, 85-100 cars\n\n[Tips]\n- Use the hint button to find escapable cars\n- Plan the escape order based on car directions',
+      'help_carescape': '[How to Play]\nGuide cars through intersections to escape.\n\n[Rules]\n- Tap a car to make it turn and exit based on its arrow\n- Cars cannot exit if blocked by other cars (they shake)\n- Clear by removing all cars!\n\n[Turn Types]\n- ↑ Straight: Go straight through intersection\n- ← Left: Turn left at intersection\n- → Right: Turn right at intersection\n- ↩ U-Turn: Make U-turn through two intersections\n\n[Difficulty]\n- Easy: 5x5 grid, 4 intersections\n- Normal: 8x8 grid, 6 intersections\n- Hard: 12x12 grid, 12 intersections\n\n[Tips]\n- Look at arrows to predict where cars will go\n- Trace paths backward from blocked cars',
       'help_sudoku_classic': '[How to Play]\nFill a 9x9 grid with numbers 1-9.\n\n[Rules]\n- No duplicate numbers in any row\n- No duplicate numbers in any column\n- No duplicate numbers in any 3x3 box\n\n[Tip]\nStart with rows/columns that have the most numbers!',
       'help_sudoku_samurai': '[How to Play]\n5 overlapping sudoku grids in one large puzzle.\n\n[Rules]\n- Each 9x9 grid follows standard sudoku rules\n- Overlapping regions must satisfy both grids\n\n[Tip]\nUse overlapping areas to find cross-references!',
       'help_sudoku_killer': '[How to Play]\nSudoku with cages. Numbers in each cage must sum to the given total.\n\n[Rules]\n- Standard sudoku rules apply\n- Cage numbers cannot repeat\n- Cage sum must equal the clue\n\n[Tip]\nSmall cages with high sums reveal limited possibilities!',
@@ -871,6 +875,7 @@ class L10n {
       'help_baseball': '[遊び方]\n相手が決めた3桁の数字を推理するゲームです。\n\n[用語]\n- ストライク(S)：数字と位置が両方一致\n- ボール(B)：数字はあるが位置が違う\n- アウト：数字がない\n\n[例]\n正解が123の場合：\n- 123入力 → 3S（正解！）\n- 132入力 → 1S 2B\n- 456入力 → 0S 0B（アウト）\n\n[ルール]\n- 各桁の数字は重複不可（0~9）\n- 制限回数内に当てる\n\n[戦略]\n最初に0、1、2で始めて数字の範囲を絞ろう！',
       'help_arrowmaze': '[遊び方]\n矢印をタップしてすべて除去するパズルゲームです。\n\n[ルール]\n- 矢印をタップすると、その方向に飛んでいきます\n- 飛んでいる矢印が他の矢印にぶつかると、元の位置に戻ります\n- 衝突するたびにエラーカウントが増加します\n- すべての矢印を除去するとクリア！\n\n[難易度]\n- 簡単：10x10グリッド\n- 普通：30x30グリッド\n- 難しい：50x50グリッド\n\n[コツ]\n- ヒントボタンで脱出可能な矢印を確認しよう\n- エラーなしでクリアすると完璧！',
       'help_parking': '[遊び方]\n詰まった車をタップして駐車場から脱出させるパズルゲームです。\n\n[ルール]\n- 車をタップすると、向いている方向に脱出します\n- 他の車に塞がれている車は脱出できません（揺れます）\n- 塞がれている車をタップすると、塞いでいる車がハイライトされます\n- すべての車を脱出させるとクリア！\n\n[難易度]\n- 簡単：10x10グリッド、25~30台\n- 普通：15x15グリッド、50~60台\n- 難しい：20x20グリッド、85~100台\n\n[コツ]\n- ヒントボタンで脱出可能な車を確認しよう\n- 車の方向を見て脱出順序を計画しよう',
+      'help_carescape': '[遊び方]\n交差点を通って車を脱出させるパズルゲームです。\n\n[ルール]\n- 車をタップすると、矢印の方向に回転して脱出します\n- 他の車に塞がれている車は脱出できません（揺れます）\n- すべての車を脱出させるとクリア！\n\n[回転タイプ]\n- ↑ 直進：交差点を直進\n- ← 左折：交差点で左折\n- → 右折：交差点で右折\n- ↩ Uターン：2つの交差点を経てUターン\n\n[難易度]\n- 簡単：5x5グリッド、4交差点\n- 普通：8x8グリッド、6交差点\n- 難しい：12x12グリッド、12交差点\n\n[コツ]\n- 矢印を見て車がどこに行くか予測しよう\n- 塞がれている車から経路を逆追跡しよう',
       'help_sudoku_classic': '[遊び方]\n9x9マスに1~9の数字を埋めます。\n\n[ルール]\n- 横一列に同じ数字は入れない\n- 縦一列に同じ数字は入れない\n- 3x3ボックスに同じ数字は入れない\n\n[コツ]\n数字が多い行や列から始めよう！',
       'help_sudoku_samurai': '[遊び方]\n5つの数独が重なった大型パズル。\n\n[ルール]\n- 各9x9グリッドは標準の数独ルールに従う\n- 重なる部分は両方のグリッドを満たす必要がある\n\n[コツ]\n重なる部分を使って相互参照しよう！',
       'help_sudoku_killer': '[遊び方]\nケージ付きの数独。各ケージの数字の合計が指定された数になる必要があります。\n\n[ルール]\n- 標準の数独ルールが適用\n- ケージ内の数字は重複できない\n- ケージの合計は手がかりと一致する必要がある\n\n[コツ]\n合計が高い小さなケージは可能性が限られる！',
@@ -1106,6 +1111,7 @@ class L10n {
       'help_baseball': '[游戏方法]\n猜测对方设定的3位数字。\n\n[术语]\n- 好球(S)：数字和位置都正确\n- 坏球(B)：数字正确但位置错误\n- 出局：数字不存在\n\n[示例]\n答案为123时：\n- 输入123 → 3S（正确！）\n- 输入132 → 1S 2B\n- 输入456 → 0S 0B（出局）\n\n[规则]\n- 每位数字不能重复（0~9）\n- 在限定次数内猜中\n\n[策略]\n先用0、1、2开始缩小数字范围！',
       'help_arrowmaze': '[游戏方法]\n点击箭头将它们全部移除的益智游戏。\n\n[规则]\n- 点击箭头，箭头会向其指向的方向飞去\n- 飞行中的箭头碰到其他箭头会返回原位\n- 每次碰撞错误计数增加\n- 移除所有箭头即可通关！\n\n[难度]\n- 简单：10x10网格\n- 普通：30x30网格\n- 困难：50x50网格\n\n[提示]\n- 使用提示按钮查找可逃脱的箭头\n- 无错误通关即为完美！',
       'help_parking': '[游戏方法]\n点击被堵住的汽车，将它们从停车场逃脱的益智游戏。\n\n[规则]\n- 点击汽车，它会朝着面向的方向逃脱\n- 被其他汽车挡住的汽车无法逃脱（会晃动）\n- 点击被挡住的汽车会高亮显示挡住它的汽车\n- 让所有汽车逃脱即可通关！\n\n[难度]\n- 简单：10x10网格，25~30辆\n- 普通：15x15网格，50~60辆\n- 困难：20x20网格，85~100辆\n\n[提示]\n- 使用提示按钮查找可逃脱的汽车\n- 根据汽车方向规划逃脱顺序',
+      'help_carescape': '[游戏方法]\n引导汽车通过交叉口逃脱的益智游戏。\n\n[规则]\n- 点击汽车，它会按照箭头方向转弯并逃脱\n- 被其他汽车挡住的汽车无法逃脱（会晃动）\n- 让所有汽车逃脱即可通关！\n\n[转向类型]\n- ↑ 直行：在交叉口直行\n- ← 左转：在交叉口左转\n- → 右转：在交叉口右转\n- ↩ 掉头：经过两个交叉口掉头\n\n[难度]\n- 简单：5x5网格，4个交叉口\n- 普通：8x8网格，6个交叉口\n- 困难：12x12网格，12个交叉口\n\n[提示]\n- 看箭头预测汽车的行驶方向\n- 从被堵住的汽车反向追踪路径',
       'help_sudoku_classic': '[游戏方法]\n在9x9格子中填入1-9数字。\n\n[规则]\n- 每行不能有重复数字\n- 每列不能有重复数字\n- 每个3x3宫格不能有重复数字\n\n[提示]\n从数字最多的行/列开始！',
       'help_sudoku_samurai': '[游戏方法]\n5个数独重叠的大型拼图。\n\n[规则]\n- 每个9x9格子遵循标准数独规则\n- 重叠区域必须同时满足两个格子\n\n[提示]\n利用重叠区域进行交叉验证！',
       'help_sudoku_killer': '[游戏方法]\n带笼子的数独。每个笼子内的数字之和必须等于指定数字。\n\n[规则]\n- 标准数独规则适用\n- 笼子内数字不能重复\n- 笼子之和必须等于提示\n\n[提示]\n高数值的小笼子可能性有限！',
@@ -7428,6 +7434,7 @@ class _HelpPageState extends State<HelpPage> {
           {'key': 'maze', 'icon': Icons.route},
           {'key': 'arrowmaze', 'icon': Icons.arrow_forward},
           {'key': 'parking', 'icon': Icons.directions_car},
+          {'key': 'carescape', 'icon': Icons.alt_route},
         ],
       },
       {
@@ -7567,6 +7574,11 @@ class _HelpPageState extends State<HelpPage> {
       case 'parking':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => const ParkingScreen(difficulty: ParkingDifficulty.easy),
+        ));
+        break;
+      case 'carescape':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const CarEscapeScreen(difficulty: CarEscapeDifficulty.easy),
         ));
         break;
       case 'sudoku':
