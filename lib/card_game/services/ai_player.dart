@@ -2702,6 +2702,73 @@ class AIPlayer {
         }
       }
 
+      // === 마지막 순서: 이길 수 있으면 이기기 (상대팀 물패 대응) ===
+      // isLastPlayer는 위에서 이미 선언됨
+      if (isLastPlayer) {
+        // 마지막 순서이고 상대팀이 이기고 있으면 이길 수 있는 카드로 이기기
+        if (currentWinningCard != null) {
+          // 선공 무늬 카드 중 이길 수 있는 카드 찾기
+          final leadSuitCards = playableCards.where((c) =>
+              !c.isJoker && !c.isMighty && c.suit == leadSuit).toList();
+          if (leadSuitCards.isNotEmpty) {
+            // 이길 수 있는 카드 찾기 (가장 낮은 것으로 효율적으로)
+            leadSuitCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+            for (final card in leadSuitCards) {
+              if (state.isCardStronger(card, currentWinningCard, leadSuit, false)) {
+                return card;
+              }
+            }
+          }
+
+          // 선공 무늬가 없으면 기루다로 컷 가능한지 확인
+          if (state.giruda != null && leadSuit != state.giruda) {
+            final girudaCards = playableCards.where((c) =>
+                !c.isJoker && !c.isMighty && c.suit == state.giruda).toList();
+            if (girudaCards.isNotEmpty) {
+              // 현재 이기는 카드가 기루다가 아니면 기루다로 컷
+              if (currentWinningCard.suit != state.giruda) {
+                girudaCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+                return girudaCards.first; // 가장 낮은 기루다로 효율적으로 컷
+              }
+              // 현재 이기는 카드도 기루다면 더 높은 기루다 필요
+              girudaCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+              for (final card in girudaCards) {
+                if (state.isCardStronger(card, currentWinningCard, leadSuit, false)) {
+                  return card;
+                }
+              }
+            }
+          }
+        }
+
+        // 이길 수 없고 점수 카드가 없으면 낮은 카드 버림
+        int pointCardsInTrick = state.currentTrick!.cards
+            .where((c) => c.isPointCard || c.isJoker).length;
+        if (pointCardsInTrick == 0) {
+          // 선공 무늬 카드 중 낮은 것
+          final leadSuitCards = playableCards.where((c) =>
+              !c.isJoker && !c.isMighty && c.suit == leadSuit).toList();
+          if (leadSuitCards.isNotEmpty) {
+            leadSuitCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+            return leadSuitCards.first;
+          }
+          // 선공 무늬가 없으면 비기루다 중 낮은 것
+          final nonGirudaCards = playableCards.where((c) =>
+              !c.isJoker && !c.isMighty && c.suit != state.giruda).toList();
+          if (nonGirudaCards.isNotEmpty) {
+            nonGirudaCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+            return nonGirudaCards.first;
+          }
+          // 기루다만 있으면 낮은 기루다
+          final girudaCards = playableCards.where((c) =>
+              !c.isJoker && !c.isMighty && c.suit == state.giruda).toList();
+          if (girudaCards.isNotEmpty) {
+            girudaCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+            return girudaCards.first;
+          }
+        }
+      }
+
       // ★ 노기루다: 마이티로 선공권 탈환 (기존 조건보다 적극적)
       if (state.giruda == null && state.currentTrickNumber > 1) {
         final mightyCard = state.mighty;
@@ -3103,6 +3170,19 @@ class AIPlayer {
       // 상대팀이 이기고 있으면 점수 카드를 피하고 낮은 카드 버리기
       bool opponentWinning = (isDefenseTeam && !defenseWinning) || (isAttackTeam && defenseWinning);
       if (opponentWinning) {
+        // ★ 마지막 순서이면 이길 수 있는지 먼저 확인 (상대팀 물패 대응)
+        bool isLastPlayer = state.currentTrick != null &&
+            state.currentTrick!.cards.length == 4;
+        if (isLastPlayer && currentWinningCard != null) {
+          // 이길 수 있는 카드 찾기 (가장 낮은 것으로 효율적으로)
+          suitCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+          for (final card in suitCards) {
+            if (state.isCardStronger(card, currentWinningCard, leadSuit, false)) {
+              return card;
+            }
+          }
+        }
+        // 이길 수 없으면 낮은 카드 버리기
         // 점수 카드가 아닌 카드 중 가장 낮은 카드
         final nonPointSuitCards = suitCards.where((c) => !c.isPointCard).toList();
         if (nonPointSuitCards.isNotEmpty) {
