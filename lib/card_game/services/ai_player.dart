@@ -3061,13 +3061,20 @@ class AIPlayer {
           if (currentWinningCard != null && !currentWinningCard.isMighty) {
             bool jokerCalled = state.currentTrick?.jokerCallSuit != null;
             if (!jokerCalled) {
-              // 선공권 탈환 후 유지할 최상위 카드가 있는지 확인
-              // 최상위 카드 없으면 점수 많을 때 사용하는 게 나음
-              bool hasTopCards = player.hand.any((c) =>
-                  c.isMighty ||
-                  (!c.isJoker && _getEffectiveCardValue(c, state) >= 14));
-              if (hasTopCards) {
-                return joker.first;
+              // ★ 마지막 순서이고 점수 카드가 없으면 조커 사용 스킵
+              int pointCardsInTrick = state.currentTrick!.cards
+                  .where((c) => c.isPointCard || c.isJoker).length;
+              if (isLastPlayer && pointCardsInTrick == 0) {
+                // 점수 없으면 조커 낭비하지 않음
+              } else {
+                // 선공권 탈환 후 유지할 최상위 카드가 있는지 확인
+                // 최상위 카드 없으면 점수 많을 때 사용하는 게 나음
+                bool hasTopCards = player.hand.any((c) =>
+                    c.isMighty ||
+                    (!c.isJoker && _getEffectiveCardValue(c, state) >= 14));
+                if (hasTopCards) {
+                  return joker.first;
+                }
               }
             }
           }
@@ -3100,7 +3107,12 @@ class AIPlayer {
               }
               // 공격팀이 이기고 있을 때만 조커 사용
               if (!teamWinningSecurely && !defenseWinning) {
-                return joker.first;
+                // ★ 마지막 순서이고 점수 카드가 없으면 조커 사용 스킵
+                int pointCardsInTrick = state.currentTrick!.cards
+                    .where((c) => c.isPointCard || c.isJoker).length;
+                if (!(isLastPlayer && pointCardsInTrick == 0)) {
+                  return joker.first;
+                }
               }
             }
           }
