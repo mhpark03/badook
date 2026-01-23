@@ -928,4 +928,113 @@ class GameState {
 
     return finalScore;
   }
+
+  /// 카드를 낼 수 없는 이유를 반환
+  String? getCannotPlayReason(PlayingCard card, Player player) {
+    // 마이티 체크 함수
+    bool isMightyCard(PlayingCard c) => c.suit == mighty.suit && c.rank == mighty.rank;
+
+    if (currentTrick == null || currentTrick!.cards.isEmpty) {
+      // 초구(첫 트릭) 주공 선공 시 기루다 제한
+      if (currentTrickNumber == 1 && player.isDeclarer && giruda != null) {
+        if (!card.isJoker && !isMightyCard(card) && card.suit == giruda) {
+          final nonGirudaCards = player.hand
+              .where((c) => !c.isJoker && !isMightyCard(c) && c.suit != giruda)
+              .toList();
+          if (nonGirudaCards.isNotEmpty) {
+            return '첫 트릭에서 주공은 기루다로 선공할 수 없습니다';
+          }
+        }
+      }
+
+      // 첫 트릭 선공에서 조커 제한
+      if (currentTrickNumber == 1 && !mightyJokerUsed) {
+        if (card.isJoker) {
+          if (player.hand.length > 1) {
+            final otherCards = player.hand.where((c) => !c.isJoker).toList();
+            if (otherCards.isNotEmpty) {
+              return '첫 트릭에서는 조커를 낼 수 없습니다';
+            }
+          }
+        }
+      }
+
+      // 마지막 트릭(10번째)에서 조커 제한
+      if (currentTrickNumber == 10 && card.isJoker) {
+        final otherCards = player.hand.where((c) => !c.isJoker).toList();
+        if (otherCards.isNotEmpty) {
+          return '마지막 트릭에서는 조커를 낼 수 없습니다';
+        }
+      }
+
+      return null; // 낼 수 있음
+    }
+
+    final leadSuit = currentTrick!.leadSuit;
+
+    // 조커 콜이 선언된 경우
+    if (currentTrick!.jokerCall == JokerCallType.jokerCall) {
+      bool hasJoker = player.hand.any((c) => c.isJoker);
+      if (hasJoker && !card.isJoker) {
+        return '조커 콜! 조커를 내야 합니다';
+      }
+    }
+
+    if (leadSuit == null) {
+      return null;
+    }
+
+    // 마지막 트릭(10번째)에서 조커 제한
+    if (currentTrickNumber == 10 && card.isJoker) {
+      bool hasLeadSuit = player.hand.any((c) => !c.isJoker && c.suit == leadSuit);
+      if (hasLeadSuit) {
+        return '${_getSuitName(leadSuit)} 무늬를 내야 합니다';
+      }
+      final otherCards = player.hand.where((c) => !c.isJoker).toList();
+      if (otherCards.isNotEmpty) {
+        return '마지막 트릭에서는 조커를 낼 수 없습니다';
+      }
+    }
+
+    // 첫 트릭에서 조커 제한 (후속 플레이어)
+    if (currentTrickNumber == 1 && !mightyJokerUsed) {
+      if (card.isJoker) {
+        final otherCards = player.hand.where((c) => !c.isJoker).toList();
+        if (otherCards.isNotEmpty) {
+          return '첫 트릭에서는 조커를 낼 수 없습니다';
+        }
+      }
+    }
+
+    // 마이티나 조커는 항상 낼 수 있음
+    if (card.isJoker || isMightyCard(card)) {
+      return null;
+    }
+
+    // 리드 무늬와 같으면 낼 수 있음
+    if (card.suit == leadSuit) {
+      return null;
+    }
+
+    // 리드 무늬가 없으면 아무 거나 낼 수 있음
+    if (!player.hasSuit(leadSuit)) {
+      return null;
+    }
+
+    // 리드 무늬가 있는데 다른 무늬를 내려는 경우
+    return '${_getSuitName(leadSuit)} 무늬를 내야 합니다';
+  }
+
+  String _getSuitName(Suit suit) {
+    switch (suit) {
+      case Suit.spade:
+        return '스페이드';
+      case Suit.heart:
+        return '하트';
+      case Suit.diamond:
+        return '다이아몬드';
+      case Suit.club:
+        return '클로버';
+    }
+  }
 }
