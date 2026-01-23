@@ -3838,31 +3838,34 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
                           // 땡큐 대기 카운트다운 표시
                           if (_thankYouWaiting && canTakeDiscard)
                             Positioned.fill(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.orange.withValues(alpha: 0.7),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      getL10n(context).thankYou,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                              child: GestureDetector(
+                                onTap: _drawFromDiscard,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange.withValues(alpha: 0.7),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        getL10n(context).thankYou,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '$_thankYouCountdown',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24,
+                                      Text(
+                                        '$_thankYouCountdown',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
