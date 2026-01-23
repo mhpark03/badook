@@ -656,16 +656,14 @@ class _GameScreenState extends State<GameScreen> {
     // 사용자가 직접 선택했거나 AI가 배팅을 추천한 경우에만 선택 표시
     final isSelected = _suitManuallySelected && _selectedBidSuit == suit;
     final isRed = suit == Suit.diamond || suit == Suit.heart;
-    final isClub = suit == Suit.club;
 
     Color symbolColor;
     if (isRed) {
-      symbolColor = isSelected ? Colors.red[700]! : Colors.red[400]!;
-    } else if (isClub) {
-      symbolColor = isSelected ? Colors.green[700]! : Colors.green[300]!;
+      symbolColor = Colors.red[700]!;
+    } else if (suit == Suit.spade || suit == Suit.club) {
+      symbolColor = Colors.black;  // 스페이드, 클로버는 검정
     } else {
-      // 스페이드
-      symbolColor = isSelected ? Colors.black : Colors.white;
+      symbolColor = isSelected ? Colors.black : Colors.white;  // 노기루다
     }
 
     return GestureDetector(
