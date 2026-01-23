@@ -506,5 +506,15 @@
     }
   },
   "betCheck": "Check",
-  "betCall": "Call"
+  "betCall": "Call",
+  "cannotPlayFirstTrickDeclarerGiruda": "Declarer cannot lead with trump on the first trick",
+  "cannotPlayFirstTrickJoker": "Cannot play Joker on the first trick",
+  "cannotPlayLastTrickJoker": "Cannot play Joker on the last trick",
+  "mustPlayJokerCall": "Joker Call! You must play the Joker",
+  "mustFollowSuit": "You must follow {suit}",
+  "@mustFollowSuit": {
+    "placeholders": {
+      "suit": {"type": "String"}
+    }
+  }
 }
