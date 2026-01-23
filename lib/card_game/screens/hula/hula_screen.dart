@@ -3188,31 +3188,40 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
 
   // stopperIndex: 스톱 실패한 플레이어 인덱스 (null이면 일반 종료)
   void _endGame(int winnerIdx, {int? stopperIndex}) {
-    // 손패 점수 계산 (등록하지 못했거나 7을 가지고 있으면 2배 패널티)
-    // ★ 실제 등록된 카드 수로 확인 (빈 멜드 방지)
-    final playerRegisteredCards = playerMelds.fold<int>(0, (sum, meld) => sum + meld.cards.length);
-    final playerRegistered = playerRegisteredCards > 0;
-    final playerHasSeven = playerHand.any((c) => _isSeven(c));
-    scores[0] = _calculateHandScore(playerHand) * ((!playerRegistered || playerHasSeven) ? 2 : 1);
+    // 손패 점수 계산 (순수 손패 점수, 2배 패널티는 차이 계산 후 적용)
+    scores[0] = _calculateHandScore(playerHand);
     for (int i = 0; i < computerHands.length; i++) {
-      final computerRegisteredCards = computerMelds[i].fold<int>(0, (sum, meld) => sum + meld.cards.length);
-      final computerRegistered = computerRegisteredCards > 0;
-      final computerHasSeven = computerHands[i].any((c) => _isSeven(c));
-      scores[i + 1] = _calculateHandScore(computerHands[i]) * ((!computerRegistered || computerHasSeven) ? 2 : 1);
+      scores[i + 1] = _calculateHandScore(computerHands[i]);
     }
 
+    // 패널티 여부 계산 (등록하지 않았거나 7을 가지고 있으면 차이의 2배 패널티)
+    final List<bool> hasPenalty = List.generate(playerCount, (i) {
+      if (i == 0) {
+        final registeredCards = playerMelds.fold<int>(0, (sum, meld) => sum + meld.cards.length);
+        final hasSeven = playerHand.any((c) => _isSeven(c));
+        return registeredCards == 0 || hasSeven;
+      } else {
+        final registeredCards = computerMelds[i - 1].fold<int>(0, (sum, meld) => sum + meld.cards.length);
+        final hasSeven = computerHands[i - 1].any((c) => _isSeven(c));
+        return registeredCards == 0 || hasSeven;
+      }
+    });
+
     // 라운드 점수 계산
-    final multiplier = (isHula && winnerIdx == 0) ? 2 : 1;
+    final hulaMultiplier = (isHula && winnerIdx == 0) ? 2 : 1;
     final winnerHandScore = scores[winnerIdx];
     int winnerGain = 0;
 
     roundScores = List.generate(playerCount, (_) => 0);
 
-    // 승자가 얻을 총 점수 계산 (모든 플레이어와의 차이 합)
+    // 승자가 얻을 총 점수 계산 (차이 계산 후 2배 패널티 적용)
     for (int i = 0; i < playerCount; i++) {
       if (i == winnerIdx) continue;
-      final diff = (scores[i] - winnerHandScore) * multiplier;
-      winnerGain += diff;
+      final diff = scores[i] - winnerHandScore;
+      // 패널티 대상 플레이어는 차이의 2배
+      final penaltyMultiplier = hasPenalty[i] ? 2 : 1;
+      final finalDiff = diff * penaltyMultiplier * hulaMultiplier;
+      winnerGain += finalDiff;
     }
 
     if (stopperIndex != null) {
@@ -3222,11 +3231,13 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
       roundScores[stopperIndex] = -winnerGain;
       // 나머지 플레이어는 0 (이미 초기화됨)
     } else {
-      // 일반 종료: 각자 승자와의 차이만큼 감점
+      // 일반 종료: 각자 승자와의 차이만큼 감점 (패널티 대상은 2배)
       for (int i = 0; i < playerCount; i++) {
         if (i == winnerIdx) continue;
-        final diff = (scores[i] - winnerHandScore) * multiplier;
-        roundScores[i] = -diff;
+        final diff = scores[i] - winnerHandScore;
+        final penaltyMultiplier = hasPenalty[i] ? 2 : 1;
+        final finalDiff = diff * penaltyMultiplier * hulaMultiplier;
+        roundScores[i] = -finalDiff;
       }
       roundScores[winnerIdx] = winnerGain;
     }
