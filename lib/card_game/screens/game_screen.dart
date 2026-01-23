@@ -659,14 +659,13 @@ class _GameScreenState extends State<GameScreen> {
     final isClub = suit == Suit.club;
 
     Color symbolColor;
-    if (isSelected) {
-      symbolColor = Colors.black;
-    } else if (isRed) {
-      symbolColor = Colors.red[400]!;
+    if (isRed) {
+      symbolColor = isSelected ? Colors.red[700]! : Colors.red[400]!;
     } else if (isClub) {
-      symbolColor = Colors.green[300]!; // 클로버는 녹색으로 구분
+      symbolColor = isSelected ? Colors.green[700]! : Colors.green[300]!;
     } else {
-      symbolColor = Colors.white;
+      // 스페이드
+      symbolColor = isSelected ? Colors.black : Colors.white;
     }
 
     return GestureDetector(
