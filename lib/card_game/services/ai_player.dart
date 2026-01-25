@@ -2166,6 +2166,21 @@ class AIPlayer {
         player.isDeclarer &&
         nonMightyPlayable.isNotEmpty;
 
+    // ★★★ 트릭 9에서 조커 프렌드가 아직 안 나왔으면 기루다 보존 ★★★
+    // 조커 프렌드가 트릭 9에서 나와야 하므로, 비기루다로 선공하여 기루다를 트릭 10용으로 보존
+    bool shouldSaveGirudaForTrick10 = false;
+    if (friendIsJoker && state.currentTrickNumber == 9 && !state.friendRevealed) {
+      final nonGirudaCards = nonMightyPlayable.where((c) =>
+          !c.isJoker && c.suit != state.giruda).toList();
+      if (nonGirudaCards.isNotEmpty) {
+        // 비기루다가 있으면 비기루다로 선공하여 기루다 보존
+        nonGirudaCards.sort((a, b) =>
+            _getEffectiveCardValue(b, state).compareTo(_getEffectiveCardValue(a, state)));
+        return nonGirudaCards.first;
+      }
+      shouldSaveGirudaForTrick10 = true;
+    }
+
     final shouldAvoidMighty = (state.currentTrickNumber < 7 || shouldSaveMightyForTrick10) &&
         nonMightyPlayable.isNotEmpty;
     final cardsToConsider = shouldAvoidMighty ? nonMightyPlayable : playableCards;
@@ -2529,6 +2544,50 @@ class AIPlayer {
         bool mightyInMyHand = player.hand.any((c) => c.isMightyWith(state.giruda));
         winningCardIsTop = mightyPlayed || mightyInMyHand ||
             !playableCards.any((c) => c.isMightyWith(state.giruda));
+      } else if (currentWinningCard.suit == state.giruda && leadSuit == state.giruda) {
+        // ★★★ 팀원이 기루다로 선공해서 이기고 있는 경우 ★★★
+        final opponentGiruda = _getRemainingGirudaCount(state, player);
+        if (opponentGiruda == 0) {
+          // 상대에게 기루다가 없으면 확실히 이김
+          winningCardIsTop = true;
+        } else {
+          // 상대에게 기루다가 있으면 더 높은 기루다가 남아있는지 확인
+          final playedCards = _getPlayedCards(state);
+          int winningRankValue = currentWinningCard.rankValue;
+          bool canBeBeaten = false;
+
+          // 마이티/조커 체크
+          bool mightyInMyHand = player.hand.any((c) => c.isMightyWith(state.giruda));
+          bool mightyPlayed = playedCards.any((c) => c.isMightyWith(state.giruda));
+          if (!mightyInMyHand && !mightyPlayed) {
+            canBeBeaten = true;
+          }
+          if (!canBeBeaten) {
+            bool jokerInMyHand = player.hand.any((c) => c.isJoker);
+            bool jokerPlayed = playedCards.any((c) => c.isJoker);
+            if (!jokerInMyHand && !jokerPlayed) {
+              canBeBeaten = true;
+            }
+          }
+
+          // 더 높은 기루다 체크
+          if (!canBeBeaten) {
+            for (final rank in Rank.values) {
+              int rankValue = rank.index + 2;
+              if (rankValue > winningRankValue) {
+                bool inMyHand = player.hand.any((c) =>
+                    c.suit == state.giruda && c.rank == rank);
+                bool alreadyPlayed = playedCards.any((c) =>
+                    c.suit == state.giruda && c.rank == rank);
+                if (!inMyHand && !alreadyPlayed) {
+                  canBeBeaten = true;
+                  break;
+                }
+              }
+            }
+          }
+          winningCardIsTop = !canBeBeaten;
+        }
       } else {
         // 일반 카드: 더 높은 카드가 나올 수 있는지 확인
         final playedCards = _getPlayedCards(state);
@@ -3066,6 +3125,13 @@ class AIPlayer {
                   }
                 }
               }
+              // ★ 선공 무늬가 기루다이고 상대에게 기루다가 없으면 확실히 이김
+              if (!teamWinningSecurely && leadSuit == state.giruda) {
+                final opponentGiruda = _getRemainingGirudaCount(state, player);
+                if (opponentGiruda == 0) {
+                  teamWinningSecurely = true;
+                }
+              }
               // 같은 팀이 확실히 이기고 있지 않을 때만 조커 사용
               if (!teamWinningSecurely) {
                 return joker.first;
@@ -3097,6 +3163,13 @@ class AIPlayer {
                   if (effectiveValue >= 14) {
                     teamWinningSecurely = true;
                   }
+                }
+              }
+              // ★ 선공 무늬가 기루다이고 상대에게 기루다가 없으면 확실히 이김
+              if (!teamWinningSecurely && leadSuit == state.giruda) {
+                final opponentGiruda = _getRemainingGirudaCount(state, player);
+                if (opponentGiruda == 0) {
+                  teamWinningSecurely = true;
                 }
               }
               // 우리 팀이 확실히 이기고 있지 않을 때만 조커 사용
