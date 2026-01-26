@@ -1125,12 +1125,13 @@ class AIPlayer {
         if (isJokerFriend) {
           return null;
         }
-        // ★ 2트릭에서 조커콜 우선 사용 조건:
-        // - 노프렌드인 경우, 또는
-        // - 조커가 없고 조커 프렌드가 아닌 경우
+        // ★ 2~3트릭에서 조커콜 우선 사용 조건:
+        // - 마이티 프렌드인 경우 (조커가 없으므로 수비팀 조커 무력화)
+        // - 노프렌드인 경우
         bool isNoFriend = state.friendDeclaration?.isNoFriend == true;
-        bool shouldCallJokerEarly = isNoFriend || !isJokerFriend;
-        if (shouldCallJokerEarly && state.currentTrickNumber == 2) {
+        bool isMightyFriend = friendCard != null && friendCard.isMightyWith(state.giruda);
+        if ((isMightyFriend || isNoFriend) &&
+            (state.currentTrickNumber == 2 || state.currentTrickNumber == 3)) {
           return jokerCallCard.suit;
         }
         // 그 외에는 50% 확률로 조커콜 (수비팀이 조커를 가지고 있을 수 있음)
@@ -1508,9 +1509,10 @@ class AIPlayer {
       List<PlayingCard> playableCards, Player player, GameState state) {
 
     // ★ 마이티는 선공에서 아끼기 (선공 탈환용으로 보존)
-    // 초반~중반(트릭 7 이전)에는 마이티를 선공 카드로 사용하지 않음
-    // 마이티는 선공을 빼앗겼을 때 되찾기 위해 사용해야 함
-    if (state.currentTrickNumber < 7) {
+    // 트릭 9 이전까지는 마이티를 선공 카드로 사용하지 않음
+    // 마이티는 트릭 9에서 선 탈환용으로 보존 → 10트릭 선 확보
+    // (트릭 8에서 마이티 선공 → 트릭 9에서 선 빼앗김 → 10트릭 선 상실 방지)
+    if (state.currentTrickNumber < 9) {
       final nonMightyCards = playableCards.where((c) => !c.isMightyWith(state.giruda)).toList();
       if (nonMightyCards.isNotEmpty) {
         // 마이티 제외한 카드들로 선공 카드 선택 진행
@@ -1780,10 +1782,75 @@ class AIPlayer {
 
     // === 주공팀 또는 노기루다 선공 전략 ===
 
-    // === 조커로 기루다 콜하여 수비팀 기루다 소진 ===
+    // === 주공: 트릭 2~3 기루다 선공 전략 ===
+    // ★ 조커콜은 decideJokerCall()에서 처리 (마이티 프렌드 + 조커 없음 → 조커콜 선언)
+    // 1. 기루다 최상위 카드 있음 → 기루다 최상위 카드로 선공
+    // 2. 기루다 최상위 없음 + 마이티/조커/기루다 프렌드 → 중간 기루다로 선공
+    // 3. 위 조건 해당 안 됨 → 일반 선공 정책
+    if (state.giruda != null && (state.currentTrickNumber == 2 || state.currentTrickNumber == 3)) {
+      bool isAttackTeam = !_isPlayerOnDefenseTeam(player, state);
+
+      if (isAttackTeam && player.isDeclarer) {
+        // 프렌드 유형 확인
+        final friendCard = state.friendDeclaration?.card;
+        bool friendIsMighty = friendCard != null && friendCard.isMightyWith(state.giruda);
+        bool friendIsJoker = friendCard != null && friendCard.isJoker;
+        bool friendIsGiruda = friendCard != null &&
+            !friendCard.isJoker &&
+            !friendCard.isMightyWith(state.giruda) &&
+            friendCard.suit == state.giruda;
+        bool friendIsSpecialOrGiruda = friendCard == null ||
+            friendIsMighty || friendIsJoker || friendIsGiruda;
+
+        // 내 기루다 카드들 (선공용)
+        final myGirudaCardsForLead = playableCards.where((c) =>
+            !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).toList();
+
+        // 지금까지 나온 기루다 카드들
+        final playedGirudaCards = _getPlayedCards(state).where((c) =>
+            !c.isJoker && c.suit == state.giruda).toList();
+
+        // 내 기루다 중 최고 랭크 카드 찾기
+        PlayingCard? myTopGiruda;
+        int myHighestGirudaRank = 0;
+        if (myGirudaCardsForLead.isNotEmpty) {
+          final sortedGiruda = List<PlayingCard>.from(myGirudaCardsForLead)
+            ..sort((a, b) => b.rankValue.compareTo(a.rankValue));
+          myTopGiruda = sortedGiruda.first;
+          myHighestGirudaRank = myTopGiruda.rankValue;
+        }
+
+        // 내 기루다가 실효 최상위인지 확인 (상대에게 더 높은 기루다가 없음)
+        bool hasEffectiveTopGiruda = myHighestGirudaRank > 0;
+        for (int rankValue = 14; rankValue > myHighestGirudaRank; rankValue--) {
+          bool played = playedGirudaCards.any((c) => c.rankValue == rankValue);
+          bool inMyHand = myGirudaCardsForLead.any((c) => c.rankValue == rankValue);
+          if (!played && !inMyHand) {
+            hasEffectiveTopGiruda = false;  // 상대에게 더 높은 기루다 있음
+            break;
+          }
+        }
+
+        // === 1. 기루다 최상위 카드 있음 → 기루다 최상위 카드로 선공 ===
+        if (hasEffectiveTopGiruda && myTopGiruda != null) {
+          return myTopGiruda;
+        }
+
+        // === 2. 기루다 최상위 없음 + 마이티/조커/기루다 프렌드 → 중간 기루다로 선공 ===
+        if (!hasEffectiveTopGiruda && friendIsSpecialOrGiruda && myGirudaCardsForLead.isNotEmpty) {
+          myGirudaCardsForLead.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+          final midIndex = myGirudaCardsForLead.length ~/ 2;
+          return myGirudaCardsForLead[midIndex];
+        }
+
+        // 3. 위 조건 해당 안 됨 → 아래 일반 선공 정책으로 진행
+      }
+    }
+
+    // === 조커로 기루다 콜하여 수비팀 기루다 소진 (트릭 4 이후) ===
     // ★ 프렌드가 일반 카드(마이티/조커 아님)인 경우 조커 선공 스킵
     // → 프렌드에게 선을 넘기는 전략 우선
-    if (state.giruda != null && state.currentTrickNumber >= 2 && state.currentTrickNumber <= 8) {
+    if (state.giruda != null && state.currentTrickNumber >= 4 && state.currentTrickNumber <= 8) {
       bool isAttackTeam = !_isPlayerOnDefenseTeam(player, state);
 
       if (isAttackTeam && player.isDeclarer) {
