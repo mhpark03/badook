@@ -164,26 +164,32 @@ class _HulaResponsiveSizes {
   late final double meldCardHeight;
 
   _HulaResponsiveSizes(this.screenHeight, this.screenWidth) {
+    // 화면 크기에 따른 스케일 팩터 계산
+    // 넓은 화면(웹)에서는 더 큰 카드 사용
+    final isWideScreen = screenWidth > 800;
+    final isLargeScreen = screenHeight > 700;
+    final scaleFactor = isWideScreen && isLargeScreen ? 1.5 : (isWideScreen ? 1.3 : 1.0);
+
     final baseUnit = screenHeight / 100;
     final widthUnit = screenWidth / 100;
 
     // 중앙 덱/버린카드 - 화면 비율로 계산
-    centerCardWidth = (widthUnit * 15).clamp(50.0, 90.0);
-    centerCardHeight = (baseUnit * 14).clamp(70.0, 130.0);
+    centerCardWidth = (widthUnit * 8 * scaleFactor).clamp(50.0, 140.0);
+    centerCardHeight = (baseUnit * 14 * scaleFactor).clamp(70.0, 200.0);
 
     // 플레이어 카드
-    playerCardWidth = (widthUnit * 11).clamp(40.0, 65.0);
-    playerCardHeight = (baseUnit * 10).clamp(55.0, 90.0);
-    playerSymbolSize = (baseUnit * 3).clamp(14.0, 26.0);
-    playerRankSize = (baseUnit * 2.5).clamp(12.0, 22.0);
+    playerCardWidth = (widthUnit * 6 * scaleFactor).clamp(40.0, 100.0);
+    playerCardHeight = (baseUnit * 12 * scaleFactor).clamp(55.0, 140.0);
+    playerSymbolSize = (baseUnit * 3.5 * scaleFactor).clamp(14.0, 40.0);
+    playerRankSize = (baseUnit * 3 * scaleFactor).clamp(12.0, 36.0);
 
     // AI 카드 (뒷면)
-    aiCardWidth = (widthUnit * 6).clamp(20.0, 36.0);
-    aiCardHeight = (baseUnit * 5).clamp(26.0, 44.0);
+    aiCardWidth = (widthUnit * 4 * scaleFactor).clamp(20.0, 60.0);
+    aiCardHeight = (baseUnit * 6 * scaleFactor).clamp(26.0, 80.0);
 
     // 멜드 영역 카드
-    meldCardWidth = (widthUnit * 5).clamp(16.0, 28.0);
-    meldCardHeight = (baseUnit * 4).clamp(22.0, 38.0);
+    meldCardWidth = (widthUnit * 3 * scaleFactor).clamp(16.0, 45.0);
+    meldCardHeight = (baseUnit * 5 * scaleFactor).clamp(22.0, 60.0);
   }
 }
 
@@ -3887,11 +3893,16 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
       }
     }
 
-    // 고정 높이 영역 (멜드가 없어도 공간 유지)
-    const fixedHeight = 70.0;
-    const cardHeight = 28.0;
-    const cardWidth = 20.0;
-    const overlap = 12.0;
+    // 반응형 크기 계산
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isWideScreen = screenWidth > 800;
+    final scaleFactor = isWideScreen ? 1.5 : 1.0;
+
+    final fixedHeight = 70.0 * scaleFactor;
+    final cardHeight = 28.0 * scaleFactor;
+    final cardWidth = 20.0 * scaleFactor;
+    final overlap = 12.0 * scaleFactor;
 
     return Container(
       height: fixedHeight,
