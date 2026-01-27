@@ -316,11 +316,14 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
       vsync: this,
     );
 
-    if (widget.resumeGame) {
-      _loadSavedGame();
-    } else {
-      _initGame();
-    }
+    // ★ context 사용이 필요한 초기화는 첫 프레임 이후에 실행
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.resumeGame) {
+        _loadSavedGame();
+      } else {
+        _initGame();
+      }
+    });
   }
 
   @override
