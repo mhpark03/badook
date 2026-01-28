@@ -8,6 +8,8 @@ import '../games/parking_jam/parking_screen.dart';
 import '../games/parking_jam/models/parking_models.dart';
 import '../games/car_escape/car_escape_screen.dart';
 import '../games/car_escape/models/car_escape_models.dart';
+import '../games/tap_master/tap_master_screen.dart';
+import '../games/tap_master/models/tap_master_models.dart';
 
 class EscapeGameSelectionScreen extends StatelessWidget {
   final GameLanguage language;
@@ -84,6 +86,13 @@ class EscapeGameSelectionScreen extends StatelessWidget {
         icon: Icons.alt_route,
         color: Colors.green[700]!,
         onTap: (context) => _showCarEscapeDialog(context),
+      ),
+      _GameInfo(
+        title: 'games.tapMaster.name'.tr(),
+        subtitle: 'games.tapMaster.subtitle'.tr(),
+        icon: Icons.touch_app,
+        color: Colors.red[400]!,
+        onTap: (context) => _showTapMasterDialog(context),
       ),
     ];
 
@@ -405,6 +414,75 @@ class EscapeGameSelectionScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => const CarEscapeScreen(
                       difficulty: CarEscapeDifficulty.hard,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showTapMasterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey.shade900,
+        title: Text(
+          'dialog.selectDifficulty'.tr(),
+          style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDifficultyButton(
+              context,
+              title: 'common.easy'.tr(),
+              subtitle: '3x3x6',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TapMasterScreen(
+                      difficulty: TapMasterDifficulty.easy,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'common.normal'.tr(),
+              subtitle: '5x5x10',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TapMasterScreen(
+                      difficulty: TapMasterDifficulty.medium,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              title: 'common.hard'.tr(),
+              subtitle: '7x7x14',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TapMasterScreen(
+                      difficulty: TapMasterDifficulty.hard,
                     ),
                   ),
                 );

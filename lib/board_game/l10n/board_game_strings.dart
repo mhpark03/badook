@@ -335,6 +335,19 @@ class BoardGameStrings {
     'games.carEscape.right': '우회전',
     'games.carEscape.uturn': '유턴',
 
+    // Tap Master
+    'games.tapMaster.name': '탭 마스터',
+    'games.tapMaster.subtitle': '3D 블록 퍼즐',
+    'games.tapMaster.description': '블록을 탭하여 화살표 방향으로 날려보내세요',
+    'games.tapMaster.time': '시간',
+    'games.tapMaster.taps': '탭',
+    'games.tapMaster.remaining': '남음',
+    'games.tapMaster.tapHighlighted': '강조된 블록을 탭하세요',
+    'games.tapMaster.rules': '3D 블록을 탭하면 화살표 방향으로 날아갑니다.\n\n'
+        '막혀있는 방향의 블록은 날아갈 수 없고 튕겨 돌아옵니다.\n\n'
+        '모든 블록을 제거하면 승리합니다.\n\n'
+        '드래그하여 3D 뷰를 회전할 수 있습니다.',
+
     // Bubble
     'games.bubble.name': '버블팝',
     'games.bubble.subtitle': '버블 터트리기',
@@ -881,6 +894,19 @@ class BoardGameStrings {
     'games.carEscape.left': '左折',
     'games.carEscape.right': '右折',
     'games.carEscape.uturn': 'Uターン',
+
+    // Tap Master
+    'games.tapMaster.name': 'タップマスター',
+    'games.tapMaster.subtitle': '3Dブロックパズル',
+    'games.tapMaster.description': 'ブロックをタップして矢印の方向に飛ばしましょう',
+    'games.tapMaster.time': '時間',
+    'games.tapMaster.taps': 'タップ',
+    'games.tapMaster.remaining': '残り',
+    'games.tapMaster.tapHighlighted': 'ハイライトされたブロックをタップしてください',
+    'games.tapMaster.rules': '3Dブロックをタップすると矢印の方向に飛んでいきます。\n\n'
+        '塞がれている方向のブロックは飛べずに跳ね返ります。\n\n'
+        'すべてのブロックを取り除くと勝利です。\n\n'
+        'ドラッグして3Dビューを回転できます。',
 
     // Bubble
     'games.bubble.name': 'バブルポップ',
@@ -1429,6 +1455,19 @@ class BoardGameStrings {
     'games.carEscape.right': 'Right',
     'games.carEscape.uturn': 'U-Turn',
 
+    // Tap Master
+    'games.tapMaster.name': 'Tap Master',
+    'games.tapMaster.subtitle': '3D Block Puzzle',
+    'games.tapMaster.description': 'Tap blocks to send them flying in arrow direction',
+    'games.tapMaster.time': 'Time',
+    'games.tapMaster.taps': 'Taps',
+    'games.tapMaster.remaining': 'Left',
+    'games.tapMaster.tapHighlighted': 'Tap the highlighted block',
+    'games.tapMaster.rules': 'Tap a 3D block to send it flying in the arrow direction.\n\n'
+        'Blocks blocked in that direction will bounce back.\n\n'
+        'Remove all blocks to win.\n\n'
+        'Drag to rotate the 3D view.',
+
     // Bubble
     'games.bubble.name': 'Bubble Pop',
     'games.bubble.subtitle': 'Pop Bubbles',
@@ -1810,6 +1849,19 @@ class BoardGameStrings {
     'games.carEscape.left': '左转',
     'games.carEscape.right': '右转',
     'games.carEscape.uturn': '掉头',
+
+    // Tap Master
+    'games.tapMaster.name': '点击大师',
+    'games.tapMaster.subtitle': '3D方块拼图',
+    'games.tapMaster.description': '点击方块，让它按箭头方向飞走',
+    'games.tapMaster.time': '时间',
+    'games.tapMaster.taps': '点击',
+    'games.tapMaster.remaining': '剩余',
+    'games.tapMaster.tapHighlighted': '点击高亮的方块',
+    'games.tapMaster.rules': '点击3D方块，它会朝箭头方向飞走。\n\n'
+        '如果方向被阻挡，方块会弹回来。\n\n'
+        '移除所有方块即可获胜。\n\n'
+        '拖动可旋转3D视图。',
 
     // Othello
     'games.othello.name': '黑白棋',
