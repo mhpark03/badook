@@ -103,3 +103,18 @@ This is a multi-game Flutter application targeting web deployment via Firebase H
 - Card games use rule-based AI in services
 - Go uses MCTS algorithm
 - Board games use minimax or custom algorithms
+
+## 오목 AI 패턴 우선순위
+
+`lib/board_game/games/gomoku/gomoku_screen.dart`에서 AI 패턴 감지 우선순위:
+
+1. **순수 연속 3** (`_●●●_`) - 양쪽 열림, 최우선 차단
+2. **한칸 건너뛴+연속 3** (`●_●●●`) - 한쪽에 3개 이상 연속
+3. **한칸 건너뛴 + 양끝 열림** - 빈칸 채우면 양쪽 열린 4
+4. **양끝 막힌 연속 3** (`○_●●●_○`) - 양쪽 빈칸 너머에 상대돌, 낮은 우선순위
+5. **일반 한칸 건너뛴 패턴** (`●_●●`)
+6. **3x3 가능 위치** - 후순위
+
+### 난이도별 AI 함수
+- 쉬움: `_findOpenThree()` - 기본 패턴 감지
+- 보통/어려움: `_blockOpenThreeSmartHard()` - 점수 평가로 최적 위치 선택
