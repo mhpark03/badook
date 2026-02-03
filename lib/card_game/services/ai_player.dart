@@ -1027,11 +1027,26 @@ class AIPlayer {
     int kingCount = hand.where((c) => !c.isJoker && c.rank == Rank.king).length;
 
     // 조건 2: 마이티 + 모든 A + 조커 콜 카드 + K 2장 이상 → 노 프렌드
+    // ★ 조커가 없어도 조커콜 카드가 있으면 2트릭에서 조커콜로 상대 조커 소진 가능
     int totalAces = (hasGirudaAce ? 1 : 0) + nonGirudaAceCount;
     // 마이티가 A인 경우 제외하고 3장의 A가 있으면 모든 A 보유
     int maxNonMightyAces = (state.mighty.rank == Rank.ace) ? 3 : 4;
     if (hasMighty && totalAces == maxNonMightyAces && hasJokerCallCard && kingCount >= 2) {
       return FriendDeclaration.noFriend();
+    }
+
+    // 조건 2-1: 기루다 압도적 우위 (8장 이상) + 마이티 + 기루다 A + 기루다 K → 노 프렌드
+    // 상대에게 기루다가 거의 없어서 컷 불가능, 조커 1번 빼앗겨도 마이티로 탈환 가능
+    if (state.giruda != null) {
+      int girudaCount = hand.where((c) =>
+          !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).length;
+      if (girudaCount >= 8 && hasMighty && hasGirudaAce && hasGirudaKing) {
+        return FriendDeclaration.noFriend();
+      }
+      // 기루다 7장 + 마이티 + 조커 + 기루다 A + 기루다 K → 노 프렌드
+      if (girudaCount >= 7 && hasMighty && hasJoker && hasGirudaAce && hasGirudaKing) {
+        return FriendDeclaration.noFriend();
+      }
     }
 
     // 조건 3: 선공 유지/탈환 확률과 예상 점수 기반 노프렌드 판단
