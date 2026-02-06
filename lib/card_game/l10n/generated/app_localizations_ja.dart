@@ -1465,4 +1465,24 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get betCall => 'コール';
+
+  @override
+  String get cannotPlayFirstTrickDeclarerGiruda => '最初のトリックでは、主公は切り札でリードできません';
+
+  @override
+  String get cannotPlayFirstTrickJoker => '最初のトリックではジョーカーを出せません';
+
+  @override
+  String get cannotPlayLastTrickJoker => '最後のトリックではジョーカーを出せません';
+
+  @override
+  String get mustPlayJokerCall => 'ジョーカーコール！ジョーカーを出さなければなりません';
+
+  @override
+  String mustFollowSuit(String suit) {
+    return '$suitのスートを出さなければなりません';
+  }
+
+  @override
+  String get fullDeclarationWarning => 'フル宣言で契約が20に上がります';
 }

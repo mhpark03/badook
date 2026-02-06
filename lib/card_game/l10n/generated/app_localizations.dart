@@ -2717,6 +2717,42 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'콜'**
   String get betCall;
+
+  /// No description provided for @cannotPlayFirstTrickDeclarerGiruda.
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 트릭에서 주공은 기루다로 선공할 수 없습니다'**
+  String get cannotPlayFirstTrickDeclarerGiruda;
+
+  /// No description provided for @cannotPlayFirstTrickJoker.
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 트릭에서는 조커를 낼 수 없습니다'**
+  String get cannotPlayFirstTrickJoker;
+
+  /// No description provided for @cannotPlayLastTrickJoker.
+  ///
+  /// In ko, this message translates to:
+  /// **'마지막 트릭에서는 조커를 낼 수 없습니다'**
+  String get cannotPlayLastTrickJoker;
+
+  /// No description provided for @mustPlayJokerCall.
+  ///
+  /// In ko, this message translates to:
+  /// **'조커 콜! 조커를 내야 합니다'**
+  String get mustPlayJokerCall;
+
+  /// No description provided for @mustFollowSuit.
+  ///
+  /// In ko, this message translates to:
+  /// **'{suit} 무늬를 내야 합니다'**
+  String mustFollowSuit(String suit);
+
+  /// No description provided for @fullDeclarationWarning.
+  ///
+  /// In ko, this message translates to:
+  /// **'풀 선언 시 공약이 20으로 올라갑니다'**
+  String get fullDeclarationWarning;
 }
 
 class _AppLocalizationsDelegate

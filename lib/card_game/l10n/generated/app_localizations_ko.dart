@@ -1471,4 +1471,24 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get betCall => '콜';
+
+  @override
+  String get cannotPlayFirstTrickDeclarerGiruda => '첫 트릭에서 주공은 기루다로 선공할 수 없습니다';
+
+  @override
+  String get cannotPlayFirstTrickJoker => '첫 트릭에서는 조커를 낼 수 없습니다';
+
+  @override
+  String get cannotPlayLastTrickJoker => '마지막 트릭에서는 조커를 낼 수 없습니다';
+
+  @override
+  String get mustPlayJokerCall => '조커 콜! 조커를 내야 합니다';
+
+  @override
+  String mustFollowSuit(String suit) {
+    return '$suit 무늬를 내야 합니다';
+  }
+
+  @override
+  String get fullDeclarationWarning => '풀 선언 시 공약이 20으로 올라갑니다';
 }

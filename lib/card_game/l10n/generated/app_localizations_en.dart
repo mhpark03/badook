@@ -1482,4 +1482,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get betCall => 'Call';
+
+  @override
+  String get cannotPlayFirstTrickDeclarerGiruda =>
+      'Declarer cannot lead with trump on the first trick';
+
+  @override
+  String get cannotPlayFirstTrickJoker =>
+      'Cannot play Joker on the first trick';
+
+  @override
+  String get cannotPlayLastTrickJoker => 'Cannot play Joker on the last trick';
+
+  @override
+  String get mustPlayJokerCall => 'Joker Call! You must play the Joker';
+
+  @override
+  String mustFollowSuit(String suit) {
+    return 'You must follow $suit';
+  }
+
+  @override
+  String get fullDeclarationWarning =>
+      'Declaring Full raises the contract to 20';
 }
