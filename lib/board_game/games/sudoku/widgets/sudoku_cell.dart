@@ -58,33 +58,39 @@ class SudokuCell extends StatelessWidget {
       onTap: onTap,
       child: Container(
         color: backgroundColor,
-        child: value != 0
-            ? Center(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final cellSize = constraints.maxWidth < constraints.maxHeight
+                ? constraints.maxWidth
+                : constraints.maxHeight;
+
+            if (value != 0) {
+              final valueFontSize = (cellSize * 0.55).clamp(14.0, 40.0);
+              return Center(
                 child: Text(
                   value.toString(),
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: valueFontSize,
                     fontWeight: isFixed ? FontWeight.bold : FontWeight.normal,
                     color: textColor,
                   ),
                 ),
-              )
-            : notes.isNotEmpty
-                ? _buildNotesGrid()
-                : const SizedBox.expand(),
+              );
+            } else if (notes.isNotEmpty) {
+              return _buildNotesGrid(cellSize);
+            } else {
+              return const SizedBox.expand();
+            }
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildNotesGrid() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final w = constraints.maxWidth;
-        final h = constraints.maxHeight;
-        final size = w < h ? w : h;
-        final fontSize = ((size / 3) * 0.55).clamp(6.0, 12.0);
+  Widget _buildNotesGrid(double cellSize) {
+    final fontSize = (cellSize / 3 * 0.55).clamp(6.0, 18.0);
 
-        return Padding(
+    return Padding(
           padding: const EdgeInsets.all(1),
           child: Column(
             children: List.generate(3, (rowIndex) {
@@ -111,7 +117,5 @@ class SudokuCell extends StatelessWidget {
             }),
           ),
         );
-      },
-    );
   }
 }
