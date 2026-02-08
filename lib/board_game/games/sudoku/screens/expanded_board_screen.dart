@@ -807,35 +807,32 @@ class _ExpandedBoardScreenState extends State<ExpandedBoardScreen> {
   }
 
   Widget _buildNotesGrid(Set<int> cellNotes, double cellSize) {
-    final noteCellSize = cellSize / 3;
-    final fontSize = (noteCellSize * 0.55).clamp(6.0, 18.0);
+    final fontSize = (cellSize / 3 * 0.55).clamp(6.0, 18.0);
 
     return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(3, (row) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(3, (col) {
-                int num = row * 3 + col + 1;
-                bool hasNote = cellNotes.contains(num);
-                return SizedBox(
-                  width: cellSize,
-                  height: cellSize,
-                  child: Center(
-                    child: Text(
-                      hasNote ? num.toString() : '',
-                      style: TextStyle(
-                        fontSize: fontSize,
-                        color: Colors.grey.shade800,
-                        fontWeight: FontWeight.bold,
-                      ),
+      children: List.generate(3, (row) {
+        return Expanded(
+          child: Row(
+            children: List.generate(3, (col) {
+              int num = row * 3 + col + 1;
+              bool hasNote = cellNotes.contains(num);
+              return Expanded(
+                child: Center(
+                  child: Text(
+                    hasNote ? num.toString() : '',
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      color: Colors.grey.shade800,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                );
-              }),
-            );
-          }),
+                ),
+              );
+            }),
+          ),
         );
+      }),
+    );
   }
 
   bool _isSameBox(int row, int col) {
