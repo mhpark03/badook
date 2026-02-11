@@ -731,9 +731,16 @@ class _GameScreenState extends State<GameScreen> {
     // 세로 모드 확인
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-    // 세로 모드에서 카드 크기와 배치 계산
-    final cardWidth = isPortrait ? (screenWidth - 32) / 6 - 4 : 55.0;
+    // 카드 크기 계산: 세로 모드와 가로 모드 모두 반응형
+    final double cardWidth;
+    if (isPortrait) {
+      cardWidth = (screenWidth - 32) / 6 - 4;
+    } else {
+      // 가로 모드: 화면 높이 기준 반응형
+      cardWidth = (screenHeight * 0.1).clamp(55.0, 100.0);
+    }
     final cardHeight = cardWidth * 1.4;
 
     return Container(
@@ -797,7 +804,7 @@ class _GameScreenState extends State<GameScreen> {
             _buildTwoRowCards(hand, cardWidth, cardHeight)
           else
             SizedBox(
-              height: 90,
+              height: cardHeight + 10,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -808,8 +815,8 @@ class _GameScreenState extends State<GameScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                         child: CardWidget(
                           card: card,
-                          width: 55,
-                          height: 80,
+                          width: cardWidth,
+                          height: cardHeight,
                           isSelected: false,
                           isPlayable: true,
                           onTap: null,
@@ -1641,11 +1648,11 @@ class _GameScreenState extends State<GameScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // 중앙 영역 크기: 화면의 비율에 따라 계산
-    final centerWidth = (screenWidth * 0.75).clamp(260.0, 500.0);
-    final centerHeight = (screenHeight * 0.22).clamp(100.0, 200.0);
+    final centerWidth = (screenWidth * 0.55).clamp(260.0, 800.0);
+    final centerHeight = (screenHeight * 0.25).clamp(100.0, 350.0);
 
     // 트릭 카드 크기: 중앙 영역에 맞춰 계산
-    final trickCardWidth = (centerWidth / 6).clamp(30.0, 55.0);
+    final trickCardWidth = (centerWidth / 6).clamp(30.0, 90.0);
     final trickCardHeight = trickCardWidth * 1.4;
 
     return Stack(
@@ -2317,9 +2324,13 @@ class _GameScreenState extends State<GameScreen> {
         ],
       );
     } else {
-      // 가로 모드: 1줄 스크롤
+      // 가로 모드: 반응형 카드 크기
+      final screenHeight = MediaQuery.of(context).size.height;
+      final landscapeCardWidth = (screenHeight * 0.1).clamp(55.0, 100.0);
+      final landscapeCardHeight = landscapeCardWidth * 1.4;
+
       return SizedBox(
-        height: 90,
+        height: landscapeCardHeight + 10,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -2330,8 +2341,8 @@ class _GameScreenState extends State<GameScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 2),
                   child: CardWidget(
                     card: card,
-                    width: 55,
-                    height: 80,
+                    width: landscapeCardWidth,
+                    height: landscapeCardHeight,
                     isSelected: selectedCard == card,
                     isPlayable: playableCards.contains(card),
                     isRecommended: recommendedCard != null && _isSameCard(card, recommendedCard),
