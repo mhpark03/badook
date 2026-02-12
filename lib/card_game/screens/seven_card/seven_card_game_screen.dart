@@ -1346,9 +1346,21 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
                     ] else
                       const Icon(Icons.emoji_events, color: Colors.amber, size: 48),
                     if (bonusInfo == null) const SizedBox(height: 12),
+                    () {
+                      final isPlayerWinner = winner?.id == 0;
+                      return Text(
+                        isPlayerWinner ? l10n.victory : l10n.defeat,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: isPlayerWinner ? Colors.green : Colors.red,
+                        ),
+                      );
+                    }(),
+                    const SizedBox(height: 4),
                     Text(
                       winner != null ? '${winner.name} ${l10n.wins}!' : l10n.gameEnd,
-                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                     if (winner?.pokerHand != null && bonusInfo == null) ...[
                       const SizedBox(height: 4),
