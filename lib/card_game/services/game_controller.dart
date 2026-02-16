@@ -5,6 +5,7 @@ import '../models/player.dart';
 import '../models/game_state.dart';
 import 'ai_player.dart';
 import 'game_save_service.dart';
+import 'mighty_tracking_service.dart';
 
 class GameController extends ChangeNotifier {
   late GameState _state;
@@ -13,6 +14,11 @@ class GameController extends ChangeNotifier {
   bool _waitingForTrickConfirm = false;
   Trick? _lastCompletedTrick;
   static const String _gameType = 'mighty';
+
+  // 트래킹용
+  String _gameUuid = '';
+  final List<BidEvaluationSnapshot> _bidSnapshots = [];
+  bool _trackingSent = false;
 
   GameController() {
     _initializePlayers();
@@ -72,6 +78,9 @@ class GameController extends ChangeNotifier {
   bool get waitingForTrickConfirm => _waitingForTrickConfirm;
   Trick? get lastCompletedTrick => _lastCompletedTrick;
 
+  String get gameUuid => _gameUuid;
+  List<BidEvaluationSnapshot> get bidSnapshots => _bidSnapshots;
+
   Player get humanPlayer => _state.players[0];
   Player get currentPlayer => _state.players[_state.currentPlayer];
   bool get isHumanTurn =>
@@ -90,6 +99,9 @@ class GameController extends ChangeNotifier {
   }
 
   void startNewGame() {
+    _gameUuid = MightyTrackingService.generateUuid();
+    _bidSnapshots.clear();
+    _trackingSent = false;
     _state.startNewGame();
     notifyListeners();
     saveGame(); // 자동 저장
@@ -107,6 +119,7 @@ class GameController extends ChangeNotifier {
 
     final currentPlayer = _state.players[_state.currentBidder];
     final bid = _aiPlayer.decideBid(currentPlayer, _state);
+    _captureBidSnapshot(currentPlayer, bid);
     _state.placeBid(bid);
 
     _isProcessing = false;
@@ -124,6 +137,7 @@ class GameController extends ChangeNotifier {
   void humanBid(Bid bid) {
     if (_state.currentBidder != 0) return;
 
+    _captureBidSnapshot(_state.players[0], bid);
     _state.placeBid(bid);
     notifyListeners();
     saveGame(); // 자동 저장
@@ -455,6 +469,54 @@ class GameController extends ChangeNotifier {
 
     // AI 로직을 사용하여 추천 배팅 선택
     return _aiPlayer.decideBid(humanPlayer, _state);
+  }
+
+  void _captureBidSnapshot(Player player, Bid bid) {
+    final hand = player.hand;
+    final bestSuit = _aiPlayer.findBestSuit(hand);
+    final mightySuit = bestSuit == Suit.spade ? Suit.diamond : Suit.spade;
+    final girudaCards = bestSuit != null
+        ? hand.where((c) => !c.isJoker && c.suit == bestSuit).toList()
+        : <PlayingCard>[];
+    final strength = bestSuit != null
+        ? _aiPlayer.evaluateHandStrength(hand, bestSuit)
+        : 0;
+
+    _bidSnapshots.add(BidEvaluationSnapshot(
+      playerId: player.id,
+      hand: hand.map((c) => c.toJson()).toList(),
+      bestGiruda: bestSuit?.name,
+      girudaCount: girudaCards.length,
+      hasMighty: hand.any((c) =>
+          !c.isJoker && c.suit == mightySuit && c.rank == Rank.ace),
+      hasJoker: hand.any((c) => c.isJoker),
+      hasGirudaAce: girudaCards.any((c) => c.rank == Rank.ace),
+      hasGirudaKing: girudaCards.any((c) => c.rank == Rank.king),
+      predictedStrength: strength,
+      bidAction: bid.passed ? 'PASS' : 'BID',
+      bidAmount: bid.tricks,
+    ));
+  }
+
+  /// 게임 종료 시 서버로 트래킹 데이터 전송
+  void sendTracking() {
+    if (_trackingSent) return;
+    _trackingSent = true;
+
+    // 주공의 비딩 스냅샷에 isDeclarer 표시
+    if (_state.declarerId != null) {
+      for (final snap in _bidSnapshots) {
+        if (snap.playerId == _state.declarerId) {
+          snap.isDeclarer = true;
+        }
+      }
+    }
+
+    MightyTrackingService.sendGameResult(
+      gameUuid: _gameUuid,
+      state: _state,
+      bidSnapshots: _bidSnapshots,
+    );
   }
 
   void reset() {

@@ -2737,30 +2737,35 @@ class _GameScreenState extends State<GameScreen> {
     WebAdHelper.showAd();
 
     // 통계 기록 (한 번만)
-    if (!_statsRecorded && state.declarerId != null) {
+    if (!_statsRecorded) {
       _statsRecorded = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final statsService = context.read<StatsService>();
-        final playerScores = <int, int>{};
-        for (int i = 0; i < state.players.length; i++) {
-          playerScores[i] = state.getPlayerScore(i);
-        }
-
-        // 프렌드 ID 찾기
-        int? friendId;
-        for (int i = 0; i < state.players.length; i++) {
-          if (state.players[i].isFriend) {
-            friendId = i;
-            break;
+        if (state.declarerId != null) {
+          final statsService = context.read<StatsService>();
+          final playerScores = <int, int>{};
+          for (int i = 0; i < state.players.length; i++) {
+            playerScores[i] = state.getPlayerScore(i);
           }
+
+          // 프렌드 ID 찾기
+          int? friendId;
+          for (int i = 0; i < state.players.length; i++) {
+            if (state.players[i].isFriend) {
+              friendId = i;
+              break;
+            }
+          }
+
+          statsService.recordGameResult(
+            playerScores: playerScores,
+            declarerWon: state.declarerWon,
+            declarerId: state.declarerId!,
+            friendId: friendId,
+          );
         }
 
-        statsService.recordGameResult(
-          playerScores: playerScores,
-          declarerWon: state.declarerWon,
-          declarerId: state.declarerId!,
-          friendId: friendId,
-        );
+        // 서버 트래킹 (allPassed 포함)
+        controller.sendTracking();
       });
     }
 

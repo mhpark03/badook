@@ -302,23 +302,42 @@ class AIPlayer {
     return true;
   }
 
+  /// 기루다 강도 점수: 카드 쌍별 연결성 가중치 적용
+  /// A/K → 2.0, A/Q → 1.7, A/J → 1.5, A/Q/J → 2.7, A/K/Q → 3.0
+  /// 3.0 이상이면 기루다 후보로 검토
+  double _calcGirudaStrengthScore(List<PlayingCard> suitCards) {
+    if (suitCards.isEmpty) return 0;
+    final ranks = suitCards.map((c) => c.rank!.index).toList()
+      ..sort((a, b) => b.compareTo(a)); // 내림차순 (A=12, K=11, ...)
+    double score = 0;
+    int i = 0;
+    while (i < ranks.length) {
+      score += 1; // 쌍의 첫 번째 카드
+      if (i + 1 < ranks.length) {
+        final gap = ranks[i] - ranks[i + 1] - 1;
+        if (gap == 0) {
+          score += 1;   // 인접 (A-K, K-Q 등)
+        } else if (gap == 1) {
+          score += 0.7;  // 한 칸 건너뜀 (A-Q, K-J 등)
+        } else {
+          score += 0.5;  // 두 칸 이상 건너뜀
+        }
+        i += 2;
+      } else {
+        i += 1; // 홀수 마지막 카드
+      }
+    }
+    return score;
+  }
+
   Bid decideBid(Player player, GameState state) {
     final hand = player.hand;
 
-    // 1. 먼저 최적의 기루다를 선택
+    // 1. 먼저 최적의 기루다를 선택 (강도 점수 기반 필터링)
     Suit? bestSuit = findBestSuit(hand);
 
-    // 2. 기루다가 없거나, 기루다에 A/K가 없으면 패스
+    // 2. 기루다 후보가 없으면 패스
     if (bestSuit == null) {
-      return Bid.pass(player.id);
-    }
-
-    final girudaCards = hand.where((c) => !c.isJoker && c.suit == bestSuit).toList();
-    bool hasGirudaAce = girudaCards.any((c) => c.rank == Rank.ace);
-    bool hasGirudaKing = girudaCards.any((c) => c.rank == Rank.king);
-
-    // 기루다 A 또는 K 필수
-    if (!hasGirudaAce && !hasGirudaKing) {
       return Bid.pass(player.id);
     }
 
@@ -485,8 +504,8 @@ class AIPlayer {
       int strength = 0;
       final suitCards = hand.where((c) => !c.isJoker && c.suit == suit).toList();
 
-      // 같은 무늬가 4장 이상이어야 기루다 후보 (3장 이하는 제외)
-      if (suitCards.length <= 3) {
+      // 기루다 강도 점수 기반 후보 필터링 (연결성 가중치 적용)
+      if (_calcGirudaStrengthScore(suitCards) < 3.0) {
         suitStrength[suit] = 0;
         continue;
       }
@@ -496,12 +515,6 @@ class AIPlayer {
       bool hasKing = suitCards.any((c) => c.rank == Rank.king);
       bool hasQueen = suitCards.any((c) => c.rank == Rank.queen);
       bool hasJack = suitCards.any((c) => c.rank == Rank.jack);
-
-      // 기루다 A 또는 K 필수 - 없으면 후보에서 제외
-      if (!hasAce && !hasKing) {
-        suitStrength[suit] = 0;
-        continue;
-      }
 
       // 고위 카드에 높은 가중치
       if (hasAce) strength += 10;
