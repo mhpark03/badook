@@ -30,6 +30,7 @@ class _GameScreenState extends State<GameScreen> {
   bool _statsRecorded = false;
   bool _bidInitialized = false;
   bool _showGameResult = true;
+  bool _showTrickDetails = false;
 
   /// 배팅을 무늬 기호로 포맷
   String _formatBid(Bid bid) {
@@ -148,6 +149,7 @@ class _GameScreenState extends State<GameScreen> {
               _allPassedDialogShown = false;
               _bidInitialized = false;
               _showGameResult = true;
+              _showTrickDetails = false;
               _showHint = false;
               controller.startNewGame();
             },
@@ -230,6 +232,8 @@ class _GameScreenState extends State<GameScreen> {
       case GamePhase.gameEnd:
         if (_showGameResult) {
           return _buildGameEndScreen(controller);
+        } else if (_showTrickDetails) {
+          return _buildTrickDetailsScreen(controller);
         } else {
           return _buildPlayingScreen(controller);
         }
@@ -1049,7 +1053,7 @@ class _GameScreenState extends State<GameScreen> {
         if (controller.waitingForTrickConfirm)
           _buildTrickConfirmOverlay(controller),
         // 게임 종료 후 팀별 점수 및 버튼 표시
-        if (state.phase == GamePhase.gameEnd && !_showGameResult)
+        if (state.phase == GamePhase.gameEnd && !_showGameResult && !_showTrickDetails)
           Positioned(
             bottom: 180,
             left: 0,
@@ -1159,6 +1163,7 @@ class _GameScreenState extends State<GameScreen> {
                         onPressed: () {
                           setState(() {
                             _showGameResult = true;
+                            _showTrickDetails = false;
                           });
                         },
                         icon: const Icon(Icons.emoji_events, color: Colors.black),
@@ -1177,6 +1182,7 @@ class _GameScreenState extends State<GameScreen> {
                           setState(() {
                             _statsRecorded = false;
                             _showGameResult = true;
+                            _showTrickDetails = false;
                             _showHint = false;
                           });
                           controller.reset();
@@ -2926,6 +2932,7 @@ class _GameScreenState extends State<GameScreen> {
                   onPressed: () {
                     setState(() {
                       _showGameResult = false;
+                      _showTrickDetails = true;
                     });
                   },
                   style: ElevatedButton.styleFrom(
@@ -2934,7 +2941,7 @@ class _GameScreenState extends State<GameScreen> {
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                   child: Text(
-                    l10n.confirm,
+                    l10n.trickDetails,
                     style: const TextStyle(fontSize: 16, color: Colors.black),
                   ),
                 ),
@@ -2944,6 +2951,7 @@ class _GameScreenState extends State<GameScreen> {
                     setState(() {
                       _statsRecorded = false;
                       _showGameResult = true;
+                      _showTrickDetails = false;
                       _showHint = false;
                     });
                     controller.reset();
@@ -2967,4 +2975,442 @@ class _GameScreenState extends State<GameScreen> {
       ),
     );
   }
+
+  /// describeTrick: 서버 GameDetailPage.tsx의 로직을 Dart로 포팅
+  String? _describeTrick(Trick trick, GameState state, AppLocalizations l10n, Set<String> playedCards) {
+    if (trick.cards.isEmpty) return null;
+    if (trick.trickNumber == 10) return l10n.trickEventLastCard;
+
+    final giruda = state.giruda;
+    final leadId = trick.leadPlayerId;
+    final leadIdx = trick.playerOrder.indexOf(leadId);
+    if (leadIdx < 0 || leadIdx >= trick.cards.length) return null;
+    final leadCard = trick.cards[leadIdx];
+
+    final mighty = state.mighty;
+    bool isMighty(PlayingCard c) => !c.isJoker && c.suit == mighty.suit && c.rank == mighty.rank;
+    bool isGiruda(PlayingCard c) => !c.isJoker && giruda != null && c.suit == giruda;
+    bool isAttack(int id) => id == state.declarerId || id == state.friendId;
+    bool isTeammate(int winnerId) => isAttack(leadId) == isAttack(winnerId);
+    final hasMightyInTrick = trick.cards.any((c) => isMighty(c));
+
+    bool isTopOfSuit(Suit suit, int rankValue) {
+      final mightySuit = mighty.suit;
+      final mightyRankValue = mighty.rankValue;
+      for (int r = 14; r > rankValue; r--) {
+        if (suit == mightySuit && r == mightyRankValue) continue;
+        if (!playedCards.contains('${suit.index}-$r')) return false;
+      }
+      return true;
+    }
+
+    final parts = <String>[];
+
+    // Lead card description
+    if (leadCard.isJoker) {
+      const suitSymbols = {Suit.spade: '\u2660', Suit.diamond: '\u2666', Suit.heart: '\u2665', Suit.club: '\u2663'};
+      final declaredSuit = trick.leadSuit;
+      final suitStr = declaredSuit != null ? suitSymbols[declaredSuit] ?? '' : '';
+      String jokerDesc = suitStr.isNotEmpty
+          ? l10n.trickEventJokerLeadSuit(suitStr)
+          : l10n.trickEventJokerLead;
+      if (declaredSuit != null && declaredSuit == giruda) {
+        jokerDesc += ' / ${l10n.trickEventJokerGirudaExhaust}';
+      }
+      parts.add(jokerDesc);
+    } else if (isMighty(leadCard)) {
+      parts.add(l10n.trickEventMightyLead);
+    } else if (isGiruda(leadCard)) {
+      final isTop = leadCard.rankValue >= 14 || isTopOfSuit(leadCard.suit!, leadCard.rankValue);
+      if (isTop) {
+        parts.add(l10n.trickEventTopGirudaLead);
+      } else {
+        if (hasMightyInTrick) {
+          parts.add(l10n.trickEventMidGirudaMightyBait);
+        } else if (trick.winnerId != leadId && isTeammate(trick.winnerId!)) {
+          parts.add(l10n.trickEventMidGirudaPassLead);
+        } else if (trick.winnerId != leadId && !isTeammate(trick.winnerId!)) {
+          parts.add(l10n.trickEventDefenderGirudaWin);
+        } else {
+          parts.add(l10n.trickEventMidGirudaLead);
+        }
+      }
+    } else {
+      final isTop = leadCard.rankValue >= 14 || isTopOfSuit(leadCard.suit!, leadCard.rankValue);
+      if (isTop) {
+        parts.add(l10n.trickEventTopNonGirudaLead);
+      } else if (trick.trickNumber == 1) {
+        if (trick.winnerId != null && isAttack(trick.winnerId!)) {
+          parts.add(l10n.trickEventFirstTrickFriendBait);
+        } else {
+          parts.add(l10n.trickEventFirstTrickWaste);
+        }
+      } else {
+        parts.add(l10n.trickEventWaste);
+      }
+    }
+
+    // Outcome: 기루다 컷
+    if (trick.leadSuit != giruda && giruda != null) {
+      final winIdx = trick.playerOrder.indexOf(trick.winnerId!);
+      if (winIdx >= 0 && winIdx < trick.cards.length) {
+        final winCard = trick.cards[winIdx];
+        if (isGiruda(winCard) && trick.winnerId != leadId) {
+          if (isAttack(trick.winnerId!)) {
+            parts.add(l10n.trickEventAttackGirudaCut);
+          } else {
+            parts.add(l10n.trickEventDefenseGirudaCut);
+          }
+        }
+      }
+    }
+
+    return parts.isNotEmpty ? parts.join(' / ') : null;
+  }
+
+  Widget _buildTrickDetailsScreen(GameController controller) {
+    final l10n = getL10n(context);
+    final state = controller.state;
+
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
+        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              () {
+                final isPlayerWinner = state.getPlayerScore(state.players[0].id) >= 0;
+                return Column(
+                  children: [
+                    Text(
+                      isPlayerWinner ? l10n.victory : l10n.defeat,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: isPlayerWinner ? Colors.green : Colors.red,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      state.declarerWon ? l10n.declarerTeamWins : l10n.defenderTeamWins,
+                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    ),
+                  ],
+                );
+              }(),
+              const SizedBox(height: 8),
+              Text(
+                state.declarerTeamPoints == 20
+                    ? '${l10n.declarerTeam}: ${l10n.fullPoints}'
+                    : l10n.declarerTeamPoints(state.declarerTeamPoints),
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                l10n.targetPoints(state.currentBid?.tricks ?? 0),
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              const SizedBox(height: 16),
+              _buildTrickDetailsTable(state, l10n: l10n),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _showTrickDetails = false;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[300],
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    child: Text(
+                      l10n.confirm,
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _showGameResult = true;
+                        _showTrickDetails = false;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.amber,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    child: Text(
+                      l10n.score,
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _statsRecorded = false;
+                        _showGameResult = true;
+                        _showTrickDetails = false;
+                        _showHint = false;
+                      });
+                      controller.reset();
+                      controller.startNewGame();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    child: Text(
+                      l10n.newGame,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTrickDetailsTable(GameState state, {required AppLocalizations l10n}) {
+    final tricks = state.tricks;
+    if (tricks.isEmpty) return const SizedBox.shrink();
+
+    final giruda = state.giruda;
+    const fontSize = 12.0;
+
+    // 플레이어 이름 + 역할
+    final playerNames = <int, String>{};
+    final playerRoles = <int, String>{};
+    for (int i = 0; i < state.players.length; i++) {
+      playerNames[i] = _getLocalizedPlayerName(state.players[i], l10n);
+      if (state.players[i].isDeclarer) {
+        playerRoles[i] = l10n.declarer;
+      } else if (state.players[i].isFriend) {
+        playerRoles[i] = l10n.friend;
+      }
+    }
+
+    // 트릭별 데이터 계산
+    final playedCards = <String>{};
+    final rows = <_TrickRowData>[];
+    int girudaRemaining = giruda != null ? 13 : 0;
+
+    for (final trick in tricks) {
+      final description = _describeTrick(trick, state, l10n, playedCards);
+
+      int girudaInTrick = 0;
+      final cardsByPlayer = <int, PlayingCard>{};
+      for (int i = 0; i < trick.cards.length; i++) {
+        final card = trick.cards[i];
+        final playerId = trick.playerOrder[i];
+        cardsByPlayer[playerId] = card;
+        if (!card.isJoker && card.suit != null) {
+          playedCards.add('${card.suit!.index}-${card.rankValue}');
+          if (card.suit == giruda) girudaInTrick++;
+        }
+      }
+      girudaRemaining -= girudaInTrick;
+
+      int trickDelta = 0;
+      if (trick.winnerId != null) {
+        final pointCount = trick.cards.where((c) => c.isPointCard).length;
+        final isAttackWin = trick.winnerId == state.declarerId || trick.winnerId == state.friendId;
+        trickDelta = isAttackWin ? pointCount : -pointCount;
+      }
+
+      rows.add(_TrickRowData(
+        trickNumber: trick.trickNumber,
+        cardsByPlayer: cardsByPlayer,
+        leadPlayerId: trick.leadPlayerId,
+        winnerId: trick.winnerId,
+        trickDelta: trickDelta,
+        girudaRemaining: girudaRemaining,
+        description: description,
+        jokerLeadSuit: trick.jokerLeadSuit,
+      ));
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.trickDetails,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Table(
+            defaultColumnWidth: const IntrinsicColumnWidth(),
+            border: TableBorder(
+              horizontalInside: BorderSide(color: Colors.grey[200]!, width: 0.5),
+            ),
+            children: [
+              TableRow(
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
+                ),
+                children: [
+                  _trickHeaderCell('#', fontSize),
+                  for (int i = 0; i < 5; i++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      child: Column(
+                        children: [
+                          Text(
+                            playerNames[i] ?? '',
+                            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                          ),
+                          if (playerRoles[i] != null)
+                            Text(
+                              playerRoles[i]!,
+                              style: TextStyle(
+                                fontSize: fontSize - 2,
+                                color: state.players[i].isDeclarer ? Colors.red[600] : Colors.blue[600],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  _trickHeaderCell(l10n.trickColumnGainLoss, fontSize),
+                  _trickHeaderCell(l10n.trickColumnGiruda, fontSize),
+                  _trickHeaderCell(l10n.trickColumnEvent, fontSize),
+                ],
+              ),
+              for (final row in rows)
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                      child: Text(
+                        '${row.trickNumber}',
+                        style: TextStyle(fontSize: fontSize, color: Colors.grey[500], fontFamily: 'monospace'),
+                      ),
+                    ),
+                    for (int i = 0; i < 5; i++)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                        color: row.winnerId == i ? Colors.blue[50] : null,
+                        child: row.cardsByPlayer[i] != null
+                            ? _buildTrickCardCell(row.cardsByPlayer[i]!, i == row.leadPlayerId, fontSize,
+                                jokerLeadSuit: i == row.leadPlayerId ? row.jokerLeadSuit : null)
+                            : Text('-', textAlign: TextAlign.center, style: TextStyle(fontSize: fontSize, color: Colors.grey[300])),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                      child: Text(
+                        row.trickDelta > 0 ? '+${row.trickDelta}' : row.trickDelta < 0 ? '${row.trickDelta}' : '-',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: fontSize,
+                          fontFamily: 'monospace',
+                          fontWeight: row.trickDelta != 0 ? FontWeight.bold : FontWeight.normal,
+                          color: row.trickDelta > 0 ? Colors.blue[600] : row.trickDelta < 0 ? Colors.red[500] : Colors.grey[300],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                      child: Text(
+                        '${row.girudaRemaining}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: fontSize, fontFamily: 'monospace', color: Colors.grey[400]),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                      child: Text(
+                        row.description ?? '',
+                        style: TextStyle(fontSize: fontSize, color: Colors.grey[500]),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _trickHeaderCell(String text, double fontSize) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+      ),
+    );
+  }
+
+  Widget _buildTrickCardCell(PlayingCard card, bool isLead, double fontSize, {Suit? jokerLeadSuit}) {
+    String text = card.toString();
+    Color textColor;
+    if (card.isJoker) {
+      textColor = Colors.green[700]!;
+      if (jokerLeadSuit != null) {
+        const suitSymbols = {Suit.spade: '\u2660', Suit.diamond: '\u2666', Suit.heart: '\u2665', Suit.club: '\u2663'};
+        text = 'JK${suitSymbols[jokerLeadSuit] ?? ''}';
+      }
+    } else if (card.isRed) {
+      textColor = Colors.red[600]!;
+    } else {
+      textColor = Colors.grey[900]!;
+    }
+
+    Widget child = Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: fontSize, color: textColor, fontWeight: FontWeight.w500),
+    );
+
+    if (isLead) {
+      child = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[400]!, width: 1),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: child,
+      );
+    }
+
+    return child;
+  }
+}
+
+class _TrickRowData {
+  final int trickNumber;
+  final Map<int, PlayingCard> cardsByPlayer;
+  final int leadPlayerId;
+  final int? winnerId;
+  final int trickDelta;
+  final int girudaRemaining;
+  final String? description;
+  final Suit? jokerLeadSuit;
+
+  _TrickRowData({
+    required this.trickNumber,
+    required this.cardsByPlayer,
+    required this.leadPlayerId,
+    required this.winnerId,
+    required this.trickDelta,
+    required this.girudaRemaining,
+    required this.description,
+    this.jokerLeadSuit,
+  });
 }
