@@ -520,9 +520,11 @@
   "fullDeclarationWarning": "Declaring Full raises the contract to 20",
 
   "trickDetails": "Trick Details",
-  "trickColumnGainLoss": "Gain/Loss",
+  "trickColumnGainLoss": "Gain/\nLoss",
   "trickColumnGiruda": "Trump",
   "trickColumnEvent": "Event",
+  "trickLegendLead": "Lead",
+  "trickLegendWinner": "Winner",
   "trickEventLastCard": "Last card",
   "trickEventJokerLead": "Joker lead",
   "trickEventJokerLeadSuit": "Joker lead ({suit})",
