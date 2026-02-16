@@ -9,6 +9,7 @@ import '../services/game_controller.dart';
 import '../services/stats_service.dart';
 import '../widgets/card_game_provider.dart';
 import 'game_screen.dart';
+import 'mighty_tutorial_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -176,6 +177,39 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.amber,
                         padding: EdgeInsets.symmetric(vertical: buttonPadding),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: isSmallScreen ? 8 : 10),
+
+                  // 마이티 배우기 버튼
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const MightyTutorialScreen()),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.school,
+                        color: Colors.white,
+                        size: isSmallScreen ? 18 : 20,
+                      ),
+                      label: Text(
+                        '마이티 배우기',
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 14 : 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.white38),
+                        padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 8 : 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
