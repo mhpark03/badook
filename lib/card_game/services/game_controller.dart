@@ -503,6 +503,9 @@ class GameController extends ChangeNotifier {
     if (_trackingSent) return;
     _trackingSent = true;
 
+    // 올패스 게임은 서버로 보내지 않음
+    if (_state.allPassed) return;
+
     // 주공의 비딩 스냅샷에 isDeclarer 표시
     if (_state.declarerId != null) {
       for (final snap in _bidSnapshots) {
