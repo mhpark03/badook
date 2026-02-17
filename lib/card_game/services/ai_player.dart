@@ -780,6 +780,12 @@ class AIPlayer {
       if (a.isJoker || a.isMightyWith(state.giruda)) return 1;
       if (b.isJoker || b.isMightyWith(state.giruda)) return -1;
 
+      // 1.5. 초구 카드는 버리지 않음 (초구 승리 계획에 필수)
+      if (firstTrickCard != null) {
+        if (identical(a, firstTrickCard)) return 1;
+        if (identical(b, firstTrickCard)) return -1;
+      }
+
       // 2. 조커콜 카드 처리
       // ★ 조커 보유 시: 일반 카드로 처리 (해당 무늬 유지가 유리할 수 있음)
       // ★ 조커 미보유 시: 조커콜 카드 보존 (상대 조커 콜용)
@@ -979,6 +985,12 @@ class AIPlayer {
       // 1. 조커/마이티는 절대 버리지 않음
       if (a.isJoker || isMightyCard(a)) return 1;
       if (b.isJoker || isMightyCard(b)) return -1;
+
+      // 1.5. 초구 카드는 버리지 않음 (초구 승리 계획에 필수)
+      if (firstTrickCard != null) {
+        if (identical(a, firstTrickCard)) return 1;
+        if (identical(b, firstTrickCard)) return -1;
+      }
 
       // 2. A, K 등 최상위 카드는 버리기 우선순위 낮춤
       bool aIsTop = a.rank == Rank.ace || a.rank == Rank.king;
@@ -1945,9 +1957,18 @@ class AIPlayer {
       final nonGirudaCards = playableCards.where((c) =>
           !c.isJoker && !c.isMightyWith(state.giruda) && c.suit != state.giruda).toList();
 
-      if (nonGirudaCards.isNotEmpty) {
+      // ★ 주공 확정 void 무늬 제외: 기루다 컷 확실 → 동료 점수카드 노출 위험
+      // 대안이 있으면 void 무늬를 완전 배제, 없으면 원래 카드풀 사용
+      final declarerVoidSuits = _getDeclarerVoidSuits(state);
+      final safeNonGirudaCards = declarerVoidSuits.isNotEmpty
+          ? nonGirudaCards.where((c) =>
+              c.suit != null && !declarerVoidSuits.contains(c.suit)).toList()
+          : nonGirudaCards;
+      final defLeadCards = safeNonGirudaCards.isNotEmpty ? safeNonGirudaCards : nonGirudaCards;
+
+      if (defLeadCards.isNotEmpty) {
         // 현재 가장 높은 카드인 것들을 찾기 (오픈된 카드 고려)
-        final highestRemainingCards = nonGirudaCards.where((c) =>
+        final highestRemainingCards = defLeadCards.where((c) =>
             _isHighestRemainingCard(c, state, player.hand)).toList();
 
         if (highestRemainingCards.isNotEmpty) {
@@ -1964,12 +1985,12 @@ class AIPlayer {
         }
 
         // 높은 실효 가치 순으로 정렬 (오픈된 카드 고려)
-        nonGirudaCards.sort((a, b) =>
+        defLeadCards.sort((a, b) =>
             _getEffectiveCardValue(b, state).compareTo(_getEffectiveCardValue(a, state)));
 
         // 실효 가치가 A(14) 이상인 카드가 있으면 선택 (= 현재 가장 높은 카드)
         // ★ 주공이 보유할 가능성 높은 무늬만 사용 (컷 방지)
-        final effectiveHighCards = nonGirudaCards.where((c) =>
+        final effectiveHighCards = defLeadCards.where((c) =>
             _getEffectiveCardValue(c, state) >= 14 &&
             (declarerHoldings[c.suit] ?? 0.5) >= 0.4).toList();
         if (effectiveHighCards.isNotEmpty) {
@@ -1985,7 +2006,7 @@ class AIPlayer {
         // 1. 비점수카드 중 낮은 카드로 리드 (안전한 선택)
         // ★ 마이티 미출 시: 잔여 점수카드가 적은 무늬 우선 (마이티 캡처 피해 최소화)
         // ★ 주공 보유 확률 높은 무늬 우선 (기루다 컷 방지)
-        final nonPointCards = nonGirudaCards.where((c) => !c.isPointCard).toList();
+        final nonPointCards = defLeadCards.where((c) => !c.isPointCard).toList();
         if (nonPointCards.isNotEmpty) {
           nonPointCards.sort((a, b) {
             // 마이티 미출 시 해당 무늬의 잔여 점수카드 수로 1차 정렬
@@ -2006,7 +2027,7 @@ class AIPlayer {
 
         // 2. 이길 확률이 낮은 점수카드 리드 (A/K가 오픈된 J/Q/10)
         // ★ 마이티 미출 시: 잔여 점수카드가 적은 무늬 우선
-        final lowProbPointCards = nonGirudaCards.where((c) =>
+        final lowProbPointCards = defLeadCards.where((c) =>
             c.isPointCard && _isLowWinProbabilityPointCard(c, player, state)).toList();
         if (lowProbPointCards.isNotEmpty) {
           lowProbPointCards.sort((a, b) {
@@ -2022,7 +2043,7 @@ class AIPlayer {
 
         // 3. 이길 가능성 있는 점수카드는 보존하고 싶지만 다른 카드가 없으면 낮은 것
         // ★ 마이티 미출 시: 잔여 점수카드가 적은 무늬 우선
-        nonGirudaCards.sort((a, b) {
+        defLeadCards.sort((a, b) {
           if (mightyStillInPlay) {
             int exposureA = _countRemainingPointCardsInSuit(a.suit!, state, player.hand);
             int exposureB = _countRemainingPointCardsInSuit(b.suit!, state, player.hand);
@@ -2030,7 +2051,7 @@ class AIPlayer {
           }
           return a.rankValue.compareTo(b.rankValue);
         });
-        return nonGirudaCards.first;
+        return defLeadCards.first;
       }
 
       // 기루다만 남은 경우, 가장 낮은 기루다를 낸다
@@ -2076,6 +2097,21 @@ class AIPlayer {
           } else {
             // 없으면 가장 낮은 기루다 사용 (주공에게 선 넘기기)
             return myGirudaCards.last;
+          }
+        }
+      }
+
+      // === 프렌드 조커 기루다 호출 (초중반, 기루다 없을 때) ===
+      // 프렌드가 기루다를 가지고 있지 않지만 조커가 있으면
+      // 조커로 기루다 호출 → 상대 기루다 강제 소진 → 주공의 기루다 우위 강화
+      if (state.currentTrickNumber >= 2 && state.currentTrickNumber <= 6 &&
+          remainingGiruda >= 3) {
+        final myGirudaCount = playableCards.where((c) =>
+            !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).length;
+        if (myGirudaCount == 0) {
+          final joker = playableCards.where((c) => c.isJoker).toList();
+          if (joker.isNotEmpty && _estimateDefenseTeamHasGiruda(player, state)) {
+            return joker.first;
           }
         }
       }
@@ -4648,7 +4684,11 @@ class AIPlayer {
                 if (pointCardsInTrick >= 1 || currentOrder >= 2) {
                   return joker.first;
                 }
+              } else if (pointCardsInTrick >= 1) {
+                // ★ 점수카드가 수비에게 넘어가는 것을 방지 → 최상위 카드 여부 무관
+                return joker.first;
               } else if (hasTopCards) {
+                // 점수카드 없음: 최상위 카드 있으면 선공 탈환
                 return joker.first;
               }
             }
