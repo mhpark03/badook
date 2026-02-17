@@ -2409,6 +2409,18 @@ class AIPlayer {
 
         // 초구 승리 카드가 없으면 마이티 무늬의 낮은 카드로 프렌드 호출
         if (!hasFirstTrickWinner) {
+          // ★ 기루다가 많은데 기루다 A가 없으면 마이티로 초구 선공
+          // → 선공권 확보 후 트릭 2부터 기루다 소진 전략
+          final myGirudaCount = playableCards.where((c) =>
+              !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).length;
+          final hasGirudaAce = playableCards.any((c) =>
+              !c.isJoker && c.suit == state.giruda && c.rank == Rank.ace);
+          final hasMighty = playableCards.any((c) => c.isMightyWith(state.giruda));
+          if (myGirudaCount >= 4 && !hasGirudaAce && hasMighty) {
+            final mighty = playableCards.where((c) => c.isMightyWith(state.giruda)).toList();
+            return mighty.first;
+          }
+
           final mightySuitCards = playableCards.where((c) =>
               !c.isJoker && !c.isMightyWith(state.giruda) &&
               c.suit == mightySuit).toList();
@@ -4022,6 +4034,17 @@ class AIPlayer {
               bool girudaLeadAtRisk = leadSuit == state.giruda &&
                   highestRemaining.rankValue > currentWinningCard.rankValue;
               if ((currentWinningCard.rankValue <= 7 || girudaLeadAtRisk) && !isLastPlayerHere) {
+                // ★ 0점 트릭에서는 조커/마이티 낭비 방지 → 보유 기루다로 팔로우
+                int currentPointCards = state.currentTrick!.cards
+                    .where((c) => c.isPointCard || c.isJoker).length;
+                if (currentPointCards == 0) {
+                  final girudaFollowCards = playableCards.where((c) =>
+                      !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == leadSuit).toList();
+                  if (girudaFollowCards.isNotEmpty) {
+                    girudaFollowCards.sort((a, b) => b.rankValue.compareTo(a.rankValue));
+                    return girudaFollowCards.first;
+                  }
+                }
                 // 마이티가 있으면 사용 (조커보다 강함)
                 final mighty = playableCards.where((c) => c.isMightyWith(state.giruda)).toList();
                 if (mighty.isNotEmpty) {
