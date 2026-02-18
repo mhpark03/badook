@@ -692,6 +692,68 @@ class AIPlayer {
     final suit = card.suit!;
     final playedCards = _getPlayedCards(state);
 
+    // ★ 기루다 점수카드가 최상위가 되면 보존 (미래 트릭에서 선 잡기 가능)
+    // 기루다는 비기루다와 달리 A/K가 없어도 최상위면 모든 비기루다를 이김
+    if (state.giruda != null && suit == state.giruda) {
+      final currentTrickCards = state.currentTrick?.cards ?? [];
+      int unaccountedHigherGiruda = 0;
+      for (int rankVal = card.rankValue + 1; rankVal <= 14; rankVal++) {
+        final rank = Rank.values[rankVal - 2];
+        bool inMyHand = player.hand.any((c) =>
+            c.suit == state.giruda && c.rank == rank);
+        bool alreadyPlayed = playedCards.any((c) =>
+            c.suit == state.giruda && c.rank == rank);
+        bool inCurrentTrick = currentTrickCards.any((c) =>
+            !c.isJoker && c.suit == state.giruda && c.rank == rank);
+        if (!inMyHand && !alreadyPlayed && !inCurrentTrick) {
+          unaccountedHigherGiruda++;
+        }
+      }
+      if (unaccountedHigherGiruda == 0) {
+        return false; // 최상위 기루다 → 이후 트릭에서 선 잡기 가능
+      }
+
+      // ★ 주공의 남은 기루다를 추정하여 최상위 가능성 판단
+      // unaccountedHigherGiruda가 1-2장일 때, 주공이 그 카드를 가지고 있다면
+      // 주공이 소진한 후 이 카드가 최상위 기루다가 됨 → 보존
+      if (unaccountedHigherGiruda <= 2 && state.declarerId != null) {
+        // 주공이 플레이한 기루다 수 추적
+        int declarerGirudaPlayed = 0;
+        for (final trick in state.tricks) {
+          final idx = trick.playerOrder.indexOf(state.declarerId!);
+          if (idx >= 0 && idx < trick.cards.length) {
+            final declCard = trick.cards[idx];
+            if (!declCard.isJoker && declCard.suit == state.giruda) {
+              declarerGirudaPlayed++;
+            }
+          }
+        }
+        // 현재 트릭에서 주공이 이미 낸 카드도 확인
+        if (state.currentTrick != null) {
+          final cIdx = state.currentTrick!.playerOrder.indexOf(state.declarerId!);
+          if (cIdx >= 0 && cIdx < state.currentTrick!.cards.length) {
+            final declCard = state.currentTrick!.cards[cIdx];
+            if (!declCard.isJoker && declCard.suit == state.giruda) {
+              declarerGirudaPlayed++;
+            }
+          }
+        }
+
+        // 공약 수준에서 주공의 초기 기루다 수 추정
+        // 13점(최소) → ~4장, 15점 → ~5장, 17점 → ~6장
+        final bidPoints = state.currentBid?.tricks ?? 13;
+        final estimatedInitialGiruda = ((bidPoints - 13) ~/ 2 + 4).clamp(3, 8);
+        final estimatedDeclarerRemaining =
+            (estimatedInitialGiruda - declarerGirudaPlayed).clamp(0, 10);
+
+        // 미확인 상위 기루다가 주공에게 있을 가능성이 높으면
+        // → 주공이 소진한 후 이 카드가 최상위가 됨 → 보존
+        if (estimatedDeclarerRemaining >= unaccountedHigherGiruda) {
+          return false; // 주공 기루다 소진 후 최상위가 될 가능성 높음 → 보존
+        }
+      }
+    }
+
     // 해당 무늬의 A가 본인 손에 있거나 아직 플레이되지 않음
     bool hasAceInHand = player.hand.any((c) => c.suit == suit && c.rank == Rank.ace);
     bool aceNotPlayed = !playedCards.any((c) => c.suit == suit && c.rank == Rank.ace);
@@ -1229,6 +1291,33 @@ class AIPlayer {
       }
     }
 
+    // ★ 연속체인 계산: gA + gK + 연속 기루다(Q→J→10→...)
+    int chainGirudaCount = 0;
+    if (hasGirudaAce) chainGirudaCount++;
+    if (hasGirudaKing) chainGirudaCount++;
+    if (hasGirudaQueen) {
+      chainGirudaCount++;
+      if (hasGirudaJack) {
+        chainGirudaCount++;
+        if (hasGirudaTen) {
+          chainGirudaCount++;
+          final lowerRanks = [Rank.nine, Rank.eight, Rank.seven, Rank.six,
+              Rank.five, Rank.four, Rank.three, Rank.two];
+          for (final rank in lowerRanks) {
+            if (_handContainsCard(hand, state.giruda, rank)) {
+              chainGirudaCount++;
+            } else {
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // === 케이스별 풀 선언 검토 ===
+    // 공식: 연속체인카드 + 비체인기루다 + 비기루다A >= threshold
+    // = 비기루다특수카드 + girudaCount + nonGirudaAce >= threshold
+
     if (declaration.isNoFriend) {
       // === 노프렌드: 내가 모든 트릭 승리 ===
       // 마이티 + 조커 필수
@@ -1236,72 +1325,95 @@ class AIPlayer {
       // 기루다 A + K 필수
       if (!hasGirudaAce || !hasGirudaKing) return false;
 
-      int leadKeepingCards = 4; // 마이티 + 조커 + 기루다 A + K
-      if (hasGirudaQueen) leadKeepingCards++;
-      if (hasGirudaJack) leadKeepingCards++;
-      if (hasGirudaTen) leadKeepingCards++;
-      leadKeepingCards += nonGirudaAceCount;
-
-      // 노프렌드 풀: 선공 유지 8장 이상 + 기루다 6장 이상
-      if (leadKeepingCards >= 8 && girudaCount >= 6) return true;
-      // 또는: 선공 유지 7장 이상 + 기루다 5장 이상 + 비기루다 A 2장 이상
-      if (leadKeepingCards >= 7 && girudaCount >= 5 && nonGirudaAceCount >= 2) return true;
+      // 예상 점수 기반 풀 선언: 선 유지 카드 * 2.0 + 비체인 기루다 * 1.5 + 키티 점수
+      final leadKeepingCards = (2 + chainGirudaCount + nonGirudaAceCount).clamp(0, 10);
+      final nonChainGiruda = girudaCount - chainGirudaCount;
+      final additionalWins = (nonChainGiruda).clamp(0, 10 - leadKeepingCards);
+      final kittyPoints = state.kitty.where((c) => c.isPointCard).length;
+      final expectedPoints = leadKeepingCards * 2.0 + additionalWins * 1.5 + kittyPoints;
+      if (expectedPoints >= 20) return true;
 
     } else if (declaration.card != null) {
       final friendCard = declaration.card!;
 
-      // === 마이티 프렌드: 프렌드가 마이티로 1트릭, 내가 조커로 탈환 후 나머지 승리 ===
-      if (friendCard.isMightyWith(state.giruda)) {
-        // 내가 조커 필수 (탈환용)
-        if (!hasJoker) return false;
-        // 기루다 A + K 필수
-        if (!hasGirudaAce || !hasGirudaKing) return false;
+      // 내 손 + 프렌드 카드로 통합 평가
+      final evalHand = [...hand, friendCard];
 
-        // 마이티 무늬 카드가 있는지 확인
-        // 주공이 마이티 무늬로 선공하면 프렌드가 마이티만 있을 때 강제로 마이티를 내야 함
-        // 이미 이기는 카드(차상위)에 마이티를 낭비하는 상황 발생
-        // 따라서 마이티 무늬 카드가 없어야 풀이 안전함
+      // 필수 카드 체크 (통합 핸드)
+      bool eHasMighty = _handContainsMighty(evalHand, state.mighty);
+      bool eHasJoker = _handContainsJoker(evalHand);
+      if (!eHasMighty || !eHasJoker) return false;
+
+      bool eHasGirudaAce = false;
+      if (state.giruda != null) {
+        if (!(state.mighty.suit == state.giruda && state.mighty.rank == Rank.ace)) {
+          eHasGirudaAce = _handContainsCard(evalHand, state.giruda, Rank.ace);
+        }
+      }
+      bool eHasGirudaKing = false;
+      if (state.giruda != null) {
+        eHasGirudaKing = _handContainsCard(evalHand, state.giruda, Rank.king);
+      }
+      if (!eHasGirudaAce || !eHasGirudaKing) return false;
+
+      // 마이티 프렌드: 마이티 무늬 카드 체크 (실제 핸드)
+      if (friendCard.isMightyWith(state.giruda)) {
         final mightySuit = state.mighty.suit;
         bool hasMightySuitCard = hand.any((c) =>
             !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == mightySuit);
+        if (hasMightySuitCard) return false;
+      }
 
-        if (hasMightySuitCard) {
-          // 마이티 무늬 카드가 있으면 프렌드가 마이티를 낭비할 위험
-          return false;
+      // 통합 핸드 기준 기루다/비기루다 A 계산
+      int eGirudaCount = 0;
+      if (state.giruda != null) {
+        eGirudaCount = evalHand.where((c) => !c.isJoker && c.suit == state.giruda).length;
+      }
+
+      int eNonGirudaAceCount = 0;
+      for (final suit in Suit.values) {
+        if (suit == state.giruda) continue;
+        if (!(state.mighty.suit == suit && state.mighty.rank == Rank.ace)) {
+          if (_handContainsCard(evalHand, suit, Rank.ace)) {
+            eNonGirudaAceCount++;
+          }
         }
-
-        // 마이티 무늬 카드가 없으면 안전하게 풀 가능
-        int leadKeepingCards = 3; // 조커 + 기루다 A + K (마이티는 프렌드가 보유)
-        if (hasGirudaQueen) leadKeepingCards++;
-        if (hasGirudaJack) leadKeepingCards++;
-        if (hasGirudaTen) leadKeepingCards++;
-        leadKeepingCards += nonGirudaAceCount;
-
-        // 마이티 프렌드 풀: 선공 유지 7장 이상 + 기루다 6장 이상 (1트릭은 프렌드)
-        if (leadKeepingCards >= 7 && girudaCount >= 6) return true;
-        // 또는: 선공 유지 6장 이상 + 기루다 5장 이상 + 비기루다 A 2장 이상
-        if (leadKeepingCards >= 6 && girudaCount >= 5 && nonGirudaAceCount >= 2) return true;
       }
 
-      // === 조커 프렌드: 프렌드가 조커로 1트릭, 내가 마이티로 탈환 후 나머지 승리 ===
-      if (friendCard.isJoker) {
-        // 내가 마이티 필수 (탈환용)
-        if (!hasMighty) return false;
-        // 기루다 A + K 필수
-        if (!hasGirudaAce || !hasGirudaKing) return false;
+      // 연속체인 계산 (통합 핸드)
+      bool eHasGirudaQueen = state.giruda != null && _handContainsCard(evalHand, state.giruda, Rank.queen);
+      bool eHasGirudaJack = state.giruda != null && _handContainsCard(evalHand, state.giruda, Rank.jack);
+      bool eHasGirudaTen = state.giruda != null && _handContainsCard(evalHand, state.giruda, Rank.ten);
 
-        // 조커 프렌드는 어떤 무늬로든 선을 넘길 수 있음 (조커는 무늬 제한 없음)
-        int leadKeepingCards = 3; // 마이티 + 기루다 A + K (조커는 프렌드가 보유)
-        if (hasGirudaQueen) leadKeepingCards++;
-        if (hasGirudaJack) leadKeepingCards++;
-        if (hasGirudaTen) leadKeepingCards++;
-        leadKeepingCards += nonGirudaAceCount;
-
-        // 조커 프렌드 풀: 선공 유지 7장 이상 + 기루다 6장 이상 (1트릭은 프렌드)
-        if (leadKeepingCards >= 7 && girudaCount >= 6) return true;
-        // 또는: 선공 유지 6장 이상 + 기루다 5장 이상 + 비기루다 A 2장 이상
-        if (leadKeepingCards >= 6 && girudaCount >= 5 && nonGirudaAceCount >= 2) return true;
+      int eChainGirudaCount = 0;
+      if (eHasGirudaAce) eChainGirudaCount++;
+      if (eHasGirudaKing) eChainGirudaCount++;
+      if (eHasGirudaQueen) {
+        eChainGirudaCount++;
+        if (eHasGirudaJack) {
+          eChainGirudaCount++;
+          if (eHasGirudaTen) {
+            eChainGirudaCount++;
+            final lowerRanks = [Rank.nine, Rank.eight, Rank.seven, Rank.six,
+                Rank.five, Rank.four, Rank.three, Rank.two];
+            for (final rank in lowerRanks) {
+              if (_handContainsCard(evalHand, state.giruda, rank)) {
+                eChainGirudaCount++;
+              } else {
+                break;
+              }
+            }
+          }
+        }
       }
+
+      // 예상 점수 기반 풀 선언: 선 유지 카드 * 2.0 + 비체인 기루다 * 1.5 + 키티 점수
+      final eLeadKeeping = (2 + eChainGirudaCount + eNonGirudaAceCount).clamp(0, 10);
+      final eNonChainGiruda = eGirudaCount - eChainGirudaCount;
+      final eAdditionalWins = (eNonChainGiruda).clamp(0, 10 - eLeadKeeping);
+      final kittyPoints = state.kitty.where((c) => c.isPointCard).length;
+      final expectedPoints = eLeadKeeping * 2.0 + eAdditionalWins * 1.5 + kittyPoints;
+      if (expectedPoints >= 20) return true;
     }
 
     return false;
@@ -2085,41 +2197,69 @@ class AIPlayer {
       final bool isJokerFriend = state.friendDeclaration?.card?.isJoker ?? false;
       final Suit mightySuit = state.giruda == Suit.spade ? Suit.diamond : Suit.spade;
 
-      // === 프렌드 트릭 2~3 기루다 선공 전략 ===
-      // 비기루다로 선공하면 수비팀에게 컷당할 위험이 있으므로 기루다 우선
-      if (state.currentTrickNumber == 2 || state.currentTrickNumber == 3) {
+      // === 프렌드 초반 기루다 선공 전략 ===
+      // 트릭 2~6: 수비팀 기루다 보유 여부에 따라 전략 분기
+      if (state.currentTrickNumber >= 2 && state.currentTrickNumber <= 6 &&
+          remainingGiruda > 0) {
+        final defenseHasGiruda = _estimateDefenseTeamHasGiruda(player, state);
         final myGirudaCards = playableCards.where((c) =>
             !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).toList();
-
         if (myGirudaCards.isNotEmpty) {
-          myGirudaCards.sort((a, b) => b.rankValue.compareTo(a.rankValue)); // 내림차순
-
-          // 최상위/차상위 기루다 확인 (실효가치 13 이상 = K 이상)
-          final highGiruda = myGirudaCards.where((c) =>
-              _getEffectiveCardValue(c, state) >= 13).toList();
-
-          if (highGiruda.isNotEmpty) {
-            // 최상위/차상위 기루다가 있으면 가장 높은 것 사용
-            return highGiruda.first;
-          } else {
-            // 없으면 가장 낮은 기루다 사용 (주공에게 선 넘기기)
-            return myGirudaCards.last;
-          }
+          myGirudaCards.sort((a, b) => b.rankValue.compareTo(a.rankValue));
         }
-      }
 
-      // === 프렌드 조커 기루다 호출 (초중반, 기루다 없을 때) ===
-      // 프렌드가 기루다를 가지고 있지 않지만 조커가 있으면
-      // 조커로 기루다 호출 → 상대 기루다 강제 소진 → 주공의 기루다 우위 강화
-      if (state.currentTrickNumber >= 2 && state.currentTrickNumber <= 6 &&
-          remainingGiruda >= 3) {
-        final myGirudaCount = playableCards.where((c) =>
-            !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).length;
-        if (myGirudaCount == 0) {
+        if (defenseHasGiruda) {
+          // === 수비팀 기루다 보유: 기루다 소진 유도 ===
+          if (myGirudaCards.isNotEmpty) {
+            final highGiruda = myGirudaCards.where((c) =>
+                _getEffectiveCardValue(c, state) >= 13).toList();
+            if (highGiruda.isNotEmpty) {
+              // 최상위 기루다(K+)로 수비 기루다 소진
+              return highGiruda.first;
+            }
+          }
+          // 높은 기루다 없으면 조커 기루다콜
           final joker = playableCards.where((c) => c.isJoker).toList();
-          if (joker.isNotEmpty && _estimateDefenseTeamHasGiruda(player, state)) {
+          if (joker.isNotEmpty && remainingGiruda >= 3) {
             return joker.first;
           }
+          // 낮은 기루다 (주공에게 선 넘기기)
+          if (myGirudaCards.isNotEmpty) {
+            return myGirudaCards.last;
+          }
+        } else {
+          // === 수비팀 기루다 없음: 기루다 리드 회피 ===
+          // 기루다를 내면 주공의 기루다만 소진되므로 비기루다 전략으로 전환
+
+          // 1. 비기루다 최상위 카드 (실효가치 13+ = K 이상)
+          final nonGirudaTop = playableCards.where((c) {
+            if (c.isJoker || c.isMightyWith(state.giruda)) return false;
+            if (c.suit == state.giruda) return false;
+            if (isJokerFriend && c.suit == mightySuit) return false;
+            if (c.suit != null && cutSuits.contains(c.suit)) return false;
+            return _getEffectiveCardValue(c, state) >= 13;
+          }).toList();
+          if (nonGirudaTop.isNotEmpty) {
+            nonGirudaTop.sort((a, b) =>
+                _getEffectiveCardValue(b, state).compareTo(_getEffectiveCardValue(a, state)));
+            return nonGirudaTop.first;
+          }
+
+          // 2. 주공 물패 무늬 리드 (주공이 기루다 컷으로 승리 → 선 이동)
+          final declarerVoidSuits = _getDeclarerVoidSuits(state);
+          if (declarerVoidSuits.isNotEmpty) {
+            for (Suit voidSuit in declarerVoidSuits) {
+              if (voidSuit == state.giruda) continue;
+              if (isJokerFriend && voidSuit == mightySuit) continue;
+              final voidSuitCards = playableCards.where((c) =>
+                  !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == voidSuit).toList();
+              if (voidSuitCards.isNotEmpty) {
+                voidSuitCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+                return voidSuitCards.first;
+              }
+            }
+          }
+          // 비기루다 최상위도 주공 물패도 없으면 → 후속 블록으로 fall through
         }
       }
 
@@ -3766,7 +3906,10 @@ class AIPlayer {
           }
 
           // 확실한 대안 없음 → 프렌드 카드(마이티/조커)로 선 확보
-          if (currentWinningCard != null &&
+          // ★ 단, 주공이 이미 이기고 있고 마지막 순서면 확실히 이기므로 낭비 방지
+          // 마지막이 아니면 뒤 플레이어가 뒤집을 수 있으므로 프렌드 카드로 확보
+          if ((!declarerAlreadyWinning || !isLastInTrick) &&
+              currentWinningCard != null &&
               state.isCardStronger(friendCard, currentWinningCard, leadSuit, false)) {
             return friendCard;
           }
@@ -4451,6 +4594,7 @@ class AIPlayer {
                   highestRemaining.rankValue > currentWinningCard.rankValue;
               if ((currentWinningCard.rankValue <= 7 || girudaLeadAtRisk) && !isLastPlayerHere) {
                 // ★ 0점 트릭에서는 조커/마이티 낭비 방지 → 보유 기루다로 팔로우
+                // 단, 최고 기루다가 현재 이기는 카드보다 높을 때만 (이길 수 없으면 낭비)
                 int currentPointCards = state.currentTrick!.cards
                     .where((c) => c.isPointCard || c.isJoker).length;
                 if (currentPointCards == 0) {
@@ -4458,7 +4602,11 @@ class AIPlayer {
                       !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == leadSuit).toList();
                   if (girudaFollowCards.isNotEmpty) {
                     girudaFollowCards.sort((a, b) => b.rankValue.compareTo(a.rankValue));
-                    return girudaFollowCards.first;
+                    // 최고 기루다가 현재 이기는 카드를 이길 수 있을 때만 사용
+                    if (girudaFollowCards.first.rankValue > currentWinningCard.rankValue) {
+                      return girudaFollowCards.first;
+                    }
+                    // 이길 수 없으면 → 높은 카드 낭비 방지, 아래 폴백(최저 카드)으로
                   }
                 }
                 // 마이티가 있으면 사용 (조커보다 강함)
@@ -4652,6 +4800,79 @@ class AIPlayer {
             if (girudaCardsElse.isNotEmpty) {
               girudaCardsElse.sort((a, b) => a.rankValue.compareTo(b.rankValue));
               return girudaCardsElse.first;
+            }
+          }
+        } else if (isDefenseTeam) {
+          // === 수비팀: 팀원이 이기고 있지만 확실하지 않을 때 ===
+          // 프렌드 공개 여부에 따라 전략 분기
+          final suitCardsDef = playableCards.where((c) =>
+              !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == leadSuit).toList();
+
+          if (!state.friendRevealed) {
+            // ★ 프렌드 미공개: 프렌드 카드(A/마이티/조커)가 뒤집을 수 있음
+            // → 점수카드 낭비 방지, 낮은 비점수 카드 우선
+            if (suitCardsDef.isNotEmpty) {
+              suitCardsDef.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+              final nonPointCards = suitCardsDef.where((c) => !c.isPointCard).toList();
+              if (nonPointCards.isNotEmpty) {
+                return nonPointCards.first;
+              }
+              return suitCardsDef.first;
+            }
+            final nonGirudaCardsDef = playableCards.where((c) =>
+                !c.isJoker && !c.isMightyWith(state.giruda) && c.suit != state.giruda).toList();
+            if (nonGirudaCardsDef.isNotEmpty) {
+              nonGirudaCardsDef.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+              final nonPointCards = nonGirudaCardsDef.where((c) => !c.isPointCard).toList();
+              if (nonPointCards.isNotEmpty) {
+                return nonPointCards.first;
+              }
+              return nonGirudaCardsDef.first;
+            }
+            final girudaCardsDef = playableCards.where((c) =>
+                !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).toList();
+            if (girudaCardsDef.isNotEmpty) {
+              girudaCardsDef.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+              return girudaCardsDef.first;
+            }
+          } else {
+            // ★ 프렌드 공개 후: 위협 해소, 물패 가능성 높음
+            // → 점수카드 적극 덤프하여 수비 점수 극대화
+            if (suitCardsDef.isNotEmpty) {
+              suitCardsDef.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+              final pointCards = suitCardsDef.where((c) =>
+                  c.isPointCard && _isLowWinProbabilityPointCard(c, player, state)).toList();
+              if (pointCards.isNotEmpty) {
+                pointCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+                return pointCards.first;
+              }
+              final nonPointCards = suitCardsDef.where((c) => !c.isPointCard).toList();
+              if (nonPointCards.isNotEmpty) {
+                return nonPointCards.first;
+              }
+              return suitCardsDef.first;
+            }
+            final nonGirudaCardsDef = playableCards.where((c) =>
+                !c.isJoker && !c.isMightyWith(state.giruda) && c.suit != state.giruda).toList();
+            if (nonGirudaCardsDef.isNotEmpty) {
+              nonGirudaCardsDef.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+              final pointCards = nonGirudaCardsDef.where((c) =>
+                  c.isPointCard && _isLowWinProbabilityPointCard(c, player, state)).toList();
+              if (pointCards.isNotEmpty) {
+                pointCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+                return pointCards.first;
+              }
+              final nonPointCards = nonGirudaCardsDef.where((c) => !c.isPointCard).toList();
+              if (nonPointCards.isNotEmpty) {
+                return nonPointCards.first;
+              }
+              return nonGirudaCardsDef.first;
+            }
+            final girudaCardsDef = playableCards.where((c) =>
+                !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).toList();
+            if (girudaCardsDef.isNotEmpty) {
+              girudaCardsDef.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+              return girudaCardsDef.first;
             }
           }
         }
@@ -5029,192 +5250,96 @@ class AIPlayer {
     }
 
     // === 공격팀 선공권 탈환 전략 ===
-    // 공격팀(주공/프렌드)이 선공권을 잃었을 때 마이티/조커로 선공권을 되찾는다
-    // 선공권이 있어야 자신이 가진 높은 무늬로 공격하여 이길 가능성이 높아진다
+    // 공격팀(주공/프렌드)이 후공에서 수비팀에 지고 있을 때
+    // 1. 선공카드 보유: 이기면 최소 승리, 못 이기면 조커/마이티, 없으면 최하위
+    // 2. 선공카드 미보유: 기루다 최소 승리, 못 이기면 조커/마이티, 없으면 물패 버림
     if (isAttackTeam && defenseWinning) {
-      // 공격팀인데 수비팀이 이기고 있으면 마이티/조커로 선공권 탈환 시도
-      bool hasJoker = player.hand.any((c) => c.isJoker);
-      final mightyCard = state.mighty;
-      bool hasMighty = playableCards.any((c) => c.suit == mightyCard.suit && c.rank == mightyCard.rank);
-
-      // 마이티 무늬 확인 (기루다가 스페이드면 다이아, 아니면 스페이드)
-      Suit mightySuit = state.giruda == Suit.spade ? Suit.diamond : Suit.spade;
-
-      // 컷된 무늬와 남은 기루다 확인
-      final cutSuits = _getCutSuits(state);
-      final remainingGiruda = _getRemainingGirudaCount(state, player);
-
-      // 마이티 대신 사용할 수 있는 최상위 카드 찾기
-      // (실효가치 14+ 또는 마이티와 같은 무늬의 K)
-      // 단, 컷된 무늬는 제외 (상대 기루다 0이면 모든 무늬 허용)
-      final topCardsInstead = playableCards.where((c) {
-        if (c.isMightyWith(state.giruda) || c.isJoker) return false;
-        // 컷된 무늬는 우선순위 낮춤 (상대 기루다 없으면 허용)
-        if (remainingGiruda > 0 && c.suit != null && cutSuits.contains(c.suit)) {
-          return false;
-        }
-        // 마이티와 같은 무늬의 K (마이티가 A이므로 K가 최상위)
-        if (c.suit == mightySuit && c.rank == Rank.king) return true;
-        // 실효가치 14 이상
-        return _getEffectiveCardValue(c, state) >= 14;
-      }).toList();
-
-      // 최상위 카드가 있고 현재 이기는 카드를 이길 수 있으면 최상위 카드 우선
-      if (topCardsInstead.isNotEmpty && currentWinningCard != null) {
-        // 현재 이기는 카드가 조커/마이티가 아니면 최상위 카드로 이길 수 있음
-        if (!currentWinningCard.isJoker && !currentWinningCard.isMightyWith(state.giruda)) {
-          // 가장 높은 실효가치 카드 선택
-          topCardsInstead.sort((a, b) =>
-              _getEffectiveCardValue(b, state).compareTo(_getEffectiveCardValue(a, state)));
-          final topCard = topCardsInstead.first;
-          // 현재 이기는 카드보다 강하면 사용
-          if (state.isCardStronger(topCard, currentWinningCard, leadSuit, false)) {
-            return topCard;
-          }
-        }
-      }
-
-      // 마지막 순서이고 수비팀이 이기고 있으면 마이티로 확실히 가져오기
       bool isLastPlayer = state.currentTrick != null &&
           state.currentTrick!.cards.length == 4;
-      if (isLastPlayer && hasMighty) {
-        final mighty = playableCards.where((c) => c.suit == mightyCard.suit && c.rank == mightyCard.rank).toList();
-        if (mighty.isNotEmpty && currentWinningCard != null && !currentWinningCard.isJoker) {
-          return mighty.first;
-        }
-      }
+      int pointCardsInTrick = state.currentTrick!.cards
+          .where((c) => c.isPointCard || c.isJoker).length;
+      bool jokerCalled = state.currentTrick?.jokerCallSuit != null;
+      bool winningIsMighty = currentWinningCard != null &&
+          currentWinningCard.isMightyWith(state.giruda);
+      // ★ 마지막 순서 + 트릭에 점수카드 없음 → 조커/마이티 아끼기
+      bool saveSpecialCards = isLastPlayer && pointCardsInTrick == 0;
 
-      // 마이티로 선공권 탈환 (첫 트릭 제외)
-      // 단, 조커가 있으면 조커를 먼저 사용하고 마이티는 상대 조커 대응용으로 아낌
-      if (state.currentTrickNumber > 1 && hasMighty) {
-        final mighty = playableCards.where((c) => c.suit == mightyCard.suit && c.rank == mightyCard.rank).toList();
-        // 현재 이기고 있는 카드가 조커가 아니면 마이티 사용
-        if (mighty.isNotEmpty && currentWinningCard != null && !currentWinningCard.isJoker) {
-          // 조커가 없거나, 점수 카드가 3장 이상일 때만 마이티 사용
-          int pointCardsInTrick = state.currentTrick!.cards
-              .where((c) => c.isPointCard || c.isJoker).length;
-          if (!hasJoker || pointCardsInTrick >= 3) {
+      final leadSuitCards = playableCards.where((c) =>
+          !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == leadSuit).toList();
+
+      if (leadSuitCards.isNotEmpty) {
+        // === 1. 선공카드 보유 ===
+
+        // 1a. 선공 무늬로 이길 수 있으면 → 최소 이기는 카드
+        if (currentWinningCard != null) {
+          final winningCards = leadSuitCards.where((c) =>
+              state.isCardStronger(c, currentWinningCard, leadSuit, false)).toList();
+          if (winningCards.isNotEmpty) {
+            winningCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+            return winningCards.first;
+          }
+        }
+
+        // 1b. 못 이기면 → 조커/마이티 (마지막+점수없으면 아낌, 마이티에는 대응 불가)
+        if (!saveSpecialCards && !winningIsMighty) {
+          final joker = playableCards.where((c) => c.isJoker).toList();
+          if (joker.isNotEmpty && !jokerCalled &&
+              state.currentTrickNumber > 1 && state.currentTrickNumber < 10) {
+            return joker.first;
+          }
+          final mighty = playableCards.where((c) => c.isMightyWith(state.giruda)).toList();
+          if (mighty.isNotEmpty) {
             return mighty.first;
           }
         }
-      }
 
-      // 조커로 선공권 탈환 (첫 트릭 및 마지막 트릭 제외)
-      if (state.currentTrickNumber > 1 && state.currentTrickNumber < 10) {
-        final joker = playableCards.where((c) => c.isJoker).toList();
-        if (joker.isNotEmpty) {
-          // 현재 이기고 있는 카드가 마이티가 아니면 조커 사용
-          if (currentWinningCard != null && !currentWinningCard.isMightyWith(state.giruda)) {
-            // 조커콜 상태가 아닐 때만 사용
-            bool jokerCalled = state.currentTrick?.jokerCallSuit != null;
-            if (!jokerCalled) {
-              // 선공권 탈환 후 유지할 최상위 카드가 있는지 확인
-              // 최상위 카드 없으면 점수 많을 때 사용하는 게 나음
-              bool hasTopCards = player.hand.any((c) =>
-                  c.isMightyWith(state.giruda) ||
-                  (!c.isJoker && _getEffectiveCardValue(c, state) >= 14));
+        // 1c. 선공 무늬 최하위 카드
+        leadSuitCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+        return leadSuitCards.first;
 
-              // ★ 노기루다: 컷이 불가능하므로 조커로 선공 탈환이 중요
-              int currentOrder = state.currentTrick!.cards.length;
-              int pointCardsInTrick = state.currentTrick!.cards
-                  .where((c) => c.isPointCard || c.isJoker).length;
-              if (state.giruda == null) {
-                // 노기루다에서는 점수 카드 1장 이상이면 조커 사용
-                if (pointCardsInTrick >= 1 || currentOrder >= 2) {
-                  return joker.first;
-                }
-              } else if (pointCardsInTrick >= 1) {
-                // ★ 점수카드가 수비에게 넘어가는 것을 방지 → 최상위 카드 여부 무관
-                return joker.first;
-              } else if (hasTopCards) {
-                // 점수카드 없음: 최상위 카드 있으면 선공 탈환
-                return joker.first;
-              }
-            }
-          }
-        }
-      }
+      } else {
+        // === 2. 선공카드 미보유 ===
 
-      // === 마지막 순서: 이길 수 있으면 이기기 (상대팀 물패 대응) ===
-      // isLastPlayer는 위에서 이미 선언됨
-      if (isLastPlayer) {
-        // 마지막 순서이고 상대팀이 이기고 있으면 이길 수 있는 카드로 이기기
-        if (currentWinningCard != null) {
-          // 선공 무늬 카드 중 이길 수 있는 카드 찾기
-          final leadSuitCards = playableCards.where((c) =>
-              !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == leadSuit).toList();
-          if (leadSuitCards.isNotEmpty) {
-            // 이길 수 있는 카드 찾기 (가장 낮은 것으로 효율적으로)
-            leadSuitCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
-            for (final card in leadSuitCards) {
-              if (state.isCardStronger(card, currentWinningCard, leadSuit, false)) {
-                return card;
-              }
-            }
-          }
-
-          // 선공 무늬가 없으면 기루다로 컷 가능한지 확인
-          if (state.giruda != null && leadSuit != state.giruda) {
-            final girudaCards = playableCards.where((c) =>
-                !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).toList();
-            if (girudaCards.isNotEmpty) {
-              // 현재 이기는 카드가 기루다가 아니면 기루다로 컷
-              if (currentWinningCard.suit != state.giruda) {
-                girudaCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
-                return girudaCards.first; // 가장 낮은 기루다로 효율적으로 컷
-              }
-              // 현재 이기는 카드도 기루다면 더 높은 기루다 필요
-              girudaCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
-              for (final card in girudaCards) {
-                if (state.isCardStronger(card, currentWinningCard, leadSuit, false)) {
-                  return card;
-                }
-              }
-            }
-          }
-        }
-
-        // 이길 수 없고 점수 카드가 없으면 낮은 카드 버림
-        int pointCardsInTrick = state.currentTrick!.cards
-            .where((c) => c.isPointCard || c.isJoker).length;
-        if (pointCardsInTrick == 0) {
-          // 선공 무늬 카드 중 낮은 것
-          final leadSuitCards = playableCards.where((c) =>
-              !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == leadSuit).toList();
-          if (leadSuitCards.isNotEmpty) {
-            leadSuitCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
-            return leadSuitCards.first;
-          }
-          // 선공 무늬가 없으면 비기루다 중 낮은 것
-          final nonGirudaCards = playableCards.where((c) =>
-              !c.isJoker && !c.isMightyWith(state.giruda) && c.suit != state.giruda).toList();
-          if (nonGirudaCards.isNotEmpty) {
-            nonGirudaCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
-            return nonGirudaCards.first;
-          }
-          // 기루다만 있으면 낮은 기루다
+        // 2a. 기루다로 이길 수 있는 최소 카드
+        if (state.giruda != null && currentWinningCard != null && !winningIsMighty) {
           final girudaCards = playableCards.where((c) =>
               !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).toList();
           if (girudaCards.isNotEmpty) {
-            girudaCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
-            return girudaCards.first;
+            final winningGiruda = girudaCards.where((c) =>
+                state.isCardStronger(c, currentWinningCard, leadSuit, false)).toList();
+            if (winningGiruda.isNotEmpty) {
+              winningGiruda.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+              return winningGiruda.first;
+            }
           }
         }
-      }
 
-      // ★ 노기루다: 마이티로 선공권 탈환 (기존 조건보다 적극적)
-      if (state.giruda == null && state.currentTrickNumber > 1) {
-        final mightyCard = state.mighty;
-        final mighty = playableCards.where((c) =>
-            c.suit == mightyCard.suit && c.rank == mightyCard.rank).toList();
-        if (mighty.isNotEmpty && currentWinningCard != null && !currentWinningCard.isJoker) {
-          int currentOrder = state.currentTrick!.cards.length;
-          int pointCardsInTrick = state.currentTrick!.cards
-              .where((c) => c.isPointCard || c.isJoker).length;
-          // 노기루다에서는 점수 카드 1장 이상이거나 2번째 이후면 마이티 사용
-          if (pointCardsInTrick >= 1 || currentOrder >= 2) {
+        // 2b. 조커/마이티 (마지막+점수없으면 아낌)
+        if (!saveSpecialCards && !winningIsMighty) {
+          final joker = playableCards.where((c) => c.isJoker).toList();
+          if (joker.isNotEmpty && !jokerCalled &&
+              state.currentTrickNumber > 1 && state.currentTrickNumber < 10) {
+            return joker.first;
+          }
+          final mighty = playableCards.where((c) => c.isMightyWith(state.giruda)).toList();
+          if (mighty.isNotEmpty) {
             return mighty.first;
           }
+        }
+
+        // 2c. 비기루다 물패 우선 버림
+        final nonGirudaDump = playableCards.where((c) =>
+            !c.isJoker && !c.isMightyWith(state.giruda) && c.suit != state.giruda).toList();
+        if (nonGirudaDump.isNotEmpty) {
+          nonGirudaDump.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+          return nonGirudaDump.first;
+        }
+        // 기루다만 있으면 낮은 기루다 버림
+        final girudaDump = playableCards.where((c) =>
+            !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).toList();
+        if (girudaDump.isNotEmpty) {
+          girudaDump.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+          return girudaDump.first;
         }
       }
     }
@@ -5375,6 +5500,40 @@ class AIPlayer {
 
             if (jokerSafe) {
               return joker.first;
+            }
+          }
+        }
+      }
+    }
+
+    // === 수비팀 조커로 선공권 탈환 (최상위 카드 보유 시) ===
+    // 수비팀이 지고 있을 때, 조커로 선을 잡고 다음 트릭에서 최상위 카드를 내서
+    // 연속으로 트릭을 가져오는 전략 (점수 카드 없어도 선공 확보 가치 있음)
+    if (isDefenseTeam && !defenseWinning &&
+        state.currentTrickNumber > 1 && state.currentTrickNumber < 10) {
+      final jokerForLead = playableCards.where((c) => c.isJoker).toList();
+      if (jokerForLead.isNotEmpty) {
+        bool jokerCalledForLead = state.currentTrick?.jokerCallSuit != null;
+        bool winningWithMightyForLead = currentWinningCard != null &&
+            currentWinningCard.isMightyWith(state.giruda);
+
+        if (!jokerCalledForLead && !winningWithMightyForLead) {
+          // 선공권 탈환 후 유지할 최상위 카드가 있는지 확인
+          // (실효 가치 14 이상 = 해당 무늬에서 최상위)
+          bool hasTopCards = player.hand.any((c) =>
+              !c.isMightyWith(state.giruda) && !c.isJoker &&
+              _getEffectiveCardValue(c, state) >= 14);
+
+          if (hasTopCards) {
+            final allPlayedForLead = _getPlayedCards(state);
+            bool mightyPlayedForLead = allPlayedForLead.any((c) => c.isMightyWith(state.giruda));
+            bool mightyInMyHandForLead = player.hand.any((c) => c.isMightyWith(state.giruda));
+            bool isLastPlayerForLead = state.currentTrick != null &&
+                state.currentTrick!.cards.length == 4;
+            bool jokerSafeForLead = mightyPlayedForLead || mightyInMyHandForLead || isLastPlayerForLead;
+
+            if (jokerSafeForLead) {
+              return jokerForLead.first;
             }
           }
         }
