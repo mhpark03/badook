@@ -14,7 +14,9 @@ class BidEvaluationSnapshot {
   final bool hasJoker;
   final bool hasGirudaAce;
   final bool hasGirudaKing;
-  final int predictedStrength;
+  final int predictedMin;
+  final int predictedMax;
+  final int predictedOptimal;
   final String bidAction;
   final int bidAmount;
   bool isDeclarer;
@@ -28,7 +30,9 @@ class BidEvaluationSnapshot {
     required this.hasJoker,
     required this.hasGirudaAce,
     required this.hasGirudaKing,
-    required this.predictedStrength,
+    required this.predictedMin,
+    required this.predictedMax,
+    required this.predictedOptimal,
     required this.bidAction,
     required this.bidAmount,
     this.isDeclarer = false,
@@ -43,9 +47,9 @@ class BidEvaluationSnapshot {
     'hasJoker': hasJoker,
     'hasGirudaAce': hasGirudaAce,
     'hasGirudaKing': hasGirudaKing,
-    'predictedMin': predictedStrength,
-    'predictedMax': predictedStrength,
-    'predictedOptimal': predictedStrength,
+    'predictedMin': predictedMin,
+    'predictedMax': predictedMax,
+    'predictedOptimal': predictedOptimal,
     'bidAction': bidAction,
     'bidAmount': bidAmount,
     'isDeclarer': isDeclarer,

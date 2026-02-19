@@ -473,26 +473,25 @@ class GameController extends ChangeNotifier {
 
   void _captureBidSnapshot(Player player, Bid bid) {
     final hand = player.hand;
-    final bestSuit = _aiPlayer.findBestSuit(hand);
+    final eval = _aiPlayer.evaluateForBidding(hand);
+    final bestSuit = eval.bestGiruda;
     final mightySuit = bestSuit == Suit.spade ? Suit.diamond : Suit.spade;
-    final girudaCards = bestSuit != null
-        ? hand.where((c) => !c.isJoker && c.suit == bestSuit).toList()
-        : <PlayingCard>[];
-    final strength = bestSuit != null
-        ? _aiPlayer.evaluateHandStrength(hand, bestSuit)
-        : 0;
 
     _bidSnapshots.add(BidEvaluationSnapshot(
       playerId: player.id,
       hand: hand.map((c) => c.toJson()).toList(),
       bestGiruda: bestSuit?.name,
-      girudaCount: girudaCards.length,
+      girudaCount: eval.girudaCount,
       hasMighty: hand.any((c) =>
           !c.isJoker && c.suit == mightySuit && c.rank == Rank.ace),
       hasJoker: hand.any((c) => c.isJoker),
-      hasGirudaAce: girudaCards.any((c) => c.rank == Rank.ace),
-      hasGirudaKing: girudaCards.any((c) => c.rank == Rank.king),
-      predictedStrength: strength,
+      hasGirudaAce: bestSuit != null &&
+          hand.any((c) => !c.isJoker && c.suit == bestSuit && c.rank == Rank.ace),
+      hasGirudaKing: bestSuit != null &&
+          hand.any((c) => !c.isJoker && c.suit == bestSuit && c.rank == Rank.king),
+      predictedMin: eval.minPoints,
+      predictedMax: eval.maxPoints,
+      predictedOptimal: eval.optimalPoints,
       bidAction: bid.passed ? 'PASS' : 'BID',
       bidAmount: bid.tricks,
     ));
