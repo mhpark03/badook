@@ -1749,6 +1749,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kittyAfterExchange => '交換後';
 
   @override
+  String get girudaComparisonTitle => '切り札比較（13枚）';
+
+  @override
   String get friendSummaryTitle => 'フレンド宣言';
 
   @override
@@ -1759,4 +1762,83 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get firstTrickStrategyLabel => '初手戦略';
+
+  @override
+  String get scoreStrategy => '得点獲得戦略';
+
+  @override
+  String strategyFirstTrickAceLead(String card) {
+    return '初手: $cardリードで確実なトリック獲得';
+  }
+
+  @override
+  String get strategyFirstTrickPassFriendWin => '初手: 短いスートの低札でフレンドにトリック譲渡';
+
+  @override
+  String strategyFirstTrickKingLead(String card) {
+    return '初手: $cardリードでトリック獲得を試行';
+  }
+
+  @override
+  String get strategyFirstTrickPassFriend => '初手: 短いスートの低札でフレンドにリード譲渡';
+
+  @override
+  String get strategyPassToMightyFriend => '低札でフレンドにリード譲渡（マイティ）';
+
+  @override
+  String get strategyPassToJokerFriend => '低札でフレンドにリード譲渡（ジョーカー）';
+
+  @override
+  String strategyPassTrumpToFriend(
+    String passCard,
+    String friendCard,
+    String rank,
+  ) {
+    return '$passCardリードでフレンド($friendCard)に譲渡 → $rank単独防止';
+  }
+
+  @override
+  String strategyPassSuitToFriend(String card, String friendCard) {
+    return '$cardリードでフレンド($friendCard)に譲渡';
+  }
+
+  @override
+  String get strategySourceFriend => 'フレンドトリック後、';
+
+  @override
+  String get strategySourceReclaim => 'リード回収後、';
+
+  @override
+  String strategyTrumpDominate(String source, String cards) {
+    return '$source $cardsで支配 → 守備切り札消耗';
+  }
+
+  @override
+  String strategyTrumpExhaust(String source, String cards) {
+    return '$source $cardsで守備切り札消耗';
+  }
+
+  @override
+  String strategyTrumpMidDraw(String suit) {
+    return '$suit中間切り札で守備側高位切り札を誘引';
+  }
+
+  @override
+  String strategyJokerCallSuits(String suits) {
+    return '切り札消耗後、弱スート($suits)にジョーカーコール';
+  }
+
+  @override
+  String get strategyJokerCallWeak => '切り札消耗後、弱スートにジョーカーコール';
+
+  @override
+  String get strategyJokerOptimal => '最適タイミングでジョーカーでトリック獲得';
+
+  @override
+  String get strategyMightyTiming => '9番目トリックでマイティ使用 → 10番目リード確保';
+
+  @override
+  String strategyVoidTrumpCut(String suits) {
+    return '$suitsボイド → 相手リード時に切り札カットでトリック回収';
+  }
 }

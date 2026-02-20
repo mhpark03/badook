@@ -3713,8 +3713,141 @@ class _GameScreenState extends State<GameScreen> {
               ],
             ),
           ),
+
+          // 기루다 비교 섹션 (청록 테두리)
+          if (explanation.girudaComparison.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            _buildKittySection(
+              icon: Icons.compare_arrows,
+              iconColor: Colors.teal[300]!,
+              borderColor: Colors.teal[400]!,
+              title: l10n.girudaComparisonTitle,
+              child: _buildGirudaComparisonContent(explanation),
+            ),
+          ],
         ],
       ),
+    );
+  }
+
+  Widget _buildGirudaComparisonContent(KittyExplanation explanation) {
+    final comp = explanation.girudaComparison;
+    if (comp.isEmpty) return const SizedBox.shrink();
+
+    // 현재 기루다와 최적 기루다 찾기
+    final currentSuit = explanation.newGiruda;
+    int bestOptimal = 0;
+    Suit? bestSuit;
+    for (final (suit, _, _, optimal) in comp) {
+      if (optimal > bestOptimal) {
+        bestOptimal = optimal;
+        bestSuit = suit;
+      }
+    }
+
+    // 현재 기루다의 점수
+    int currentOptimal = 0;
+    for (final (suit, _, _, optimal) in comp) {
+      if (suit == currentSuit) {
+        currentOptimal = optimal;
+        break;
+      }
+    }
+
+    return Column(
+      children: [
+        // 4개 무늬 비교 (2x2 그리드)
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          alignment: WrapAlignment.center,
+          children: comp.map((entry) {
+            final (suit, min, max, optimal) = entry;
+            final isCurrent = suit == currentSuit;
+            final isBest = suit == bestSuit && bestSuit != currentSuit;
+            final suitColor = _getSuitColor(suit!);
+
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: isCurrent
+                    ? Colors.teal[800]!.withValues(alpha: 0.5)
+                    : isBest
+                        ? Colors.amber[800]!.withValues(alpha: 0.3)
+                        : Colors.black26,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: isCurrent
+                      ? Colors.teal[400]!
+                      : isBest
+                          ? Colors.amber[400]!
+                          : Colors.white24,
+                  width: isCurrent || isBest ? 1.5 : 0.5,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _suitSymbolForCard(suit),
+                        style: TextStyle(color: suitColor, fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      if (isCurrent)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: Icon(Icons.check_circle, color: Colors.teal[300], size: 12),
+                        ),
+                      if (isBest)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: Icon(Icons.star, color: Colors.amber[400], size: 12),
+                        ),
+                    ],
+                  ),
+                  Text(
+                    '$min~$max',
+                    style: TextStyle(color: Colors.grey[400], fontSize: 10),
+                  ),
+                  Text(
+                    '$optimal점',
+                    style: TextStyle(
+                      color: isCurrent ? Colors.teal[200] : isBest ? Colors.amber[200] : Colors.white70,
+                      fontSize: 13,
+                      fontWeight: isCurrent || isBest ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+
+        // 변경 추천 메시지
+        if (bestSuit != null && bestSuit != currentSuit && bestOptimal > currentOptimal) ...[
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: bestOptimal >= currentOptimal + 3
+                  ? Colors.amber[900]!.withValues(alpha: 0.5)
+                  : Colors.white.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              bestOptimal >= currentOptimal + 3
+                  ? '${_suitSymbolForCard(bestSuit)} +${bestOptimal - currentOptimal}점 (변경 시 패널티 +2)'
+                  : '${_suitSymbolForCard(bestSuit)} +${bestOptimal - currentOptimal}점 (변경 패널티 감안 시 유지 적절)',
+              style: TextStyle(
+                color: bestOptimal >= currentOptimal + 3 ? Colors.amber[200] : Colors.grey[400],
+                fontSize: 11,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 
@@ -3954,6 +4087,49 @@ class _GameScreenState extends State<GameScreen> {
               ),
             ),
           ],
+
+          // (e) 점수 획득 전략
+          if (explanation.strategyPoints.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green.withValues(alpha: 0.4), width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.military_tech, color: Colors.greenAccent, size: 18),
+                      const SizedBox(width: 6),
+                      Text(l10n.scoreStrategy, style: const TextStyle(color: Colors.greenAccent, fontSize: 13, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  for (final strategy in explanation.strategyPoints)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 3),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('• ', style: TextStyle(color: Colors.white54, fontSize: 12)),
+                          Expanded(
+                            child: Text(
+                              _getStrategyText(strategy, l10n),
+                              style: const TextStyle(color: Colors.white70, fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -3978,6 +4154,29 @@ class _GameScreenState extends State<GameScreen> {
       'FIRST_KING' => '${l10n.firstTrickStrategy}: $cardText ${l10n.kingLead}',
       'FIRST_GIVE_UP' => l10n.firstTrickGiveUp,
       _ => '',
+    };
+  }
+
+  String _getStrategyText((String, Map<String, String>) strategy, AppLocalizations l10n) {
+    final (code, params) = strategy;
+    return switch (code) {
+      'FIRST_TRICK_ACE_LEAD' => l10n.strategyFirstTrickAceLead(params['card']!),
+      'FIRST_TRICK_PASS_FRIEND_WIN' => l10n.strategyFirstTrickPassFriendWin,
+      'FIRST_TRICK_KING_LEAD' => l10n.strategyFirstTrickKingLead(params['card']!),
+      'FIRST_TRICK_PASS_FRIEND' => l10n.strategyFirstTrickPassFriend,
+      'PASS_TO_MIGHTY_FRIEND' => l10n.strategyPassToMightyFriend,
+      'PASS_TO_JOKER_FRIEND' => l10n.strategyPassToJokerFriend,
+      'PASS_TRUMP_TO_FRIEND' => l10n.strategyPassTrumpToFriend(params['passCard']!, params['friendCard']!, params['rank']!),
+      'PASS_SUIT_TO_FRIEND' => l10n.strategyPassSuitToFriend(params['card']!, params['friendCard']!),
+      'TRUMP_DOMINATE' => l10n.strategyTrumpDominate(params['source'] == 'friend' ? l10n.strategySourceFriend : l10n.strategySourceReclaim, params['cards']!),
+      'TRUMP_EXHAUST' => l10n.strategyTrumpExhaust(params['source'] == 'friend' ? l10n.strategySourceFriend : l10n.strategySourceReclaim, params['cards']!),
+      'TRUMP_MID_DRAW' => l10n.strategyTrumpMidDraw(params['suit']!),
+      'JOKER_CALL_SUITS' => l10n.strategyJokerCallSuits(params['suits']!),
+      'JOKER_CALL_WEAK' => l10n.strategyJokerCallWeak,
+      'JOKER_OPTIMAL' => l10n.strategyJokerOptimal,
+      'MIGHTY_TIMING' => l10n.strategyMightyTiming,
+      'VOID_TRUMP_CUT' => l10n.strategyVoidTrumpCut(params['suits']!),
+      _ => code,
     };
   }
 

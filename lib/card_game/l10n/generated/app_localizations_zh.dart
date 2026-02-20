@@ -1742,6 +1742,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kittyAfterExchange => '交换后';
 
   @override
+  String get girudaComparisonTitle => '王牌比较（13张）';
+
+  @override
   String get friendSummaryTitle => '朋友宣言';
 
   @override
@@ -1752,4 +1755,83 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get firstTrickStrategyLabel => '首墩策略';
+
+  @override
+  String get scoreStrategy => '得分策略';
+
+  @override
+  String strategyFirstTrickAceLead(String card) {
+    return '首墩: 出$card获取确定墩数';
+  }
+
+  @override
+  String get strategyFirstTrickPassFriendWin => '首墩: 出短门低牌让朋友赢墩';
+
+  @override
+  String strategyFirstTrickKingLead(String card) {
+    return '首墩: 出$card尝试赢墩';
+  }
+
+  @override
+  String get strategyFirstTrickPassFriend => '首墩: 出短门低牌把出牌权给朋友';
+
+  @override
+  String get strategyPassToMightyFriend => '出低牌把出牌权给朋友(至尊)';
+
+  @override
+  String get strategyPassToJokerFriend => '出低牌把出牌权给朋友(王牌)';
+
+  @override
+  String strategyPassTrumpToFriend(
+    String passCard,
+    String friendCard,
+    String rank,
+  ) {
+    return '出$passCard传给朋友($friendCard) → 防止$rank单打';
+  }
+
+  @override
+  String strategyPassSuitToFriend(String card, String friendCard) {
+    return '出$card传给朋友($friendCard)';
+  }
+
+  @override
+  String get strategySourceFriend => '朋友赢墩后,';
+
+  @override
+  String get strategySourceReclaim => '夺回出牌权后,';
+
+  @override
+  String strategyTrumpDominate(String source, String cards) {
+    return '$source 用$cards控制 → 消耗防守方将牌';
+  }
+
+  @override
+  String strategyTrumpExhaust(String source, String cards) {
+    return '$source 用$cards消耗防守方将牌';
+  }
+
+  @override
+  String strategyTrumpMidDraw(String suit) {
+    return '用$suit中间将牌引出防守方高位将牌';
+  }
+
+  @override
+  String strategyJokerCallSuits(String suits) {
+    return '消耗将牌后, 对弱门($suits)叫王牌';
+  }
+
+  @override
+  String get strategyJokerCallWeak => '消耗将牌后, 对弱门叫王牌';
+
+  @override
+  String get strategyJokerOptimal => '最佳时机用王牌赢墩';
+
+  @override
+  String get strategyMightyTiming => '第9墩用至尊 → 确保第10墩出牌权';
+
+  @override
+  String strategyVoidTrumpCut(String suits) {
+    return '$suits缺门 → 对手出牌时用将牌切入赢墩';
+  }
 }

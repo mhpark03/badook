@@ -350,6 +350,14 @@ class GameController extends ChangeNotifier {
       final kittyPointCards = discardCards.where((c) => c.isPointCard).length;
       final afterOptimal = (afterMin * 0.3 + (afterMax + kittyPointCards) * 0.7 + 1).round();
 
+      // 기루다 변경 검토: 13장 기준 각 무늬별 점수 비교
+      final girudaComp = <(Suit?, int, int, int)>[];
+      for (final candidateSuit in [Suit.spade, Suit.diamond, Suit.heart, Suit.club]) {
+        final (cMin, cMax) = _aiPlayer.estimatePointRange(allCards, candidateSuit);
+        final cOptimal = (cMin * 0.3 + cMax * 0.7 + 1).round();
+        girudaComp.add((candidateSuit, cMin, cMax, cOptimal));
+      }
+
       _kittyExplanation = KittyExplanation(
         kittyCards: kittyCards,
         discardCards: discardCards,
@@ -364,6 +372,7 @@ class GameController extends ChangeNotifier {
         afterMinPoints: afterMin,
         afterMaxPoints: afterMax + kittyPointCards,
         afterOptimalPoints: afterOptimal,
+        girudaComparison: girudaComp,
       );
 
       _showKittySummary = true;
@@ -424,12 +433,15 @@ class GameController extends ChangeNotifier {
       final reason = _generateFriendReason(declaration, declarer, _state);
       final firstTrickInfo = _analyzeFirstTrick(declarer, _state);
 
+      final strategyPoints = _generateStrategyPoints(declarer, _state);
+
       _friendExplanation = FriendExplanation(
         declaration: declaration,
         reason: reason,
         isFull: isFull,
         firstTrickCard: firstTrickInfo.$1,
         firstTrickStrategy: firstTrickInfo.$2,
+        strategyPoints: strategyPoints,
       );
 
       _showFriendSummary = true;
@@ -857,6 +869,159 @@ class GameController extends ChangeNotifier {
     return (bestFirstCard, strategy);
   }
 
+  /// 점수 획득 전략 목록 생성
+  List<(String, Map<String, String>)> _generateStrategyPoints(Player declarer, GameState state) {
+    final hand = declarer.hand;
+    final giruda = state.giruda;
+    final strategies = <(String, Map<String, String>)>[];
+
+    String ss(Suit? s) => switch (s) {
+      Suit.spade => '♠', Suit.heart => '♥',
+      Suit.diamond => '♦', Suit.club => '♣', _ => ''
+    };
+    String rs(Rank? r) => switch (r) {
+      Rank.ace => 'A', Rank.king => 'K', Rank.queen => 'Q',
+      Rank.jack => 'J', Rank.ten => '10', Rank.nine => '9',
+      Rank.eight => '8', Rank.seven => '7', Rank.six => '6',
+      Rank.five => '5', Rank.four => '4', Rank.three => '3',
+      Rank.two => '2', _ => ''
+    };
+    String cs(PlayingCard c) => c.isJoker ? 'Joker' : '${ss(c.suit)}${rs(c.rank)}';
+
+    final hasMighty = hand.any((c) => c.isMightyWith(giruda));
+    final hasJoker = hand.any((c) => c.isJoker);
+    final friendCard = state.friendDeclaration?.card;
+    final mightySuit = state.mighty.suit;
+
+    // === 0. 초구 전략 ===
+    PlayingCard? firstTrickAce;
+    for (final card in hand) {
+      if (card.isJoker || card.isMightyWith(giruda)) continue;
+      if (card.suit == giruda) continue;
+      if (card.rank == Rank.ace && card.suit != mightySuit) {
+        firstTrickAce = card;
+        break;
+      }
+    }
+    if (firstTrickAce != null) {
+      strategies.add(('FIRST_TRICK_ACE_LEAD', {'card': cs(firstTrickAce)}));
+    } else {
+      if (friendCard != null && (friendCard.isMightyWith(giruda) || friendCard.isJoker)) {
+        strategies.add(('FIRST_TRICK_PASS_FRIEND_WIN', <String, String>{}));
+      } else {
+        PlayingCard? firstTrickKing;
+        for (final card in hand) {
+          if (card.isJoker || card.isMightyWith(giruda)) continue;
+          if (card.suit == giruda) continue;
+          if (card.rank == Rank.king) { firstTrickKing = card; break; }
+        }
+        if (firstTrickKing != null) {
+          strategies.add(('FIRST_TRICK_KING_LEAD', {'card': cs(firstTrickKing)}));
+        } else {
+          strategies.add(('FIRST_TRICK_PASS_FRIEND', <String, String>{}));
+        }
+      }
+    }
+
+    // 기루다 카드 (마이티 제외, 높은 순)
+    final girudaCards = giruda != null
+        ? (hand.where((c) => !c.isJoker && !c.isMightyWith(giruda) && c.suit == giruda).toList()
+          ..sort((a, b) => b.rankValue.compareTo(a.rankValue)))
+        : <PlayingCard>[];
+    final highGiruda = girudaCards.where((c) => c.rankValue >= 12).toList();
+
+    // void 무늬
+    Set<Suit> voidSuits = {};
+    for (final suit in Suit.values) {
+      if (suit == giruda) continue;
+      if (!hand.any((c) => !c.isJoker && !c.isMightyWith(giruda) && c.suit == suit)) {
+        voidSuits.add(suit);
+      }
+    }
+
+    // 물패 무늬
+    List<Suit> weakSuits = [];
+    for (final suit in Suit.values) {
+      if (suit == giruda) continue;
+      final sc = hand.where((c) => !c.isJoker && !c.isMightyWith(giruda) && c.suit == suit).toList();
+      if (sc.isEmpty) { weakSuits.add(suit); continue; }
+      if (!sc.any((c) => c.rank == Rank.ace) && sc.length <= 2) weakSuits.add(suit);
+    }
+
+    // === 1. 프렌드 연결 전략 ===
+    bool friendIsGirudaCard = false;
+    if (friendCard != null) {
+      if (friendCard.isMightyWith(giruda)) {
+        strategies.add(('PASS_TO_MIGHTY_FRIEND', <String, String>{}));
+      } else if (friendCard.isJoker) {
+        strategies.add(('PASS_TO_JOKER_FRIEND', <String, String>{}));
+      } else if (friendCard.suit == giruda && giruda != null) {
+        friendIsGirudaCard = true;
+        final lowerGiruda = girudaCards.where((c) => c.rankValue < friendCard.rankValue).toList();
+        if (lowerGiruda.isNotEmpty) {
+          final midGiruda = lowerGiruda.where((c) => c.rankValue <= 9).toList();
+          PlayingCard passCard;
+          if (midGiruda.isNotEmpty) {
+            midGiruda.sort((a, b) => b.rankValue.compareTo(a.rankValue));
+            passCard = midGiruda.first;
+          } else {
+            lowerGiruda.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+            passCard = lowerGiruda.first;
+          }
+          strategies.add(('PASS_TRUMP_TO_FRIEND', {'passCard': cs(passCard), 'friendCard': cs(friendCard), 'rank': rs(friendCard.rank)}));
+        }
+      } else if (friendCard.suit != null) {
+        final friendSuitCards = hand.where((c) =>
+            !c.isJoker && !c.isMightyWith(giruda) &&
+            c.suit == friendCard.suit &&
+            c.rankValue < friendCard.rankValue).toList();
+        if (friendSuitCards.isNotEmpty) {
+          friendSuitCards.sort((a, b) => a.rankValue.compareTo(b.rankValue));
+          strategies.add(('PASS_SUIT_TO_FRIEND', {'card': cs(friendSuitCards.first), 'friendCard': cs(friendCard)}));
+        }
+      }
+    }
+
+    // === 2. 기루다 공격 전략 ===
+    if (giruda != null && highGiruda.isNotEmpty) {
+      final highNames = highGiruda.map((c) => rs(c.rank)).join('/');
+      final source = friendIsGirudaCard ? 'friend' : 'reclaim';
+      final cards = '${ss(giruda)}$highNames';
+      if (girudaCards.length >= 5) {
+        strategies.add(('TRUMP_DOMINATE', {'source': source, 'cards': cards}));
+      } else {
+        strategies.add(('TRUMP_EXHAUST', {'source': source, 'cards': cards}));
+      }
+    } else if (giruda != null && girudaCards.length >= 3) {
+      strategies.add(('TRUMP_MID_DRAW', {'suit': ss(giruda)}));
+    }
+
+    // === 3. 조커 활용 전략 ===
+    if (hasJoker && giruda != null) {
+      final callSuits = weakSuits.map((s) => ss(s)).toList();
+      if (callSuits.isNotEmpty && callSuits.length <= 3) {
+        strategies.add(('JOKER_CALL_SUITS', {'suits': callSuits.join('/')}));
+      } else {
+        strategies.add(('JOKER_CALL_WEAK', <String, String>{}));
+      }
+    } else if (hasJoker) {
+      strategies.add(('JOKER_OPTIMAL', <String, String>{}));
+    }
+
+    // === 4. 마이티 타이밍 ===
+    if (hasMighty) {
+      strategies.add(('MIGHTY_TIMING', <String, String>{}));
+    }
+
+    // === 5. 컷 전략 ===
+    if (voidSuits.isNotEmpty && giruda != null && girudaCards.isNotEmpty) {
+      final voidSymbols = voidSuits.map((s) => ss(s)).join("/");
+      strategies.add(('VOID_TRUMP_CUT', {'suits': voidSymbols}));
+    }
+
+    return strategies;
+  }
+
   void _sendTrackingData() {
     if (_state.allPassed) return;
     if (_state.declarerId != null) {
@@ -907,6 +1072,7 @@ class FriendExplanation {
   final bool isFull;
   final PlayingCard? firstTrickCard;
   final String firstTrickStrategy;
+  final List<(String, Map<String, String>)> strategyPoints;
 
   FriendExplanation({
     required this.declaration,
@@ -914,6 +1080,7 @@ class FriendExplanation {
     this.isFull = false,
     this.firstTrickCard,
     this.firstTrickStrategy = '',
+    this.strategyPoints = const [],
   });
 }
 
@@ -931,6 +1098,7 @@ class KittyExplanation {
   final int afterMinPoints;
   final int afterMaxPoints;
   final int afterOptimalPoints;
+  final List<(Suit?, int, int, int)> girudaComparison; // (suit, min, max, optimal)
 
   KittyExplanation({
     required this.kittyCards,
@@ -946,6 +1114,7 @@ class KittyExplanation {
     this.afterMinPoints = 0,
     this.afterMaxPoints = 0,
     this.afterOptimalPoints = 0,
+    this.girudaComparison = const [],
   });
 }
 
