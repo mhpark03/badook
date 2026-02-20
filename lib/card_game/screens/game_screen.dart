@@ -4008,15 +4008,20 @@ class _GameScreenState extends State<GameScreen> {
               border: Border.all(color: friendColor.withValues(alpha: 0.5), width: 1.5),
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(friendIcon, color: friendColor, size: 36),
-                const SizedBox(height: 6),
-                Text(friendText, style: TextStyle(color: friendColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                // 카드 프렌드인 경우 카드 위젯 크게 표시
-                if (declaration.card != null) ...[
-                  const SizedBox(height: 8),
-                  _buildTinyCardFixed(declaration.card!, state, 52.0),
-                ],
+                Row(
+                  children: [
+                    Icon(friendIcon, color: friendColor, size: 24),
+                    const SizedBox(width: 8),
+                    Text(friendText, style: TextStyle(color: friendColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                    // 카드 프렌드인 경우 카드 위젯 옆에 표시
+                    if (declaration.card != null) ...[
+                      const SizedBox(width: 10),
+                      _buildTinyCardFixed(declaration.card!, state, 42.0),
+                    ],
+                  ],
+                ),
                 // 풀 선언 경고(빨간 배지)
                 if (explanation.isFull) ...[
                   const SizedBox(height: 8),
