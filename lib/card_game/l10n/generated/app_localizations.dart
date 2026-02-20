@@ -2891,6 +2891,192 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'비기루다 소진'**
   String get trickEventNonGirudaExhaust;
+
+  /// No description provided for @demoMode.
+  ///
+  /// In ko, this message translates to:
+  /// **'데모 모드'**
+  String get demoMode;
+
+  /// No description provided for @stopDemo.
+  ///
+  /// In ko, this message translates to:
+  /// **'관전 종료'**
+  String get stopDemo;
+
+  /// No description provided for @pauseDemo.
+  ///
+  /// In ko, this message translates to:
+  /// **'일시정지'**
+  String get pauseDemo;
+
+  /// No description provided for @resumeDemo.
+  ///
+  /// In ko, this message translates to:
+  /// **'재개'**
+  String get resumeDemo;
+
+  /// No description provided for @nextGame.
+  ///
+  /// In ko, this message translates to:
+  /// **'다음 게임'**
+  String get nextGame;
+
+  /// No description provided for @optimal.
+  ///
+  /// In ko, this message translates to:
+  /// **'적정'**
+  String get optimal;
+
+  /// No description provided for @currentBid.
+  ///
+  /// In ko, this message translates to:
+  /// **'현재 배팅'**
+  String get currentBid;
+
+  /// No description provided for @kittyExchange.
+  ///
+  /// In ko, this message translates to:
+  /// **'바닥패 교환'**
+  String get kittyExchange;
+
+  /// No description provided for @kittyReceived.
+  ///
+  /// In ko, this message translates to:
+  /// **'바닥에서 받은 카드'**
+  String get kittyReceived;
+
+  /// No description provided for @kittyDiscard.
+  ///
+  /// In ko, this message translates to:
+  /// **'버릴 카드'**
+  String get kittyDiscard;
+
+  /// No description provided for @discardCutSuit.
+  ///
+  /// In ko, this message translates to:
+  /// **'무늬 정리 → 컷 가능'**
+  String get discardCutSuit;
+
+  /// No description provided for @discardNonGirudaLow.
+  ///
+  /// In ko, this message translates to:
+  /// **'비기루다 낮은 카드'**
+  String get discardNonGirudaLow;
+
+  /// No description provided for @discardLowValue.
+  ///
+  /// In ko, this message translates to:
+  /// **'낮은 가치 카드'**
+  String get discardLowValue;
+
+  /// No description provided for @discardLeastUseful.
+  ///
+  /// In ko, this message translates to:
+  /// **'가장 불필요한 카드'**
+  String get discardLeastUseful;
+
+  /// No description provided for @finalHand.
+  ///
+  /// In ko, this message translates to:
+  /// **'최종 보유 카드'**
+  String get finalHand;
+
+  /// No description provided for @girudaChange.
+  ///
+  /// In ko, this message translates to:
+  /// **'기루다 변경'**
+  String get girudaChange;
+
+  /// No description provided for @friendDeclaration.
+  ///
+  /// In ko, this message translates to:
+  /// **'프렌드 선언'**
+  String get friendDeclaration;
+
+  /// No description provided for @fullDeclaration.
+  ///
+  /// In ko, this message translates to:
+  /// **'풀(20) 선언'**
+  String get fullDeclaration;
+
+  /// No description provided for @reasonNoFriend.
+  ///
+  /// In ko, this message translates to:
+  /// **'강한 핸드로 혼자서 승리 가능'**
+  String get reasonNoFriend;
+
+  /// No description provided for @reasonFirstTrick.
+  ///
+  /// In ko, this message translates to:
+  /// **'초구 승자를 프렌드로 지명'**
+  String get reasonFirstTrick;
+
+  /// No description provided for @reasonNeedAce.
+  ///
+  /// In ko, this message translates to:
+  /// **'비기루다 A 필요'**
+  String get reasonNeedAce;
+
+  /// No description provided for @firstTrickStrategy.
+  ///
+  /// In ko, this message translates to:
+  /// **'초구 전략'**
+  String get firstTrickStrategy;
+
+  /// No description provided for @aceLead.
+  ///
+  /// In ko, this message translates to:
+  /// **'에이스 선공'**
+  String get aceLead;
+
+  /// No description provided for @kingLead.
+  ///
+  /// In ko, this message translates to:
+  /// **'킹 선공'**
+  String get kingLead;
+
+  /// No description provided for @firstTrickGiveUp.
+  ///
+  /// In ko, this message translates to:
+  /// **'초구 유리한 카드 없음'**
+  String get firstTrickGiveUp;
+
+  /// No description provided for @bidSummary.
+  ///
+  /// In ko, this message translates to:
+  /// **'배팅 결과'**
+  String get bidSummary;
+
+  /// No description provided for @targetTricks.
+  ///
+  /// In ko, this message translates to:
+  /// **'목표 점수'**
+  String get targetTricks;
+
+  /// No description provided for @cardFriend.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드 프렌드'**
+  String get cardFriend;
+
+  /// No description provided for @firstTrickWinnerFriend.
+  ///
+  /// In ko, this message translates to:
+  /// **'초구 프렌드'**
+  String get firstTrickWinnerFriend;
+
+  /// No description provided for @allPassed.
+  ///
+  /// In ko, this message translates to:
+  /// **'모두 패스'**
+  String get allPassed;
+
+  /// No description provided for @watchAiGame.
+  ///
+  /// In ko, this message translates to:
+  /// **'AI 대전 관전'**
+  String get watchAiGame;
 }
 
 class _AppLocalizationsDelegate

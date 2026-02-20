@@ -1546,4 +1546,97 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trickEventNonGirudaExhaust => '非将牌消耗';
+
+  @override
+  String get demoMode => '演示模式';
+
+  @override
+  String get stopDemo => '停止观战';
+
+  @override
+  String get pauseDemo => '暂停';
+
+  @override
+  String get resumeDemo => '继续';
+
+  @override
+  String get nextGame => '下一局';
+
+  @override
+  String get optimal => '最佳';
+
+  @override
+  String get currentBid => '当前出价';
+
+  @override
+  String get kittyExchange => '底牌交换';
+
+  @override
+  String get kittyReceived => '从底牌获得的牌';
+
+  @override
+  String get kittyDiscard => '丢弃的牌';
+
+  @override
+  String get discardCutSuit => '整理花色 → 可切牌';
+
+  @override
+  String get discardNonGirudaLow => '非王牌低牌';
+
+  @override
+  String get discardLowValue => '低价值牌';
+
+  @override
+  String get discardLeastUseful => '最无用的牌';
+
+  @override
+  String get finalHand => '最终手牌';
+
+  @override
+  String get girudaChange => '王牌变更';
+
+  @override
+  String get friendDeclaration => '朋友宣言';
+
+  @override
+  String get fullDeclaration => '满分(20)宣言';
+
+  @override
+  String get reasonNoFriend => '手牌强可以独自获胜';
+
+  @override
+  String get reasonFirstTrick => '第一墩赢家为朋友';
+
+  @override
+  String get reasonNeedAce => '需要非王牌A';
+
+  @override
+  String get firstTrickStrategy => '首墩策略';
+
+  @override
+  String get aceLead => 'A先出';
+
+  @override
+  String get kingLead => 'K先出';
+
+  @override
+  String get firstTrickGiveUp => '没有有利的首墩牌';
+
+  @override
+  String get bidSummary => '出价结果';
+
+  @override
+  String get targetTricks => '目标分数';
+
+  @override
+  String get cardFriend => '牌友';
+
+  @override
+  String get firstTrickWinnerFriend => '首墩朋友';
+
+  @override
+  String get allPassed => '全部通过';
+
+  @override
+  String get watchAiGame => '观看AI对战';
 }

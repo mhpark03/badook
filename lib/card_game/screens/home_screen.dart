@@ -9,7 +9,6 @@ import '../services/game_controller.dart';
 import '../services/stats_service.dart';
 import '../widgets/card_game_provider.dart';
 import 'game_screen.dart';
-import 'mighty_tutorial_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -185,30 +184,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: isSmallScreen ? 8 : 10),
 
-                  // 마이티 배우기 버튼
+                  // AI 대전 관전 버튼
                   SizedBox(
                     width: double.infinity,
-                    child: OutlinedButton.icon(
+                    child: ElevatedButton.icon(
                       onPressed: () {
+                        controller.startAutoPlay();
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const MightyTutorialScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => const GameScreen(isAutoPlay: true),
+                          ),
                         );
                       },
                       icon: Icon(
-                        Icons.school,
+                        Icons.smart_display,
                         color: Colors.white,
                         size: isSmallScreen ? 18 : 20,
                       ),
                       label: Text(
-                        '마이티 배우기',
+                        l10n.watchAiGame,
                         style: TextStyle(
                           fontSize: isSmallScreen ? 14 : 15,
+                          fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.white38),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
                         padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 8 : 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),

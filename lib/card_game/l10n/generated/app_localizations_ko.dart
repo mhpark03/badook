@@ -1562,4 +1562,97 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trickEventNonGirudaExhaust => '비기루다 소진';
+
+  @override
+  String get demoMode => '데모 모드';
+
+  @override
+  String get stopDemo => '관전 종료';
+
+  @override
+  String get pauseDemo => '일시정지';
+
+  @override
+  String get resumeDemo => '재개';
+
+  @override
+  String get nextGame => '다음 게임';
+
+  @override
+  String get optimal => '적정';
+
+  @override
+  String get currentBid => '현재 배팅';
+
+  @override
+  String get kittyExchange => '바닥패 교환';
+
+  @override
+  String get kittyReceived => '바닥에서 받은 카드';
+
+  @override
+  String get kittyDiscard => '버릴 카드';
+
+  @override
+  String get discardCutSuit => '무늬 정리 → 컷 가능';
+
+  @override
+  String get discardNonGirudaLow => '비기루다 낮은 카드';
+
+  @override
+  String get discardLowValue => '낮은 가치 카드';
+
+  @override
+  String get discardLeastUseful => '가장 불필요한 카드';
+
+  @override
+  String get finalHand => '최종 보유 카드';
+
+  @override
+  String get girudaChange => '기루다 변경';
+
+  @override
+  String get friendDeclaration => '프렌드 선언';
+
+  @override
+  String get fullDeclaration => '풀(20) 선언';
+
+  @override
+  String get reasonNoFriend => '강한 핸드로 혼자서 승리 가능';
+
+  @override
+  String get reasonFirstTrick => '초구 승자를 프렌드로 지명';
+
+  @override
+  String get reasonNeedAce => '비기루다 A 필요';
+
+  @override
+  String get firstTrickStrategy => '초구 전략';
+
+  @override
+  String get aceLead => '에이스 선공';
+
+  @override
+  String get kingLead => '킹 선공';
+
+  @override
+  String get firstTrickGiveUp => '초구 유리한 카드 없음';
+
+  @override
+  String get bidSummary => '배팅 결과';
+
+  @override
+  String get targetTricks => '목표 점수';
+
+  @override
+  String get cardFriend => '카드 프렌드';
+
+  @override
+  String get firstTrickWinnerFriend => '초구 프렌드';
+
+  @override
+  String get allPassed => '모두 패스';
+
+  @override
+  String get watchAiGame => 'AI 대전 관전';
 }

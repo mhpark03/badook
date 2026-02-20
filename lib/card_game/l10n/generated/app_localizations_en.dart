@@ -1577,4 +1577,97 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventNonGirudaExhaust => 'Non-trump exhausted';
+
+  @override
+  String get demoMode => 'Demo Mode';
+
+  @override
+  String get stopDemo => 'Stop Demo';
+
+  @override
+  String get pauseDemo => 'Pause';
+
+  @override
+  String get resumeDemo => 'Resume';
+
+  @override
+  String get nextGame => 'Next Game';
+
+  @override
+  String get optimal => 'Optimal';
+
+  @override
+  String get currentBid => 'Current Bid';
+
+  @override
+  String get kittyExchange => 'Kitty Exchange';
+
+  @override
+  String get kittyReceived => 'Cards from Kitty';
+
+  @override
+  String get kittyDiscard => 'Discard Cards';
+
+  @override
+  String get discardCutSuit => 'Suit cleanup → cut possible';
+
+  @override
+  String get discardNonGirudaLow => 'Non-trump low card';
+
+  @override
+  String get discardLowValue => 'Low value card';
+
+  @override
+  String get discardLeastUseful => 'Least useful card';
+
+  @override
+  String get finalHand => 'Final Hand';
+
+  @override
+  String get girudaChange => 'Trump Change';
+
+  @override
+  String get friendDeclaration => 'Friend Declaration';
+
+  @override
+  String get fullDeclaration => 'Full (20) Declaration';
+
+  @override
+  String get reasonNoFriend => 'Strong hand, can win alone';
+
+  @override
+  String get reasonFirstTrick => 'First trick winner as friend';
+
+  @override
+  String get reasonNeedAce => 'Need non-trump Ace';
+
+  @override
+  String get firstTrickStrategy => 'First Trick Strategy';
+
+  @override
+  String get aceLead => 'Ace lead';
+
+  @override
+  String get kingLead => 'King lead';
+
+  @override
+  String get firstTrickGiveUp => 'No strong first trick card';
+
+  @override
+  String get bidSummary => 'Bid Summary';
+
+  @override
+  String get targetTricks => 'Target Points';
+
+  @override
+  String get cardFriend => 'Card Friend';
+
+  @override
+  String get firstTrickWinnerFriend => 'First Trick Friend';
+
+  @override
+  String get allPassed => 'All Passed';
+
+  @override
+  String get watchAiGame => 'Watch AI Game';
 }

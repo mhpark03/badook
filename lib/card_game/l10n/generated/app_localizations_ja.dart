@@ -1556,4 +1556,97 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get trickEventNonGirudaExhaust => '非切り札消耗';
+
+  @override
+  String get demoMode => 'デモモード';
+
+  @override
+  String get stopDemo => '観戦終了';
+
+  @override
+  String get pauseDemo => '一時停止';
+
+  @override
+  String get resumeDemo => '再開';
+
+  @override
+  String get nextGame => '次のゲーム';
+
+  @override
+  String get optimal => '適正';
+
+  @override
+  String get currentBid => '現在のビッド';
+
+  @override
+  String get kittyExchange => 'キティ交換';
+
+  @override
+  String get kittyReceived => 'キティから受けたカード';
+
+  @override
+  String get kittyDiscard => '捨てるカード';
+
+  @override
+  String get discardCutSuit => 'スート整理 → カット可能';
+
+  @override
+  String get discardNonGirudaLow => '非切り札の低カード';
+
+  @override
+  String get discardLowValue => '低価値カード';
+
+  @override
+  String get discardLeastUseful => '最も不要なカード';
+
+  @override
+  String get finalHand => '最終手札';
+
+  @override
+  String get girudaChange => '切り札変更';
+
+  @override
+  String get friendDeclaration => 'フレンド宣言';
+
+  @override
+  String get fullDeclaration => 'フル(20)宣言';
+
+  @override
+  String get reasonNoFriend => '強い手札で一人で勝てる';
+
+  @override
+  String get reasonFirstTrick => '初手勝者をフレンドに指名';
+
+  @override
+  String get reasonNeedAce => '非切り札のA必要';
+
+  @override
+  String get firstTrickStrategy => '初手戦略';
+
+  @override
+  String get aceLead => 'エースリード';
+
+  @override
+  String get kingLead => 'キングリード';
+
+  @override
+  String get firstTrickGiveUp => '初手に有利なカードなし';
+
+  @override
+  String get bidSummary => 'ビッド結果';
+
+  @override
+  String get targetTricks => '目標点数';
+
+  @override
+  String get cardFriend => 'カードフレンド';
+
+  @override
+  String get firstTrickWinnerFriend => '初手フレンド';
+
+  @override
+  String get allPassed => '全員パス';
+
+  @override
+  String get watchAiGame => 'AI対戦観戦';
 }

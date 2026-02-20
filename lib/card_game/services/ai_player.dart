@@ -496,21 +496,25 @@ class AIPlayer {
     );
   }
 
-  Bid decideBid(Player player, GameState state) {
+  (Bid, BidEvaluation) decideBidWithEvaluation(Player player, GameState state) {
     final hand = player.hand;
 
     // 1. 먼저 최적의 기루다를 선택 (강도 점수 기반 필터링)
     Suit? bestSuit = findBestSuit(hand);
 
-    // 2. 기루다 후보가 없으면 패스
+    // 2. 기루다 후보가 없으면 패스 (평가 정보도 함께 반환)
     if (bestSuit == null) {
-      return Bid.pass(player.id);
+      final evaluation = evaluateForBidding(hand);
+      return (Bid.pass(player.id), evaluation);
     }
 
     // 3. 선택된 기루다를 기준으로 핸드 강도 계산
     int strength = evaluateHandStrength(hand, bestSuit);
 
-    // 4. 배팅 결정 - 순서대로 1씩 증가하며 배팅
+    // 4. evaluateForBidding으로 상세 평가 정보 생성
+    final evaluation = evaluateForBidding(hand);
+
+    // 5. 배팅 결정 - 순서대로 1씩 증가하며 배팅
     int bidAmount;
     if (state.currentBid == null) {
       // 첫 배팅은 13부터 시작
@@ -522,18 +526,27 @@ class AIPlayer {
 
     // 배팅할 금액이 자신의 강도보다 높으면 패스
     if (bidAmount > strength || strength < 13) {
-      return Bid.pass(player.id);
+      return (Bid.pass(player.id), evaluation);
     }
 
     // 최대 20까지만 배팅 가능
     bidAmount = min(bidAmount, 20);
 
-    return Bid(
-      playerId: player.id,
-      suit: bestSuit,
-      tricks: bidAmount,
+    return (
+      Bid(
+        playerId: player.id,
+        suit: bestSuit,
+        tricks: bidAmount,
+      ),
+      evaluation,
     );
   }
+
+  Bid decideBid(Player player, GameState state) {
+    final (bid, _) = decideBidWithEvaluation(player, state);
+    return bid;
+  }
+
 
   // Public method for debugging
   int evaluateHandStrength(List<PlayingCard> hand, Suit? giruda) {
