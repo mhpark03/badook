@@ -1848,4 +1848,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String strategyVoidTrumpCut(String suits) {
     return '$suits 보이드 → 상대 선공 시 기루다 컷으로 트릭 회수';
   }
+
+  @override
+  String get estimatedScore => '예상 점수';
 }

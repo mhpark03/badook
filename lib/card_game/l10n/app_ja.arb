@@ -669,5 +669,6 @@
   "strategyJokerOptimal": "最適タイミングでジョーカーでトリック獲得",
   "strategyMightyTiming": "9番目トリックでマイティ使用 → 10番目リード確保",
   "strategyVoidTrumpCut": "{suits}ボイド → 相手リード時に切り札カットでトリック回収",
-  "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } }
+  "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
+  "estimatedScore": "予想スコア"
 }

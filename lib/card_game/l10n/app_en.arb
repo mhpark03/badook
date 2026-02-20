@@ -670,5 +670,6 @@
   "strategyJokerOptimal": "Use joker at optimal timing for trick",
   "strategyMightyTiming": "Use Mighty on 9th trick → secure 10th trick lead",
   "strategyVoidTrumpCut": "{suits} void → trump cut on opponent's lead",
-  "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } }
+  "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
+  "estimatedScore": "Estimated Score"
 }

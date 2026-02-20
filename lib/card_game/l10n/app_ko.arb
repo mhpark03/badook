@@ -761,5 +761,6 @@
   "strategyJokerOptimal": "최적 타이밍에 조커로 트릭 획득",
   "strategyMightyTiming": "9번째 트릭에 마이티 사용 → 10번째 트릭 선 확보",
   "strategyVoidTrumpCut": "{suits} 보이드 → 상대 선공 시 기루다 컷으로 트릭 회수",
-  "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } }
+  "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
+  "estimatedScore": "예상 점수"
 }

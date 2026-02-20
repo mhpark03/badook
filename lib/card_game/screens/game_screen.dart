@@ -1960,13 +1960,9 @@ class _GameScreenState extends State<GameScreen> {
           ),
           borderRadius: BorderRadius.circular(3),
         ),
-        child: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.auto_awesome, color: Colors.yellowAccent, size: 10),
-            SizedBox(width: 2),
-            Text('JK', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white)),
-          ],
+        child: const Text(
+          '★JK',
+          style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.yellowAccent),
         ),
       );
     }
@@ -2019,7 +2015,7 @@ class _GameScreenState extends State<GameScreen> {
     if (card.isJoker) {
       return Container(
         width: width,
-        padding: const EdgeInsets.symmetric(vertical: 1),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 1),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
@@ -2028,13 +2024,11 @@ class _GameScreenState extends State<GameScreen> {
           ),
           borderRadius: BorderRadius.circular(3),
         ),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.auto_awesome, color: Colors.yellowAccent, size: width * 0.32),
-              Text('JK', style: TextStyle(fontSize: width * 0.22, fontWeight: FontWeight.bold, color: Colors.white)),
-            ],
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            '★JK',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.yellowAccent),
           ),
         ),
       );
@@ -4202,12 +4196,17 @@ class _GameScreenState extends State<GameScreen> {
   Widget _buildBidSummaryScreen(GameController controller) {
     final l10n = getL10n(context);
     final state = controller.state;
+    final declaration = controller.pendingDeclaration;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardW = (screenWidth * 0.065).clamp(32.0, 50.0);
+    final cardH = cardW * 1.5;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 헤더
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -4223,22 +4222,128 @@ class _GameScreenState extends State<GameScreen> {
             ),
           ),
           const SizedBox(height: 12),
+
           if (state.declarerId != null) ...[
+            // 게임 정보 섹션
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.teal.withValues(alpha: 0.5)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 주공 + 목표
+                  Row(
+                    children: [
+                      const Icon(Icons.person, color: Colors.amber, size: 16),
+                      const SizedBox(width: 6),
+                      Text(
+                        '${l10n.declarer}: ${_getLocalizedPlayerName(state.players[state.declarerId!], l10n)}',
+                        style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  // 기루다 + 목표 점수
+                  Row(
+                    children: [
+                      const Icon(Icons.flag, color: Colors.lightBlueAccent, size: 16),
+                      const SizedBox(width: 6),
+                      Text(
+                        '${state.currentBid?.tricks ?? 0}${state.giruda != null ? " ${_suitSymbolForCard(state.giruda!)}" : " NT"}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (state.giruda != null) ...[
+                        const SizedBox(width: 4),
+                        Text(
+                          _suitNameKo(state.giruda!),
+                          style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  // 프렌드
+                  Row(
+                    children: [
+                      Icon(
+                        declaration != null && declaration.isNoFriend
+                            ? Icons.person_off
+                            : declaration != null && declaration.isFirstTrickWinner
+                                ? Icons.emoji_events
+                                : Icons.handshake,
+                        color: Colors.pinkAccent,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        _friendDeclarationText(declaration, l10n),
+                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // 주공 최종 카드
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.style, color: Colors.amber, size: 14),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${_getLocalizedPlayerName(state.players[state.declarerId!], l10n)} ${l10n.handCards}',
+                        style: TextStyle(color: Colors.amber, fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 2,
+                    runSpacing: 2,
+                    children: [
+                      for (final card in _sortedHand(state.players[state.declarerId!].hand, state.giruda))
+                        CardWidget(
+                          card: card,
+                          width: cardW,
+                          height: cardH,
+                          compact: true,
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // 각 플레이어 예상 점수
             Text(
-              '${l10n.declarer}: ${_getLocalizedPlayerName(state.players[state.declarerId!], l10n)}',
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              l10n.estimatedScore,
+              style: TextStyle(color: Colors.grey[400], fontSize: 12, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
-            Text(
-              '${l10n.targetTricks}: ${state.currentBid?.tricks ?? 0} ${state.giruda != null ? _suitSymbolForCard(state.giruda!) : "NT"}',
-              style: const TextStyle(color: Colors.white, fontSize: 16),
-            ),
-            const SizedBox(height: 12),
-            // 각 플레이어 배팅 결과
             for (int i = 0; i < state.players.length; i++)
               _buildBidSummaryPlayerRow(state.players[i], state, controller.bidSnapshots, l10n),
           ],
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           Center(
             child: ElevatedButton(
               onPressed: () => controller.confirmBidSummary(),
@@ -4252,6 +4357,47 @@ class _GameScreenState extends State<GameScreen> {
         ],
       ),
     );
+  }
+
+  String _friendDeclarationText(FriendDeclaration? declaration, AppLocalizations l10n) {
+    if (declaration == null) return '';
+    if (declaration.isNoFriend) return l10n.noFriend;
+    if (declaration.isFirstTrickWinner) return l10n.firstTrickFriend;
+    if (declaration.card != null) {
+      return '${_cardStr(declaration.card!)} ${l10n.friend}';
+    }
+    if (declaration.trickNumber != null) {
+      return '${declaration.trickNumber}${l10n.nthTrickFriend}';
+    }
+    return '';
+  }
+
+  String _suitNameKo(Suit suit) {
+    return switch (suit) {
+      Suit.spade => '스페이드',
+      Suit.heart => '하트',
+      Suit.diamond => '다이아',
+      Suit.club => '클럽',
+    };
+  }
+
+  List<PlayingCard> _sortedHand(List<PlayingCard> hand, Suit? giruda) {
+    final sorted = hand.toList();
+    sorted.sort((a, b) {
+      if (a.isJoker && !b.isJoker) return -1;
+      if (!a.isJoker && b.isJoker) return 1;
+      if (a.isJoker && b.isJoker) return 0;
+      // 기루다 우선
+      final aIsGiruda = a.suit == giruda;
+      final bIsGiruda = b.suit == giruda;
+      if (aIsGiruda && !bIsGiruda) return -1;
+      if (!aIsGiruda && bIsGiruda) return 1;
+      // 같은 무늬: 높은 순
+      if (a.suit == b.suit) return b.rankValue.compareTo(a.rankValue);
+      // 무늬 순서
+      return a.suit!.index.compareTo(b.suit!.index);
+    });
+    return sorted;
   }
 
   Widget _buildBidSummaryPlayerRow(Player player, GameState state, List<BidEvaluationSnapshot> snapshots, AppLocalizations l10n) {

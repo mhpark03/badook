@@ -1834,4 +1834,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String strategyVoidTrumpCut(String suits) {
     return '$suits缺门 → 对手出牌时用将牌切入赢墩';
   }
+
+  @override
+  String get estimatedScore => '预估分数';
 }

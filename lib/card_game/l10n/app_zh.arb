@@ -669,5 +669,6 @@
   "strategyJokerOptimal": "最佳时机用王牌赢墩",
   "strategyMightyTiming": "第9墩用至尊 → 确保第10墩出牌权",
   "strategyVoidTrumpCut": "{suits}缺门 → 对手出牌时用将牌切入赢墩",
-  "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } }
+  "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
+  "estimatedScore": "预估分数"
 }

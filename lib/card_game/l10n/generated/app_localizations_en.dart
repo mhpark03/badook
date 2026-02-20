@@ -1868,4 +1868,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String strategyVoidTrumpCut(String suits) {
     return '$suits void → trump cut on opponent\'s lead';
   }
+
+  @override
+  String get estimatedScore => 'Estimated Score';
 }

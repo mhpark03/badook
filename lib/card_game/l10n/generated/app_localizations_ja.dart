@@ -1841,4 +1841,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String strategyVoidTrumpCut(String suits) {
     return '$suitsボイド → 相手リード時に切り札カットでトリック回収';
   }
+
+  @override
+  String get estimatedScore => '予想スコア';
 }

@@ -261,13 +261,13 @@ class MiniCardWidget extends StatelessWidget {
           border: Border.all(color: Colors.white, width: 1),
         ),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.auto_awesome, color: Colors.yellowAccent, size: size * 0.35),
-              Text('JK', style: TextStyle(fontSize: size * 0.2, fontWeight: FontWeight.bold, color: Colors.white)),
-            ],
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '★\nJK',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.yellowAccent, height: 1.1),
+            ),
           ),
         ),
       );

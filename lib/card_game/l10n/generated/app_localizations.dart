@@ -3387,6 +3387,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'{suits} 보이드 → 상대 선공 시 기루다 컷으로 트릭 회수'**
   String strategyVoidTrumpCut(String suits);
+
+  /// No description provided for @estimatedScore.
+  ///
+  /// In ko, this message translates to:
+  /// **'예상 점수'**
+  String get estimatedScore;
 }
 
 class _AppLocalizationsDelegate
