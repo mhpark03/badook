@@ -1742,7 +1742,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kittyAfterExchange => '交换后';
 
   @override
-  String get girudaComparisonTitle => '王牌比较（13张）';
+  String get girudaComparisonTitle => '王牌比较';
 
   @override
   String get friendSummaryTitle => '朋友宣言';

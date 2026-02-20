@@ -1770,7 +1770,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kittyAfterExchange => 'After';
 
   @override
-  String get girudaComparisonTitle => 'Giruda Comparison (13 cards)';
+  String get girudaComparisonTitle => 'Giruda Comparison';
 
   @override
   String get friendSummaryTitle => 'Friend Declaration';

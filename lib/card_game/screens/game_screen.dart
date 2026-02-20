@@ -3658,12 +3658,11 @@ class _GameScreenState extends State<GameScreen> {
             iconColor: Colors.purple[300]!,
             borderColor: Colors.purple[400]!,
             title: l10n.kittyScoreChange,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                     // 교체 전
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -3726,7 +3725,6 @@ class _GameScreenState extends State<GameScreen> {
                     ],
                   ],
                 ),
-              ],
             ),
           ),
 

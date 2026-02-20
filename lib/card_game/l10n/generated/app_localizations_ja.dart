@@ -1749,7 +1749,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kittyAfterExchange => '交換後';
 
   @override
-  String get girudaComparisonTitle => '切り札比較（13枚）';
+  String get girudaComparisonTitle => '切り札比較';
 
   @override
   String get friendSummaryTitle => 'フレンド宣言';

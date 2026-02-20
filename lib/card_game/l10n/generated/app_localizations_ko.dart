@@ -1755,7 +1755,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get kittyAfterExchange => '교체 후';
 
   @override
-  String get girudaComparisonTitle => '기루다 비교 (13장)';
+  String get girudaComparisonTitle => '기루다 비교';
 
   @override
   String get friendSummaryTitle => '프렌드 선언';

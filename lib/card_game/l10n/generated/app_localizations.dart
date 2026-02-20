@@ -3243,7 +3243,7 @@ abstract class AppLocalizations {
   /// No description provided for @girudaComparisonTitle.
   ///
   /// In ko, this message translates to:
-  /// **'기루다 비교 (13장)'**
+  /// **'기루다 비교'**
   String get girudaComparisonTitle;
 
   /// No description provided for @friendSummaryTitle.
