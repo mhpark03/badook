@@ -27,6 +27,7 @@ class GameController extends ChangeNotifier {
   // 트래킹용
   String _gameUuid = '';
   final List<BidEvaluationSnapshot> _bidSnapshots = [];
+  KittySnapshot? _kittySnapshot;
   bool _trackingSent = false;
 
   GameController() {
@@ -137,6 +138,7 @@ class GameController extends ChangeNotifier {
     _showFriendSummary = false;
     _gameUuid = MightyTrackingService.generateUuid();
     _bidSnapshots.clear();
+    _kittySnapshot = null;
     _trackingSent = false;
     _state.startNewGame();
     notifyListeners();
@@ -334,7 +336,22 @@ class GameController extends ChangeNotifier {
       return b.rankValue.compareTo(a.rankValue);
     });
 
-    // Tracking: mark declarer in bid snapshots
+    // Tracking: kitty snapshot + mark declarer in bid snapshots
+    final kittyPointCards = discardCards.where((c) => c.isPointCard).length;
+    final (postMin, postMax) = _aiPlayer.estimatePointRange(finalHand, newGiruda);
+    final postOptimal = (postMin * 0.3 + postMax * 0.7 + 1).round();
+    _kittySnapshot = KittySnapshot(
+      kittyCards: kittyCards.map((c) => c.toJson()).toList(),
+      kittyPointCards: kittyPointCards,
+      discardCards: discardCards.map((c) => c.toJson()).toList(),
+      finalHand: finalHand.map((c) => c.toJson()).toList(),
+      girudaChanged: girudaChanged,
+      originalGiruda: originalGiruda?.name,
+      newGiruda: newGiruda?.name,
+      postKittyMin: postMin,
+      postKittyMax: postMax,
+      postKittyOptimal: postOptimal,
+    );
     for (var snap in _bidSnapshots) {
       if (snap.playerId == _state.declarerId) snap.isDeclarer = true;
     }
@@ -1033,6 +1050,8 @@ class GameController extends ChangeNotifier {
       gameUuid: _gameUuid,
       state: _state,
       bidSnapshots: _bidSnapshots,
+      kittySnapshot: _kittySnapshot,
+      isAutoPlay: _isAutoPlayMode,
     );
   }
 
@@ -1057,6 +1076,8 @@ class GameController extends ChangeNotifier {
       gameUuid: _gameUuid,
       state: _state,
       bidSnapshots: _bidSnapshots,
+      kittySnapshot: _kittySnapshot,
+      isAutoPlay: _isAutoPlayMode,
     );
   }
 

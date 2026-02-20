@@ -1953,12 +1953,21 @@ class _GameScreenState extends State<GameScreen> {
 
     if (card.isJoker) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
         decoration: BoxDecoration(
-          color: Colors.purple[600],
+          gradient: const LinearGradient(
+            colors: [Color(0xFF7B1FA2), Color(0xFFAB47BC)],
+          ),
           borderRadius: BorderRadius.circular(3),
         ),
-        child: const Text('🃏', style: TextStyle(fontSize: 11)),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.auto_awesome, color: Colors.yellowAccent, size: 10),
+            SizedBox(width: 2),
+            Text('JK', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white)),
+          ],
+        ),
       );
     }
 
@@ -2012,11 +2021,21 @@ class _GameScreenState extends State<GameScreen> {
         width: width,
         padding: const EdgeInsets.symmetric(vertical: 1),
         decoration: BoxDecoration(
-          color: Colors.purple[600],
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF7B1FA2), Color(0xFFAB47BC)],
+          ),
           borderRadius: BorderRadius.circular(3),
         ),
         child: Center(
-          child: Text('🃏', style: TextStyle(fontSize: width * 0.36)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.auto_awesome, color: Colors.yellowAccent, size: width * 0.32),
+              Text('JK', style: TextStyle(fontSize: width * 0.22, fontWeight: FontWeight.bold, color: Colors.white)),
+            ],
+          ),
         ),
       );
     }
@@ -4282,6 +4301,7 @@ class _GameScreenState extends State<GameScreen> {
   Widget _buildTrickDetailsScreen(GameController controller) {
     final l10n = getL10n(context);
     final state = controller.state;
+    final isAuto = widget.isAutoPlay;
 
     return Center(
       child: Container(
@@ -4289,7 +4309,7 @@ class _GameScreenState extends State<GameScreen> {
         padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isAuto ? const Color(0xFF1A1A2E) : Colors.white,
           borderRadius: BorderRadius.circular(16),
         ),
         child: SingleChildScrollView(
@@ -4297,60 +4317,78 @@ class _GameScreenState extends State<GameScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               () {
-                final isPlayerWinner = state.getPlayerScore(state.players[0].id) >= 0;
-                return Column(
-                  children: [
-                    Text(
-                      isPlayerWinner ? l10n.victory : l10n.defeat,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: isPlayerWinner ? Colors.green : Colors.red,
+                if (isAuto) {
+                  // 자동 게임: 주공 기준 표시
+                  return Column(
+                    children: [
+                      Text(
+                        state.declarerWon ? l10n.declarerTeamWins : l10n.defenderTeamWins,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: state.declarerWon ? Colors.greenAccent : Colors.red[300],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      state.declarerWon ? l10n.declarerTeamWins : l10n.defenderTeamWins,
-                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                    ),
-                  ],
-                );
+                    ],
+                  );
+                } else {
+                  final isPlayerWinner = state.getPlayerScore(state.players[0].id) >= 0;
+                  return Column(
+                    children: [
+                      Text(
+                        isPlayerWinner ? l10n.victory : l10n.defeat,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: isPlayerWinner ? Colors.green : Colors.red,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        state.declarerWon ? l10n.declarerTeamWins : l10n.defenderTeamWins,
+                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                      ),
+                    ],
+                  );
+                }
               }(),
               const SizedBox(height: 8),
               Text(
                 state.declarerTeamPoints == 20
                     ? '${l10n.declarerTeam}: ${l10n.fullPoints}'
                     : l10n.declarerTeamPoints(state.declarerTeamPoints),
-                style: const TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18, color: isAuto ? Colors.white : Colors.black),
               ),
               Text(
                 l10n.targetPoints(state.currentBid?.tricks ?? 0),
-                style: const TextStyle(fontSize: 16, color: Colors.grey),
+                style: TextStyle(fontSize: 16, color: isAuto ? Colors.grey[400] : Colors.grey),
               ),
               const SizedBox(height: 16),
-              _buildTrickDetailsTable(state, l10n: l10n),
+              _buildTrickDetailsTable(state, l10n: l10n, darkTheme: isAuto),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _showGameResult = true;
-                        _showTrickDetails = false;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  if (!isAuto) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _showGameResult = true;
+                          _showTrickDetails = false;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amber,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                      child: Text(
+                        l10n.score,
+                        style: const TextStyle(fontSize: 16, color: Colors.black),
+                      ),
                     ),
-                    child: Text(
-                      l10n.score,
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  if (widget.isAutoPlay)
+                    const SizedBox(width: 12),
+                  ],
+                  if (isAuto)
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -4399,7 +4437,7 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  Widget _buildTrickDetailsTable(GameState state, {required AppLocalizations l10n}) {
+  Widget _buildTrickDetailsTable(GameState state, {required AppLocalizations l10n, bool darkTheme = false}) {
     final tricks = state.tricks;
     if (tricks.isEmpty) return const SizedBox.shrink();
 
@@ -4463,18 +4501,31 @@ class _GameScreenState extends State<GameScreen> {
     // 기루다/마이티 정보 및 범례
     final girudaSymbol = giruda != null ? _getSuitSymbol(giruda) : null;
     final girudaColor = giruda != null
-        ? (giruda == Suit.diamond || giruda == Suit.heart ? Colors.red[600]! : Colors.grey[900]!)
+        ? (giruda == Suit.diamond || giruda == Suit.heart
+            ? (darkTheme ? Colors.red[300]! : Colors.red[600]!)
+            : (darkTheme ? Colors.white : Colors.grey[900]!))
         : null;
     final mighty = state.mighty;
     final mightyText = '${_getSuitSymbol(mighty.suit!)}${mighty.rankSymbol}';
-    final mightyColor = mighty.isRed ? Colors.red[600]! : Colors.grey[900]!;
+    final mightyColor = mighty.isRed
+        ? (darkTheme ? Colors.red[300]! : Colors.red[600]!)
+        : (darkTheme ? Colors.white : Colors.grey[900]!);
+
+    final labelColor = darkTheme ? Colors.grey[400]! : Colors.grey[600]!;
+    final headerColor = darkTheme ? Colors.grey[300]! : Colors.grey[700]!;
+    final borderColor = darkTheme ? Colors.grey[700]! : Colors.grey[200]!;
+    final headerBorderColor = darkTheme ? Colors.grey[600]! : Colors.grey[300]!;
+    final winnerBg = darkTheme ? Colors.blue[900]!.withValues(alpha: 0.4) : Colors.blue[50]!;
+    final numberColor = darkTheme ? Colors.grey[500]! : Colors.grey[500]!;
+    final eventColor = darkTheme ? Colors.grey[400]! : Colors.grey[500]!;
+    final dashColor = darkTheme ? Colors.grey[600]! : Colors.grey[300]!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           l10n.trickDetails,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: darkTheme ? Colors.white : Colors.black),
         ),
         const SizedBox(height: 4),
         // 범례
@@ -4487,42 +4538,24 @@ class _GameScreenState extends State<GameScreen> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    '${l10n.giruda}: ',
-                    style: TextStyle(fontSize: fontSize, color: Colors.grey[600]),
-                  ),
-                  Text(
-                    girudaSymbol!,
-                    style: TextStyle(fontSize: fontSize + 2, color: girudaColor, fontWeight: FontWeight.bold),
-                  ),
+                  Text('${l10n.giruda}: ', style: TextStyle(fontSize: fontSize, color: labelColor)),
+                  Text(girudaSymbol!, style: TextStyle(fontSize: fontSize + 2, color: girudaColor, fontWeight: FontWeight.bold)),
                 ],
               )
             else
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    '${l10n.giruda}: ',
-                    style: TextStyle(fontSize: fontSize, color: Colors.grey[600]),
-                  ),
-                  Text(
-                    l10n.noGiruda,
-                    style: TextStyle(fontSize: fontSize, color: Colors.grey[600], fontWeight: FontWeight.bold),
-                  ),
+                  Text('${l10n.giruda}: ', style: TextStyle(fontSize: fontSize, color: labelColor)),
+                  Text(l10n.noGiruda, style: TextStyle(fontSize: fontSize, color: labelColor, fontWeight: FontWeight.bold)),
                 ],
               ),
             // 마이티
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  '${l10n.mighty}: ',
-                  style: TextStyle(fontSize: fontSize, color: Colors.grey[600]),
-                ),
-                Text(
-                  mightyText,
-                  style: TextStyle(fontSize: fontSize, color: mightyColor, fontWeight: FontWeight.bold),
-                ),
+                Text('${l10n.mighty}: ', style: TextStyle(fontSize: fontSize, color: labelColor)),
+                Text(mightyText, style: TextStyle(fontSize: fontSize, color: mightyColor, fontWeight: FontWeight.bold)),
               ],
             ),
             // 선공 범례
@@ -4532,19 +4565,13 @@ class _GameScreenState extends State<GameScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[400]!, width: 1),
+                    border: Border.all(color: darkTheme ? Colors.grey[500]! : Colors.grey[400]!, width: 1),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Text(
-                    'A',
-                    style: TextStyle(fontSize: fontSize, color: Colors.grey[600]),
-                  ),
+                  child: Text('A', style: TextStyle(fontSize: fontSize, color: labelColor)),
                 ),
                 const SizedBox(width: 2),
-                Text(
-                  l10n.trickLegendLead,
-                  style: TextStyle(fontSize: fontSize, color: Colors.grey[600]),
-                ),
+                Text(l10n.trickLegendLead, style: TextStyle(fontSize: fontSize, color: labelColor)),
               ],
             ),
             // 승자 범례
@@ -4554,16 +4581,10 @@ class _GameScreenState extends State<GameScreen> {
                 Container(
                   width: fontSize + 6,
                   height: fontSize + 4,
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+                  decoration: BoxDecoration(color: winnerBg, borderRadius: BorderRadius.circular(2)),
                 ),
                 const SizedBox(width: 2),
-                Text(
-                  l10n.trickLegendWinner,
-                  style: TextStyle(fontSize: fontSize, color: Colors.grey[600]),
-                ),
+                Text(l10n.trickLegendWinner, style: TextStyle(fontSize: fontSize, color: labelColor)),
               ],
             ),
           ],
@@ -4578,15 +4599,15 @@ class _GameScreenState extends State<GameScreen> {
             child: Table(
               defaultColumnWidth: const IntrinsicColumnWidth(),
               border: TableBorder(
-                horizontalInside: BorderSide(color: Colors.grey[200]!, width: 0.5),
+                horizontalInside: BorderSide(color: borderColor, width: 0.5),
               ),
             children: [
               TableRow(
                 decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1)),
+                  border: Border(bottom: BorderSide(color: headerBorderColor, width: 1)),
                 ),
                 children: [
-                  _trickHeaderCell('#', fontSize),
+                  _trickHeaderCell('#', fontSize, darkTheme: darkTheme),
                   for (int i = 0; i < 5; i++)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
@@ -4594,23 +4615,25 @@ class _GameScreenState extends State<GameScreen> {
                         children: [
                           Text(
                             playerNames[i] ?? '',
-                            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: headerColor),
                           ),
                           if (playerRoles[i] != null)
                             Text(
                               playerRoles[i]!,
                               style: TextStyle(
                                 fontSize: fontSize - 2,
-                                color: state.players[i].isDeclarer ? Colors.red[600] : Colors.blue[600],
+                                color: state.players[i].isDeclarer
+                                    ? (darkTheme ? Colors.red[300] : Colors.red[600])
+                                    : (darkTheme ? Colors.blue[300] : Colors.blue[600]),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                         ],
                       ),
                     ),
-                  _trickHeaderCell(l10n.trickColumnGainLoss, fontSize),
-                  _trickHeaderCell(l10n.trickColumnGiruda, fontSize),
-                  _trickHeaderCell(l10n.trickColumnEvent, fontSize),
+                  _trickHeaderCell(l10n.trickColumnGainLoss, fontSize, darkTheme: darkTheme),
+                  _trickHeaderCell(l10n.trickColumnGiruda, fontSize, darkTheme: darkTheme),
+                  _trickHeaderCell(l10n.trickColumnEvent, fontSize, darkTheme: darkTheme),
                 ],
               ),
               for (final row in rows)
@@ -4620,18 +4643,19 @@ class _GameScreenState extends State<GameScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                       child: Text(
                         '${row.trickNumber}',
-                        style: TextStyle(fontSize: fontSize, color: Colors.grey[500], fontFamily: 'monospace'),
+                        style: TextStyle(fontSize: fontSize, color: numberColor, fontFamily: 'monospace'),
                       ),
                     ),
                     for (int i = 0; i < 5; i++)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                        color: row.winnerId == i ? Colors.blue[50] : null,
+                        color: row.winnerId == i ? winnerBg : null,
                         child: row.cardsByPlayer[i] != null
                             ? _buildTrickCardCell(row.cardsByPlayer[i]!, i == row.leadPlayerId, fontSize,
                                 jokerLeadSuit: i == row.leadPlayerId ? row.jokerLeadSuit : null,
-                                isFriendCard: friendCard != null && row.cardsByPlayer[i] == friendCard)
-                            : Text('-', textAlign: TextAlign.center, style: TextStyle(fontSize: fontSize, color: Colors.grey[300])),
+                                isFriendCard: friendCard != null && row.cardsByPlayer[i] == friendCard,
+                                darkTheme: darkTheme)
+                            : Text('-', textAlign: TextAlign.center, style: TextStyle(fontSize: fontSize, color: dashColor)),
                       ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
@@ -4642,7 +4666,11 @@ class _GameScreenState extends State<GameScreen> {
                           fontSize: fontSize,
                           fontFamily: 'monospace',
                           fontWeight: row.trickDelta != 0 ? FontWeight.bold : FontWeight.normal,
-                          color: row.trickDelta > 0 ? Colors.blue[600] : row.trickDelta < 0 ? Colors.red[500] : Colors.grey[300],
+                          color: row.trickDelta > 0
+                              ? (darkTheme ? Colors.blue[300] : Colors.blue[600])
+                              : row.trickDelta < 0
+                                  ? (darkTheme ? Colors.red[300] : Colors.red[500])
+                                  : dashColor,
                         ),
                       ),
                     ),
@@ -4651,14 +4679,14 @@ class _GameScreenState extends State<GameScreen> {
                       child: Text(
                         '${row.girudaRemaining}',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: fontSize, fontFamily: 'monospace', color: Colors.grey[400]),
+                        style: TextStyle(fontSize: fontSize, fontFamily: 'monospace', color: darkTheme ? Colors.grey[500] : Colors.grey[400]),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                       child: Text(
                         row.description ?? '',
-                        style: TextStyle(fontSize: fontSize, color: Colors.grey[500]),
+                        style: TextStyle(fontSize: fontSize, color: eventColor),
                       ),
                     ),
                   ],
@@ -4671,29 +4699,29 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  Widget _trickHeaderCell(String text, double fontSize) {
+  Widget _trickHeaderCell(String text, double fontSize, {bool darkTheme = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       child: Text(
         text,
-        style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+        style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: darkTheme ? Colors.grey[300] : Colors.grey[700]),
       ),
     );
   }
 
-  Widget _buildTrickCardCell(PlayingCard card, bool isLead, double fontSize, {Suit? jokerLeadSuit, bool isFriendCard = false}) {
+  Widget _buildTrickCardCell(PlayingCard card, bool isLead, double fontSize, {Suit? jokerLeadSuit, bool isFriendCard = false, bool darkTheme = false}) {
     String text = card.toString();
     Color textColor;
     if (card.isJoker) {
-      textColor = Colors.green[700]!;
+      textColor = darkTheme ? Colors.greenAccent : Colors.green[700]!;
       if (jokerLeadSuit != null) {
         const suitSymbols = {Suit.spade: '\u2660', Suit.diamond: '\u2666', Suit.heart: '\u2665', Suit.club: '\u2663'};
         text = 'JK${suitSymbols[jokerLeadSuit] ?? ''}';
       }
     } else if (card.isRed) {
-      textColor = Colors.red[600]!;
+      textColor = darkTheme ? Colors.red[300]! : Colors.red[600]!;
     } else {
-      textColor = Colors.grey[900]!;
+      textColor = darkTheme ? Colors.white : Colors.grey[900]!;
     }
 
     Widget child = Text(
@@ -4706,7 +4734,7 @@ class _GameScreenState extends State<GameScreen> {
       child = Container(
         padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[400]!, width: 1),
+          border: Border.all(color: darkTheme ? Colors.grey[500]! : Colors.grey[400]!, width: 1),
           borderRadius: BorderRadius.circular(4),
         ),
         child: child,

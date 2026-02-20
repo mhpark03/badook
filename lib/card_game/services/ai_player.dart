@@ -460,7 +460,7 @@ class AIPlayer {
       final keyCardCount = (hasMighty ? 1 : 0) + (hasJoker ? 1 : 0) + (hasGirudaAce ? 1 : 0);
       final kittyBonus = keyCardCount >= 2 ? 2 : (keyCardCount >= 1 ? 1 : 0);
       // kittyBonus는 적정 계산에만 반영, 최대값에는 더하지 않음
-      // (estimatePointRange의 2.2 배수가 이미 낙관적 최대를 산출)
+      // (estimatePointRange의 2.0 배수가 이미 낙관적 최대를 산출)
       final optimal = (minPts * 0.3 + (maxPts + kittyBonus) * 0.7 + 1).round();
 
       if (optimal > bestOptimal) {
@@ -1399,11 +1399,9 @@ class AIPlayer {
 
       if (!gA && !gK && gQ) {
         if (gc.length >= 5) {
-          maxTricks++;
-          maxTricks += 2;
+          maxTricks += 2; // Q가 AK 이후 1트릭 + 장수 우위 1트릭
         } else if (gc.length >= 4) {
-          maxTricks++;
-          maxTricks++;
+          maxTricks++; // Q가 AK 이후 1트릭
         }
       }
     }
@@ -1461,7 +1459,7 @@ class AIPlayer {
       minTricks -= 1;
     }
     // 프렌드 협력 보너스: 마이티/조커 둘 다 없을 때만 추가 기대 트릭
-    if (!hasMighty || !hasJoker) {
+    if (!hasMighty && !hasJoker) {
       maxTricks++;
     }
     if (hasMighty && hasJoker && giruda != null) {
@@ -1545,7 +1543,7 @@ class AIPlayer {
 
     final double minPpt = minTricks >= 5 ? 1.8 : 1.5;
     int minPoints = ((minTricks + minAdj) * minPpt).round().clamp(0, 20);
-    int maxPoints = ((maxTricks + maxAdj) * 2.2).round().clamp(0, 20);
+    int maxPoints = ((maxTricks + maxAdj) * 2.0).round().clamp(0, 20);
 
     // === 런 감지 ===
     if (hasMighty && hasJoker && giruda != null && girudaLen >= 5) {

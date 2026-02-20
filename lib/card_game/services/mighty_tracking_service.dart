@@ -56,6 +56,45 @@ class BidEvaluationSnapshot {
   };
 }
 
+class KittySnapshot {
+  final List<Map<String, dynamic>> kittyCards;
+  final int kittyPointCards;
+  final List<Map<String, dynamic>> discardCards;
+  final List<Map<String, dynamic>> finalHand;
+  final bool girudaChanged;
+  final String? originalGiruda;
+  final String? newGiruda;
+  final int postKittyMin;
+  final int postKittyMax;
+  final int postKittyOptimal;
+
+  KittySnapshot({
+    required this.kittyCards,
+    required this.kittyPointCards,
+    required this.discardCards,
+    required this.finalHand,
+    required this.girudaChanged,
+    this.originalGiruda,
+    this.newGiruda,
+    required this.postKittyMin,
+    required this.postKittyMax,
+    required this.postKittyOptimal,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'kittyCards': kittyCards,
+    'kittyPointCards': kittyPointCards,
+    'discardCards': discardCards,
+    'finalHand': finalHand,
+    'girudaChanged': girudaChanged,
+    'originalGiruda': originalGiruda,
+    'newGiruda': newGiruda,
+    'postKittyMin': postKittyMin,
+    'postKittyMax': postKittyMax,
+    'postKittyOptimal': postKittyOptimal,
+  };
+}
+
 class MightyTrackingService {
   static const String _defaultUrl = 'https://center.kaistory.net';
   static const String _prefsKeyUrl = 'mighty_tracking_server_url';
@@ -98,11 +137,15 @@ class MightyTrackingService {
     required String gameUuid,
     required GameState state,
     required List<BidEvaluationSnapshot> bidSnapshots,
+    KittySnapshot? kittySnapshot,
+    required bool isAutoPlay,
   }) {
     _doSend(
       gameUuid: gameUuid,
       state: state,
       bidSnapshots: bidSnapshots,
+      kittySnapshot: kittySnapshot,
+      isAutoPlay: isAutoPlay,
     );
   }
 
@@ -110,6 +153,8 @@ class MightyTrackingService {
     required String gameUuid,
     required GameState state,
     required List<BidEvaluationSnapshot> bidSnapshots,
+    KittySnapshot? kittySnapshot,
+    required bool isAutoPlay,
   }) async {
     try {
       final serverUrl = await _getServerUrl();
@@ -212,12 +257,13 @@ class MightyTrackingService {
         'contractFulfilled': state.declarerId != null && state.currentBid != null
             ? state.declarerWon
             : null,
-        'isAutoPlay': false,
+        'isAutoPlay': isAutoPlay,
         'tricksWonByDeclarerTeam': tricksWonByDeclarerTeam,
         'tricksWonByDefenderTeam': tricksWonByDefenderTeam,
         'jokerCalled': jokerCalled,
         'trickDetails': trickDetails,
         'bidEvaluations': bidSnapshots.map((s) => s.toJson()).toList(),
+        'kittyResult': kittySnapshot?.toJson(),
       };
 
       await http.post(
