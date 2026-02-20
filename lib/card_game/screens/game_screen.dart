@@ -312,7 +312,7 @@ class _GameScreenState extends State<GameScreen> {
       case GamePhase.roundEnd:
         return _buildPlayingScreen(controller);
       case GamePhase.gameEnd:
-        if (widget.isAutoPlay && _nextGameTimer == null) {
+        if (widget.isAutoPlay && _nextGameTimer == null && _showGameResult) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) _startNextGameTimer(controller);
           });
@@ -4582,6 +4582,21 @@ class _GameScreenState extends State<GameScreen> {
     final snap = snapshots.where((s) => s.playerId == player.id).lastOrNull;
     final isDeclarer = player.id == state.declarerId;
 
+    // 무늬별 최적값 중 최대값 찾기
+    Suit? bestSuit;
+    int bestOptimal = 0;
+    if (snap != null && snap.suitComparison.isNotEmpty) {
+      for (final (suit, _, _, optimal) in snap.suitComparison) {
+        if (optimal > bestOptimal) {
+          bestOptimal = optimal;
+          bestSuit = suit;
+        }
+      }
+    }
+    final selectedSuit = snap?.bestGiruda != null
+        ? Suit.values.firstWhere((s) => s.name == snap!.bestGiruda)
+        : null;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -4590,33 +4605,94 @@ class _GameScreenState extends State<GameScreen> {
         borderRadius: BorderRadius.circular(6),
         border: isDeclarer ? Border.all(color: Colors.teal, width: 1) : null,
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 60,
-            child: Text(
-              _getLocalizedPlayerName(player, l10n),
-              style: TextStyle(
-                color: isDeclarer ? Colors.amber : Colors.white,
-                fontWeight: isDeclarer ? FontWeight.bold : FontWeight.normal,
-                fontSize: 13,
+          Row(
+            children: [
+              SizedBox(
+                width: 60,
+                child: Text(
+                  _getLocalizedPlayerName(player, l10n),
+                  style: TextStyle(
+                    color: isDeclarer ? Colors.amber : Colors.white,
+                    fontWeight: isDeclarer ? FontWeight.bold : FontWeight.normal,
+                    fontSize: 13,
+                  ),
+                ),
               ),
-            ),
+              if (snap != null) ...[
+                Text(
+                  '${snap.predictedMin}~${snap.predictedMax}',
+                  style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${l10n.optimal}: ${snap.predictedOptimal}',
+                  style: const TextStyle(color: Colors.greenAccent, fontSize: 12),
+                ),
+              ],
+              const Spacer(),
+              if (isDeclarer)
+                const Icon(Icons.star, color: Colors.amber, size: 16),
+            ],
           ),
-          if (snap != null) ...[
-            Text(
-              '${snap.predictedMin}~${snap.predictedMax}',
-              style: TextStyle(color: Colors.grey[400], fontSize: 12),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              '${l10n.optimal}: ${snap.predictedOptimal}',
-              style: const TextStyle(color: Colors.greenAccent, fontSize: 12),
+          if (snap != null && snap.suitComparison.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Wrap(
+              spacing: 4,
+              runSpacing: 2,
+              children: snap.suitComparison.map((entry) {
+                final (suit, min, max, optimal) = entry;
+                final isSelected = suit == selectedSuit;
+                final isBest = suit == bestSuit && bestSuit != selectedSuit;
+                final suitColor = _getSuitColor(suit);
+
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? Colors.teal[800]!.withValues(alpha: 0.5)
+                        : isBest
+                            ? Colors.amber[800]!.withValues(alpha: 0.3)
+                            : Colors.black26,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: isSelected
+                          ? Colors.teal[400]!
+                          : isBest
+                              ? Colors.amber[400]!
+                              : Colors.white12,
+                      width: isSelected || isBest ? 1.5 : 0.5,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _suitSymbolForCard(suit),
+                        style: TextStyle(color: suitColor, fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        '$min~$max',
+                        style: TextStyle(color: Colors.grey[500], fontSize: 9),
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        '$optimal',
+                        style: TextStyle(
+                          color: isSelected ? Colors.teal[200] : isBest ? Colors.amber[200] : Colors.white54,
+                          fontSize: 11,
+                          fontWeight: isSelected || isBest ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
             ),
           ],
-          const Spacer(),
-          if (isDeclarer)
-            const Icon(Icons.star, color: Colors.amber, size: 16),
         ],
       ),
     );
@@ -4728,7 +4804,7 @@ class _GameScreenState extends State<GameScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       ),
                       child: Text(
-                        '${l10n.nextGame} ($_nextGameCountdown)',
+                        l10n.nextGame,
                         style: const TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     )

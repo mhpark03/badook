@@ -491,6 +491,7 @@ class AIPlayer {
         girudaCount: evaluation.girudaCount,
         handStrength: evaluation.optimalPoints,
         requiredBid: 13,
+        suitComparison: evaluation.suitComparison,
       ));
     }
 
@@ -512,6 +513,7 @@ class AIPlayer {
         girudaCount: evaluation.girudaCount,
         handStrength: evaluation.optimalPoints,
         requiredBid: bidAmount,
+        suitComparison: evaluation.suitComparison,
       ));
     }
 
@@ -532,6 +534,7 @@ class AIPlayer {
         girudaCount: evaluation.girudaCount,
         handStrength: evaluation.optimalPoints,
         requiredBid: bidAmount,
+        suitComparison: evaluation.suitComparison,
       ),
     );
   }

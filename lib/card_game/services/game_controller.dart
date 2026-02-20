@@ -363,25 +363,19 @@ class GameController extends ChangeNotifier {
       // 교체 전 예상 점수 (배팅 시 10장 기준)
       final beforeEval = _aiPlayer.evaluateForBidding(declarer.hand);
 
-      // 교체 후 예상 점수 (배팅과 동일한 kittyBonus 방식)
-      final (afterMin, afterMax) = _aiPlayer.estimatePointRange(finalHand, newGiruda);
-      final afterMightySuit = (newGiruda == Suit.spade) ? Suit.diamond : Suit.spade;
-      final afterHasMighty = finalHand.any((c) => !c.isJoker && c.suit == afterMightySuit && c.rank == Rank.ace);
-      final afterHasJoker = finalHand.any((c) => c.isJoker);
-      final afterHasGirudaAce = finalHand.any((c) => !c.isJoker && c.suit == newGiruda && c.rank == Rank.ace);
-      final afterKeyCards = (afterHasMighty ? 1 : 0) + (afterHasJoker ? 1 : 0) + (afterHasGirudaAce ? 1 : 0);
-      final afterKittyBonus = afterKeyCards >= 2 ? 2 : (afterKeyCards >= 1 ? 1 : 0);
-      final afterAdjustedMax = afterMax + afterKittyBonus;
-      final afterOptimal = (afterMin * 0.3 + afterAdjustedMax * 0.7 + 1).round().clamp(afterMin, afterAdjustedMax);
-
-      // 기루다 변경 검토: 13장에서 후보별 최적 10장 시뮬레이션 후 평가
+      // 기루다별 예상 점수: 선택 기루다는 실제 finalHand, 나머지는 시뮬레이션
       final girudaComp = <(Suit?, int, int, int)>[];
       for (final candidateSuit in [Suit.spade, Suit.diamond, Suit.heart, Suit.club]) {
-        final simHand = _aiPlayer.simulateBest10Cards(allCards, candidateSuit);
-        final (cMin, cMax) = _aiPlayer.estimatePointRange(simHand, candidateSuit);
+        final hand10 = (candidateSuit == newGiruda)
+            ? finalHand
+            : _aiPlayer.simulateBest10Cards(allCards, candidateSuit);
+        final (cMin, cMax) = _aiPlayer.estimatePointRange(hand10, candidateSuit);
         final cOptimal = (cMin * 0.3 + cMax * 0.7 + 1).round().clamp(cMin, cMax);
         girudaComp.add((candidateSuit, cMin, cMax, cOptimal));
       }
+
+      // 교체 후 예상 점수: 기루다 비교에서 선택 기루다의 값을 추출
+      final afterEntry = girudaComp.firstWhere((e) => e.$1 == newGiruda);
 
       _kittyExplanation = KittyExplanation(
         kittyCards: kittyCards,
@@ -394,9 +388,9 @@ class GameController extends ChangeNotifier {
         beforeMinPoints: beforeEval.minPoints,
         beforeMaxPoints: beforeEval.maxPoints,
         beforeOptimalPoints: beforeEval.optimalPoints,
-        afterMinPoints: afterMin,
-        afterMaxPoints: afterAdjustedMax,
-        afterOptimalPoints: afterOptimal,
+        afterMinPoints: afterEntry.$2,
+        afterMaxPoints: afterEntry.$3,
+        afterOptimalPoints: afterEntry.$4,
         girudaComparison: girudaComp,
       );
 
@@ -742,6 +736,7 @@ class GameController extends ChangeNotifier {
       predictedOptimal: eval.optimalPoints,
       bidAction: bid.passed ? 'PASS' : 'BID',
       bidAmount: bid.tricks,
+      suitComparison: eval.suitComparison,
     ));
   }
 
