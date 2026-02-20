@@ -1676,5 +1676,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get allPassed => '全部通过';
 
   @override
-  String get watchAiGame => '观看AI对战';
+  String get watchAiGame => '学习Mighty';
 }

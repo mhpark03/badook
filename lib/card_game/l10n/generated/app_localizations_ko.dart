@@ -1689,5 +1689,5 @@ class AppLocalizationsKo extends AppLocalizations {
   String get allPassed => '모두 패스';
 
   @override
-  String get watchAiGame => 'AI 대전 관전';
+  String get watchAiGame => '마이티 배우기';
 }

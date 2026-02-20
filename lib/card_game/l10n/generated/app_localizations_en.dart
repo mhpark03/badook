@@ -1704,5 +1704,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allPassed => 'All Passed';
 
   @override
-  String get watchAiGame => 'Watch AI Game';
+  String get watchAiGame => 'Learn Mighty';
 }

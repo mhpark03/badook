@@ -182,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: isSmallScreen ? 8 : 10),
 
-                  // AI 대전 관전 버튼
+                  // 마이티 배우기 버튼
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(

@@ -1683,5 +1683,5 @@ class AppLocalizationsJa extends AppLocalizations {
   String get allPassed => '全員パス';
 
   @override
-  String get watchAiGame => 'AI対戦観戦';
+  String get watchAiGame => 'マイティを学ぶ';
 }
