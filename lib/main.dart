@@ -17,6 +17,15 @@ import 'card_game/screens/onecard/onecard_home_screen.dart';
 import 'card_game/screens/hi_lo/hi_lo_home_screen.dart';
 import 'card_game/screens/seven_card/seven_card_home_screen.dart';
 import 'card_game/widgets/card_game_provider.dart';
+import 'card_game/services/game_controller.dart';
+import 'card_game/services/stats_service.dart';
+import 'card_game/services/seven_card/seven_card_controller.dart';
+import 'card_game/services/seven_card/seven_card_stats_service.dart';
+import 'card_game/services/hi_lo/hi_lo_controller.dart';
+import 'card_game/services/hi_lo/hi_lo_stats_service.dart';
+import 'card_game/services/hula/hula_stats_service.dart';
+import 'card_game/services/onecard/onecard_stats_service.dart';
+import 'card_game/services/hearts/hearts_stats_service.dart';
 
 // 보드게임 import
 import 'board_game/screens/board_game_selection_screen.dart';
@@ -138,8 +147,19 @@ class LanguageProvider extends ChangeNotifier {
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => LanguageProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => StatsService()..loadStats()),
+        ChangeNotifierProvider(create: (_) => GameController()),
+        ChangeNotifierProvider(create: (_) => SevenCardStatsService()..loadStats()),
+        ChangeNotifierProvider(create: (_) => SevenCardController()),
+        ChangeNotifierProvider(create: (_) => HiLoStatsService()..loadStats()),
+        ChangeNotifierProvider(create: (_) => HiLoController()),
+        ChangeNotifierProvider(create: (_) => HulaStatsService()..loadStats()),
+        ChangeNotifierProvider(create: (_) => OneCardStatsService()..loadStats()),
+        ChangeNotifierProvider(create: (_) => HeartsStatsService()..loadStats()),
+      ],
       child: const BadukApp(),
     ),
   );

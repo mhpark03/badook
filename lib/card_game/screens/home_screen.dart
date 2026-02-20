@@ -189,10 +189,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () {
+                        controller.startAutoPlay();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CardGameProviderWrapper(child: GameScreen(isAutoPlay: true)),
+                            builder: (context) => const GameScreen(isAutoPlay: true),
                           ),
                         );
                       },
