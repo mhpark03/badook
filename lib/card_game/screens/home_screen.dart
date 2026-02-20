@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -484,36 +482,6 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: Text(l10n.resetStats, style: const TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showExitAppDialog(BuildContext context, AppLocalizations l10n) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.exitApp),
-        content: Text(l10n.exitAppConfirm),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              if (Platform.isAndroid) {
-                SystemNavigator.pop();
-              } else if (Platform.isIOS) {
-                exit(0);
-              } else {
-                exit(0);
-              }
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text(l10n.exit, style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
