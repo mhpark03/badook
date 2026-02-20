@@ -31,6 +31,16 @@ class _GameScreenState extends State<GameScreen> {
   bool _timerRunning = false;
   bool _showHint = false;
   bool _statsRecorded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isAutoPlay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<GameController>().startAutoPlay();
+      });
+    }
+  }
   bool _bidInitialized = false;
   bool _showGameResult = false;
   bool _showTrickDetails = true;

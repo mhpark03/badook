@@ -458,43 +458,81 @@ class AppLocalizationsZh extends AppLocalizations {
   String get gameGuide => '游戏方法';
 
   @override
-  String get guideOverview => '游戏概述';
+  String get guideIntro => '1. 游戏介绍';
 
   @override
-  String get guideOverviewText => 'Mighty是一款5人吃墩纸牌游戏。庄家(1人)和朋友(1人)组队对抗防守队(3人)。';
+  String get guideIntroText =>
+      'Mighty是一款5人吃墩纸牌游戏。\n使用包含小丑的53张牌，每位玩家分10张，3张作为底牌（猫咪）。\n\n庄家（1人）和朋友（1人）组成进攻队，其余3人为防守队。庄家队获得不低于叫牌分数即获胜。';
 
   @override
-  String get guideBidding => '叫牌';
+  String get guideGameFlow => '2. 游戏流程';
 
   @override
-  String get guideBiddingText => '• 每位玩家宣布将赢得的得分牌数\n• 叫牌最高者成为庄家\n• 庄家选择王牌花色';
+  String get guideGameFlowText =>
+      '① 发牌 → ② 叫牌 → ③ 底牌交换 → ④ 朋友宣言 → ⑤ 打牌 → ⑥ 计分\n\n各阶段按顺序进行。若所有玩家都放弃，则重新发牌。';
 
   @override
-  String get guideSpecialCards => '特殊牌';
+  String get guideBidding => '3. 叫牌';
 
   @override
-  String get guideSpecialCardsText =>
-      '• Mighty: 黑桃A (最强的牌)\n• 小丑: 第二强的牌\n• 王牌: 庄家选择的花色';
+  String get guideBiddingText =>
+      '宣布自己能获得的得分牌数。\n\n• 最低叫牌: 13分（得分牌共20张）\n• 同时宣布王牌花色\n• 无王牌: 不设王牌（同分数时优先于有王牌叫牌）\n• 叫牌最高者成为庄家\n\n💡 手中有Mighty、小丑、王牌A时可以高叫。';
 
   @override
-  String get guideFriend => '朋友';
+  String get guideKitty => '4. 底牌交换';
+
+  @override
+  String get guideKittyText =>
+      '庄家取走3张底牌，从13张中弃掉3张。\n\n• 弃掉弱牌以强化手牌\n• 可以更换王牌花色（叫牌+2）\n• 也可以弃掉得分牌，但可能有利于防守队';
+
+  @override
+  String get guideFriend => '5. 朋友宣言';
 
   @override
   String get guideFriendText =>
-      '• 庄家指定持有特定牌的人为朋友\n• 朋友可以隐藏身份\n• 小丑召唤: 指定持有特定3的人为朋友';
+      '庄家指定自己的队友（朋友）。\n\n• 牌友: 持有特定牌的人（例: 持有♠A的人）\n• 首墩朋友: 赢得第一墩的人\n• 无朋友: 单独作战（分数×2）\n\n朋友在打出指定牌之前身份不会暴露。防守队需要推理谁是朋友。';
 
   @override
-  String get guideScoring => '计分';
+  String get guideSpecialCards => '6. 特殊牌';
+
+  @override
+  String get guideSpecialCardsText =>
+      '♠A Mighty\n最强的牌。任何牌都无法击败它。\n但小丑召唤时必须打出，如果王牌是♠则♦A是Mighty。\n\n🃏 小丑 (Joker)\nMighty之后最强的牌。\n领出时可以指定花色，首墩无效力。\n被小丑召唤时必须打出小丑。\n\n王牌\n庄家指定花色的牌。\n在非王牌花色中打出王牌可以\"切牌\"赢得该墩。';
+
+  @override
+  String get guideJokerCall => '7. 小丑召唤';
+
+  @override
+  String get guideJokerCallText =>
+      '领出玩家打出特定花色的牌并宣布\"小丑召唤\"时，持有小丑的玩家必须打出小丑。\n\n• 首墩不能小丑召唤\n• 小丑召唤时小丑变为最弱的牌\n• 防守队使对方小丑失效的核心策略';
+
+  @override
+  String get guideTrickPlay => '8. 吃墩玩法';
+
+  @override
+  String get guideTrickPlayText =>
+      '进行10轮吃墩。\n\n• 领出玩家打出一张牌\n• 其他玩家必须跟同花色的牌（跟牌）\n• 如果没有该花色可以打任意牌\n• 打出最强牌的玩家赢得该墩并成为下一轮领出者\n\n牌力顺序:\nMighty > 小丑 > 王牌(A~2) > 领出花色(A~2)';
+
+  @override
+  String get guideScoring => '9. 得分牌';
 
   @override
   String get guideScoringText =>
-      '• 得分牌: A, K, Q, J, 10 (各1分，共20分)\n• 庄家队达到目标分数即获胜\n• 胜者得+分，败者得-分';
+      '得分牌: A, K, Q, J, 10（每花色5张×4花色＝20张）\n每张得分牌值1分，由赢墩玩家获得。\n\n示例: 如果一墩中出了♠A、♠K、♥3、♦7、♣2\n→ 2张得分牌（♠A、♠K）＝赢墩者获得2分';
 
   @override
-  String get guideTips => '游戏技巧';
+  String get guideWinLose => '10. 胜负与计分';
 
   @override
-  String get guideTipsText => '• Mighty和小丑始终很强\n• 善用王牌\n• 识别朋友身份很重要';
+  String get guideWinLoseText =>
+      '庄家队获得不低于叫牌的分数即获胜。\n\n胜利时基本分:\n•（获得分数 - 叫牌）+ 1 + 额外奖励\n• 全胜（赢得全部10墩）: 奖励分\n• 无朋友: 分数×2\n• 无王牌: 分数×2\n\n失败时:\n• 庄家扣（防守队人数×基本分）分\n• 反全胜（防守全赢）: 额外扣分';
+
+  @override
+  String get guideTips => '11. 策略技巧';
+
+  @override
+  String get guideTipsText =>
+      '庄家策略:\n• 有Mighty/小丑/王牌A时积极叫牌\n• 早期消耗对手王牌防止切牌\n• 与朋友合作收集得分牌\n\n防守策略:\n• 尽快识别朋友身份\n• 用小丑召唤使对方小丑失效\n• 注意不让庄家队获得得分牌\n• 用王牌切牌抓对方非王牌A';
 
   @override
   String get close => '关闭';
