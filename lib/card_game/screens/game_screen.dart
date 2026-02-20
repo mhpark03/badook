@@ -4129,16 +4129,16 @@ class _GameScreenState extends State<GameScreen> {
                     ],
                   ),
                   const SizedBox(height: 6),
-                  for (final strategy in explanation.strategyPoints)
+                  for (int i = 0; i < explanation.strategyPoints.length; i++)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 3),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('• ', style: TextStyle(color: Colors.white54, fontSize: 12)),
+                          Text('${String.fromCharCode(0x2460 + i)} ', style: const TextStyle(color: Colors.white54, fontSize: 12)),
                           Expanded(
                             child: Text(
-                              _getStrategyText(strategy, l10n),
+                              _getStrategyText(explanation.strategyPoints[i], l10n),
                               style: const TextStyle(color: Colors.white70, fontSize: 12),
                             ),
                           ),
@@ -4179,22 +4179,22 @@ class _GameScreenState extends State<GameScreen> {
   String _getStrategyText((String, Map<String, String>) strategy, AppLocalizations l10n) {
     final (code, params) = strategy;
     return switch (code) {
-      'FIRST_TRICK_ACE_LEAD' => l10n.strategyFirstTrickAceLead(params['card']!),
-      'FIRST_TRICK_PASS_FRIEND_WIN' => l10n.strategyFirstTrickPassFriendWin,
-      'FIRST_TRICK_KING_LEAD' => l10n.strategyFirstTrickKingLead(params['card']!),
-      'FIRST_TRICK_PASS_FRIEND' => l10n.strategyFirstTrickPassFriend,
-      'PASS_TO_MIGHTY_FRIEND' => l10n.strategyPassToMightyFriend,
-      'PASS_TO_JOKER_FRIEND' => l10n.strategyPassToJokerFriend,
-      'PASS_TRUMP_TO_FRIEND' => l10n.strategyPassTrumpToFriend(params['passCard']!, params['friendCard']!, params['rank']!),
-      'PASS_SUIT_TO_FRIEND' => l10n.strategyPassSuitToFriend(params['card']!, params['friendCard']!),
-      'TRUMP_DOMINATE' => l10n.strategyTrumpDominate(params['source'] == 'friend' ? l10n.strategySourceFriend : l10n.strategySourceReclaim, params['cards']!),
-      'TRUMP_EXHAUST' => l10n.strategyTrumpExhaust(params['source'] == 'friend' ? l10n.strategySourceFriend : l10n.strategySourceReclaim, params['cards']!),
-      'TRUMP_MID_DRAW' => l10n.strategyTrumpMidDraw(params['suit']!),
-      'JOKER_CALL_SUITS' => l10n.strategyJokerCallSuits(params['suits']!),
-      'JOKER_CALL_WEAK' => l10n.strategyJokerCallWeak,
-      'JOKER_OPTIMAL' => l10n.strategyJokerOptimal,
-      'MIGHTY_TIMING' => l10n.strategyMightyTiming,
-      'VOID_TRUMP_CUT' => l10n.strategyVoidTrumpCut(params['suits']!),
+      'STEP_FIRST_ACE' => '${params['card']} 선출 → 초구 점수 선취',
+      'STEP_FIRST_KING' => '${params['card']} 선출 (마이티 무늬 최상위)',
+      'STEP_FIRST_MIGHTY' => '마이티 선출 → 초구 확보',
+      'STEP_FIRST_JOKER' => '조커 선출 → 초구 확보',
+      'STEP_GIRUDA_ACE' => '${params['card']} 선출 → 기루다 흡수',
+      'STEP_GIRUDA_KING' => '${params['card']} 선출 → 추가 흡수',
+      'STEP_FRIEND_MIGHTY_JOIN' => '마이티 프렌드 → 초구에서 합류',
+      'STEP_FRIEND_JOKER_JOIN' => '조커 프렌드 → 기루다 리드 시 자연 합류',
+      'STEP_GIRUDA_LEAD_FRIEND' => '기루다 A/K 리드로 ${params['friendCard']} 출현 유도',
+      'STEP_JOKER_CALL_FRIEND' => '${params['friendCard']} 미출현 → 조커로 기루다 호출하여 프렌드 유도',
+      'STEP_LURE_WITH_GIRUDA' => '그래도 미출현 → ${params['card']}로 프렌드(${params['friendCard']}) 따라내기 유도',
+      'STEP_SUIT_LEAD_FRIEND' => '${params['card']}로 리드 → 프렌드(${params['friendCard']}) 유도',
+      'STEP_JOKER_CALL' => '조커: ${params['suits']} 무늬 호출 → 점수 획득',
+      'STEP_JOKER_OPTIMAL' => '조커: 최적 타이밍에 사용',
+      'STEP_MIGHTY_TIMING' => '마이티: 상대 기루다 소진 후 사용',
+      'STEP_VOID_CUT' => '${params['suits']} 보이드 → 기루다 컷으로 점수 획득',
       _ => code,
     };
   }
