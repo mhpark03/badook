@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const GameScreen(isAutoPlay: true),
+                            builder: (context) => const CardGameProviderWrapper(child: GameScreen(isAutoPlay: true)),
                           ),
                         );
                       },
