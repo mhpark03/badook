@@ -3344,9 +3344,14 @@ class _GameScreenState extends State<GameScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 핵심 카드 정보 라인
-                  _buildKeyCardInfoLine(player, state, explanation, l10n, scaleFactor),
-                  SizedBox(height: 4 * scaleFactor),
+                  // 점수 계산 근거 요약
+                  if (explanation.scoreBreakdown.isNotEmpty) ...[
+                    Text(
+                      explanation.scoreBreakdown,
+                      style: TextStyle(color: Colors.white38, fontSize: 10 * scaleFactor),
+                    ),
+                    SizedBox(height: 4 * scaleFactor),
+                  ],
                   // 패스/입찰 판정 표시
                   if (explanation.passed) ...[
                     Row(
@@ -3369,13 +3374,6 @@ class _GameScreenState extends State<GameScreen> {
                           style: TextStyle(color: Colors.orange[300], fontSize: 11 * scaleFactor),
                         ),
                       ],
-                    ),
-                    SizedBox(height: 2 * scaleFactor),
-                    Text(
-                      explanation.passReason == 'LOW_POINTS'
-                          ? l10n.passReasonLowPoints(explanation.handStrength)
-                          : l10n.passReasonOutbid(explanation.handStrength, explanation.requiredBid),
-                      style: TextStyle(color: Colors.orange[300], fontSize: 11 * scaleFactor),
                     ),
                   ] else ...[
                     Row(
