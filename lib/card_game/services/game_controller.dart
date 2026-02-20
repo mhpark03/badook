@@ -362,17 +362,30 @@ class GameController extends ChangeNotifier {
       // 교체 전 예상 점수 (배팅 시 10장 기준)
       final beforeEval = _aiPlayer.evaluateForBidding(declarer.hand);
 
-      // 교체 후 예상 점수 (최종 핸드 10장 + 키티 점수 카드 기준)
+      // 교체 후 예상 점수 (배팅과 동일한 kittyBonus 방식)
       final (afterMin, afterMax) = _aiPlayer.estimatePointRange(finalHand, newGiruda);
-      final kittyPointCards = discardCards.where((c) => c.isPointCard).length;
-      final afterOptimal = (afterMin * 0.3 + (afterMax + kittyPointCards) * 0.7 + 1).round();
+      final afterMightySuit = (newGiruda == Suit.spade) ? Suit.diamond : Suit.spade;
+      final afterHasMighty = finalHand.any((c) => !c.isJoker && c.suit == afterMightySuit && c.rank == Rank.ace);
+      final afterHasJoker = finalHand.any((c) => c.isJoker);
+      final afterHasGirudaAce = finalHand.any((c) => !c.isJoker && c.suit == newGiruda && c.rank == Rank.ace);
+      final afterKeyCards = (afterHasMighty ? 1 : 0) + (afterHasJoker ? 1 : 0) + (afterHasGirudaAce ? 1 : 0);
+      final afterKittyBonus = afterKeyCards >= 2 ? 2 : (afterKeyCards >= 1 ? 1 : 0);
+      final afterAdjustedMax = afterMax + afterKittyBonus;
+      final afterOptimal = (afterMin * 0.3 + afterAdjustedMax * 0.7 + 1).round().clamp(afterMin, afterAdjustedMax);
 
-      // 기루다 변경 검토: 13장 기준 각 무늬별 점수 비교
+      // 기루다 변경 검토: 13장 기준 각 무늬별 점수 비교 (kittyBonus 동일 적용)
       final girudaComp = <(Suit?, int, int, int)>[];
       for (final candidateSuit in [Suit.spade, Suit.diamond, Suit.heart, Suit.club]) {
         final (cMin, cMax) = _aiPlayer.estimatePointRange(allCards, candidateSuit);
-        final cOptimal = (cMin * 0.3 + cMax * 0.7 + 1).round();
-        girudaComp.add((candidateSuit, cMin, cMax, cOptimal));
+        final cMightySuit = (candidateSuit == Suit.spade) ? Suit.diamond : Suit.spade;
+        final cHasMighty = allCards.any((c) => !c.isJoker && c.suit == cMightySuit && c.rank == Rank.ace);
+        final cHasJoker = allCards.any((c) => c.isJoker);
+        final cHasGirudaAce = allCards.any((c) => !c.isJoker && c.suit == candidateSuit && c.rank == Rank.ace);
+        final cKeyCards = (cHasMighty ? 1 : 0) + (cHasJoker ? 1 : 0) + (cHasGirudaAce ? 1 : 0);
+        final cKittyBonus = cKeyCards >= 2 ? 2 : (cKeyCards >= 1 ? 1 : 0);
+        final cAdjustedMax = cMax + cKittyBonus;
+        final cOptimal = (cMin * 0.3 + cAdjustedMax * 0.7 + 1).round().clamp(cMin, cAdjustedMax);
+        girudaComp.add((candidateSuit, cMin, cAdjustedMax, cOptimal));
       }
 
       _kittyExplanation = KittyExplanation(
@@ -387,7 +400,7 @@ class GameController extends ChangeNotifier {
         beforeMaxPoints: beforeEval.maxPoints,
         beforeOptimalPoints: beforeEval.optimalPoints,
         afterMinPoints: afterMin,
-        afterMaxPoints: afterMax + kittyPointCards,
+        afterMaxPoints: afterAdjustedMax,
         afterOptimalPoints: afterOptimal,
         girudaComparison: girudaComp,
       );

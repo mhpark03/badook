@@ -3659,12 +3659,14 @@ class _GameScreenState extends State<GameScreen> {
             borderColor: Colors.purple[400]!,
             title: l10n.kittyScoreChange,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // 교체 전
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(l10n.kittyBeforeExchange, style: TextStyle(color: Colors.grey[400], fontSize: 11)),
                         const SizedBox(height: 4),
@@ -3684,6 +3686,7 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                     // 교체 후
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(l10n.kittyAfterExchange, style: TextStyle(color: Colors.grey[400], fontSize: 11)),
                         const SizedBox(height: 4),
@@ -3705,24 +3708,24 @@ class _GameScreenState extends State<GameScreen> {
                         ),
                       ],
                     ),
+                    if (explanation.afterOptimalPoints != explanation.beforeOptimalPoints) ...[
+                      const SizedBox(width: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: explanation.afterOptimalPoints > explanation.beforeOptimalPoints
+                              ? Colors.green[800]
+                              : Colors.red[800],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '${explanation.afterOptimalPoints > explanation.beforeOptimalPoints ? '+' : ''}${explanation.afterOptimalPoints - explanation.beforeOptimalPoints}',
+                          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
-                if (explanation.afterOptimalPoints != explanation.beforeOptimalPoints) ...[
-                  const SizedBox(height: 6),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: explanation.afterOptimalPoints > explanation.beforeOptimalPoints
-                          ? Colors.green[800]
-                          : Colors.red[800],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      '${explanation.afterOptimalPoints > explanation.beforeOptimalPoints ? '+' : ''}${explanation.afterOptimalPoints - explanation.beforeOptimalPoints}',
-                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
               ],
             ),
           ),
