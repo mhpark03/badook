@@ -29,6 +29,8 @@ class _GameScreenState extends State<GameScreen> {
   Timer? _trickTimer;
   int _trickCountdown = 10;
   bool _timerRunning = false;
+  Timer? _nextGameTimer;
+  int _nextGameCountdown = 5;
   bool _showHint = false;
   bool _statsRecorded = false;
 
@@ -65,8 +67,34 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void dispose() {
     _trickTimer?.cancel();
+    _nextGameTimer?.cancel();
     _trickTableScrollController.dispose();
     super.dispose();
+  }
+
+  void _startNextGameTimer(GameController controller) {
+    _nextGameTimer?.cancel();
+    _nextGameCountdown = 5;
+    _nextGameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) { timer.cancel(); return; }
+      setState(() {
+        _nextGameCountdown--;
+        if (_nextGameCountdown <= 0) {
+          timer.cancel();
+          _nextGameTimer = null;
+          _statsRecorded = false;
+          _showGameResult = false;
+          _showTrickDetails = true;
+          controller.startNextAutoGame();
+        }
+      });
+    });
+  }
+
+  void _cancelNextGameTimer() {
+    _nextGameTimer?.cancel();
+    _nextGameTimer = null;
+    _nextGameCountdown = 5;
   }
 
   void _startTrickTimer(GameController controller) {
@@ -284,6 +312,11 @@ class _GameScreenState extends State<GameScreen> {
       case GamePhase.roundEnd:
         return _buildPlayingScreen(controller);
       case GamePhase.gameEnd:
+        if (widget.isAutoPlay && _nextGameTimer == null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _startNextGameTimer(controller);
+          });
+        }
         if (_showGameResult) {
           return _buildGameEndScreen(controller);
         } else if (_showTrickDetails || widget.isAutoPlay) {
@@ -3042,6 +3075,7 @@ class _GameScreenState extends State<GameScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      _cancelNextGameTimer();
                       setState(() {
                         _showGameResult = false;
                         _showTrickDetails = true;
@@ -3059,6 +3093,7 @@ class _GameScreenState extends State<GameScreen> {
                   const SizedBox(width: 12),
                   ElevatedButton(
                     onPressed: () {
+                      _cancelNextGameTimer();
                       setState(() {
                         _statsRecorded = false;
                         _showGameResult = false;
@@ -3071,7 +3106,7 @@ class _GameScreenState extends State<GameScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     ),
                     child: Text(
-                      l10n.nextGame,
+                      '${l10n.nextGame} ($_nextGameCountdown)',
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
@@ -3130,7 +3165,9 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   /// describeTrick: 서버 GameDetailPage.tsx의 로직을 Dart로 포팅
-  String? _describeTrick(Trick trick, GameState state, AppLocalizations l10n, Set<String> playedCards) {
+  /// isAutoPlay일 때 전략 대비 실제 진행 상황을 추가로 설명
+  String? _describeTrick(Trick trick, GameState state, AppLocalizations l10n,
+      Set<String> playedCards, {bool isAutoPlay = false}) {
     if (trick.cards.isEmpty) return null;
     if (trick.trickNumber == 10) return l10n.trickEventLastCard;
 
@@ -3146,6 +3183,22 @@ class _GameScreenState extends State<GameScreen> {
     bool isAttack(int id) => id == state.declarerId || id == state.friendId;
     bool isTeammate(int winnerId) => isAttack(leadId) == isAttack(winnerId);
     final hasMightyInTrick = trick.cards.any((c) => isMighty(c));
+    final isDeclarerLead = leadId == state.declarerId;
+
+    // auto-play 전략 비교용: K가 이 트릭에서 나왔는지, 프렌드 기합류 여부
+    bool girudaKInTrick = giruda != null && trick.cards.any((c) =>
+        !c.isJoker && c.suit == giruda && c.rank == Rank.king);
+    bool girudaKAlreadyPlayed = giruda != null &&
+        playedCards.contains('${giruda!.index}-13'); // King rankValue = 13
+    bool friendAlreadyRevealed = false;
+    final friendCard = state.friendDeclaration?.card;
+    if (friendCard != null) {
+      if (friendCard.isMightyWith(giruda)) {
+        friendAlreadyRevealed = mighty.suit != null && playedCards.contains('${mighty.suit!.index}-${mighty.rankValue}');
+      } else if (friendCard.isJoker) {
+        friendAlreadyRevealed = playedCards.any((s) => s == 'joker');
+      }
+    }
 
     bool isTopOfSuit(Suit suit, int rankValue) {
       final mightySuit = mighty.suit;
@@ -3164,22 +3217,49 @@ class _GameScreenState extends State<GameScreen> {
       const suitSymbols = {Suit.spade: '\u2660', Suit.diamond: '\u2666', Suit.heart: '\u2665', Suit.club: '\u2663'};
       final declaredSuit = trick.leadSuit;
       final suitStr = declaredSuit != null ? suitSymbols[declaredSuit] ?? '' : '';
-      String jokerDesc = suitStr.isNotEmpty
-          ? l10n.trickEventJokerLeadSuit(suitStr)
-          : l10n.trickEventJokerLead;
-      if (declaredSuit != null && declaredSuit == giruda) {
-        jokerDesc += ' / ${l10n.trickEventJokerGirudaExhaust}';
+      if (isAutoPlay && isDeclarerLead && friendAlreadyRevealed) {
+        // 전략: 프렌드 합류 후 조커 사용
+        String jokerDesc = suitStr.isNotEmpty
+            ? l10n.trickEventJokerAfterFriend(suitStr)
+            : l10n.trickEventJokerAfterFriendGeneral;
+        parts.add(jokerDesc);
+      } else {
+        String jokerDesc = suitStr.isNotEmpty
+            ? l10n.trickEventJokerLeadSuit(suitStr)
+            : l10n.trickEventJokerLead;
+        if (declaredSuit != null && declaredSuit == giruda) {
+          jokerDesc += ' / ${l10n.trickEventJokerGirudaExhaust}';
+        }
+        parts.add(jokerDesc);
       }
-      parts.add(jokerDesc);
     } else if (isMighty(leadCard)) {
       parts.add(l10n.trickEventMightyLead);
     } else if (isGiruda(leadCard)) {
       final isTop = leadCard.rankValue >= 14 || isTopOfSuit(leadCard.suit!, leadCard.rankValue);
       if (isTop) {
-        parts.add(l10n.trickEventTopGirudaLead);
+        if (isAutoPlay && isDeclarerLead && leadCard.rank == Rank.ace && giruda != null) {
+          // 전략: 기루다 A 공격 → K 소진 확인
+          if (girudaKInTrick) {
+            parts.add(l10n.trickEventGirudaAceKExhausted);
+          } else if (girudaKAlreadyPlayed) {
+            parts.add(l10n.trickEventTopGirudaLead);
+          } else {
+            parts.add(l10n.trickEventGirudaAceKNotExhausted);
+          }
+        } else {
+          parts.add(l10n.trickEventTopGirudaLead);
+        }
       } else {
         if (hasMightyInTrick) {
           parts.add(l10n.trickEventMidGirudaMightyBait);
+        } else if (isAutoPlay && isDeclarerLead && leadCard.rank == Rank.queen) {
+          // 전략: Q로 선 탈환
+          final won = trick.winnerId == leadId;
+          if (won) {
+            parts.add(l10n.trickEventGirudaQReclaimSuccess);
+          } else {
+            parts.add(l10n.trickEventGirudaQReclaimFail);
+          }
         } else if (trick.winnerId != leadId && isTeammate(trick.winnerId!)) {
           parts.add(l10n.trickEventMidGirudaPassLead);
         } else if (trick.winnerId != leadId && !isTeammate(trick.winnerId!)) {
@@ -3191,7 +3271,11 @@ class _GameScreenState extends State<GameScreen> {
     } else {
       final isTop = leadCard.rankValue >= 14 || isTopOfSuit(leadCard.suit!, leadCard.rankValue);
       if (isTop) {
-        parts.add(l10n.trickEventTopNonGirudaLead);
+        if (isAutoPlay && isDeclarerLead && trick.trickNumber > 1) {
+          parts.add(l10n.trickEventHighCardAttack);
+        } else {
+          parts.add(l10n.trickEventTopNonGirudaLead);
+        }
       } else if (trick.trickNumber == 1) {
         if (trick.winnerId != null && isAttack(trick.winnerId!)) {
           parts.add(l10n.trickEventFirstTrickFriendBait);
@@ -3225,6 +3309,11 @@ class _GameScreenState extends State<GameScreen> {
 
   Widget _buildAutoPlayAllPassedScreen(GameController controller) {
     final l10n = getL10n(context);
+    if (_nextGameTimer == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _startNextGameTimer(controller);
+      });
+    }
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -3234,12 +3323,15 @@ class _GameScreenState extends State<GameScreen> {
           Text(l10n.allPassed, style: const TextStyle(color: Colors.white, fontSize: 24)),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () => controller.startNextAutoGame(),
+            onPressed: () {
+              _cancelNextGameTimer();
+              controller.startNextAutoGame();
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.teal,
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
             ),
-            child: Text(l10n.nextGame, style: const TextStyle(fontSize: 16, color: Colors.white)),
+            child: Text('${l10n.nextGame} ($_nextGameCountdown)', style: const TextStyle(fontSize: 16, color: Colors.white)),
           ),
         ],
       ),
@@ -3423,12 +3515,86 @@ class _GameScreenState extends State<GameScreen> {
                       ],
                     ),
                   ],
+                  // 무늬별 예상 점수 비교
+                  if (explanation.suitComparison.isNotEmpty) ...[
+                    SizedBox(height: 6 * scaleFactor),
+                    _buildBidSuitComparison(explanation, scaleFactor),
+                  ],
                 ],
               ),
             ),
           ],
         ],
       ),
+    );
+  }
+
+  Widget _buildBidSuitComparison(BidExplanation explanation, double scaleFactor) {
+    final comp = explanation.suitComparison;
+    final selectedSuit = explanation.suit;
+
+    // 최적 무늬 찾기
+    int bestOptimal = 0;
+    Suit? bestSuit;
+    for (final (suit, _, _, optimal) in comp) {
+      if (optimal > bestOptimal) {
+        bestOptimal = optimal;
+        bestSuit = suit;
+      }
+    }
+
+    return Wrap(
+      spacing: 4 * scaleFactor,
+      runSpacing: 2 * scaleFactor,
+      children: comp.map((entry) {
+        final (suit, min, max, optimal) = entry;
+        final isSelected = suit == selectedSuit;
+        final isBest = suit == bestSuit && bestSuit != selectedSuit;
+        final suitColor = _getSuitColor(suit);
+
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 5 * scaleFactor, vertical: 2 * scaleFactor),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? Colors.teal[800]!.withValues(alpha: 0.5)
+                : isBest
+                    ? Colors.amber[800]!.withValues(alpha: 0.3)
+                    : Colors.black26,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(
+              color: isSelected
+                  ? Colors.teal[400]!
+                  : isBest
+                      ? Colors.amber[400]!
+                      : Colors.white12,
+              width: isSelected || isBest ? 1.5 : 0.5,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _suitSymbolForCard(suit),
+                style: TextStyle(color: suitColor, fontSize: 12 * scaleFactor, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 2 * scaleFactor),
+              Text(
+                '$min~$max',
+                style: TextStyle(color: Colors.grey[500], fontSize: 9 * scaleFactor),
+              ),
+              SizedBox(width: 2 * scaleFactor),
+              Text(
+                '$optimal',
+                style: TextStyle(
+                  color: isSelected ? Colors.teal[200] : isBest ? Colors.amber[200] : Colors.white54,
+                  fontSize: 11 * scaleFactor,
+                  fontWeight: isSelected || isBest ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -3657,7 +3823,7 @@ class _GameScreenState extends State<GameScreen> {
             icon: Icons.trending_up,
             iconColor: Colors.purple[300]!,
             borderColor: Colors.purple[400]!,
-            title: l10n.kittyScoreChange,
+            title: '${l10n.kittyScoreChange} (${_suitSymbolForCard(explanation.newGiruda)})',
             child: Align(
               alignment: Alignment.centerLeft,
               child: Row(
@@ -4125,7 +4291,7 @@ class _GameScreenState extends State<GameScreen> {
                     children: [
                       Icon(Icons.military_tech, color: Colors.greenAccent, size: 18),
                       const SizedBox(width: 6),
-                      Text(l10n.scoreStrategy, style: const TextStyle(color: Colors.greenAccent, fontSize: 13, fontWeight: FontWeight.bold)),
+                      Text('${l10n.scoreStrategy} (${_suitSymbolForCard(state.giruda)})', style: const TextStyle(color: Colors.greenAccent, fontSize: 13, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   const SizedBox(height: 6),
@@ -4179,22 +4345,28 @@ class _GameScreenState extends State<GameScreen> {
   String _getStrategyText((String, Map<String, String>) strategy, AppLocalizations l10n) {
     final (code, params) = strategy;
     return switch (code) {
-      'STEP_FIRST_ACE' => '${params['card']} 선출 → 초구 점수 선취',
-      'STEP_FIRST_KING' => '${params['card']} 선출 (마이티 무늬 최상위)',
-      'STEP_FIRST_MIGHTY' => '마이티 선출 → 초구 확보',
-      'STEP_FIRST_JOKER' => '조커 선출 → 초구 확보',
-      'STEP_GIRUDA_ACE' => '${params['card']} 선출 → 기루다 흡수',
-      'STEP_GIRUDA_KING' => '${params['card']} 선출 → 추가 흡수',
-      'STEP_FRIEND_MIGHTY_JOIN' => '마이티 프렌드 → 초구에서 합류',
-      'STEP_FRIEND_JOKER_JOIN' => '조커 프렌드 → 기루다 리드 시 자연 합류',
-      'STEP_GIRUDA_LEAD_FRIEND' => '기루다 A/K 리드로 ${params['friendCard']} 출현 유도',
-      'STEP_JOKER_CALL_FRIEND' => '${params['friendCard']} 미출현 → 조커로 기루다 호출하여 프렌드 유도',
-      'STEP_LURE_WITH_GIRUDA' => '그래도 미출현 → ${params['card']}로 프렌드(${params['friendCard']}) 따라내기 유도',
-      'STEP_SUIT_LEAD_FRIEND' => '${params['card']}로 리드 → 프렌드(${params['friendCard']}) 유도',
-      'STEP_JOKER_CALL' => '조커: ${params['suits']} 무늬 호출 → 점수 획득',
-      'STEP_JOKER_OPTIMAL' => '조커: 최적 타이밍에 사용',
-      'STEP_MIGHTY_TIMING' => '마이티: 상대 기루다 소진 후 사용',
-      'STEP_VOID_CUT' => '${params['suits']} 보이드 → 기루다 컷으로 점수 획득',
+      'STEP_FIRST_ACE' => l10n.stepFirstAce(params['card']!),
+      'STEP_FIRST_KING' => l10n.stepFirstKing(params['card']!),
+      'STEP_FIRST_MIGHTY' => l10n.stepFirstMighty,
+      'STEP_FIRST_JOKER' => l10n.stepFirstJoker,
+      'STEP_GIRUDA_ACE' => l10n.stepGirudaAce(params['card']!),
+      'STEP_GIRUDA_ACE_CHECK_K' => l10n.stepGirudaAceCheckK(params['card']!),
+      'STEP_GIRUDA_KING' => l10n.stepGirudaKing(params['card']!),
+      'STEP_JOKER_CALL_GIRUDA' => l10n.stepJokerCallGiruda(params['suit']!),
+      'STEP_JOKER_AFTER_FRIEND' => l10n.stepJokerAfterFriend,
+      'STEP_FRIEND_MIGHTY_JOIN' => l10n.stepFriendMightyJoin,
+      'STEP_FRIEND_JOKER_JOIN' => l10n.stepFriendJokerJoin,
+      'STEP_LOW_GIRUDA_FRIEND_LURE' => l10n.stepLowGirudaFriendLure(params['card']!),
+      'STEP_GIRUDA_Q_RECLAIM' => l10n.stepGirudaQReclaim(params['card']!),
+      'STEP_GIRUDA_LEAD_FRIEND' => l10n.stepGirudaLeadFriend(params['friendCard']!),
+      'STEP_JOKER_CALL_FRIEND' => l10n.stepJokerCallFriend(params['friendCard']!),
+      'STEP_LURE_WITH_GIRUDA' => l10n.stepLureWithGiruda(params['card']!, params['friendCard']!),
+      'STEP_SUIT_LEAD_FRIEND' => l10n.stepSuitLeadFriend(params['card']!, params['friendCard']!),
+      'STEP_JOKER_CALL' => l10n.stepJokerCall(params['suits']!),
+      'STEP_JOKER_OPTIMAL' => l10n.stepJokerOptimal,
+      'STEP_HIGH_CARD_ATTACK' => l10n.stepHighCardAttack(params['cards']!),
+      'STEP_MIGHTY_TIMING' => l10n.stepMightyTiming,
+      'STEP_VOID_CUT' => l10n.stepVoidCut(params['suits']!),
       _ => code,
     };
   }
@@ -4543,6 +4715,7 @@ class _GameScreenState extends State<GameScreen> {
                   if (isAuto)
                     ElevatedButton(
                       onPressed: () {
+                        _cancelNextGameTimer();
                         setState(() {
                           _statsRecorded = false;
                           _showGameResult = false;
@@ -4555,7 +4728,7 @@ class _GameScreenState extends State<GameScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       ),
                       child: Text(
-                        l10n.nextGame,
+                        '${l10n.nextGame} ($_nextGameCountdown)',
                         style: const TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     )
@@ -4616,7 +4789,7 @@ class _GameScreenState extends State<GameScreen> {
     int girudaRemaining = giruda != null ? 13 : 0;
 
     for (final trick in tricks) {
-      final description = _describeTrick(trick, state, l10n, playedCards);
+      final description = _describeTrick(trick, state, l10n, playedCards, isAutoPlay: widget.isAutoPlay);
 
       int girudaInTrick = 0;
       final cardsByPlayer = <int, PlayingCard>{};
