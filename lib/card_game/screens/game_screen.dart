@@ -284,12 +284,9 @@ class _GameScreenState extends State<GameScreen> {
       case GamePhase.roundEnd:
         return _buildPlayingScreen(controller);
       case GamePhase.gameEnd:
-        if (widget.isAutoPlay) {
-          return _buildGameEndScreen(controller);
-        }
         if (_showGameResult) {
           return _buildGameEndScreen(controller);
-        } else if (_showTrickDetails) {
+        } else if (_showTrickDetails || widget.isAutoPlay) {
           return _buildTrickDetailsScreen(controller);
         } else {
           return _buildPlayingScreen(controller);
@@ -1909,38 +1906,44 @@ class _GameScreenState extends State<GameScreen> {
               ),
           ],
         ),
-        // 획득한 점수 카드 표시 (고정 크기)
+        // 획득한 점수 카드 표시 (반응형 크기)
         if (pointCards.isNotEmpty)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.black54,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Wrap(
-              spacing: 2,
-              runSpacing: 2,
-              alignment: WrapAlignment.center,
-              children: pointCards.map((card) => _buildTinyCardFixed(card, state, 28.0)).toList(),
-            ),
-          ),
+          Builder(builder: (context) {
+            final tinyCardWidth = (MediaQuery.of(context).size.width / 14).clamp(28.0, 56.0);
+            return Container(
+              margin: const EdgeInsets.only(top: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Wrap(
+                spacing: 2,
+                runSpacing: 2,
+                alignment: WrapAlignment.center,
+                children: pointCards.map((card) => _buildTinyCardFixed(card, state, tinyCardWidth)).toList(),
+              ),
+            );
+          }),
         // auto-play: 핸드 카드 공개
         if (widget.isAutoPlay && handCards.isNotEmpty)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.green[900],
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Wrap(
-              spacing: 2,
-              runSpacing: 2,
-              alignment: WrapAlignment.center,
-              children: handCards.map((card) => _buildTinyCardFixed(card, state, 28.0)).toList(),
-            ),
-          ),
+          Builder(builder: (context) {
+            final tinyCardWidth = (MediaQuery.of(context).size.width / 14).clamp(28.0, 56.0);
+            return Container(
+              margin: const EdgeInsets.only(top: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.green[900],
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Wrap(
+                spacing: 2,
+                runSpacing: 2,
+                alignment: WrapAlignment.center,
+                children: handCards.map((card) => _buildTinyCardFixed(card, state, tinyCardWidth)).toList(),
+              ),
+            );
+          }),
       ],
     );
   }
@@ -2012,8 +2015,8 @@ class _GameScreenState extends State<GameScreen> {
           color: Colors.purple[600],
           borderRadius: BorderRadius.circular(3),
         ),
-        child: const Center(
-          child: Text('🃏', style: TextStyle(fontSize: 10)),
+        child: Center(
+          child: Text('🃏', style: TextStyle(fontSize: width * 0.36)),
         ),
       );
     }
@@ -2054,7 +2057,7 @@ class _GameScreenState extends State<GameScreen> {
           '$suitSymbol$rank',
           style: TextStyle(
             color: isRed ? Colors.red[700] : Colors.black,
-            fontSize: 12,
+            fontSize: width * 0.43,
             fontWeight: isMighty ? FontWeight.bold : FontWeight.normal,
             fontFamily: 'Roboto',  // 이모지 폰트 대신 텍스트 폰트 사용
           ),
@@ -3021,23 +3024,45 @@ class _GameScreenState extends State<GameScreen> {
             ),
             const SizedBox(height: 20),
             if (widget.isAutoPlay)
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _statsRecorded = false;
-                    _showGameResult = true;
-                    _showTrickDetails = false;
-                  });
-                  controller.startNextAutoGame();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                ),
-                child: Text(
-                  l10n.nextGame,
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _showGameResult = false;
+                        _showTrickDetails = true;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[300],
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    child: Text(
+                      l10n.trickDetails,
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _statsRecorded = false;
+                        _showGameResult = false;
+                        _showTrickDetails = true;
+                      });
+                      controller.startNextAutoGame();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    child: Text(
+                      l10n.nextGame,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ],
               )
             else
               Row(
@@ -3227,44 +3252,47 @@ class _GameScreenState extends State<GameScreen> {
     final l10n = getL10n(context);
     final state = controller.state;
     final explanation = controller.lastBidExplanation;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = (screenWidth / 14).clamp(28.0, 56.0);
+    final scaleFactor = cardWidth / 28.0;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all((12 * scaleFactor).roundToDouble()),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all((10 * scaleFactor).roundToDouble()),
             decoration: BoxDecoration(
               color: Colors.black38,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: [
-                const Icon(Icons.gavel, color: Colors.amber, size: 20),
-                const SizedBox(width: 8),
-                Text(l10n.biddingPhase, style: const TextStyle(color: Colors.amber, fontSize: 16, fontWeight: FontWeight.bold)),
+                Icon(Icons.gavel, color: Colors.amber, size: 20 * scaleFactor),
+                SizedBox(width: 8 * scaleFactor),
+                Text(l10n.biddingPhase, style: TextStyle(color: Colors.amber, fontSize: 16 * scaleFactor, fontWeight: FontWeight.bold)),
                 const Spacer(),
                 if (state.currentBid != null)
                   Text(
                     '${l10n.currentBid}: ${state.currentBid!.tricks} ${state.currentBid!.suit != null ? _suitSymbolForCard(state.currentBid!.suit!) : "NT"}',
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    style: TextStyle(color: Colors.white, fontSize: 14 * scaleFactor),
                   ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8 * scaleFactor),
           // 각 플레이어의 카드와 배팅 정보
           for (int i = 0; i < state.players.length; i++) ...[
-            _buildAutoPlayPlayerBidRow(state.players[i], state, explanation, l10n),
-            const SizedBox(height: 6),
+            _buildAutoPlayPlayerBidRow(state.players[i], state, explanation, l10n, cardWidth, scaleFactor),
+            SizedBox(height: 6 * scaleFactor),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildAutoPlayPlayerBidRow(Player player, GameState state, BidExplanation? explanation, AppLocalizations l10n) {
+  Widget _buildAutoPlayPlayerBidRow(Player player, GameState state, BidExplanation? explanation, AppLocalizations l10n, double cardWidth, double scaleFactor) {
     final isCurrentExplained = explanation != null && explanation.playerId == player.id;
     final hand = player.hand.toList()
       ..sort((a, b) {
@@ -3275,7 +3303,7 @@ class _GameScreenState extends State<GameScreen> {
       });
 
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: EdgeInsets.all(8 * scaleFactor),
       decoration: BoxDecoration(
         color: isCurrentExplained ? Colors.teal[900] : Colors.black26,
         borderRadius: BorderRadius.circular(8),
@@ -3291,24 +3319,24 @@ class _GameScreenState extends State<GameScreen> {
                 style: TextStyle(
                   color: isCurrentExplained ? Colors.amber : Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 14 * scaleFactor,
                 ),
               ),
               const Spacer(),
               if (state.passedPlayers[player.id])
-                Text('PASS', style: TextStyle(color: Colors.grey[400], fontSize: 12)),
+                Text('PASS', style: TextStyle(color: Colors.grey[400], fontSize: 12 * scaleFactor)),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4 * scaleFactor),
           Wrap(
-            spacing: 2,
-            runSpacing: 2,
-            children: hand.map((c) => _buildTinyCardFixed(c, state, 28.0)).toList(),
+            spacing: 2 * scaleFactor,
+            runSpacing: 2 * scaleFactor,
+            children: hand.map((c) => _buildTinyCardFixed(c, state, cardWidth)).toList(),
           ),
           if (isCurrentExplained) ...[
-            const SizedBox(height: 6),
+            SizedBox(height: 6 * scaleFactor),
             Container(
-              padding: const EdgeInsets.all(6),
+              padding: EdgeInsets.all(6 * scaleFactor),
               decoration: BoxDecoration(
                 color: Colors.black38,
                 borderRadius: BorderRadius.circular(4),
@@ -3316,15 +3344,72 @@ class _GameScreenState extends State<GameScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (!explanation.passed) ...[
+                  // 핵심 카드 정보 라인
+                  _buildKeyCardInfoLine(player, state, explanation, l10n, scaleFactor),
+                  SizedBox(height: 4 * scaleFactor),
+                  // 패스/입찰 판정 표시
+                  if (explanation.passed) ...[
+                    Row(
+                      children: [
+                        Icon(Icons.block, color: Colors.grey[400], size: 14 * scaleFactor),
+                        SizedBox(width: 4 * scaleFactor),
+                        Text('PASS', style: TextStyle(color: Colors.grey[400], fontSize: 13 * scaleFactor, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    SizedBox(height: 2 * scaleFactor),
+                    Row(
+                      children: [
+                        Text(
+                          l10n.estimatedRange(explanation.minPoints, explanation.maxPoints),
+                          style: TextStyle(color: Colors.white60, fontSize: 11 * scaleFactor),
+                        ),
+                        Text(' | ', style: TextStyle(color: Colors.white24, fontSize: 11 * scaleFactor)),
+                        Text(
+                          l10n.optimalScore(explanation.optimalPoints),
+                          style: TextStyle(color: Colors.orange[300], fontSize: 11 * scaleFactor),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 2 * scaleFactor),
                     Text(
-                      '${explanation.tricks} ${explanation.suit != null ? _suitSymbolForCard(explanation.suit!) : "NT"} (${explanation.minPoints}~${explanation.maxPoints}, ${l10n.optimal}: ${explanation.optimalPoints})',
-                      style: const TextStyle(color: Colors.greenAccent, fontSize: 12),
+                      explanation.passReason == 'LOW_POINTS'
+                          ? l10n.passReasonLowPoints(explanation.handStrength)
+                          : l10n.passReasonOutbid(explanation.handStrength, explanation.requiredBid),
+                      style: TextStyle(color: Colors.orange[300], fontSize: 11 * scaleFactor),
                     ),
                   ] else ...[
-                    Text(
-                      'PASS (${explanation.minPoints}~${explanation.maxPoints}, ${l10n.optimal}: ${explanation.optimalPoints})',
-                      style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                    Row(
+                      children: [
+                        Icon(Icons.gavel, color: Colors.greenAccent, size: 14 * scaleFactor),
+                        SizedBox(width: 4 * scaleFactor),
+                        _buildSuitColoredText(
+                          '${explanation.tricks} ${explanation.suit != null ? _suitSymbolForCard(explanation.suit!) : "NT"}',
+                          explanation.suit,
+                          13 * scaleFactor,
+                          bold: true,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 2 * scaleFactor),
+                    Row(
+                      children: [
+                        if (explanation.suit != null) ...[
+                          Text(
+                            '${_suitSymbolForCard(explanation.suit!)} ${explanation.girudaCount}',
+                            style: TextStyle(color: _getSuitColor(explanation.suit!), fontSize: 11 * scaleFactor),
+                          ),
+                          Text(' | ', style: TextStyle(color: Colors.white24, fontSize: 11 * scaleFactor)),
+                        ],
+                        Text(
+                          l10n.estimatedRange(explanation.minPoints, explanation.maxPoints),
+                          style: TextStyle(color: Colors.white60, fontSize: 11 * scaleFactor),
+                        ),
+                        Text(' | ', style: TextStyle(color: Colors.white24, fontSize: 11 * scaleFactor)),
+                        Text(
+                          l10n.optimalScore(explanation.optimalPoints),
+                          style: TextStyle(color: Colors.greenAccent, fontSize: 11 * scaleFactor),
+                        ),
+                      ],
                     ),
                   ],
                 ],
@@ -3333,6 +3418,100 @@ class _GameScreenState extends State<GameScreen> {
           ],
         ],
       ),
+    );
+  }
+
+  /// 무늬 기호를 색상별로 렌더링하는 헬퍼
+  Widget _buildSuitColoredText(String text, Suit? suit, double fontSize, {bool bold = false}) {
+    final color = suit != null ? _getSuitColor(suit) : Colors.white;
+    return Text(
+      text,
+      style: TextStyle(
+        color: color,
+        fontSize: fontSize,
+        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+      ),
+    );
+  }
+
+  /// 핵심 카드 정보를 한 줄로 요약하는 헬퍼
+  Widget _buildKeyCardInfoLine(Player player, GameState state, BidExplanation explanation, AppLocalizations l10n, double scaleFactor) {
+    final hand = player.hand.toList();
+    final girudaSuit = explanation.suit;
+    final mightySuit = girudaSuit == Suit.spade ? Suit.diamond : Suit.spade;
+
+    final hasMighty = hand.any((c) => !c.isJoker && c.suit == mightySuit && c.rank == Rank.ace);
+    final hasJoker = hand.any((c) => c.isJoker);
+    final girudaCards = girudaSuit != null
+        ? hand.where((c) => !c.isJoker && c.suit == girudaSuit).toList()
+        : <PlayingCard>[];
+
+    // 비기루다 에이스 (초구 카드)
+    final sideAces = <String>[];
+    for (final suit in Suit.values) {
+      if (suit == girudaSuit) continue;
+      if (hand.any((c) => !c.isJoker && c.suit == suit && c.rank == Rank.ace &&
+          !(c.suit == mightySuit && c.rank == Rank.ace))) {
+        sideAces.add('${_suitSymbolForCard(suit)}A');
+      }
+    }
+
+    final fs = 11 * scaleFactor;
+    final parts = <Widget>[];
+
+    // 기루다 핵심 카드 (A·K·Q 등)
+    if (girudaSuit != null && girudaCards.isNotEmpty) {
+      final girudaRanks = girudaCards
+          .map((c) => _rankSymbolForCard(c.rank))
+          .join('·');
+      parts.add(Text(
+        '${_suitSymbolForCard(girudaSuit)} $girudaRanks',
+        style: TextStyle(color: _getSuitColor(girudaSuit), fontSize: fs, fontWeight: FontWeight.bold),
+      ));
+    }
+
+    // 비기루다 초구 카드
+    if (sideAces.isNotEmpty) {
+      if (parts.isNotEmpty) {
+        parts.add(Text(', ', style: TextStyle(color: Colors.white38, fontSize: fs)));
+      }
+      final aceWidgets = <InlineSpan>[];
+      for (int i = 0; i < sideAces.length; i++) {
+        if (i > 0) aceWidgets.add(TextSpan(text: '·', style: TextStyle(color: Colors.white60, fontSize: fs)));
+        final aceSuit = sideAces[i].substring(0, 1);
+        final suitObj = aceSuit == '♠' ? Suit.spade : aceSuit == '♥' ? Suit.heart : aceSuit == '♦' ? Suit.diamond : Suit.club;
+        aceWidgets.add(TextSpan(
+          text: sideAces[i],
+          style: TextStyle(color: _getSuitColor(suitObj), fontSize: fs, fontWeight: FontWeight.bold),
+        ));
+      }
+      parts.add(RichText(text: TextSpan(children: aceWidgets)));
+    }
+
+    // 마이티/조커 보유
+    if (hasMighty) {
+      if (parts.isNotEmpty) parts.add(Text(', ', style: TextStyle(color: Colors.white38, fontSize: fs)));
+      parts.add(Text(l10n.bidInfoHasMighty, style: TextStyle(color: Colors.amber, fontSize: fs)));
+    }
+    if (hasJoker) {
+      if (parts.isNotEmpty) parts.add(Text(', ', style: TextStyle(color: Colors.white38, fontSize: fs)));
+      parts.add(Text(l10n.bidInfoHasJoker, style: TextStyle(color: Colors.purple[200], fontSize: fs)));
+    }
+
+    // 조커→프렌드, 마이티→프렌드 예상
+    if (!hasMighty && hasJoker) {
+      parts.add(Text(', ', style: TextStyle(color: Colors.white38, fontSize: fs)));
+      parts.add(Text(l10n.bidInfoFriendMighty, style: TextStyle(color: Colors.white60, fontSize: fs)));
+    } else if (hasMighty && !hasJoker) {
+      parts.add(Text(', ', style: TextStyle(color: Colors.white38, fontSize: fs)));
+      parts.add(Text(l10n.bidInfoFriendJoker, style: TextStyle(color: Colors.white60, fontSize: fs)));
+    }
+
+    if (parts.isEmpty) return const SizedBox.shrink();
+
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: parts,
     );
   }
 
@@ -3345,6 +3524,7 @@ class _GameScreenState extends State<GameScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 헤더
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -3360,43 +3540,213 @@ class _GameScreenState extends State<GameScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          Text(l10n.kittyReceived, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-          const SizedBox(height: 4),
-          Wrap(
-            spacing: 4,
-            children: explanation.kittyCards.map((c) => _buildTinyCardFixed(c, controller.state, 36.0)).toList(),
+
+          // 받은 카드 섹션 (파란 테두리)
+          _buildKittySection(
+            icon: Icons.add_circle_outline,
+            iconColor: Colors.blue[300]!,
+            borderColor: Colors.blue[400]!,
+            title: l10n.kittyReceivedCards,
+            child: Wrap(
+              spacing: 4,
+              runSpacing: 4,
+              alignment: WrapAlignment.center,
+              children: explanation.kittyCards.map((c) => _buildTinyCardFixed(c, controller.state, 40.0)).toList(),
+            ),
           ),
-          const SizedBox(height: 12),
-          Text(l10n.kittyDiscard, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-          const SizedBox(height: 4),
-          for (int i = 0; i < explanation.discardCards.length; i++) ...[
-            Row(
+          const SizedBox(height: 10),
+
+          // 버릴 카드 섹션 (빨간 테두리)
+          _buildKittySection(
+            icon: Icons.remove_circle_outline,
+            iconColor: Colors.red[300]!,
+            borderColor: Colors.red[400]!,
+            title: l10n.kittyDiscardCards,
+            child: Column(
               children: [
-                _buildTinyCardFixed(explanation.discardCards[i], controller.state, 36.0),
-                const SizedBox(width: 8),
-                Text(
-                  _getDiscardReasonText(explanation.discardReasons[i], l10n),
-                  style: TextStyle(color: Colors.grey[400], fontSize: 12),
-                ),
+                for (int i = 0; i < explanation.discardCards.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Row(
+                      children: [
+                        _buildTinyCardFixed(explanation.discardCards[i], controller.state, 40.0),
+                        const SizedBox(width: 10),
+                        Icon(Icons.arrow_right, color: Colors.red[300], size: 16),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            _getDiscardReasonText(explanation.discardReasons[i], l10n),
+                            style: TextStyle(color: Colors.grey[300], fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
-            const SizedBox(height: 4),
-          ],
-          if (explanation.girudaChanged) ...[
-            const SizedBox(height: 8),
-            Text(
-              '${l10n.girudaChange}: ${_suitSymbolForCard(explanation.originalGiruda)} → ${_suitSymbolForCard(explanation.newGiruda)} (+2)',
-              style: const TextStyle(color: Colors.orangeAccent, fontSize: 14),
-            ),
-          ],
-          const SizedBox(height: 12),
-          Text(l10n.finalHand, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-          const SizedBox(height: 4),
-          Wrap(
-            spacing: 3,
-            runSpacing: 3,
-            children: explanation.finalHand.map((c) => _buildTinyCardFixed(c, controller.state, 36.0)).toList(),
           ),
+          const SizedBox(height: 10),
+
+          // 기루다 변경 섹션 (주황 테두리, 변경 시에만)
+          if (explanation.girudaChanged) ...[
+            _buildKittySection(
+              icon: Icons.swap_horiz,
+              iconColor: Colors.orange[300]!,
+              borderColor: Colors.orange[400]!,
+              title: l10n.kittyGirudaChange,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildSuitColoredText(
+                    _suitSymbolForCard(explanation.originalGiruda),
+                    explanation.originalGiruda,
+                    20,
+                    bold: true,
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(Icons.arrow_forward, color: Colors.orangeAccent, size: 20),
+                  const SizedBox(width: 8),
+                  _buildSuitColoredText(
+                    _suitSymbolForCard(explanation.newGiruda),
+                    explanation.newGiruda,
+                    20,
+                    bold: true,
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.orange[800],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Text('+2', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
+
+          // 최종 핸드 섹션 (초록 테두리)
+          _buildKittySection(
+            icon: Icons.back_hand,
+            iconColor: Colors.green[300]!,
+            borderColor: Colors.green[400]!,
+            title: l10n.kittyFinalHand,
+            child: Wrap(
+              spacing: 3,
+              runSpacing: 3,
+              children: explanation.finalHand.map((c) => _buildTinyCardFixed(c, controller.state, 36.0)).toList(),
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // 예상 점수 변화 섹션 (보라 테두리)
+          _buildKittySection(
+            icon: Icons.trending_up,
+            iconColor: Colors.purple[300]!,
+            borderColor: Colors.purple[400]!,
+            title: l10n.kittyScoreChange,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // 교체 전
+                    Column(
+                      children: [
+                        Text(l10n.kittyBeforeExchange, style: TextStyle(color: Colors.grey[400], fontSize: 11)),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${explanation.beforeMinPoints}~${explanation.beforeMaxPoints}',
+                          style: const TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
+                        Text(
+                          l10n.optimalScore(explanation.beforeOptimalPoints),
+                          style: TextStyle(color: Colors.orange[300], fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Icon(Icons.arrow_forward, color: Colors.purple[300], size: 20),
+                    ),
+                    // 교체 후
+                    Column(
+                      children: [
+                        Text(l10n.kittyAfterExchange, style: TextStyle(color: Colors.grey[400], fontSize: 11)),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${explanation.afterMinPoints}~${explanation.afterMaxPoints}',
+                          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          l10n.optimalScore(explanation.afterOptimalPoints),
+                          style: TextStyle(
+                            color: explanation.afterOptimalPoints > explanation.beforeOptimalPoints
+                                ? Colors.greenAccent
+                                : explanation.afterOptimalPoints < explanation.beforeOptimalPoints
+                                    ? Colors.red[300]
+                                    : Colors.orange[300],
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                if (explanation.afterOptimalPoints != explanation.beforeOptimalPoints) ...[
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: explanation.afterOptimalPoints > explanation.beforeOptimalPoints
+                          ? Colors.green[800]
+                          : Colors.red[800],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      '${explanation.afterOptimalPoints > explanation.beforeOptimalPoints ? '+' : ''}${explanation.afterOptimalPoints - explanation.beforeOptimalPoints}',
+                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKittySection({
+    required IconData icon,
+    required Color iconColor,
+    required Color borderColor,
+    required String title,
+    required Widget child,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.black26,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: borderColor.withValues(alpha: 0.6), width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: iconColor, size: 16),
+              const SizedBox(width: 6),
+              Text(title, style: TextStyle(color: iconColor, fontSize: 13, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          child,
         ],
       ),
     );
@@ -3414,16 +3764,28 @@ class _GameScreenState extends State<GameScreen> {
     final l10n = getL10n(context);
     final explanation = controller.friendExplanation!;
     final declaration = explanation.declaration;
+    final state = controller.state;
 
+    // 프렌드 타입별 아이콘/텍스트
+    IconData friendIcon;
     String friendText;
+    Color friendColor;
     if (declaration.isNoFriend) {
+      friendIcon = Icons.person_off;
       friendText = l10n.noFriend;
+      friendColor = Colors.orange[300]!;
     } else if (declaration.isFirstTrickWinner) {
+      friendIcon = Icons.emoji_events;
       friendText = l10n.firstTrickWinnerFriend;
+      friendColor = Colors.amber;
     } else if (declaration.card != null) {
-      friendText = '${l10n.cardFriend}: ${_cardStr(declaration.card!)}';
+      friendIcon = Icons.style;
+      friendText = l10n.cardFriend;
+      friendColor = Colors.cyan[300]!;
     } else {
+      friendIcon = Icons.people;
       friendText = l10n.friend;
+      friendColor = Colors.white;
     }
 
     String reasonText = _getFriendReasonText(explanation.reason, l10n);
@@ -3434,6 +3796,7 @@ class _GameScreenState extends State<GameScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 헤더
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -3449,16 +3812,149 @@ class _GameScreenState extends State<GameScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          Text(friendText, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-          if (explanation.isFull) ...[
-            const SizedBox(height: 4),
-            Text(l10n.fullDeclaration, style: const TextStyle(color: Colors.orangeAccent, fontSize: 14)),
+
+          // (a) 주공 보유 카드 표시
+          if (state.declarerId != null) ...[
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.white24, width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.style, color: Colors.white70, size: 16),
+                      const SizedBox(width: 6),
+                      Text(l10n.declarerHandCards, style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 3,
+                    runSpacing: 3,
+                    children: (state.players[state.declarerId!].hand.toList()
+                      ..sort((a, b) {
+                        if (a.isJoker) return -1;
+                        if (b.isJoker) return 1;
+                        if (a.suit != b.suit) return a.suit!.index.compareTo(b.suit!.index);
+                        return b.rankValue.compareTo(a.rankValue);
+                      }))
+                        .map((c) => _buildTinyCardFixed(c, state, 34.0))
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
           ],
-          const SizedBox(height: 8),
-          Text(reasonText, style: TextStyle(color: Colors.grey[400], fontSize: 14)),
+
+          // (b) 프렌드 선언 내용 강조
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.black26,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: friendColor.withValues(alpha: 0.5), width: 1.5),
+            ),
+            child: Column(
+              children: [
+                Icon(friendIcon, color: friendColor, size: 36),
+                const SizedBox(height: 6),
+                Text(friendText, style: TextStyle(color: friendColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                // 카드 프렌드인 경우 카드 위젯 크게 표시
+                if (declaration.card != null) ...[
+                  const SizedBox(height: 8),
+                  _buildTinyCardFixed(declaration.card!, state, 52.0),
+                ],
+                // 풀 선언 경고(빨간 배지)
+                if (explanation.isFull) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.red[700],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(l10n.fullDeclaration, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // (c) 선택 이유
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.black26,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.lightbulb_outline, color: Colors.yellow[600], size: 18),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l10n.friendReason, style: TextStyle(color: Colors.yellow[600], fontSize: 12, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 2),
+                      Text(reasonText, style: TextStyle(color: Colors.grey[300], fontSize: 13)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // (d) 초구 전략
           if (strategyText.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(strategyText, style: TextStyle(color: Colors.tealAccent[100], fontSize: 13)),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.orange.withValues(alpha: 0.4), width: 1),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.play_circle_outline, color: Colors.orange[300], size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(l10n.firstTrickStrategyLabel, style: TextStyle(color: Colors.orange[300], fontSize: 12, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            if (explanation.firstTrickCard != null) ...[
+                              _buildTinyCardFixed(explanation.firstTrickCard!, state, 34.0),
+                              const SizedBox(width: 8),
+                            ],
+                            Expanded(
+                              child: Text(strategyText, style: TextStyle(color: Colors.tealAccent[100], fontSize: 13)),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ],
       ),
@@ -3657,26 +4153,46 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _statsRecorded = false;
-                        _showGameResult = true;
-                        _showTrickDetails = false;
-                        _showHint = false;
-                      });
-                      controller.reset();
-                      controller.startNewGame();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  if (widget.isAutoPlay)
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _statsRecorded = false;
+                          _showGameResult = false;
+                          _showTrickDetails = true;
+                        });
+                        controller.startNextAutoGame();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                      child: Text(
+                        l10n.nextGame,
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    )
+                  else
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _statsRecorded = false;
+                          _showGameResult = true;
+                          _showTrickDetails = false;
+                          _showHint = false;
+                        });
+                        controller.reset();
+                        controller.startNewGame();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      ),
+                      child: Text(
+                        l10n.newGame,
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
+                      ),
                     ),
-                    child: Text(
-                      l10n.newGame,
-                      style: const TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ),
                 ],
               ),
             ],

@@ -586,5 +586,59 @@
   "cardFriend": "牌友",
   "firstTrickWinnerFriend": "首墩朋友",
   "allPassed": "全部通过",
-  "watchAiGame": "学习Mighty"
+  "watchAiGame": "学习Mighty",
+
+  "bidInfoGirudaKeys": "王牌: {keys}",
+  "@bidInfoGirudaKeys": {
+    "placeholders": {
+      "keys": {"type": "String"}
+    }
+  },
+  "bidInfoFirstTrickCards": "首墩: {cards}",
+  "@bidInfoFirstTrickCards": {
+    "placeholders": {
+      "cards": {"type": "String"}
+    }
+  },
+  "bidInfoHasMighty": "持有Mighty",
+  "bidInfoHasJoker": "持有Joker",
+  "bidInfoFriendMighty": "朋友→Mighty",
+  "bidInfoFriendJoker": "朋友→Joker",
+  "passReasonLowPoints": "最佳 {points}分 < 13 → 分数不足",
+  "@passReasonLowPoints": {
+    "placeholders": {
+      "points": {"type": "int"}
+    }
+  },
+  "passReasonOutbid": "最佳 {points}分 < 需要 {needed} → 放弃",
+  "@passReasonOutbid": {
+    "placeholders": {
+      "points": {"type": "int"},
+      "needed": {"type": "int"}
+    }
+  },
+  "estimatedRange": "预估 {min}~{max}分",
+  "@estimatedRange": {
+    "placeholders": {
+      "min": {"type": "int"},
+      "max": {"type": "int"}
+    }
+  },
+  "optimalScore": "最佳: {points}分",
+  "@optimalScore": {
+    "placeholders": {
+      "points": {"type": "int"}
+    }
+  },
+  "kittyReceivedCards": "从底牌获得的牌",
+  "kittyDiscardCards": "丢弃的牌",
+  "kittyGirudaChange": "王牌变更",
+  "kittyFinalHand": "最终手牌",
+  "kittyScoreChange": "预估分数变化",
+  "kittyBeforeExchange": "交换前",
+  "kittyAfterExchange": "交换后",
+  "friendSummaryTitle": "朋友宣言",
+  "friendReason": "选择理由",
+  "declarerHandCards": "庄家手牌",
+  "firstTrickStrategyLabel": "首墩策略"
 }

@@ -1690,4 +1690,79 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get watchAiGame => '마이티 배우기';
+
+  @override
+  String bidInfoGirudaKeys(String keys) {
+    return '기루다: $keys';
+  }
+
+  @override
+  String bidInfoFirstTrickCards(String cards) {
+    return '초구: $cards';
+  }
+
+  @override
+  String get bidInfoHasMighty => '마이티 보유';
+
+  @override
+  String get bidInfoHasJoker => '조커 보유';
+
+  @override
+  String get bidInfoFriendMighty => '프렌드→마이티';
+
+  @override
+  String get bidInfoFriendJoker => '프렌드→조커';
+
+  @override
+  String passReasonLowPoints(int points) {
+    return '적정 $points점 < 13 → 점수 부족';
+  }
+
+  @override
+  String passReasonOutbid(int points, int needed) {
+    return '적정 $points점 < 필요 $needed → 패스';
+  }
+
+  @override
+  String estimatedRange(int min, int max) {
+    return '예상 $min~$max점';
+  }
+
+  @override
+  String optimalScore(int points) {
+    return '적정: $points점';
+  }
+
+  @override
+  String get kittyReceivedCards => '바닥에서 받은 카드';
+
+  @override
+  String get kittyDiscardCards => '버릴 카드';
+
+  @override
+  String get kittyGirudaChange => '기루다 변경';
+
+  @override
+  String get kittyFinalHand => '최종 보유 카드';
+
+  @override
+  String get kittyScoreChange => '예상 점수 변화';
+
+  @override
+  String get kittyBeforeExchange => '교체 전';
+
+  @override
+  String get kittyAfterExchange => '교체 후';
+
+  @override
+  String get friendSummaryTitle => '프렌드 선언';
+
+  @override
+  String get friendReason => '선택 이유';
+
+  @override
+  String get declarerHandCards => '주공 보유 카드';
+
+  @override
+  String get firstTrickStrategyLabel => '초구 전략';
 }

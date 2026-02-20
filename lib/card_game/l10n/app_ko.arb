@@ -678,5 +678,59 @@
   "cardFriend": "카드 프렌드",
   "firstTrickWinnerFriend": "초구 프렌드",
   "allPassed": "모두 패스",
-  "watchAiGame": "마이티 배우기"
+  "watchAiGame": "마이티 배우기",
+
+  "bidInfoGirudaKeys": "기루다: {keys}",
+  "@bidInfoGirudaKeys": {
+    "placeholders": {
+      "keys": {"type": "String"}
+    }
+  },
+  "bidInfoFirstTrickCards": "초구: {cards}",
+  "@bidInfoFirstTrickCards": {
+    "placeholders": {
+      "cards": {"type": "String"}
+    }
+  },
+  "bidInfoHasMighty": "마이티 보유",
+  "bidInfoHasJoker": "조커 보유",
+  "bidInfoFriendMighty": "프렌드→마이티",
+  "bidInfoFriendJoker": "프렌드→조커",
+  "passReasonLowPoints": "적정 {points}점 < 13 → 점수 부족",
+  "@passReasonLowPoints": {
+    "placeholders": {
+      "points": {"type": "int"}
+    }
+  },
+  "passReasonOutbid": "적정 {points}점 < 필요 {needed} → 패스",
+  "@passReasonOutbid": {
+    "placeholders": {
+      "points": {"type": "int"},
+      "needed": {"type": "int"}
+    }
+  },
+  "estimatedRange": "예상 {min}~{max}점",
+  "@estimatedRange": {
+    "placeholders": {
+      "min": {"type": "int"},
+      "max": {"type": "int"}
+    }
+  },
+  "optimalScore": "적정: {points}점",
+  "@optimalScore": {
+    "placeholders": {
+      "points": {"type": "int"}
+    }
+  },
+  "kittyReceivedCards": "바닥에서 받은 카드",
+  "kittyDiscardCards": "버릴 카드",
+  "kittyGirudaChange": "기루다 변경",
+  "kittyFinalHand": "최종 보유 카드",
+  "kittyScoreChange": "예상 점수 변화",
+  "kittyBeforeExchange": "교체 전",
+  "kittyAfterExchange": "교체 후",
+  "friendSummaryTitle": "프렌드 선언",
+  "friendReason": "선택 이유",
+  "declarerHandCards": "주공 보유 카드",
+  "firstTrickStrategyLabel": "초구 전략"
 }

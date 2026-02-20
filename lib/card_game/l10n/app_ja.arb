@@ -586,5 +586,59 @@
   "cardFriend": "カードフレンド",
   "firstTrickWinnerFriend": "初手フレンド",
   "allPassed": "全員パス",
-  "watchAiGame": "マイティを学ぶ"
+  "watchAiGame": "マイティを学ぶ",
+
+  "bidInfoGirudaKeys": "切り札: {keys}",
+  "@bidInfoGirudaKeys": {
+    "placeholders": {
+      "keys": {"type": "String"}
+    }
+  },
+  "bidInfoFirstTrickCards": "初手: {cards}",
+  "@bidInfoFirstTrickCards": {
+    "placeholders": {
+      "cards": {"type": "String"}
+    }
+  },
+  "bidInfoHasMighty": "マイティ所持",
+  "bidInfoHasJoker": "ジョーカー所持",
+  "bidInfoFriendMighty": "フレンド→マイティ",
+  "bidInfoFriendJoker": "フレンド→ジョーカー",
+  "passReasonLowPoints": "適正 {points}点 < 13 → 点数不足",
+  "@passReasonLowPoints": {
+    "placeholders": {
+      "points": {"type": "int"}
+    }
+  },
+  "passReasonOutbid": "適正 {points}点 < 必要 {needed} → パス",
+  "@passReasonOutbid": {
+    "placeholders": {
+      "points": {"type": "int"},
+      "needed": {"type": "int"}
+    }
+  },
+  "estimatedRange": "予想 {min}~{max}点",
+  "@estimatedRange": {
+    "placeholders": {
+      "min": {"type": "int"},
+      "max": {"type": "int"}
+    }
+  },
+  "optimalScore": "適正: {points}点",
+  "@optimalScore": {
+    "placeholders": {
+      "points": {"type": "int"}
+    }
+  },
+  "kittyReceivedCards": "キティから受けたカード",
+  "kittyDiscardCards": "捨てるカード",
+  "kittyGirudaChange": "切り札変更",
+  "kittyFinalHand": "最終手札",
+  "kittyScoreChange": "予想点数の変化",
+  "kittyBeforeExchange": "交換前",
+  "kittyAfterExchange": "交換後",
+  "friendSummaryTitle": "フレンド宣言",
+  "friendReason": "選択理由",
+  "declarerHandCards": "宣言者の手札",
+  "firstTrickStrategyLabel": "初手戦略"
 }

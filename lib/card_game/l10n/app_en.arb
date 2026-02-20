@@ -587,5 +587,59 @@
   "cardFriend": "Card Friend",
   "firstTrickWinnerFriend": "First Trick Friend",
   "allPassed": "All Passed",
-  "watchAiGame": "Learn Mighty"
+  "watchAiGame": "Learn Mighty",
+
+  "bidInfoGirudaKeys": "Trump: {keys}",
+  "@bidInfoGirudaKeys": {
+    "placeholders": {
+      "keys": {"type": "String"}
+    }
+  },
+  "bidInfoFirstTrickCards": "1st trick: {cards}",
+  "@bidInfoFirstTrickCards": {
+    "placeholders": {
+      "cards": {"type": "String"}
+    }
+  },
+  "bidInfoHasMighty": "Has Mighty",
+  "bidInfoHasJoker": "Has Joker",
+  "bidInfoFriendMighty": "Friend→Mighty",
+  "bidInfoFriendJoker": "Friend→Joker",
+  "passReasonLowPoints": "Optimal {points}pts < 13 → Insufficient",
+  "@passReasonLowPoints": {
+    "placeholders": {
+      "points": {"type": "int"}
+    }
+  },
+  "passReasonOutbid": "Optimal {points}pts < need {needed} → Pass",
+  "@passReasonOutbid": {
+    "placeholders": {
+      "points": {"type": "int"},
+      "needed": {"type": "int"}
+    }
+  },
+  "estimatedRange": "Est. {min}~{max}pts",
+  "@estimatedRange": {
+    "placeholders": {
+      "min": {"type": "int"},
+      "max": {"type": "int"}
+    }
+  },
+  "optimalScore": "Optimal: {points}pts",
+  "@optimalScore": {
+    "placeholders": {
+      "points": {"type": "int"}
+    }
+  },
+  "kittyReceivedCards": "Cards from Kitty",
+  "kittyDiscardCards": "Discard Cards",
+  "kittyGirudaChange": "Trump Change",
+  "kittyFinalHand": "Final Hand",
+  "kittyScoreChange": "Estimated Score Change",
+  "kittyBeforeExchange": "Before",
+  "kittyAfterExchange": "After",
+  "friendSummaryTitle": "Friend Declaration",
+  "friendReason": "Reason",
+  "declarerHandCards": "Declarer's Hand",
+  "firstTrickStrategyLabel": "1st Trick Strategy"
 }

@@ -175,7 +175,7 @@ class GameController extends ChangeNotifier {
 
       String passReason = '';
       if (bid.passed) {
-        passReason = evaluation.optimalPoints < 13 ? 'LOW_POINTS' : 'OUTBID';
+        passReason = evaluation.handStrength < 13 ? 'LOW_POINTS' : 'OUTBID';
       }
 
       _lastBidExplanation = BidExplanation(
@@ -189,6 +189,8 @@ class GameController extends ChangeNotifier {
         optimalPoints: evaluation.optimalPoints,
         girudaCount: evaluation.girudaCount,
         passReason: passReason,
+        handStrength: evaluation.handStrength,
+        requiredBid: evaluation.requiredBid,
       );
 
       _state.placeBid(bid);
@@ -339,6 +341,14 @@ class GameController extends ChangeNotifier {
     if (_isAutoPlayMode) {
       final reasons = _generateDiscardReasons(discardCards, newGiruda, declarer);
 
+      // 교체 전 예상 점수 (배팅 시 10장 기준)
+      final beforeEval = _aiPlayer.evaluateForBidding(declarer.hand);
+
+      // 교체 후 예상 점수 (최종 핸드 10장 + 키티 점수 카드 기준)
+      final (afterMin, afterMax) = _aiPlayer.estimatePointRange(finalHand, newGiruda);
+      final kittyPointCards = discardCards.where((c) => c.isPointCard).length;
+      final afterOptimal = (afterMin * 0.3 + (afterMax + kittyPointCards) * 0.7 + 1).round();
+
       _kittyExplanation = KittyExplanation(
         kittyCards: kittyCards,
         discardCards: discardCards,
@@ -347,6 +357,12 @@ class GameController extends ChangeNotifier {
         newGiruda: newGiruda,
         girudaChanged: girudaChanged,
         discardReasons: reasons,
+        beforeMinPoints: beforeEval.minPoints,
+        beforeMaxPoints: beforeEval.maxPoints,
+        beforeOptimalPoints: beforeEval.optimalPoints,
+        afterMinPoints: afterMin,
+        afterMaxPoints: afterMax + kittyPointCards,
+        afterOptimalPoints: afterOptimal,
       );
 
       _showKittySummary = true;
@@ -908,6 +924,12 @@ class KittyExplanation {
   final Suit? newGiruda;
   final bool girudaChanged;
   final List<String> discardReasons;
+  final int beforeMinPoints;
+  final int beforeMaxPoints;
+  final int beforeOptimalPoints;
+  final int afterMinPoints;
+  final int afterMaxPoints;
+  final int afterOptimalPoints;
 
   KittyExplanation({
     required this.kittyCards,
@@ -917,6 +939,12 @@ class KittyExplanation {
     required this.newGiruda,
     required this.girudaChanged,
     required this.discardReasons,
+    this.beforeMinPoints = 0,
+    this.beforeMaxPoints = 0,
+    this.beforeOptimalPoints = 0,
+    this.afterMinPoints = 0,
+    this.afterMaxPoints = 0,
+    this.afterOptimalPoints = 0,
   });
 }
 
@@ -931,6 +959,8 @@ class BidExplanation {
   final int optimalPoints;
   final int girudaCount;
   final String passReason;
+  final int handStrength;
+  final int requiredBid;
 
   BidExplanation({
     required this.playerId,
@@ -943,5 +973,7 @@ class BidExplanation {
     required this.optimalPoints,
     this.girudaCount = 0,
     this.passReason = '',
+    this.handStrength = 0,
+    this.requiredBid = 0,
   });
 }

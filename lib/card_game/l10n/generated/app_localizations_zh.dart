@@ -1677,4 +1677,79 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get watchAiGame => '学习Mighty';
+
+  @override
+  String bidInfoGirudaKeys(String keys) {
+    return '王牌: $keys';
+  }
+
+  @override
+  String bidInfoFirstTrickCards(String cards) {
+    return '首墩: $cards';
+  }
+
+  @override
+  String get bidInfoHasMighty => '持有Mighty';
+
+  @override
+  String get bidInfoHasJoker => '持有Joker';
+
+  @override
+  String get bidInfoFriendMighty => '朋友→Mighty';
+
+  @override
+  String get bidInfoFriendJoker => '朋友→Joker';
+
+  @override
+  String passReasonLowPoints(int points) {
+    return '最佳 $points分 < 13 → 分数不足';
+  }
+
+  @override
+  String passReasonOutbid(int points, int needed) {
+    return '最佳 $points分 < 需要 $needed → 放弃';
+  }
+
+  @override
+  String estimatedRange(int min, int max) {
+    return '预估 $min~$max分';
+  }
+
+  @override
+  String optimalScore(int points) {
+    return '最佳: $points分';
+  }
+
+  @override
+  String get kittyReceivedCards => '从底牌获得的牌';
+
+  @override
+  String get kittyDiscardCards => '丢弃的牌';
+
+  @override
+  String get kittyGirudaChange => '王牌变更';
+
+  @override
+  String get kittyFinalHand => '最终手牌';
+
+  @override
+  String get kittyScoreChange => '预估分数变化';
+
+  @override
+  String get kittyBeforeExchange => '交换前';
+
+  @override
+  String get kittyAfterExchange => '交换后';
+
+  @override
+  String get friendSummaryTitle => '朋友宣言';
+
+  @override
+  String get friendReason => '选择理由';
+
+  @override
+  String get declarerHandCards => '庄家手牌';
+
+  @override
+  String get firstTrickStrategyLabel => '首墩策略';
 }

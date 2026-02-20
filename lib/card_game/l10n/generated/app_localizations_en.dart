@@ -1705,4 +1705,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get watchAiGame => 'Learn Mighty';
+
+  @override
+  String bidInfoGirudaKeys(String keys) {
+    return 'Trump: $keys';
+  }
+
+  @override
+  String bidInfoFirstTrickCards(String cards) {
+    return '1st trick: $cards';
+  }
+
+  @override
+  String get bidInfoHasMighty => 'Has Mighty';
+
+  @override
+  String get bidInfoHasJoker => 'Has Joker';
+
+  @override
+  String get bidInfoFriendMighty => 'Friend→Mighty';
+
+  @override
+  String get bidInfoFriendJoker => 'Friend→Joker';
+
+  @override
+  String passReasonLowPoints(int points) {
+    return 'Optimal ${points}pts < 13 → Insufficient';
+  }
+
+  @override
+  String passReasonOutbid(int points, int needed) {
+    return 'Optimal ${points}pts < need $needed → Pass';
+  }
+
+  @override
+  String estimatedRange(int min, int max) {
+    return 'Est. $min~${max}pts';
+  }
+
+  @override
+  String optimalScore(int points) {
+    return 'Optimal: ${points}pts';
+  }
+
+  @override
+  String get kittyReceivedCards => 'Cards from Kitty';
+
+  @override
+  String get kittyDiscardCards => 'Discard Cards';
+
+  @override
+  String get kittyGirudaChange => 'Trump Change';
+
+  @override
+  String get kittyFinalHand => 'Final Hand';
+
+  @override
+  String get kittyScoreChange => 'Estimated Score Change';
+
+  @override
+  String get kittyBeforeExchange => 'Before';
+
+  @override
+  String get kittyAfterExchange => 'After';
+
+  @override
+  String get friendSummaryTitle => 'Friend Declaration';
+
+  @override
+  String get friendReason => 'Reason';
+
+  @override
+  String get declarerHandCards => 'Declarer\'s Hand';
+
+  @override
+  String get firstTrickStrategyLabel => '1st Trick Strategy';
 }

@@ -3137,6 +3137,132 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'마이티 배우기'**
   String get watchAiGame;
+
+  /// No description provided for @bidInfoGirudaKeys.
+  ///
+  /// In ko, this message translates to:
+  /// **'기루다: {keys}'**
+  String bidInfoGirudaKeys(String keys);
+
+  /// No description provided for @bidInfoFirstTrickCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'초구: {cards}'**
+  String bidInfoFirstTrickCards(String cards);
+
+  /// No description provided for @bidInfoHasMighty.
+  ///
+  /// In ko, this message translates to:
+  /// **'마이티 보유'**
+  String get bidInfoHasMighty;
+
+  /// No description provided for @bidInfoHasJoker.
+  ///
+  /// In ko, this message translates to:
+  /// **'조커 보유'**
+  String get bidInfoHasJoker;
+
+  /// No description provided for @bidInfoFriendMighty.
+  ///
+  /// In ko, this message translates to:
+  /// **'프렌드→마이티'**
+  String get bidInfoFriendMighty;
+
+  /// No description provided for @bidInfoFriendJoker.
+  ///
+  /// In ko, this message translates to:
+  /// **'프렌드→조커'**
+  String get bidInfoFriendJoker;
+
+  /// No description provided for @passReasonLowPoints.
+  ///
+  /// In ko, this message translates to:
+  /// **'적정 {points}점 < 13 → 점수 부족'**
+  String passReasonLowPoints(int points);
+
+  /// No description provided for @passReasonOutbid.
+  ///
+  /// In ko, this message translates to:
+  /// **'적정 {points}점 < 필요 {needed} → 패스'**
+  String passReasonOutbid(int points, int needed);
+
+  /// No description provided for @estimatedRange.
+  ///
+  /// In ko, this message translates to:
+  /// **'예상 {min}~{max}점'**
+  String estimatedRange(int min, int max);
+
+  /// No description provided for @optimalScore.
+  ///
+  /// In ko, this message translates to:
+  /// **'적정: {points}점'**
+  String optimalScore(int points);
+
+  /// No description provided for @kittyReceivedCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'바닥에서 받은 카드'**
+  String get kittyReceivedCards;
+
+  /// No description provided for @kittyDiscardCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'버릴 카드'**
+  String get kittyDiscardCards;
+
+  /// No description provided for @kittyGirudaChange.
+  ///
+  /// In ko, this message translates to:
+  /// **'기루다 변경'**
+  String get kittyGirudaChange;
+
+  /// No description provided for @kittyFinalHand.
+  ///
+  /// In ko, this message translates to:
+  /// **'최종 보유 카드'**
+  String get kittyFinalHand;
+
+  /// No description provided for @kittyScoreChange.
+  ///
+  /// In ko, this message translates to:
+  /// **'예상 점수 변화'**
+  String get kittyScoreChange;
+
+  /// No description provided for @kittyBeforeExchange.
+  ///
+  /// In ko, this message translates to:
+  /// **'교체 전'**
+  String get kittyBeforeExchange;
+
+  /// No description provided for @kittyAfterExchange.
+  ///
+  /// In ko, this message translates to:
+  /// **'교체 후'**
+  String get kittyAfterExchange;
+
+  /// No description provided for @friendSummaryTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'프렌드 선언'**
+  String get friendSummaryTitle;
+
+  /// No description provided for @friendReason.
+  ///
+  /// In ko, this message translates to:
+  /// **'선택 이유'**
+  String get friendReason;
+
+  /// No description provided for @declarerHandCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'주공 보유 카드'**
+  String get declarerHandCards;
+
+  /// No description provided for @firstTrickStrategyLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'초구 전략'**
+  String get firstTrickStrategyLabel;
 }
 
 class _AppLocalizationsDelegate
