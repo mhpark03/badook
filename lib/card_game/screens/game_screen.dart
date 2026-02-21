@@ -783,6 +783,7 @@ class _GameScreenState extends State<GameScreen> {
                   color: symbolColor,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
                 ),
               ),
               const SizedBox(width: 4),
@@ -3919,7 +3920,7 @@ class _GameScreenState extends State<GameScreen> {
             children: [
               Text(
                 _suitSymbolForCard(suit),
-                style: TextStyle(color: suitColor, fontSize: 12 * scaleFactor, fontWeight: FontWeight.bold),
+                style: TextStyle(color: suitColor, fontSize: 12 * scaleFactor, fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
               ),
               SizedBox(width: 2 * scaleFactor),
               Text(
@@ -3966,15 +3967,7 @@ class _GameScreenState extends State<GameScreen> {
         spans.add(TextSpan(text: text.substring(lastEnd, match.start)));
       }
       final symbol = match.group(0)!;
-      Suit suit;
-      Color color;
-      switch (symbol) {
-        case '♠': suit = Suit.spade; color = Colors.black;
-        case '♣': suit = Suit.club; color = Colors.black;
-        case '♥': suit = Suit.heart; color = Colors.red;
-        case '♦': suit = Suit.diamond; color = Colors.red;
-        default: suit = Suit.spade; color = Colors.black;
-      }
+      final color = (symbol == '♥' || symbol == '♦') ? Colors.red : Colors.black;
       spans.add(WidgetSpan(
         alignment: PlaceholderAlignment.middle,
         child: Container(
@@ -3986,9 +3979,14 @@ class _GameScreenState extends State<GameScreen> {
             borderRadius: BorderRadius.circular(2),
           ),
           child: Center(
-            child: CustomPaint(
-              size: Size(cardSize * 0.7, cardSize * 0.7),
-              painter: SuitSymbolPainter(suit: suit, color: color),
+            child: Text(
+              symbol,
+              style: TextStyle(
+                fontSize: cardSize * 0.8,
+                color: color,
+                fontFamily: 'Roboto',
+                height: 1.0,
+              ),
             ),
           ),
         ),
@@ -4413,6 +4411,7 @@ class _GameScreenState extends State<GameScreen> {
               style: TextStyle(
                 color: bestOptimal >= currentOptimal + 3 ? Colors.amber[200] : Colors.grey[400],
                 fontSize: 11,
+                fontFamily: 'Roboto',
               ),
             ),
           ),
@@ -5004,7 +5003,7 @@ class _GameScreenState extends State<GameScreen> {
                     children: [
                       Text(
                         _suitSymbolForCard(suit),
-                        style: TextStyle(color: suitColor, fontSize: 12, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: suitColor, fontSize: 12, fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
                       ),
                       const SizedBox(width: 2),
                       Text(

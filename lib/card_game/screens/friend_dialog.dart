@@ -553,6 +553,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
                   ? (isRed ? Colors.red : Colors.black)
                   : (isRed ? Colors.red[300] : Colors.white70),
               fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto',
             ),
           ),
         ),
