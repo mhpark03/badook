@@ -1640,6 +1640,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventHighCardAttack => 'High card score attack';
 
   @override
+  String trickResultAttack(int count) {
+    return '→ Attack +$count';
+  }
+
+  @override
+  String trickResultDefense(int count) {
+    return '→ Defense +$count';
+  }
+
+  @override
+  String get trickResultNoScore => '→ No score';
+
+  @override
+  String get trickMightyAppeared => 'Mighty appeared';
+
+  @override
+  String get trickFriendJoined => 'Friend joined';
+
+  @override
   String get demoMode => 'Demo Mode';
 
   @override
@@ -1900,101 +1919,110 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String stepFirstAce(String card) {
-    return 'Lead $card → first trick score';
+    return 'Lead $card to maintain initiative on first trick';
   }
 
   @override
   String stepFirstKing(String card) {
-    return 'Lead $card (highest in Mighty suit)';
+    return 'Lead $card to maintain initiative (highest in Mighty suit)';
   }
 
   @override
-  String get stepFirstMighty => 'Lead Mighty → secure first trick';
+  String get stepFirstMighty => 'Lead Mighty to secure first trick';
 
   @override
-  String get stepFirstJoker => 'Lead Joker → secure first trick';
+  String get stepFirstJoker => 'Lead Joker to secure first trick';
 
   @override
   String stepGirudaAce(String card) {
-    return 'Lead $card → top trump attack';
+    return 'Attack with $card as trump';
   }
 
   @override
   String stepGirudaAceCheckK(String card) {
-    return 'Lead $card → top trump attack, check K exhaustion';
+    return 'Attack with $card as trump (check K exhaustion)';
   }
 
   @override
   String stepGirudaKing(String card) {
-    return 'Lead $card → additional trump absorption';
+    return 'Additional trump attack with $card';
   }
 
   @override
   String stepJokerCallGiruda(String suit) {
-    return 'If K not exhausted, Joker: call $suit → draw out K';
+    return 'If K not exhausted, call $suit with Joker to draw out K';
   }
 
   @override
   String get stepJokerAfterFriend =>
-      'After friend joins, lead Joker → score points';
+      'Score points with Joker after friend joins';
 
   @override
-  String get stepFriendMightyJoin => 'Mighty friend → joins on first trick';
+  String get stepFriendMightyJoin => 'Mighty friend joins on first trick';
 
   @override
   String get stepFriendJokerJoin =>
-      'Joker friend → naturally joins on trump lead';
+      'Joker friend naturally joins on trump lead';
 
   @override
-  String stepLowGirudaFriendLure(String card) {
-    return 'Lead $card → yield lead to lure friend';
+  String stepLowGirudaFriendLure(
+    String highCards,
+    String card,
+    String mightyCard,
+  ) {
+    return 'If $highCards not appeared, lure Mighty($mightyCard) with $card while attacking trump';
   }
 
   @override
   String stepGirudaQReclaim(String card) {
-    return 'Lead $card → reclaim lead';
+    return 'Reclaim lead with $card';
   }
 
   @override
   String stepGirudaLeadFriend(String friendCard) {
-    return 'Lead trump A/K to draw out $friendCard';
+    return 'Lead trump to draw out $friendCard';
   }
 
   @override
   String stepJokerCallFriend(String friendCard) {
-    return '$friendCard not appeared → Joker calls trump to lure friend';
+    return 'If $friendCard not appeared, call trump with Joker to lure friend';
   }
 
   @override
   String stepLureWithGiruda(String card, String friendCard) {
-    return 'Still not appeared → lead $card to lure friend($friendCard)';
+    return 'Still not appeared, lead $card to lure friend($friendCard)';
   }
 
   @override
   String stepSuitLeadFriend(String card, String friendCard) {
-    return 'Lead $card → lure friend($friendCard)';
+    return 'Lead $card to lure friend($friendCard)';
   }
 
   @override
   String stepJokerCall(String suits) {
-    return 'Joker: call $suits → exhaust high cards';
+    return 'Call $suits with Joker to secure point cards';
   }
 
   @override
-  String get stepJokerOptimal => 'Joker: use at optimal timing';
+  String get stepJokerOptimal => 'Use Joker at optimal timing to score points';
 
   @override
   String stepHighCardAttack(String cards) {
-    return 'Lead $cards → additional score attack';
+    return 'Score additional points with $cards';
   }
 
   @override
-  String get stepMightyTiming => 'Mighty: use after opponent trumps exhausted';
+  String get stepMightyTiming =>
+      'Use Mighty after trump exhaustion to secure trick';
 
   @override
   String stepVoidCut(String suits) {
-    return '$suits void → trump cut for score';
+    return 'Use $suits void for trump cut scoring';
   }
+
+  @override
+  String get stepEndgameScoring =>
+      'Maximize point collection through endgame play';
 
   @override
   String estimatedMinWins(int count) {

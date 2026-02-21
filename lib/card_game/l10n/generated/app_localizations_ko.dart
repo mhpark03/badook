@@ -1622,6 +1622,25 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trickEventHighCardAttack => '추가 점수 공격';
 
   @override
+  String trickResultAttack(int count) {
+    return '→ 공격 +$count';
+  }
+
+  @override
+  String trickResultDefense(int count) {
+    return '→ 수비 +$count';
+  }
+
+  @override
+  String get trickResultNoScore => '→ 무득점';
+
+  @override
+  String get trickMightyAppeared => '마이티 출현';
+
+  @override
+  String get trickFriendJoined => '프렌드 합류';
+
+  @override
   String get demoMode => '데모 모드';
 
   @override
@@ -1877,42 +1896,42 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String stepFirstAce(String card) {
-    return '$card 선출 → 초구 점수 선취';
+    return '$card로 초구 선 유지';
   }
 
   @override
   String stepFirstKing(String card) {
-    return '$card 선출 (마이티 무늬 최상위)';
+    return '$card로 초구 선 유지 (마이티 무늬 최상위)';
   }
 
   @override
-  String get stepFirstMighty => '마이티 선출 → 초구 확보';
+  String get stepFirstMighty => '마이티로 초구 선 확보';
 
   @override
-  String get stepFirstJoker => '조커 선출 → 초구 확보';
+  String get stepFirstJoker => '조커로 초구 선 확보';
 
   @override
   String stepGirudaAce(String card) {
-    return '$card 선출 → 기루다 최상위 공격';
+    return '$card로 기루다 공격';
   }
 
   @override
   String stepGirudaAceCheckK(String card) {
-    return '$card 선출 → 기루다 최상위 공격, K 소진 확인';
+    return '$card로 기루다 공격 (K 소진 확인)';
   }
 
   @override
   String stepGirudaKing(String card) {
-    return '$card 선출 → 기루다 추가 흡수';
+    return '$card로 기루다 추가 공격';
   }
 
   @override
   String stepJokerCallGiruda(String suit) {
-    return 'K 미소진 시 조커: $suit 호출 → K 유도';
+    return 'K 미소진 시 조커로 $suit 호출하여 K 유도';
   }
 
   @override
-  String get stepJokerAfterFriend => '프렌드 합류 후 조커 선출 → 점수 획득';
+  String get stepJokerAfterFriend => '프렌드 합류 후 조커로 점수 획득';
 
   @override
   String get stepFriendMightyJoin => '마이티 프렌드 → 초구에서 합류';
@@ -1921,55 +1940,62 @@ class AppLocalizationsKo extends AppLocalizations {
   String get stepFriendJokerJoin => '조커 프렌드 → 기루다 리드 시 자연 합류';
 
   @override
-  String stepLowGirudaFriendLure(String card) {
-    return '$card 선출 → 프렌드에게 선 양보하여 유도';
+  String stepLowGirudaFriendLure(
+    String highCards,
+    String card,
+    String mightyCard,
+  ) {
+    return '$highCards 미출현 시 $card로 마이티($mightyCard) 유도하면서 기루다 공격';
   }
 
   @override
   String stepGirudaQReclaim(String card) {
-    return '$card 선출 → 선 탈환';
+    return '$card로 선 탈환';
   }
 
   @override
   String stepGirudaLeadFriend(String friendCard) {
-    return '기루다 A/K 리드로 $friendCard 출현 유도';
+    return '기루다 리드로 $friendCard 유도';
   }
 
   @override
   String stepJokerCallFriend(String friendCard) {
-    return '$friendCard 미출현 → 조커로 기루다 호출하여 프렌드 유도';
+    return '$friendCard 미출현 시 조커로 기루다 호출하여 프렌드 유도';
   }
 
   @override
   String stepLureWithGiruda(String card, String friendCard) {
-    return '그래도 미출현 → $card로 프렌드($friendCard) 따라내기 유도';
+    return '그래도 미출현 시 $card로 프렌드($friendCard) 유도';
   }
 
   @override
   String stepSuitLeadFriend(String card, String friendCard) {
-    return '$card로 리드 → 프렌드($friendCard) 유도';
+    return '$card로 리드하여 프렌드($friendCard) 유도';
   }
 
   @override
   String stepJokerCall(String suits) {
-    return '조커: $suits 호출 → 고액 카드 소진';
+    return '조커로 $suits 호출하여 점수 카드 확보';
   }
 
   @override
-  String get stepJokerOptimal => '조커: 최적 타이밍에 사용';
+  String get stepJokerOptimal => '조커를 최적 타이밍에 사용하여 점수 획득';
 
   @override
   String stepHighCardAttack(String cards) {
-    return '$cards 선출 → 추가 점수 공격';
+    return '$cards로 추가 점수 획득';
   }
 
   @override
-  String get stepMightyTiming => '마이티: 상대 기루다 소진 후 사용';
+  String get stepMightyTiming => '마이티를 기루다 소진 후 사용하여 확실한 트릭 확보';
 
   @override
   String stepVoidCut(String suits) {
-    return '$suits 보이드 → 기루다 컷으로 점수 획득';
+    return '$suits 보이드를 활용하여 기루다 컷으로 점수 획득';
   }
+
+  @override
+  String get stepEndgameScoring => '간(間)을 통해 최대한 많은 점수 획득 시도';
 
   @override
   String estimatedMinWins(int count) {

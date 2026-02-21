@@ -989,12 +989,21 @@ class GameController extends ChangeNotifier {
     bool jokerUsedForGiruda = false;
     if (friendIsMighty && !hasMighty) {
       // 마이티 프렌드: 낮은 기루다로 프렌드 유도가 최우선
-      // (조커로 K 유도보다 프렌드 합류가 더 중요)
+      final mightyCardStr = '${ss(mightySuit)}A';
+      final highRanks = [Rank.king, Rank.queen, Rank.jack];
+      final missingHighGiruda = highRanks.where((r) =>
+          !girudaCards.any((c) => c.rank == r)).toList();
+
       final lowGiruda = girudaCards.where((c) =>
           c.rank != Rank.ace && c.rank != Rank.king && c.rank != Rank.queen).toList();
-      if (lowGiruda.isNotEmpty) {
+      if (lowGiruda.isNotEmpty && missingHighGiruda.isNotEmpty) {
         lowGiruda.sort((a, b) => a.rankValue.compareTo(b.rankValue));
-        strategies.add(('STEP_LOW_GIRUDA_FRIEND_LURE', {'card': cs(lowGiruda.first)}));
+        final highCardsStr = missingHighGiruda.map((r) => '${ss(giruda)}${rs(r)}').join('/');
+        strategies.add(('STEP_LOW_GIRUDA_FRIEND_LURE', {
+          'highCards': highCardsStr,
+          'card': cs(lowGiruda.first),
+          'mightyCard': mightyCardStr,
+        }));
       }
       // 프렌드 합류 후 조커로 점수 획득
       if (hasJoker) {
@@ -1090,6 +1099,9 @@ class GameController extends ChangeNotifier {
       final voidSymbols = voidSuits.map((s) => ss(s)).join("/");
       strategies.add(('STEP_VOID_CUT', {'suits': voidSymbols}));
     }
+
+    // === 간(間) 전략 ===
+    strategies.add(('STEP_ENDGAME_SCORING', <String, String>{}));
 
     return strategies;
   }
