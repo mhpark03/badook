@@ -1618,6 +1618,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get trickEventGirudaKExhaustSuccess => 'K消耗成功';
 
   @override
+  String get trickEventDefenseJokerCounterattack => 'マイティ消滅 → 守備ジョーカー反撃';
+
+  @override
   String trickEventJokerAfterFriend(String suit) {
     return 'フレンド合流後ジョーカー ($suit) → 得点';
   }
