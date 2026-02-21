@@ -1543,6 +1543,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get trickEventLastCard => '最後のカード';
 
   @override
+  String trickEventLastCardDefenseWin(int count) {
+    return '守備上位カード$count点防御';
+  }
+
+  @override
+  String trickEventLastCardAttackWin(int count) {
+    return '攻撃$count点獲得';
+  }
+
+  @override
   String get trickEventJokerLead => 'ジョーカーリード';
 
   @override
@@ -1579,6 +1589,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get trickEventDefenseTopCardDefend => '守備最上位カード得点防御';
+
+  @override
+  String get trickEventDefenseLeadAttackCut => '守備非切り札攻撃 → 切り札カット奪還';
 
   @override
   String get trickEventFirstTrickFriendBait => '初トリック不在 / フレンド誘導';
@@ -1658,6 +1671,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get trickFriendJoined => 'フレンド合流';
+
+  @override
+  String get trickEventFriendTopCardWin => 'フレンド最上位カード勝利';
+
+  @override
+  String trickEventFriendTrickContribution(int count) {
+    return 'フレンド貢献$countトリック攻撃成功';
+  }
 
   @override
   String get demoMode => 'デモモード';

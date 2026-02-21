@@ -1549,6 +1549,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trickEventLastCard => '마지막 카드';
 
   @override
+  String trickEventLastCardDefenseWin(int count) {
+    return '수비 상위 카드 $count점 방어';
+  }
+
+  @override
+  String trickEventLastCardAttackWin(int count) {
+    return '공격 $count점 획득';
+  }
+
+  @override
   String get trickEventJokerLead => '조커 선공';
 
   @override
@@ -1585,6 +1595,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trickEventDefenseTopCardDefend => '수비 최상위 카드 점수 방어';
+
+  @override
+  String get trickEventDefenseLeadAttackCut => '수비 비기루다 공격 → 기루다 컷 선 탈환';
 
   @override
   String get trickEventFirstTrickFriendBait => '초구 부재 / 물패로 프렌드 유도';
@@ -1664,6 +1677,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trickFriendJoined => '프렌드 합류';
+
+  @override
+  String get trickEventFriendTopCardWin => '프렌드 최상위 카드 승리';
+
+  @override
+  String trickEventFriendTrickContribution(int count) {
+    return '프렌드 도움 $count트릭 공격 성공';
+  }
 
   @override
   String get demoMode => '데모 모드';
