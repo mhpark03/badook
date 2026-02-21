@@ -1970,4 +1970,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String stepVoidCut(String suits) {
     return '$suits 보이드 → 기루다 컷으로 점수 획득';
   }
+
+  @override
+  String estimatedMinWins(int count) {
+    return '→ $count승 이상 예상';
+  }
 }

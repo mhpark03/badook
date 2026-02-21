@@ -3451,9 +3451,9 @@ class _GameScreenState extends State<GameScreen> {
                 children: [
                   // 점수 계산 근거 요약
                   if (explanation.scoreBreakdown.isNotEmpty) ...[
-                    Text(
-                      explanation.scoreBreakdown,
-                      style: TextStyle(color: Colors.white38, fontSize: 10 * scaleFactor),
+                    _buildSuitCardText(
+                      '${explanation.scoreBreakdown} ${l10n.estimatedMinWins(explanation.totalMinTricks)}',
+                      TextStyle(color: Colors.white38, fontSize: 10 * scaleFactor),
                     ),
                     SizedBox(height: 4 * scaleFactor),
                   ],
@@ -3555,18 +3555,14 @@ class _GameScreenState extends State<GameScreen> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 5 * scaleFactor, vertical: 2 * scaleFactor),
           decoration: BoxDecoration(
-            color: isSelected
-                ? Colors.teal[800]!.withValues(alpha: 0.5)
-                : isBest
-                    ? Colors.amber[800]!.withValues(alpha: 0.3)
-                    : Colors.black26,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               color: isSelected
-                  ? Colors.teal[400]!
+                  ? Colors.teal
                   : isBest
-                      ? Colors.amber[400]!
-                      : Colors.white12,
+                      ? Colors.amber[700]!
+                      : Colors.grey[300]!,
               width: isSelected || isBest ? 1.5 : 0.5,
             ),
           ),
@@ -3584,9 +3580,9 @@ class _GameScreenState extends State<GameScreen> {
               ),
               SizedBox(width: 2 * scaleFactor),
               Text(
-                '$optimal',
+                '($optimal)',
                 style: TextStyle(
-                  color: isSelected ? Colors.teal[200] : isBest ? Colors.amber[200] : Colors.white54,
+                  color: isSelected ? Colors.teal[700] : isBest ? Colors.amber[800] : Colors.black54,
                   fontSize: 11 * scaleFactor,
                   fontWeight: isSelected || isBest ? FontWeight.bold : FontWeight.normal,
                 ),
@@ -3609,6 +3605,52 @@ class _GameScreenState extends State<GameScreen> {
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,
       ),
     );
+  }
+
+  /// 무늬 기호를 흰색 배경 미니 카드로 렌더링하는 헬퍼 (어두운 배경용)
+  Widget _buildSuitCardText(String text, TextStyle baseStyle) {
+    final suitPattern = RegExp('[♠♦♥♣]');
+    final spans = <InlineSpan>[];
+    int lastEnd = 0;
+    final cardSize = (baseStyle.fontSize ?? 10) * 1.2;
+    for (final match in suitPattern.allMatches(text)) {
+      if (match.start > lastEnd) {
+        spans.add(TextSpan(text: text.substring(lastEnd, match.start)));
+      }
+      final symbol = match.group(0)!;
+      Suit suit;
+      Color color;
+      switch (symbol) {
+        case '♠': suit = Suit.spade; color = Colors.black;
+        case '♣': suit = Suit.club; color = Colors.black;
+        case '♥': suit = Suit.heart; color = Colors.red;
+        case '♦': suit = Suit.diamond; color = Colors.red;
+        default: suit = Suit.spade; color = Colors.black;
+      }
+      spans.add(WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: Container(
+          width: cardSize,
+          height: cardSize,
+          margin: const EdgeInsets.symmetric(horizontal: 1),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(2),
+          ),
+          child: Center(
+            child: CustomPaint(
+              size: Size(cardSize * 0.7, cardSize * 0.7),
+              painter: SuitSymbolPainter(suit: suit, color: color),
+            ),
+          ),
+        ),
+      ));
+      lastEnd = match.end;
+    }
+    if (lastEnd < text.length) {
+      spans.add(TextSpan(text: text.substring(lastEnd)));
+    }
+    return RichText(text: TextSpan(style: baseStyle, children: spans));
   }
 
   /// 핵심 카드 정보를 한 줄로 요약하는 헬퍼

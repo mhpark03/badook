@@ -716,5 +716,7 @@
   "@stepHighCardAttack": { "placeholders": { "cards": { "type": "String" } } },
   "stepMightyTiming": "Mighty: use after opponent trumps exhausted",
   "stepVoidCut": "{suits} void → trump cut for score",
-  "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } }
+  "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } },
+  "estimatedMinWins": "→ {count}+ wins expected",
+  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } }
 }

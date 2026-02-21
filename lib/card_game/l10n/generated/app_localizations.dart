@@ -3567,6 +3567,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'{suits} 보이드 → 기루다 컷으로 점수 획득'**
   String stepVoidCut(String suits);
+
+  /// No description provided for @estimatedMinWins.
+  ///
+  /// In ko, this message translates to:
+  /// **'→ {count}승 이상 예상'**
+  String estimatedMinWins(int count);
 }
 
 class _AppLocalizationsDelegate

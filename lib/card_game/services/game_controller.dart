@@ -180,6 +180,7 @@ class GameController extends ChangeNotifier {
         passReason = evaluation.handStrength < 13 ? 'LOW_POINTS' : 'OUTBID';
       }
 
+      final (breakdownText, breakdownMinTricks) = _aiPlayer.getPointBreakdownText(currentPlayer.hand, effectiveSuit);
       _lastBidExplanation = BidExplanation(
         playerId: currentPlayer.id,
         playerName: currentPlayer.name,
@@ -193,7 +194,8 @@ class GameController extends ChangeNotifier {
         passReason: passReason,
         handStrength: evaluation.handStrength,
         requiredBid: evaluation.requiredBid,
-        scoreBreakdown: _aiPlayer.getPointBreakdownText(currentPlayer.hand, effectiveSuit),
+        scoreBreakdown: breakdownText,
+        totalMinTricks: breakdownMinTricks,
         suitComparison: evaluation.suitComparison,
       );
 
@@ -1206,6 +1208,7 @@ class BidExplanation {
   final int handStrength;
   final int requiredBid;
   final String scoreBreakdown;
+  final int totalMinTricks;
   final List<(Suit, int, int, int)> suitComparison; // (suit, min, max, optimal)
 
   BidExplanation({
@@ -1222,6 +1225,7 @@ class BidExplanation {
     this.handStrength = 0,
     this.requiredBid = 0,
     this.scoreBreakdown = '',
+    this.totalMinTricks = 0,
     this.suitComparison = const [],
   });
 }

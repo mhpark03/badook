@@ -1995,4 +1995,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String stepVoidCut(String suits) {
     return '$suits void → trump cut for score';
   }
+
+  @override
+  String estimatedMinWins(int count) {
+    return '→ $count+ wins expected';
+  }
 }

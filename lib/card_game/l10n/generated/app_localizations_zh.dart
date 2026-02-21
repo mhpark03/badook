@@ -1956,4 +1956,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String stepVoidCut(String suits) {
     return '$suits缺门 → 将牌切入得分';
   }
+
+  @override
+  String estimatedMinWins(int count) {
+    return '→ 预计$count胜以上';
+  }
 }

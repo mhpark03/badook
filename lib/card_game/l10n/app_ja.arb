@@ -715,5 +715,7 @@
   "@stepHighCardAttack": { "placeholders": { "cards": { "type": "String" } } },
   "stepMightyTiming": "マイティ: 相手切り札消耗後に使用",
   "stepVoidCut": "{suits}ボイド → 切り札カットで得点",
-  "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } }
+  "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } },
+  "estimatedMinWins": "→ {count}勝以上予想",
+  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } }
 }

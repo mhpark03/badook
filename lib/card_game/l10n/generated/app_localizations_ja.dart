@@ -1963,4 +1963,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String stepVoidCut(String suits) {
     return '$suitsボイド → 切り札カットで得点';
   }
+
+  @override
+  String estimatedMinWins(int count) {
+    return '→ $count勝以上予想';
+  }
 }

@@ -715,5 +715,7 @@
   "@stepHighCardAttack": { "placeholders": { "cards": { "type": "String" } } },
   "stepMightyTiming": "至尊: 对手将牌消耗后使用",
   "stepVoidCut": "{suits}缺门 → 将牌切入得分",
-  "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } }
+  "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } },
+  "estimatedMinWins": "→ 预计{count}胜以上",
+  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } }
 }
