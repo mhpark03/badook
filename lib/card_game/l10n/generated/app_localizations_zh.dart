@@ -1561,6 +1561,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String trickEventLastDefenseTopProtectFail(int count) {
+    return '守方最高牌保护$count分防御但防守失败';
+  }
+
+  @override
   String trickEventLastCardAttackWin(int count) {
     return '攻方$count分获取';
   }
@@ -1586,10 +1591,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trickEventMidGirudaMightyBait => '中位将牌诱导Mighty';
 
   @override
-  String get trickEventMidGirudaMightyBaitForA => '为A最高位确保用低位将牌诱导Mighty';
-
-  @override
-  String get trickEventMidGirudaMightyBaitForQ => '为Q攻击用低位将牌诱导Mighty';
+  String trickEventMidGirudaMightyBaitForTop(String topCard) {
+    return '为$topCard最高位确保用低位将牌诱导Mighty';
+  }
 
   @override
   String get trickEventMidGirudaPassLead => '中位将牌让先';
