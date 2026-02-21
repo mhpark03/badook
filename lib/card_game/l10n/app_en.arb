@@ -692,8 +692,6 @@
   "strategyMightyTiming": "Use Mighty on 9th trick → secure 10th trick lead",
   "strategyVoidTrumpCut": "{suits} void → trump cut on opponent's lead",
   "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
-  "trickEventGirudaAceKExhausted": "Trump A attack → K exhausted",
-  "trickEventGirudaAceKNotExhausted": "Trump A attack (draw K)",
   "trickEventGirudaKExhaustSuccess": "K exhausted",
   "trickEventDefenseJokerCounterattack": "Mighty gone → Defense Joker counterattack",
   "trickEventJokerAfterFriend": "Joker after friend joined ({suit}) → score",

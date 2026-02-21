@@ -691,8 +691,6 @@
   "strategyMightyTiming": "第9墩用至尊 → 确保第10墩出牌权",
   "strategyVoidTrumpCut": "{suits}缺门 → 对手出牌时用将牌切入赢墩",
   "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
-  "trickEventGirudaAceKExhausted": "将牌A攻击 → K消耗",
-  "trickEventGirudaAceKNotExhausted": "将牌A攻击 (引K)",
   "trickEventGirudaKExhaustSuccess": "K消耗成功",
   "trickEventDefenseJokerCounterattack": "Mighty消失 → 守方小丑反击",
   "trickEventJokerAfterFriend": "朋友合流后王牌 ({suit}) → 得分",

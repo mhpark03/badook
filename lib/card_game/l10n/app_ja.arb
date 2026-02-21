@@ -691,8 +691,6 @@
   "strategyMightyTiming": "9番目トリックでマイティ使用 → 10番目リード確保",
   "strategyVoidTrumpCut": "{suits}ボイド → 相手リード時に切り札カットでトリック回収",
   "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
-  "trickEventGirudaAceKExhausted": "切り札A攻撃 → K消耗",
-  "trickEventGirudaAceKNotExhausted": "切り札A攻撃 (K誘導)",
   "trickEventGirudaKExhaustSuccess": "K消耗成功",
   "trickEventDefenseJokerCounterattack": "マイティ消滅 → 守備ジョーカー反撃",
   "trickEventJokerAfterFriend": "フレンド合流後ジョーカー ({suit}) → 得点",
