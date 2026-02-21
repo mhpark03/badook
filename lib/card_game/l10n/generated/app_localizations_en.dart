@@ -1681,6 +1681,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Mighty gone → Defense Joker counterattack';
 
   @override
+  String get trickEventDefenseMightyExhaust => 'Defense mighty exhaust success';
+
+  @override
+  String trickEventDefenseMightyExhaustPoints(int count) {
+    return 'Defense mighty exhaust, ${count}pts lost';
+  }
+
+  @override
   String trickEventJokerAfterFriend(String suit) {
     return 'Joker after friend joined ($suit) → score';
   }
