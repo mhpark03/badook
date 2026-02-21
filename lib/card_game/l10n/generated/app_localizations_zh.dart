@@ -1542,7 +1542,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trickEventLastTrickMighty => 'Mighty最后一墩';
 
   @override
+  String trickEventLastTrickTopByExhaust(String card) {
+    return '花色耗尽 → $card 最高首攻';
+  }
+
+  @override
   String get trickEventGameVictory => '进攻胜利确定';
+
+  @override
+  String get trickEventGameRunVictory => '进攻全胜（满贯）大胜确定';
 
   @override
   String get trickEventGameDefeat => '进攻败北确定';
@@ -1638,6 +1646,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get trickEventFriendLeadDefenseBeatDeclarerCut =>
+      '朋友先攻 → 守方逆转 → 庄家将牌再逆转';
+
+  @override
   String get trickEventWasteFriendRescue => '弃牌 → 朋友救场!';
 
   @override
@@ -1656,6 +1668,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trickEventGirudaKExhaustSuccess => 'K消耗成功';
+
+  @override
+  String get trickEventGirudaKQExhaustSuccess => 'K/Q同时消耗 大成功';
 
   @override
   String get trickEventDefenseJokerCounterattack => 'Mighty消失 → 守方小丑反击';

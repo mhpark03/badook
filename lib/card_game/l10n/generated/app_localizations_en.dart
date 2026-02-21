@@ -1569,7 +1569,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventLastTrickMighty => 'Mighty last trick';
 
   @override
+  String trickEventLastTrickTopByExhaust(String card) {
+    return 'Suit exhausted → $card top lead';
+  }
+
+  @override
   String get trickEventGameVictory => 'Attack victory';
+
+  @override
+  String get trickEventGameRunVictory => 'Attack run (sweep) major victory';
 
   @override
   String get trickEventGameDefeat => 'Attack defeat';
@@ -1672,6 +1680,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get trickEventFriendLeadDefenseBeatDeclarerCut =>
+      'Friend lead → Defense beats → Declarer trump cut reversal';
+
+  @override
   String get trickEventWasteFriendRescue => 'Waste → Friend rescue!';
 
   @override
@@ -1690,6 +1702,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventGirudaKExhaustSuccess => 'K exhausted';
+
+  @override
+  String get trickEventGirudaKQExhaustSuccess => 'K/Q both exhausted!';
 
   @override
   String get trickEventDefenseJokerCounterattack =>

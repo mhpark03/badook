@@ -1555,7 +1555,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trickEventLastTrickMighty => '마이티 마지막 트릭';
 
   @override
+  String trickEventLastTrickTopByExhaust(String card) {
+    return '무늬 소진 → $card 최상위 선공';
+  }
+
+  @override
   String get trickEventGameVictory => '공격 승리 확정';
+
+  @override
+  String get trickEventGameRunVictory => '공격 런(풀) 대승 확정';
 
   @override
   String get trickEventGameDefeat => '공격 패배 확정';
@@ -1651,6 +1659,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get trickEventFriendLeadDefenseBeatDeclarerCut =>
+      '프렌드 선공 → 수비 역전 → 주공 기루다 컷 재역전';
+
+  @override
   String get trickEventWasteFriendRescue => '물패 → 프렌드 기사회생!';
 
   @override
@@ -1669,6 +1681,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trickEventGirudaKExhaustSuccess => 'K 소진 성공';
+
+  @override
+  String get trickEventGirudaKQExhaustSuccess => 'K/Q 동시 소진 대성공';
 
   @override
   String get trickEventDefenseJokerCounterattack => '마이티 소멸 → 수비 조커 반격';
