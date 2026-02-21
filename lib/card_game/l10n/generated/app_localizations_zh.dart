@@ -1546,6 +1546,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String trickEventLastCardLeadFailed(String name, int count) {
+    return '$name先攻失败，错失$count分';
+  }
+
+  @override
   String get trickEventJokerLead => 'Joker首攻';
 
   @override
@@ -1564,6 +1569,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trickEventMidGirudaMightyBait => '中位将牌诱导Mighty';
+
+  @override
+  String get trickEventMidGirudaMightyBaitForA => '为A最高位确保用低位将牌诱导Mighty';
 
   @override
   String get trickEventMidGirudaMightyBaitForQ => '为Q攻击用低位将牌诱导Mighty';
@@ -1593,11 +1601,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trickEventFirstTrickWaste => '首墩缺牌 / 弃牌';
 
   @override
+  String get trickEventAttackFailed => '攻击失败 → 败于守方高牌';
+
+  @override
+  String trickEventAttackFailedWithTop(String topCard) {
+    return '攻击 ($topCard 最高) 失败 → 败于守方';
+  }
+
+  @override
   String get trickEventWaste => '弃牌';
 
   @override
   String trickEventWasteWithTop(String topCard) {
     return '弃牌 ($topCard 最高)';
+  }
+
+  @override
+  String get trickEventWasteDeclarerReclaim => '弃牌 → 庄家夺回先手';
+
+  @override
+  String trickEventWasteDeclarerReclaimWithTop(String topCard) {
+    return '弃牌 ($topCard 最高) → 庄家夺回先手';
   }
 
   @override
@@ -1671,6 +1695,21 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String trickEventFriendTrickContribution(int count) {
     return '朋友助攻$count墩攻击成功';
+  }
+
+  @override
+  String trickEventJokerSkipNoPoints(String name) {
+    return '$name: Joker保有，无得分墩跳过';
+  }
+
+  @override
+  String trickEventGirudaAceHeldMightyGuard(String name) {
+    return '$name: 王牌A保有，警惕Mighty未使用';
+  }
+
+  @override
+  String trickEventGirudaAceHeld(String name) {
+    return '$name: 王牌A保有，未使用';
   }
 
   @override

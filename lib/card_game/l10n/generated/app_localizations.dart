@@ -2868,6 +2868,12 @@ abstract class AppLocalizations {
   /// **'공격 {count}점 획득'**
   String trickEventLastCardAttackWin(int count);
 
+  /// No description provided for @trickEventLastCardLeadFailed.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name} 선공 실패, {count}점 놓침'**
+  String trickEventLastCardLeadFailed(String name, int count);
+
   /// No description provided for @trickEventJokerLead.
   ///
   /// In ko, this message translates to:
@@ -2903,6 +2909,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'기루다 중간으로 마이티 유도'**
   String get trickEventMidGirudaMightyBait;
+
+  /// No description provided for @trickEventMidGirudaMightyBaitForA.
+  ///
+  /// In ko, this message translates to:
+  /// **'A 최상위 확보 위해 저액 기루다로 마이티 유도'**
+  String get trickEventMidGirudaMightyBaitForA;
 
   /// No description provided for @trickEventMidGirudaMightyBaitForQ.
   ///
@@ -2958,6 +2970,18 @@ abstract class AppLocalizations {
   /// **'초구 부재 / 물패 처리'**
   String get trickEventFirstTrickWaste;
 
+  /// No description provided for @trickEventAttackFailed.
+  ///
+  /// In ko, this message translates to:
+  /// **'공격 실패 → 수비 상위 카드에 패배'**
+  String get trickEventAttackFailed;
+
+  /// No description provided for @trickEventAttackFailedWithTop.
+  ///
+  /// In ko, this message translates to:
+  /// **'공격 ({topCard} 최상위) 실패 → 수비에 패배'**
+  String trickEventAttackFailedWithTop(String topCard);
+
   /// No description provided for @trickEventWaste.
   ///
   /// In ko, this message translates to:
@@ -2969,6 +2993,18 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'물패 ({topCard} 최상위)'**
   String trickEventWasteWithTop(String topCard);
+
+  /// No description provided for @trickEventWasteDeclarerReclaim.
+  ///
+  /// In ko, this message translates to:
+  /// **'물패 → 주공 선 탈환'**
+  String get trickEventWasteDeclarerReclaim;
+
+  /// No description provided for @trickEventWasteDeclarerReclaimWithTop.
+  ///
+  /// In ko, this message translates to:
+  /// **'물패 ({topCard} 최상위) → 주공 선 탈환'**
+  String trickEventWasteDeclarerReclaimWithTop(String topCard);
 
   /// No description provided for @trickEventWasteFriendRescue.
   ///
@@ -3095,6 +3131,24 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'프렌드 도움 {count}트릭 공격 성공'**
   String trickEventFriendTrickContribution(int count);
+
+  /// No description provided for @trickEventJokerSkipNoPoints.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}: 조커 보유, 무득점 트릭 스킵'**
+  String trickEventJokerSkipNoPoints(String name);
+
+  /// No description provided for @trickEventGirudaAceHeldMightyGuard.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}: 기루다 A 보유, 마이티 경계로 미사용'**
+  String trickEventGirudaAceHeldMightyGuard(String name);
+
+  /// No description provided for @trickEventGirudaAceHeld.
+  ///
+  /// In ko, this message translates to:
+  /// **'{name}: 기루다 A 보유, 미사용'**
+  String trickEventGirudaAceHeld(String name);
 
   /// No description provided for @demoMode.
   ///

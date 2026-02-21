@@ -1553,6 +1553,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String trickEventLastCardLeadFailed(String name, int count) {
+    return '$nameリード失敗、$count点逃す';
+  }
+
+  @override
   String get trickEventJokerLead => 'ジョーカーリード';
 
   @override
@@ -1571,6 +1576,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get trickEventMidGirudaMightyBait => '切り札中位でマイティ誘導';
+
+  @override
+  String get trickEventMidGirudaMightyBaitForA => 'A最上位確保のため低位切り札でマイティ誘導';
 
   @override
   String get trickEventMidGirudaMightyBaitForQ => 'Q攻撃のため低位切り札でマイティ誘導';
@@ -1600,11 +1608,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get trickEventFirstTrickWaste => '初トリック不在 / 捨て札';
 
   @override
+  String get trickEventAttackFailed => '攻撃失敗 → 守備上位カードに敗北';
+
+  @override
+  String trickEventAttackFailedWithTop(String topCard) {
+    return '攻撃 ($topCard 最上位) 失敗 → 守備に敗北';
+  }
+
+  @override
   String get trickEventWaste => '捨て札';
 
   @override
   String trickEventWasteWithTop(String topCard) {
     return '捨て札 ($topCard 最上位)';
+  }
+
+  @override
+  String get trickEventWasteDeclarerReclaim => '捨て札 → 宣言者リード奪還';
+
+  @override
+  String trickEventWasteDeclarerReclaimWithTop(String topCard) {
+    return '捨て札 ($topCard 最上位) → 宣言者リード奪還';
   }
 
   @override
@@ -1678,6 +1702,21 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String trickEventFriendTrickContribution(int count) {
     return 'フレンド貢献$countトリック攻撃成功';
+  }
+
+  @override
+  String trickEventJokerSkipNoPoints(String name) {
+    return '$name: ジョーカー保有、無得点トリックスキップ';
+  }
+
+  @override
+  String trickEventGirudaAceHeldMightyGuard(String name) {
+    return '$name: 切り札A保有、マイティ警戒で未使用';
+  }
+
+  @override
+  String trickEventGirudaAceHeld(String name) {
+    return '$name: 切り札A保有、未使用';
   }
 
   @override

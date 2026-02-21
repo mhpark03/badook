@@ -1573,6 +1573,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String trickEventLastCardLeadFailed(String name, int count) {
+    return '$name lead failed, ${count}pt missed';
+  }
+
+  @override
   String get trickEventJokerLead => 'Joker lead';
 
   @override
@@ -1591,6 +1596,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventMidGirudaMightyBait => 'Mid trump to bait Mighty';
+
+  @override
+  String get trickEventMidGirudaMightyBaitForA =>
+      'Low trump to bait Mighty for A dominance';
 
   @override
   String get trickEventMidGirudaMightyBaitForQ =>
@@ -1623,11 +1632,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventFirstTrickWaste => 'No lead in 1st trick / Waste';
 
   @override
+  String get trickEventAttackFailed =>
+      'Attack failed → lost to higher defense card';
+
+  @override
+  String trickEventAttackFailedWithTop(String topCard) {
+    return 'Attack ($topCard top) failed → lost to defense';
+  }
+
+  @override
   String get trickEventWaste => 'Waste play';
 
   @override
   String trickEventWasteWithTop(String topCard) {
     return 'Waste ($topCard is top)';
+  }
+
+  @override
+  String get trickEventWasteDeclarerReclaim => 'Waste → Declarer reclaim';
+
+  @override
+  String trickEventWasteDeclarerReclaimWithTop(String topCard) {
+    return 'Waste ($topCard top) → Declarer reclaim';
   }
 
   @override
@@ -1704,6 +1730,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String trickEventFriendTrickContribution(int count) {
     return 'Friend helped $count attack tricks';
+  }
+
+  @override
+  String trickEventJokerSkipNoPoints(String name) {
+    return '$name: held Joker, skipped (no points)';
+  }
+
+  @override
+  String trickEventGirudaAceHeldMightyGuard(String name) {
+    return '$name: held trump A, guarding against Mighty';
+  }
+
+  @override
+  String trickEventGirudaAceHeld(String name) {
+    return '$name: held trump A, not played';
   }
 
   @override
