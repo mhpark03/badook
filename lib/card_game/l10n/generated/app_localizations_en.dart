@@ -1730,6 +1730,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventFriendTopCardWin => 'Friend top card win';
 
   @override
+  String get trickEventFriendGirudaKDeclarerA =>
+      'Friend giruda K win, declarer has A - attack giruda dominance';
+
+  @override
   String trickEventFriendTrickContribution(int count) {
     return 'Friend helped $count attack tricks';
   }
