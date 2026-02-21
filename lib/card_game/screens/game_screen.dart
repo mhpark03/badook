@@ -3789,7 +3789,7 @@ class _GameScreenState extends State<GameScreen> {
                 if (state.currentBid != null)
                   Text(
                     '${l10n.currentBid}: ${state.currentBid!.tricks} ${state.currentBid!.suit != null ? _suitSymbolForCard(state.currentBid!.suit!) : "NT"}',
-                    style: TextStyle(color: Colors.white, fontSize: 14 * scaleFactor),
+                    style: TextStyle(color: Colors.white, fontSize: 14 * scaleFactor, fontFamily: 'Roboto'),
                   ),
               ],
             ),
@@ -3907,7 +3907,7 @@ class _GameScreenState extends State<GameScreen> {
                         if (explanation.suit != null) ...[
                           Text(
                             '${_suitSymbolForCard(explanation.suit!)} ${explanation.girudaCount}',
-                            style: TextStyle(color: _getSuitColor(explanation.suit!), fontSize: 11 * scaleFactor),
+                            style: TextStyle(color: _getSuitColor(explanation.suit!), fontSize: 11 * scaleFactor, fontFamily: 'Roboto'),
                           ),
                           Text(' | ', style: TextStyle(color: Colors.white24, fontSize: 11 * scaleFactor)),
                         ],
@@ -4011,6 +4011,7 @@ class _GameScreenState extends State<GameScreen> {
         color: color,
         fontSize: fontSize,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        fontFamily: 'Roboto',
       ),
     );
   }
@@ -4420,7 +4421,7 @@ class _GameScreenState extends State<GameScreen> {
                     children: [
                       Text(
                         _suitSymbolForCard(suit),
-                        style: TextStyle(color: suitColor, fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: suitColor, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
                       ),
                       if (isCurrent)
                         Padding(
@@ -4840,6 +4841,7 @@ class _GameScreenState extends State<GameScreen> {
                           color: Colors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'Roboto',
                         ),
                       ),
                       if (state.giruda != null) ...[
