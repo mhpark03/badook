@@ -246,6 +246,21 @@ class MightyTrackingService {
         lastParts.add('총평: 전패 백런 0/${bidTricks}점 완패');
       } else if (attackWins && attackPoints >= bidTricks + 5) {
         lastParts.add('총평: ${attackTrickWins}승${defenseTrickWins}패 $attackPoints/${bidTricks}점 대승');
+      } else if (attackWins && attackPoints == bidTricks) {
+        bool atkJoker = false, atkMighty = false;
+        for (final t in state.tricks) {
+          for (int i = 0; i < t.cards.length && i < t.playerOrder.length; i++) {
+            if (isAttack(t.playerOrder[i])) {
+              if (t.cards[i].isJoker) atkJoker = true;
+              if (isMighty(t.cards[i])) atkMighty = true;
+            }
+          }
+        }
+        if (atkJoker && atkMighty) {
+          lastParts.add('총평: 조커/마이티 보유 추가 점수 실패 → $attackPoints/${bidTricks}점 최소 점수 달성');
+        } else {
+          lastParts.add('총평: ${attackTrickWins}승${defenseTrickWins}패 $attackPoints/${bidTricks}점 최소 점수 달성');
+        }
       } else if (attackWins) {
         lastParts.add('총평: ${attackTrickWins}승${defenseTrickWins}패 $attackPoints/${bidTricks}점 승리');
       } else if (attackPoints >= bidTricks - 3) {
@@ -373,7 +388,21 @@ class MightyTrackingService {
             parts.add('기루다 Q 선 탈환 실패, 수비 승리');
           }
         } else if (trick.winnerId != leadId && trick.winnerId != null && isTeammate(trick.winnerId!)) {
-          parts.add('기루다 중간으로 선 넘김');
+          bool defOvertake = false;
+          for (int i = 0; i < trick.cards.length && i < trick.playerOrder.length; i++) {
+            if (i == leadIdx) continue;
+            final c = trick.cards[i];
+            if (!isAttack(trick.playerOrder[i]) && !c.isJoker &&
+                c.suit == leadCard.suit && c.rankValue > leadCard.rankValue) {
+              defOvertake = true;
+              break;
+            }
+          }
+          if (defOvertake) {
+            parts.add('프렌드 공격 → 수비 역전 시도 → 주공 재역전 (행운)');
+          } else {
+            parts.add('기루다 중간으로 선 넘김');
+          }
         } else if (trick.winnerId != leadId && trick.winnerId != null && !isTeammate(trick.winnerId!)) {
           parts.add('수비팀 기루다 승리');
         } else {
@@ -629,10 +658,21 @@ class MightyTrackingService {
             parts.add('물패 → 주공 선 탈환');
           }
         } else if (trick.winnerId != null && trick.winnerId != leadId && isAttack(trick.winnerId!)) {
-          if (topCardStr != null) {
-            parts.add('물패 ($topCardStr 최상위) → 프렌드 기사회생!');
+          final fWinIdx = trick.playerOrder.indexOf(trick.winnerId!);
+          final fWinCard = (fWinIdx >= 0 && fWinIdx < trick.cards.length) ? trick.cards[fWinIdx] : null;
+          final friendWonWithMighty = fWinCard != null && fWinCard.isMightyWith(giruda);
+          if (!isAttack(leadId) && friendWonWithMighty) {
+            if (topCardStr != null) {
+              parts.add('물패 ($topCardStr 최상위) → 수비 공격을 마이티로 선 탈환');
+            } else {
+              parts.add('물패 → 수비 공격을 마이티로 선 탈환');
+            }
           } else {
-            parts.add('물패 → 프렌드 기사회생!');
+            if (topCardStr != null) {
+              parts.add('물패 ($topCardStr 최상위) → 프렌드 기사회생!');
+            } else {
+              parts.add('물패 → 프렌드 기사회생!');
+            }
           }
         } else if (leadPlayedBestOfSuit && trick.winnerId != null && trick.winnerId != leadId && !isAttack(trick.winnerId!)) {
           if (topCardStr != null) {

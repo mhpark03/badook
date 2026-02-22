@@ -961,6 +961,7 @@ class GameController extends ChangeNotifier {
 
     // === ① 초구 ===
     PlayingCard? firstTrickAce;
+    PlayingCard? firstTrickKing;
     for (final card in hand) {
       if (card.isJoker || card.isMightyWith(giruda)) continue;
       if (card.suit == giruda) continue;
@@ -968,10 +969,7 @@ class GameController extends ChangeNotifier {
         firstTrickAce = card; break;
       }
     }
-    if (firstTrickAce != null) {
-      strategies.add(('STEP_FIRST_ACE', {'card': cs(firstTrickAce)}));
-    } else {
-      PlayingCard? firstTrickKing;
+    if (firstTrickAce == null) {
       for (final card in hand) {
         if (card.isJoker || card.isMightyWith(giruda)) continue;
         if (card.suit == giruda) continue;
@@ -979,19 +977,29 @@ class GameController extends ChangeNotifier {
           firstTrickKing = card; break;
         }
       }
-      if (firstTrickKing != null) {
-        strategies.add(('STEP_FIRST_KING', {'card': cs(firstTrickKing)}));
-      } else if (hasMighty) {
-        strategies.add(('STEP_FIRST_MIGHTY', <String, String>{}));
-      } else if (hasJoker) {
-        strategies.add(('STEP_FIRST_JOKER', <String, String>{}));
-      }
+    }
+    if (firstTrickAce != null) {
+      strategies.add(('STEP_FIRST_ACE', {'card': cs(firstTrickAce)}));
+    } else if (firstTrickKing != null) {
+      strategies.add(('STEP_FIRST_KING', {'card': cs(firstTrickKing)}));
+    } else if (hasMighty) {
+      strategies.add(('STEP_FIRST_MIGHTY', <String, String>{}));
+    } else if (hasJoker) {
+      strategies.add(('STEP_FIRST_JOKER', <String, String>{}));
+    }
+
+    // === 초구 성공 후 조커콜 ===
+    // 마이티 프렌드가 외부에 있으면 프렌드가 조커를 보유할 수 있으므로 조커콜 제외
+    final jokerCallCard = state.jokerCall;
+    final hasJokerCallCard = hand.any((c) =>
+        !c.isJoker && c.suit == jokerCallCard.suit && c.rank == jokerCallCard.rank);
+    if (hasJokerCallCard && !hasJoker && !friendIsJoker && !(friendIsMighty && !hasMighty)) {
+      strategies.add(('STEP_JOKER_CALL_EXHAUST', {'card': cs(jokerCallCard)}));
     }
 
     // === ② 기루다 A → K 소진 확인 ===
     if (hasGirudaA) {
       if (!hasGirudaK) {
-        // K가 없으면 A로 공격 시 K 소진 확인이 중요
         strategies.add(('STEP_GIRUDA_ACE_CHECK_K', {'card': '${ss(giruda)}A'}));
       } else {
         strategies.add(('STEP_GIRUDA_ACE', {'card': '${ss(giruda)}A'}));
@@ -1096,8 +1104,12 @@ class GameController extends ChangeNotifier {
         (c.rank == Rank.ace || c.rank == Rank.king)).toList();
     // 초구에서 이미 사용한 카드 제외
     final fta = firstTrickAce;
+    final ftk = firstTrickKing;
     if (fta != null) {
       remainingHighCards.removeWhere((c) => c.suit == fta.suit && c.rank == fta.rank);
+    }
+    if (ftk != null) {
+      remainingHighCards.removeWhere((c) => c.suit == ftk.suit && c.rank == ftk.rank);
     }
     if (remainingHighCards.isNotEmpty) {
       remainingHighCards.sort((a, b) => b.rankValue.compareTo(a.rankValue));
