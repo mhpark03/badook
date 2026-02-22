@@ -343,6 +343,21 @@ class MightyTrackingService {
       final isTop = leadCard.rankValue >= 14 || isTopOfSuit(leadCard.suit!, leadCard.rankValue);
       if (isTop) {
         parts.add('기루다 최상위 선공');
+        // 상대 기루다 소진 시: 비기루다 공략, 기루다는 간용 보존
+        {
+          bool noOpponentGiruda = true;
+          for (int i = 0; i < trick.cards.length && i < trick.playerOrder.length; i++) {
+            if (i == leadIdx) continue;
+            if (isAttack(trick.playerOrder[i]) != isAttack(leadId) &&
+                !trick.cards[i].isJoker && trick.cards[i].suit == giruda) {
+              noOpponentGiruda = false;
+              break;
+            }
+          }
+          if (noOpponentGiruda) {
+            parts.add('상대 기루다 소진 → 비기루다 공략, 기루다는 간용 보존');
+          }
+        }
       } else {
         if (hasMightyInTrick) {
           if (isAutoPlay && isDeclarerLead && topRemainingGirudaStr != null) {
@@ -547,7 +562,47 @@ class MightyTrackingService {
           }
         }
 
-        if (isFriendWasteDeclarerCutDefenseOvercut) {
+        // 주공 프렌드 유도
+        bool isDeclarerFriendLure = false;
+        if (leadId == state.declarerId && state.friendDeclaration?.card != null) {
+          final fCard = state.friendDeclaration!.card!;
+          final fSuit = fCard.isJoker ? null : fCard.suit;
+          if (fSuit != null && leadCard.suit == fSuit) {
+            bool friendCardInTrick = false;
+            for (int i = 0; i < trick.cards.length; i++) {
+              if (i == leadIdx) continue;
+              final c = trick.cards[i];
+              if (!c.isJoker && c.suit == fCard.suit && c.rank == fCard.rank) {
+                friendCardInTrick = true;
+                break;
+              }
+            }
+            if (friendCardInTrick) {
+              bool alreadyRevealed = false;
+              for (final t in state.tricks) {
+                if (t.trickNumber >= trick.trickNumber) break;
+                for (final c in t.cards) {
+                  if (!fCard.isJoker && !c.isJoker && c.suit == fCard.suit && c.rank == fCard.rank) {
+                    alreadyRevealed = true;
+                    break;
+                  }
+                }
+                if (alreadyRevealed) break;
+              }
+              if (!alreadyRevealed) {
+                isDeclarerFriendLure = true;
+              }
+            }
+          }
+        }
+
+        if (isDeclarerFriendLure) {
+          if (trick.winnerId != null && isAttack(trick.winnerId!)) {
+            parts.add('프렌드 유도');
+          } else {
+            parts.add('프렌드 유도 실패');
+          }
+        } else if (isFriendWasteDeclarerCutDefenseOvercut) {
           final ptCount = trick.cards.where((c) => !c.isJoker && c.isPointCard).length;
           if (ptCount > 0) {
             parts.add('프렌드 물패 → 주공 기루다 컷 → 수비 기루다 재역전 ${ptCount}점 방어');

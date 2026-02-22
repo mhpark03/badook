@@ -109,6 +109,12 @@ class GameController extends ChangeNotifier {
   bool get showFriendSummary => _showFriendSummary;
   FriendDeclaration? get pendingDeclaration => _pendingDeclaration;
 
+  List<(String, Map<String, String>)> getStrategyPoints() {
+    if (_state.declarerId == null) return [];
+    final declarer = _state.players[_state.declarerId!];
+    return _generateStrategyPoints(declarer, _state, friendOverride: _pendingDeclaration);
+  }
+
   String get gameUuid => _gameUuid;
   List<BidEvaluationSnapshot> get bidSnapshots => _bidSnapshots;
 
@@ -466,7 +472,7 @@ class GameController extends ChangeNotifier {
       final reason = _generateFriendReason(declaration, declarer, _state);
       final firstTrickInfo = _analyzeFirstTrick(declarer, _state);
 
-      final strategyPoints = _generateStrategyPoints(declarer, _state);
+      final strategyPoints = _generateStrategyPoints(declarer, _state, friendOverride: declaration);
 
       _friendExplanation = FriendExplanation(
         declaration: declaration,
@@ -512,11 +518,9 @@ class GameController extends ChangeNotifier {
   void humanDeclareFriend(FriendDeclaration declaration) {
     if (_state.declarerId != 0) return;
 
-    _state.declareFriend(declaration);
+    _pendingDeclaration = declaration;
+    _showBidSummary = true;
     notifyListeners();
-    saveGame(); // 자동 저장
-
-    _processAIPlayIfNeeded();
   }
 
   void _processAIPlayIfNeeded() async {
@@ -904,7 +908,7 @@ class GameController extends ChangeNotifier {
   }
 
   /// 점수 획득 전략 목록 생성
-  List<(String, Map<String, String>)> _generateStrategyPoints(Player declarer, GameState state) {
+  List<(String, Map<String, String>)> _generateStrategyPoints(Player declarer, GameState state, {FriendDeclaration? friendOverride}) {
     final hand = declarer.hand;
     final giruda = state.giruda;
     final strategies = <(String, Map<String, String>)>[];
@@ -924,7 +928,7 @@ class GameController extends ChangeNotifier {
 
     final hasMighty = hand.any((c) => c.isMightyWith(giruda));
     final hasJoker = hand.any((c) => c.isJoker);
-    final friendCard = state.friendDeclaration?.card;
+    final friendCard = (friendOverride ?? state.friendDeclaration)?.card;
     final mightySuit = state.mighty.suit;
 
     // 기루다 카드 (마이티 제외, 높은 순)
