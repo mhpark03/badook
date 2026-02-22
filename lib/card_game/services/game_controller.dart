@@ -1196,7 +1196,16 @@ class GameController extends ChangeNotifier {
     if (_state.giruda != null && card.suit == _state.giruda) {
       return LeadIntent.midGirudaLead;
     }
-    if (_state.currentTrickNumber == 1) return LeadIntent.firstTrickWaste;
+    if (_state.currentTrickNumber == 1) {
+      // 비기루다 최상위 카드 (Ace 또는 마이티 무늬 K) → 초구 최상위 공격
+      final mightySuit = _state.mighty.suit;
+      if (!card.isMightyWith(_state.giruda) && card.suit != _state.giruda &&
+          ((card.rank == Rank.ace && card.suit != mightySuit) ||
+           (card.rank == Rank.king && card.suit == mightySuit))) {
+        return LeadIntent.firstTrickTopAttack;
+      }
+      return LeadIntent.firstTrickWaste;
+    }
     return LeadIntent.waste;
   }
 

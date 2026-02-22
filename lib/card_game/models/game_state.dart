@@ -151,6 +151,7 @@ enum LeadIntent {
   highCardAttack,         // 추가 점수 공격
   topNonGirudaLead,       // 비기루다 최상위 선공
   defenseTopCard,         // 수비 최상위 카드 방어
+  firstTrickTopAttack,    // 초구 비기루다 최상위 선공
   firstTrickMightyBait,   // 초구 마이티 프렌드 유도
   firstTrickFriendBait,   // 초구 프렌드 유도
   firstTrickWaste,        // 초구 물패
