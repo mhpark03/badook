@@ -5278,9 +5278,9 @@ class _GameScreenState extends State<GameScreen> {
 
     return Center(
       child: Container(
-        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
-        padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.all(16),
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.95),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         decoration: BoxDecoration(
           color: isAuto ? const Color(0xFF1A1A2E) : Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -5297,7 +5297,7 @@ class _GameScreenState extends State<GameScreen> {
                       Text(
                         state.declarerWon ? l10n.declarerTeamWins : l10n.defenderTeamWins,
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 26,
                           fontWeight: FontWeight.bold,
                           color: state.declarerWon ? Colors.greenAccent : Colors.red[300],
                         ),
@@ -5330,13 +5330,13 @@ class _GameScreenState extends State<GameScreen> {
                 state.declarerTeamPoints == 20
                     ? '${l10n.declarerTeam}: ${l10n.fullPoints}'
                     : l10n.declarerTeamPoints(state.declarerTeamPoints),
-                style: TextStyle(fontSize: 18, color: isAuto ? Colors.white : Colors.black),
+                style: TextStyle(fontSize: 20, color: isAuto ? Colors.white : Colors.black),
               ),
               Text(
                 l10n.targetPoints(state.currentBid?.tricks ?? 0),
-                style: TextStyle(fontSize: 16, color: isAuto ? Colors.grey[400] : Colors.grey),
+                style: TextStyle(fontSize: 17, color: isAuto ? Colors.grey[400] : Colors.grey),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               _buildTrickDetailsTable(state, l10n: l10n, darkTheme: isAuto),
               const SizedBox(height: 20),
               Row(
@@ -5416,7 +5416,7 @@ class _GameScreenState extends State<GameScreen> {
     if (tricks.isEmpty) return const SizedBox.shrink();
 
     final giruda = state.giruda;
-    const fontSize = 12.0;
+    const fontSize = 13.0;
 
     // 플레이어 이름 + 역할
     final playerNames = <int, String>{};
@@ -5501,7 +5501,7 @@ class _GameScreenState extends State<GameScreen> {
       children: [
         Text(
           l10n.trickDetails,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: darkTheme ? Colors.white : Colors.black),
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: darkTheme ? Colors.white : Colors.black),
         ),
         const SizedBox(height: 4),
         // 범례
