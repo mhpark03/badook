@@ -492,20 +492,10 @@ class GameController extends ChangeNotifier {
 
       _showFriendSummary = false;
       _friendExplanation = null;
-      notifyListeners();
 
-      // 배팅 결과 요약 화면 표시
-      _pendingDeclaration = declaration;
-      _showBidSummary = true;
-      _lastBidExplanation = null;
+      _state.declareFriend(declaration);
       notifyListeners();
-
-      // auto-play: 3초 후 자동 진행
-      await Future.delayed(const Duration(seconds: 3));
-      if (_isAutoPlayPaused) return;
-      if (_showBidSummary && _pendingDeclaration != null) {
-        confirmBidSummary();
-      }
+      _processAIPlayIfNeeded();
     } else {
       _state.declareFriend(declaration);
       _isProcessing = false;
@@ -518,9 +508,9 @@ class GameController extends ChangeNotifier {
   void humanDeclareFriend(FriendDeclaration declaration) {
     if (_state.declarerId != 0) return;
 
-    _pendingDeclaration = declaration;
-    _showBidSummary = true;
+    _state.declareFriend(declaration);
     notifyListeners();
+    _processAIPlayIfNeeded();
   }
 
   void _processAIPlayIfNeeded() async {
@@ -814,6 +804,7 @@ class GameController extends ChangeNotifier {
       _processAIFriendDeclaration();
       return;
     }
+    // 프렌드 요약 화면에서 일시정지 후 재개 시 바로 게임 시작
     if (_showFriendSummary && _friendExplanation != null) {
       _showFriendSummary = false;
       final declaration = _friendExplanation!.declaration;
@@ -821,9 +812,6 @@ class GameController extends ChangeNotifier {
       _state.declareFriend(declaration);
       notifyListeners();
       _processAIPlayIfNeeded();
-      return;
-    }
-    if (_showBidSummary && _pendingDeclaration != null) {
       return;
     }
     if (_state.phase == GamePhase.waiting && _state.allPassed) {
