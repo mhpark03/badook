@@ -752,6 +752,7 @@
   "strategyMightyTiming": "Use Mighty on 9th trick → secure 10th trick lead",
   "strategyVoidTrumpCut": "{suits} void → trump cut on opponent's lead",
   "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
+  "trickEventJokerCallDeclared": "Joker Call",
   "trickEventGirudaKExhaustSuccess": "K exhausted",
   "trickEventGirudaKQExhaustSuccess": "K/Q both exhausted!",
   "trickEventDefenseJokerRunBlock": "Defense Joker blocks run",

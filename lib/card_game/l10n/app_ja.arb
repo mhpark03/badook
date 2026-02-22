@@ -751,6 +751,7 @@
   "strategyMightyTiming": "9番目トリックでマイティ使用 → 10番目リード確保",
   "strategyVoidTrumpCut": "{suits}ボイド → 相手リード時に切り札カットでトリック回収",
   "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
+  "trickEventJokerCallDeclared": "ジョーカーコール宣言",
   "trickEventGirudaKExhaustSuccess": "K消耗成功",
   "trickEventGirudaKQExhaustSuccess": "K/Q同時消耗 大成功",
   "trickEventDefenseJokerRunBlock": "守備ジョーカーでラン阻止",

@@ -751,6 +751,7 @@
   "strategyMightyTiming": "第9墩用至尊 → 确保第10墩出牌权",
   "strategyVoidTrumpCut": "{suits}缺门 → 对手出牌时用将牌切入赢墩",
   "@strategyVoidTrumpCut": { "placeholders": { "suits": { "type": "String" } } },
+  "trickEventJokerCallDeclared": "小丑召唤宣言",
   "trickEventGirudaKExhaustSuccess": "K消耗成功",
   "trickEventGirudaKQExhaustSuccess": "K/Q同时消耗 大成功",
   "trickEventDefenseJokerRunBlock": "守方Joker阻止全胜",

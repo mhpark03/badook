@@ -132,6 +132,38 @@ class FriendDeclaration {
   );
 }
 
+enum LeadIntent {
+  // 조커 선공
+  jokerAfterFriend,       // 프렌드 합류 후 조커 사용
+  jokerLeadSuit,          // 조커 선공 (무늬 선언)
+  jokerGirudaExhaust,     // 조커 기루다 소진 유도
+  // 마이티 선공
+  mightyLead,             // 마이티 선공
+  mightyTrick9,           // 트릭9 마이티 (적 조커 잡기)
+  // 기루다 선공
+  topGirudaLead,          // 기루다 최상위 선공
+  midGirudaMightyBait,    // 마이티 소진 유도 (기루다 중간)
+  midGirudaLead,          // 기루다 중간 선공
+  midGirudaPassLead,      // 기루다 중간으로 선 넘김
+  soleGirudaLeadMaintain, // 유일 기루다 선 유지
+  lowGirudaFriendPass,    // 낮은 기루다로 프렌드 선 넘김
+  // 비기루다 선공
+  highCardAttack,         // 추가 점수 공격
+  topNonGirudaLead,       // 비기루다 최상위 선공
+  defenseTopCard,         // 수비 최상위 카드 방어
+  firstTrickMightyBait,   // 초구 마이티 프렌드 유도
+  firstTrickFriendBait,   // 초구 프렌드 유도
+  firstTrickWaste,        // 초구 물패
+  declarerFriendLure,     // 주공 프렌드 유도
+  defenseMightyExhaust,   // 수비 마이티 소진 유도
+  friendVoidPass,         // 프렌드 void 무늬 선공
+  friendTopCardLead,      // 프렌드 최상위 카드
+  defenseJokerLead,       // 수비 조커 선공
+  defenseHighCard,        // 수비 최상위 비기루다
+  defenseLowCard,         // 수비 낮은 카드
+  waste,                  // 물패
+}
+
 class Trick {
   final int trickNumber;
   final List<PlayingCard> cards;
@@ -142,6 +174,7 @@ class Trick {
   JokerCallType jokerCall;
   Suit? jokerCallSuit;  // 조커 콜로 지정된 무늬
   Suit? jokerLeadSuit;  // 조커 선공 시 지정된 무늬
+  LeadIntent? leadIntent;  // 선공 의도 (nullable: 저장 게임 호환)
 
   Trick({
     required this.trickNumber,
@@ -153,6 +186,7 @@ class Trick {
     this.jokerCall = JokerCallType.none,
     this.jokerCallSuit,
     this.jokerLeadSuit,
+    this.leadIntent,
   })  : cards = cards ?? [],
         playerOrder = playerOrder ?? [];
 
@@ -184,6 +218,7 @@ class Trick {
     'jokerCall': jokerCall.index,
     'jokerCallSuit': jokerCallSuit?.index,
     'jokerLeadSuit': jokerLeadSuit?.index,
+    if (leadIntent != null) 'leadIntent': leadIntent!.index,
   };
 
   factory Trick.fromJson(Map<String, dynamic> json) => Trick(
@@ -196,6 +231,9 @@ class Trick {
     jokerCall: JokerCallType.values[json['jokerCall']],
     jokerCallSuit: json['jokerCallSuit'] != null ? Suit.values[json['jokerCallSuit']] : null,
     jokerLeadSuit: json['jokerLeadSuit'] != null ? Suit.values[json['jokerLeadSuit']] : null,
+    leadIntent: json['leadIntent'] != null
+        ? LeadIntent.values[json['leadIntent']]
+        : null,
   );
 }
 
