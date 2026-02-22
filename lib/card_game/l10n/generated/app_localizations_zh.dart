@@ -2272,4 +2272,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String estimatedMinWins(int count) {
     return '→ 预计$count胜以上';
   }
+
+  @override
+  String get cardEventMighty => '王牌!';
+
+  @override
+  String get cardEventJoker => '小丑!';
+
+  @override
+  String get cardEventCut => '切牌!';
+
+  @override
+  String get cardEventFriend => '盟友!';
 }

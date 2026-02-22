@@ -2279,4 +2279,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String estimatedMinWins(int count) {
     return '→ $count勝以上予想';
   }
+
+  @override
+  String get cardEventMighty => 'マイティ!';
+
+  @override
+  String get cardEventJoker => 'ジョーカー!';
+
+  @override
+  String get cardEventCut => 'カット!';
+
+  @override
+  String get cardEventFriend => 'フレンド!';
 }

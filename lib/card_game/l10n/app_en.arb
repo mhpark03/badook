@@ -833,5 +833,9 @@
   "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } },
   "stepEndgameScoring": "Maximize point collection through endgame play",
   "estimatedMinWins": "→ {count}+ wins expected",
-  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } }
+  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } },
+  "cardEventMighty": "Mighty!",
+  "cardEventJoker": "Joker!",
+  "cardEventCut": "Cut!",
+  "cardEventFriend": "Friend!"
 }

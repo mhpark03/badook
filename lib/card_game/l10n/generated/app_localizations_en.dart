@@ -2322,4 +2322,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String estimatedMinWins(int count) {
     return '→ $count+ wins expected';
   }
+
+  @override
+  String get cardEventMighty => 'Mighty!';
+
+  @override
+  String get cardEventJoker => 'Joker!';
+
+  @override
+  String get cardEventCut => 'Cut!';
+
+  @override
+  String get cardEventFriend => 'Friend!';
 }

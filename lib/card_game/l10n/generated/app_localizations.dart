@@ -4039,6 +4039,30 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'→ {count}승 이상 예상'**
   String estimatedMinWins(int count);
+
+  /// No description provided for @cardEventMighty.
+  ///
+  /// In ko, this message translates to:
+  /// **'마이티!'**
+  String get cardEventMighty;
+
+  /// No description provided for @cardEventJoker.
+  ///
+  /// In ko, this message translates to:
+  /// **'조커!'**
+  String get cardEventJoker;
+
+  /// No description provided for @cardEventCut.
+  ///
+  /// In ko, this message translates to:
+  /// **'컷!'**
+  String get cardEventCut;
+
+  /// No description provided for @cardEventFriend.
+  ///
+  /// In ko, this message translates to:
+  /// **'프렌드!'**
+  String get cardEventFriend;
 }
 
 class _AppLocalizationsDelegate

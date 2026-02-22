@@ -832,5 +832,9 @@
   "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } },
   "stepEndgameScoring": "通过间（カン）尽量获得更多分数",
   "estimatedMinWins": "→ 预计{count}胜以上",
-  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } }
+  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } },
+  "cardEventMighty": "王牌!",
+  "cardEventJoker": "小丑!",
+  "cardEventCut": "切牌!",
+  "cardEventFriend": "盟友!"
 }

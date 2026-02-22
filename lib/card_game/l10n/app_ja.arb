@@ -832,5 +832,9 @@
   "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } },
   "stepEndgameScoring": "間（カン）を通じて最大限の得点獲得を試みる",
   "estimatedMinWins": "→ {count}勝以上予想",
-  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } }
+  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } },
+  "cardEventMighty": "マイティ!",
+  "cardEventJoker": "ジョーカー!",
+  "cardEventCut": "カット!",
+  "cardEventFriend": "フレンド!"
 }

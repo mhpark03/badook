@@ -1393,6 +1393,8 @@ class _GameScreenState extends State<GameScreen> {
                               height: 75,
                             ),
                           ),
+                          if (_buildCardEventBadge(trick.cards[i], i, trick, controller.state) != null)
+                            _buildCardEventBadge(trick.cards[i], i, trick, controller.state)!,
                         ],
                       ),
                   ],
@@ -2356,6 +2358,8 @@ class _GameScreenState extends State<GameScreen> {
                         width: cardWidth,
                         height: cardHeight,
                       ),
+                      if (_buildCardEventBadge(trick.cards[i], i, trick, state) != null)
+                        _buildCardEventBadge(trick.cards[i], i, trick, state)!,
                     ],
                   ),
               ],
@@ -2363,6 +2367,50 @@ class _GameScreenState extends State<GameScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget? _buildCardEventBadge(PlayingCard card, int cardIndex, Trick trick, GameState state) {
+    final l10n = getL10n(context);
+    final giruda = state.giruda;
+    final mighty = state.mighty;
+
+    // 마이티 (선공/후속 모두)
+    if (!card.isJoker && card.suit == mighty.suit && card.rank == mighty.rank) {
+      return _eventBadge(l10n.cardEventMighty, Colors.amber);
+    }
+    // 조커 (비선공만 - 선공은 jokerLeadSuit 뱃지 있음)
+    if (card.isJoker && cardIndex > 0) {
+      return _eventBadge(l10n.cardEventJoker, Colors.purple);
+    }
+    // 기루다 컷 (비선공, 비조커, 기루다 카드, 리드가 비기루다)
+    if (cardIndex > 0 && !card.isJoker && giruda != null && card.suit == giruda && trick.leadSuit != giruda) {
+      return _eventBadge(l10n.cardEventCut, Colors.red);
+    }
+    // 프렌드 공개
+    if (state.friendRevealed && state.friendId != null && state.friendId != state.declarerId) {
+      final friendDecl = state.friendDeclaration?.card;
+      if (friendDecl != null) {
+        final isMatch = (friendDecl.isJoker && card.isJoker) ||
+            (!friendDecl.isJoker && !card.isJoker && friendDecl.suit == card.suit && friendDecl.rank == card.rank);
+        final playerId = trick.playerOrder[cardIndex];
+        if (isMatch && playerId == state.friendId) {
+          return _eventBadge(l10n.cardEventFriend, Colors.blue);
+        }
+      }
+    }
+    return null;
+  }
+
+  Widget _eventBadge(String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+      margin: const EdgeInsets.only(top: 2),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
     );
   }
 

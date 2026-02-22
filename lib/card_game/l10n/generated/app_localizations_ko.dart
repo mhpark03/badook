@@ -2287,4 +2287,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String estimatedMinWins(int count) {
     return '→ $count승 이상 예상';
   }
+
+  @override
+  String get cardEventMighty => '마이티!';
+
+  @override
+  String get cardEventJoker => '조커!';
+
+  @override
+  String get cardEventCut => '컷!';
+
+  @override
+  String get cardEventFriend => '프렌드!';
 }

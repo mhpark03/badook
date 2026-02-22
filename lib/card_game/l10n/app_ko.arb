@@ -924,5 +924,9 @@
   "@stepVoidCut": { "placeholders": { "suits": { "type": "String" } } },
   "stepEndgameScoring": "간(間)을 통해 최대한 많은 점수 획득 시도",
   "estimatedMinWins": "→ {count}승 이상 예상",
-  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } }
+  "@estimatedMinWins": { "placeholders": { "count": { "type": "int" } } },
+  "cardEventMighty": "마이티!",
+  "cardEventJoker": "조커!",
+  "cardEventCut": "컷!",
+  "cardEventFriend": "프렌드!"
 }
