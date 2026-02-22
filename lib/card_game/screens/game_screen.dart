@@ -5267,9 +5267,12 @@ class _GameScreenState extends State<GameScreen> {
     if (strategyPoints.isEmpty) return const SizedBox.shrink();
     final giruda = controller.state.giruda;
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final sf = (screenWidth / 400).clamp(1.0, 2.5);
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all((10 * sf).roundToDouble()),
       decoration: BoxDecoration(
         color: Colors.black26,
         borderRadius: BorderRadius.circular(8),
@@ -5280,26 +5283,26 @@ class _GameScreenState extends State<GameScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.military_tech, color: Colors.greenAccent, size: 18),
-              const SizedBox(width: 6),
+              Icon(Icons.military_tech, color: Colors.greenAccent, size: 18 * sf),
+              SizedBox(width: 6 * sf),
               Text(
                 '${l10n.scoreStrategy} (${giruda != null ? _suitSymbolForCard(giruda) : "NT"})',
-                style: const TextStyle(color: Colors.greenAccent, fontSize: 13, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.greenAccent, fontSize: 13 * sf, fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6 * sf),
           for (int i = 0; i < strategyPoints.length; i++)
             Padding(
-              padding: const EdgeInsets.only(bottom: 3),
+              padding: EdgeInsets.only(bottom: 3 * sf),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${String.fromCharCode(0x2460 + i)} ', style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                  Text('${String.fromCharCode(0x2460 + i)} ', style: TextStyle(color: Colors.white54, fontSize: 12 * sf)),
                   Expanded(
                     child: _buildSuitCardText(
                       _getStrategyText(strategyPoints[i], l10n),
-                      const TextStyle(color: Colors.white70, fontSize: 12),
+                      TextStyle(color: Colors.white70, fontSize: 12 * sf),
                     ),
                   ),
                 ],
