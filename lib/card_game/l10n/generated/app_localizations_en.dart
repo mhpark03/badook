@@ -1583,6 +1583,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventGameDefeat => 'Attack defeat';
 
   @override
+  String trickEventSummaryRun(int points, int bid) {
+    return 'Review: Sweep run $points/${bid}pts, dominant win';
+  }
+
+  @override
+  String trickEventSummaryBackRun(int bid) {
+    return 'Review: Swept back-run 0/${bid}pts, shutout';
+  }
+
+  @override
+  String trickEventSummaryBigWin(int wins, int losses, int points, int bid) {
+    return 'Review: ${wins}W${losses}L $points/${bid}pts, dominant win';
+  }
+
+  @override
+  String trickEventSummaryWin(int wins, int losses, int points, int bid) {
+    return 'Review: ${wins}W${losses}L $points/${bid}pts, victory';
+  }
+
+  @override
+  String trickEventSummaryNarrowLoss(
+    int wins,
+    int losses,
+    int points,
+    int bid,
+  ) {
+    return 'Review: ${wins}W${losses}L $points/${bid}pts, narrow loss';
+  }
+
+  @override
+  String trickEventSummaryBigLoss(int wins, int losses, int points, int bid) {
+    return 'Review: ${wins}W${losses}L $points/${bid}pts, big loss';
+  }
+
+  @override
   String trickEventLastCardDefenseWin(int count) {
     return 'Defense higher card ${count}pt guard';
   }
@@ -1626,6 +1661,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventMidGirudaPassLead => 'Mid trump to pass lead';
 
   @override
+  String trickEventGirudaDepletionFail(String card) {
+    return 'Failed to flush $card';
+  }
+
+  @override
   String get trickEventDefenderGirudaWin => 'Defender trump win';
 
   @override
@@ -1642,6 +1682,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventDefenseTopCardDefend => 'Defense top card point guard';
 
   @override
+  String get trickEventDefenseTopDeclarerCutDefense =>
+      'Defense top lead → Declarer trump cut → Defense higher trump guard';
+
+  @override
+  String get trickEventDefenseTopDeclarerCutTeamDefense =>
+      'Defense top lead → Declarer trump cut → Defense team trump guard';
+
+  @override
   String get trickEventDefenseLeadAttackCut =>
       'Defense non-trump top lead → Attack trump cut reclaim';
 
@@ -1650,8 +1698,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Attack non-trump top lead → Defense trump cut';
 
   @override
+  String get trickEventFirstTrickMightyBait =>
+      'No lead in 1st trick / Mighty friend bait';
+
+  @override
   String get trickEventFirstTrickFriendBait =>
-      'No lead in 1st trick / Friend bait';
+      'No lead in 1st trick / Suit depletion → Lucky friend win';
 
   @override
   String get trickEventFirstTrickWaste => 'No lead in 1st trick / Waste';
@@ -1682,6 +1734,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get trickEventFriendWasteDeclarerCutDefenseOvercut =>
+      'Friend waste → Declarer trump cut → Defense higher trump reversal';
+
+  @override
+  String trickEventFriendWasteDeclarerCutDefenseOvercutPoints(int count) {
+    return 'Friend waste → Declarer trump cut → Defense higher trump reversal, ${count}pts defended';
+  }
+
+  @override
   String get trickEventFriendLeadDefenseBeatDeclarerCut =>
       'Friend lead → Defense beats → Declarer trump cut reversal';
 
@@ -1700,6 +1761,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventDefenseGirudaCut => 'Defense trump cut';
 
   @override
+  String get trickEventAttackNoGirudaDefenseHas =>
+      'Attack out of trump / Defense still has trump';
+
+  @override
   String get trickEventNonGirudaExhaust => 'Non-trump exhausted';
 
   @override
@@ -1707,6 +1772,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventGirudaKQExhaustSuccess => 'K/Q both exhausted!';
+
+  @override
+  String get trickEventDefenseJokerRunBlock => 'Defense Joker blocks run';
 
   @override
   String get trickEventDefenseJokerCounterattack =>

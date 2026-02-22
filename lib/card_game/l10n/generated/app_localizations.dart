@@ -2892,6 +2892,42 @@ abstract class AppLocalizations {
   /// **'공격 패배 확정'**
   String get trickEventGameDefeat;
 
+  /// No description provided for @trickEventSummaryRun.
+  ///
+  /// In ko, this message translates to:
+  /// **'총평: 전승 런 {points}/{bid}점 대승'**
+  String trickEventSummaryRun(int points, int bid);
+
+  /// No description provided for @trickEventSummaryBackRun.
+  ///
+  /// In ko, this message translates to:
+  /// **'총평: 전패 백런 0/{bid}점 완패'**
+  String trickEventSummaryBackRun(int bid);
+
+  /// No description provided for @trickEventSummaryBigWin.
+  ///
+  /// In ko, this message translates to:
+  /// **'총평: {wins}승{losses}패 {points}/{bid}점 대승'**
+  String trickEventSummaryBigWin(int wins, int losses, int points, int bid);
+
+  /// No description provided for @trickEventSummaryWin.
+  ///
+  /// In ko, this message translates to:
+  /// **'총평: {wins}승{losses}패 {points}/{bid}점 승리'**
+  String trickEventSummaryWin(int wins, int losses, int points, int bid);
+
+  /// No description provided for @trickEventSummaryNarrowLoss.
+  ///
+  /// In ko, this message translates to:
+  /// **'총평: {wins}승{losses}패 {points}/{bid}점 석패'**
+  String trickEventSummaryNarrowLoss(int wins, int losses, int points, int bid);
+
+  /// No description provided for @trickEventSummaryBigLoss.
+  ///
+  /// In ko, this message translates to:
+  /// **'총평: {wins}승{losses}패 {points}/{bid}점 대패'**
+  String trickEventSummaryBigLoss(int wins, int losses, int points, int bid);
+
   /// No description provided for @trickEventLastCardDefenseWin.
   ///
   /// In ko, this message translates to:
@@ -2958,6 +2994,12 @@ abstract class AppLocalizations {
   /// **'기루다 중간으로 선 넘김'**
   String get trickEventMidGirudaPassLead;
 
+  /// No description provided for @trickEventGirudaDepletionFail.
+  ///
+  /// In ko, this message translates to:
+  /// **'{card} 소진 실패'**
+  String trickEventGirudaDepletionFail(String card);
+
   /// No description provided for @trickEventDefenderGirudaWin.
   ///
   /// In ko, this message translates to:
@@ -2988,6 +3030,18 @@ abstract class AppLocalizations {
   /// **'수비 최상위 카드 점수 방어'**
   String get trickEventDefenseTopCardDefend;
 
+  /// No description provided for @trickEventDefenseTopDeclarerCutDefense.
+  ///
+  /// In ko, this message translates to:
+  /// **'수비 최상위 선공 → 주공 기루다 컷 → 수비 상위 기루다 방어'**
+  String get trickEventDefenseTopDeclarerCutDefense;
+
+  /// No description provided for @trickEventDefenseTopDeclarerCutTeamDefense.
+  ///
+  /// In ko, this message translates to:
+  /// **'수비 최상위 선공 → 주공 기루다 컷 → 수비 팀워크 기루다 방어'**
+  String get trickEventDefenseTopDeclarerCutTeamDefense;
+
   /// No description provided for @trickEventDefenseLeadAttackCut.
   ///
   /// In ko, this message translates to:
@@ -3000,10 +3054,16 @@ abstract class AppLocalizations {
   /// **'공격 비기루다 최상위 선공 → 수비 기루다 컷'**
   String get trickEventAttackLeadDefenseCut;
 
+  /// No description provided for @trickEventFirstTrickMightyBait.
+  ///
+  /// In ko, this message translates to:
+  /// **'초구 부재 / 물패로 마이티 프렌드 유도'**
+  String get trickEventFirstTrickMightyBait;
+
   /// No description provided for @trickEventFirstTrickFriendBait.
   ///
   /// In ko, this message translates to:
-  /// **'초구 부재 / 물패로 프렌드 유도'**
+  /// **'초구 부재 / 물패 소진 → 행운의 프렌드 승리'**
   String get trickEventFirstTrickFriendBait;
 
   /// No description provided for @trickEventFirstTrickWaste.
@@ -3048,6 +3108,18 @@ abstract class AppLocalizations {
   /// **'물패 ({topCard} 최상위) → 주공 선 탈환'**
   String trickEventWasteDeclarerReclaimWithTop(String topCard);
 
+  /// No description provided for @trickEventFriendWasteDeclarerCutDefenseOvercut.
+  ///
+  /// In ko, this message translates to:
+  /// **'프렌드 물패 → 주공 기루다 컷 → 수비 기루다 재역전'**
+  String get trickEventFriendWasteDeclarerCutDefenseOvercut;
+
+  /// No description provided for @trickEventFriendWasteDeclarerCutDefenseOvercutPoints.
+  ///
+  /// In ko, this message translates to:
+  /// **'프렌드 물패 → 주공 기루다 컷 → 수비 기루다 재역전 {count}점 방어'**
+  String trickEventFriendWasteDeclarerCutDefenseOvercutPoints(int count);
+
   /// No description provided for @trickEventFriendLeadDefenseBeatDeclarerCut.
   ///
   /// In ko, this message translates to:
@@ -3078,6 +3150,12 @@ abstract class AppLocalizations {
   /// **'수비 기루다 컷'**
   String get trickEventDefenseGirudaCut;
 
+  /// No description provided for @trickEventAttackNoGirudaDefenseHas.
+  ///
+  /// In ko, this message translates to:
+  /// **'공격팀 기루다 소진 / 수비만 기루다 보유'**
+  String get trickEventAttackNoGirudaDefenseHas;
+
   /// No description provided for @trickEventNonGirudaExhaust.
   ///
   /// In ko, this message translates to:
@@ -3095,6 +3173,12 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'K/Q 동시 소진 대성공'**
   String get trickEventGirudaKQExhaustSuccess;
+
+  /// No description provided for @trickEventDefenseJokerRunBlock.
+  ///
+  /// In ko, this message translates to:
+  /// **'수비 조커 런 저지'**
+  String get trickEventDefenseJokerRunBlock;
 
   /// No description provided for @trickEventDefenseJokerCounterattack.
   ///

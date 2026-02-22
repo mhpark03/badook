@@ -1556,6 +1556,41 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trickEventGameDefeat => '进攻败北确定';
 
   @override
+  String trickEventSummaryRun(int points, int bid) {
+    return '总评: 全胜Run $points/$bid分 大胜';
+  }
+
+  @override
+  String trickEventSummaryBackRun(int bid) {
+    return '总评: 全败BackRun 0/$bid分 完败';
+  }
+
+  @override
+  String trickEventSummaryBigWin(int wins, int losses, int points, int bid) {
+    return '总评: $wins胜$losses败 $points/$bid分 大胜';
+  }
+
+  @override
+  String trickEventSummaryWin(int wins, int losses, int points, int bid) {
+    return '总评: $wins胜$losses败 $points/$bid分 胜利';
+  }
+
+  @override
+  String trickEventSummaryNarrowLoss(
+    int wins,
+    int losses,
+    int points,
+    int bid,
+  ) {
+    return '总评: $wins胜$losses败 $points/$bid分 惜败';
+  }
+
+  @override
+  String trickEventSummaryBigLoss(int wins, int losses, int points, int bid) {
+    return '总评: $wins胜$losses败 $points/$bid分 大败';
+  }
+
+  @override
   String trickEventLastCardDefenseWin(int count) {
     return '守方高牌$count分防御';
   }
@@ -1599,6 +1634,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trickEventMidGirudaPassLead => '中位将牌让先';
 
   @override
+  String trickEventGirudaDepletionFail(String card) {
+    return '$card 清除失败';
+  }
+
+  @override
   String get trickEventDefenderGirudaWin => '守方将牌胜';
 
   @override
@@ -1614,13 +1654,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trickEventDefenseTopCardDefend => '守方最高牌得分防御';
 
   @override
+  String get trickEventDefenseTopDeclarerCutDefense =>
+      '守方最高首攻 → 庄家将牌切 → 守方高将牌防御';
+
+  @override
+  String get trickEventDefenseTopDeclarerCutTeamDefense =>
+      '守方最高首攻 → 庄家将牌切 → 守方团队将牌防御';
+
+  @override
   String get trickEventDefenseLeadAttackCut => '守方非将牌最高出牌 → 进攻将牌切入夺先';
 
   @override
   String get trickEventAttackLeadDefenseCut => '进攻非将牌最高出牌 → 守方将牌切入';
 
   @override
-  String get trickEventFirstTrickFriendBait => '首墩缺牌 / 诱导Friend';
+  String get trickEventFirstTrickMightyBait => '首墩缺牌 / Mighty搭档诱导';
+
+  @override
+  String get trickEventFirstTrickFriendBait => '首墩缺牌 / 花色消耗 → 幸运的搭档胜利';
 
   @override
   String get trickEventFirstTrickWaste => '首墩缺牌 / 弃牌';
@@ -1650,6 +1701,15 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get trickEventFriendWasteDeclarerCutDefenseOvercut =>
+      '朋友垫牌 → 庄家将牌切 → 守方高将牌逆转';
+
+  @override
+  String trickEventFriendWasteDeclarerCutDefenseOvercutPoints(int count) {
+    return '朋友垫牌 → 庄家将牌切 → 守方高将牌逆转 防御$count分';
+  }
+
+  @override
   String get trickEventFriendLeadDefenseBeatDeclarerCut =>
       '朋友先攻 → 守方逆转 → 庄家将牌再逆转';
 
@@ -1668,6 +1728,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trickEventDefenseGirudaCut => '守方将牌切入';
 
   @override
+  String get trickEventAttackNoGirudaDefenseHas => '进攻方将牌耗尽 / 仅守方持有将牌';
+
+  @override
   String get trickEventNonGirudaExhaust => '非将牌消耗';
 
   @override
@@ -1675,6 +1738,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trickEventGirudaKQExhaustSuccess => 'K/Q同时消耗 大成功';
+
+  @override
+  String get trickEventDefenseJokerRunBlock => '守方Joker阻止全胜';
 
   @override
   String get trickEventDefenseJokerCounterattack => 'Mighty消失 → 守方小丑反击';

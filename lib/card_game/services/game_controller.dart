@@ -362,8 +362,20 @@ class GameController extends ChangeNotifier {
     if (_isAutoPlayMode) {
       final reasons = _generateDiscardReasons(discardCards, newGiruda, declarer);
 
-      // 교체 전 예상 점수 (배팅 시 10장 기준)
+      // 교체 전 예상 점수 (배팅 시 10장 기준, 원래 기루다 무늬의 점수)
       final beforeEval = _aiPlayer.evaluateForBidding(declarer.hand);
+      // 원래 기루다의 점수를 suitComparison에서 추출 (bestGiruda와 다를 수 있음)
+      int beforeMin = beforeEval.minPoints;
+      int beforeMax = beforeEval.maxPoints;
+      int beforeOptimal = beforeEval.optimalPoints;
+      if (originalGiruda != null) {
+        final origEntry = beforeEval.suitComparison.where((e) => e.$1 == originalGiruda);
+        if (origEntry.isNotEmpty) {
+          beforeMin = origEntry.first.$2;
+          beforeMax = origEntry.first.$3;
+          beforeOptimal = origEntry.first.$4;
+        }
+      }
 
       // 기루다별 예상 점수: 선택 기루다는 실제 finalHand, 나머지는 시뮬레이션
       final girudaComp = <(Suit?, int, int, int)>[];
@@ -387,9 +399,9 @@ class GameController extends ChangeNotifier {
         newGiruda: newGiruda,
         girudaChanged: girudaChanged,
         discardReasons: reasons,
-        beforeMinPoints: beforeEval.minPoints,
-        beforeMaxPoints: beforeEval.maxPoints,
-        beforeOptimalPoints: beforeEval.optimalPoints,
+        beforeMinPoints: beforeMin,
+        beforeMaxPoints: beforeMax,
+        beforeOptimalPoints: beforeOptimal,
         afterMinPoints: afterEntry.$2,
         afterMaxPoints: afterEntry.$3,
         afterOptimalPoints: afterEntry.$4,
