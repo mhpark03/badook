@@ -1889,6 +1889,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get trickEventSameTeamGirudaCut => '味方切り札カット（やむを得ず）';
+
+  @override
   String get trickEventDefenseGirudaCut => '守備切り札カット';
 
   @override
