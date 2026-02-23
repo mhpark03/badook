@@ -157,12 +157,14 @@ enum LeadIntent {
   firstTrickWaste,        // 초구 물패
   declarerFriendLure,     // 주공 프렌드 유도
   defenseMightyExhaust,   // 수비 마이티 소진 유도
+  defenseMightySuitBait,  // 수비 마이티 무늬 선공 (마이티 유도)
   friendVoidPass,         // 프렌드 void 무늬 선공
   friendTopCardLead,      // 프렌드 최상위 카드
   defenseJokerLead,       // 수비 조커 선공
   defenseHighCard,        // 수비 최상위 비기루다
   defenseLowCard,         // 수비 낮은 카드
   waste,                  // 물패
+  jokerCallLead,          // 조커콜 선공
 }
 
 class Trick {

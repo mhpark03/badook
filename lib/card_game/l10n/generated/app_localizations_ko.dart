@@ -1884,7 +1884,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trickEventAttackGirudaCut => '공격 기루다 컷';
 
   @override
+  String trickEventAttackGirudaCutCount(int count) {
+    return '공격 기루다 컷 $count회';
+  }
+
+  @override
   String get trickEventDefenseGirudaCut => '수비 기루다 컷';
+
+  @override
+  String trickEventDefenseGirudaCutCount(int count) {
+    return '수비 기루다 컷 $count회';
+  }
 
   @override
   String get trickEventAttackNoGirudaDefenseHas => '공격팀 기루다 소진 / 수비만 기루다 보유';
@@ -1894,6 +1904,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trickEventJokerCallDeclared => '조커콜 선언';
+
+  @override
+  String get trickEventJokerCallAllyJoker => '아군 조커 헌납';
+
+  @override
+  String get trickEventJokerCallEnemyJoker => '상대 조커 소진';
 
   @override
   String get trickEventGirudaKExhaustSuccess => 'K 소진 성공';
@@ -1909,6 +1925,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trickEventDefenseMightyExhaust => '수비 마이티 소진 유도 성공';
+
+  @override
+  String get trickEventDefenseMightySuitBait => '마이티 무늬 선공 (마이티 유도)';
+
+  @override
+  String get trickEventDefenseMightySuitBaitSuccess => '마이티 무늬 선공 / 마이티 유도 성공';
 
   @override
   String trickEventDefenseMightyExhaustPoints(int count) {
@@ -1950,6 +1972,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trickMightyAppeared => '마이티 출현';
+
+  @override
+  String get trickJokerAppeared => '조커 출현';
 
   @override
   String get trickFriendJoined => '프렌드 합류';

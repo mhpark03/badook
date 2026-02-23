@@ -1913,7 +1913,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventAttackGirudaCut => 'Attack trump cut';
 
   @override
+  String trickEventAttackGirudaCutCount(int count) {
+    return 'Attack trump cut x$count';
+  }
+
+  @override
   String get trickEventDefenseGirudaCut => 'Defense trump cut';
+
+  @override
+  String trickEventDefenseGirudaCutCount(int count) {
+    return 'Defense trump cut x$count';
+  }
 
   @override
   String get trickEventAttackNoGirudaDefenseHas =>
@@ -1924,6 +1934,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventJokerCallDeclared => 'Joker Call';
+
+  @override
+  String get trickEventJokerCallAllyJoker => 'Ally Joker sacrificed';
+
+  @override
+  String get trickEventJokerCallEnemyJoker => 'Enemy Joker exhausted';
 
   @override
   String get trickEventGirudaKExhaustSuccess => 'K exhausted';
@@ -1940,6 +1956,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventDefenseMightyExhaust => 'Defense mighty exhaust success';
+
+  @override
+  String get trickEventDefenseMightySuitBait =>
+      'Mighty suit lead (mighty bait)';
+
+  @override
+  String get trickEventDefenseMightySuitBaitSuccess =>
+      'Mighty suit lead / mighty bait success';
 
   @override
   String trickEventDefenseMightyExhaustPoints(int count) {
@@ -1983,6 +2007,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickMightyAppeared => 'Mighty appeared';
+
+  @override
+  String get trickJokerAppeared => 'Joker appeared';
 
   @override
   String get trickFriendJoined => 'Friend joined';

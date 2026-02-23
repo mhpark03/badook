@@ -3714,6 +3714,20 @@ class AIPlayer {
       if (friendCard.isMightyWith(state.giruda)) {
         // 선을 유지할 카드가 없을 때만 마이티 무늬로 선공하여 프렌드 공개
         if (!canMaintainLead && !hasMighty && !hasJoker) {
+          // ★ 기루다만 남았을때 → 최상위부터 순서대로 (프렌드 유도 불필요)
+          // 비기루다 카드가 없으면 선택의 여지가 없으므로 최상위 기루다로 직접 승리 시도
+          final nonGirudaCards = playableCards.where((c) =>
+              !c.isJoker && !c.isMightyWith(state.giruda) && c.suit != state.giruda).toList();
+          if (nonGirudaCards.isEmpty && state.giruda != null) {
+            final girudaOnly = playableCards.where((c) =>
+                !c.isJoker && !c.isMightyWith(state.giruda) && c.suit == state.giruda).toList();
+            if (girudaOnly.isNotEmpty) {
+              girudaOnly.sort((a, b) => b.rankValue.compareTo(a.rankValue));
+              _lastLeadIntent = LeadIntent.topGirudaLead;
+              return girudaOnly.first;
+            }
+          }
+
           final opponentGirudaMF = _getRemainingGirudaCount(state, player);
           if (opponentGirudaMF > 0) {
             // 마이티 무늬 카드가 있는지 확인 (마이티 자체 제외)

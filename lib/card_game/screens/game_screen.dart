@@ -3638,7 +3638,8 @@ class _GameScreenState extends State<GameScreen> {
         parts.add(leadDesc);
         leadDescribed = true;
         if (trick.leadIntent == LeadIntent.defenseMightyExhaust ||
-            trick.leadIntent == LeadIntent.midGirudaMightyBait) {
+            trick.leadIntent == LeadIntent.midGirudaMightyBait ||
+            trick.leadIntent == LeadIntent.defenseMightySuitBait) {
           mightyExhaustDescribed = true;
         }
         // defenseTopCard가 마이티 소진 유도로 변환된 경우에도 중복 방지
@@ -4081,43 +4082,49 @@ class _GameScreenState extends State<GameScreen> {
     }
     } // end if (!leadDescribed)
 
-    // 조커콜 선언
-    if (trick.jokerCall == JokerCallType.jokerCall) {
+    // 조커콜 선언 (leadIntent로 리드 설명에 포함되지 않은 경우만)
+    if (trick.jokerCall == JokerCallType.jokerCall && trick.leadIntent != LeadIntent.jokerCallLead) {
       parts.add(l10n.trickEventJokerCallDeclared);
     }
 
-    // Outcome: 기루다 컷 (리드 설명에서 이미 기술된 경우 생략)
+    // Outcome: 기루다 컷 (리드 설명에서 이미 기술된 경우 생략) - 모든 컷 카운트
     if (!girudaCutDescribed && trick.leadSuit != giruda && giruda != null) {
-      final winIdx = trick.playerOrder.indexOf(trick.winnerId!);
-      if (winIdx >= 0 && winIdx < trick.cards.length) {
-        final winCard = trick.cards[winIdx];
-        if (isGiruda(winCard) && trick.winnerId != leadId) {
-          if (isAttack(trick.winnerId!)) {
-            parts.add(l10n.trickEventAttackGirudaCut);
+      int attackCuts = 0;
+      int defenseCuts = 0;
+      for (int i = 0; i < trick.cards.length && i < trick.playerOrder.length; i++) {
+        if (i == leadIdx) continue;
+        if (!trick.cards[i].isJoker && trick.cards[i].suit == giruda) {
+          if (isAttack(trick.playerOrder[i])) {
+            attackCuts++;
           } else {
-            parts.add(l10n.trickEventDefenseGirudaCut);
-            // 공격팀 기루다 소진 상태에서 수비만 기루다 보유 → 특이 상황
-            bool attackHasGirudaLeft = false;
-            for (final ft in state.tricks) {
-              if (ft.trickNumber <= trick.trickNumber) continue;
-              for (int i = 0; i < ft.cards.length && i < ft.playerOrder.length; i++) {
-                if (isAttack(ft.playerOrder[i]) && !ft.cards[i].isJoker && ft.cards[i].suit == giruda) {
-                  attackHasGirudaLeft = true;
-                }
-              }
+            defenseCuts++;
+          }
+        }
+      }
+      if (attackCuts > 0) {
+        parts.add(attackCuts > 1 ? l10n.trickEventAttackGirudaCutCount(attackCuts) : l10n.trickEventAttackGirudaCut);
+      }
+      if (defenseCuts > 0) {
+        parts.add(defenseCuts > 1 ? l10n.trickEventDefenseGirudaCutCount(defenseCuts) : l10n.trickEventDefenseGirudaCut);
+        // 공격팀 기루다 소진 상태에서 수비만 기루다 보유 → 특이 상황
+        bool attackHasGirudaLeft = false;
+        for (final ft in state.tricks) {
+          if (ft.trickNumber <= trick.trickNumber) continue;
+          for (int i = 0; i < ft.cards.length && i < ft.playerOrder.length; i++) {
+            if (isAttack(ft.playerOrder[i]) && !ft.cards[i].isJoker && ft.cards[i].suit == giruda) {
+              attackHasGirudaLeft = true;
             }
-            if (!attackHasGirudaLeft) {
-              // 이번 트릭에서도 공격팀이 기루다를 내지 않았는지 확인
-              bool attackPlayedGirudaHere = false;
-              for (int i = 0; i < trick.cards.length && i < trick.playerOrder.length; i++) {
-                if (isAttack(trick.playerOrder[i]) && !trick.cards[i].isJoker && trick.cards[i].suit == giruda) {
-                  attackPlayedGirudaHere = true;
-                }
-              }
-              if (!attackPlayedGirudaHere) {
-                parts.add(l10n.trickEventAttackNoGirudaDefenseHas);
-              }
+          }
+        }
+        if (!attackHasGirudaLeft) {
+          bool attackPlayedGirudaHere = false;
+          for (int i = 0; i < trick.cards.length && i < trick.playerOrder.length; i++) {
+            if (isAttack(trick.playerOrder[i]) && !trick.cards[i].isJoker && trick.cards[i].suit == giruda) {
+              attackPlayedGirudaHere = true;
             }
+          }
+          if (!attackPlayedGirudaHere) {
+            parts.add(l10n.trickEventAttackNoGirudaDefenseHas);
           }
         }
       }
@@ -4209,6 +4216,29 @@ class _GameScreenState extends State<GameScreen> {
             playedCards.contains('${mighty.suit!.index}-${mighty.rankValue}');
         if (mightyAlreadyPlayed) {
           parts.add(l10n.trickEventDefenseJokerCounterattack);
+        }
+      }
+    }
+
+    // Outcome: 조커 출현 (비선공 조커, 위에서 이미 기술되지 않은 경우)
+    // 조커콜(leadIntent로 기술됨)이나 수비 조커 승리가 아닌 경우의 조커 출현
+    {
+      bool jokerDescribedAbove = (trick.leadIntent == LeadIntent.jokerCallLead) ||
+          (trick.leadIntent == LeadIntent.jokerLeadSuit) ||
+          (trick.leadIntent == LeadIntent.jokerAfterFriend) ||
+          (trick.leadIntent == LeadIntent.jokerGirudaExhaust) ||
+          (trick.leadIntent == LeadIntent.defenseJokerLead);
+      if (!jokerDescribedAbove) {
+        for (int i = 0; i < trick.cards.length && i < trick.playerOrder.length; i++) {
+          if (i == leadIdx) continue;
+          if (trick.cards[i].isJoker) {
+            // 수비 조커 승리는 이미 위에서 처리됨 → 그 외 조커 출현만
+            final jokerWon = trick.winnerId == trick.playerOrder[i];
+            if (!jokerWon || isAttack(trick.playerOrder[i])) {
+              parts.add(l10n.trickJokerAppeared);
+            }
+            break;
+          }
         }
       }
     }
@@ -4444,6 +4474,15 @@ class _GameScreenState extends State<GameScreen> {
         return l10n.trickEventDeclarerFriendLure;
       case LeadIntent.defenseMightyExhaust:
         return l10n.trickEventDefenseMightyExhaust;
+      case LeadIntent.defenseMightySuitBait:
+        // 마이티 출현 여부에 따라 성공/시도 구분
+        final dmbLeadIdx = trick.playerOrder.indexOf(trick.leadPlayerId);
+        final dmbMightyAppeared = trick.cards.asMap().entries.any((e) =>
+            e.key != dmbLeadIdx && !e.value.isJoker &&
+            e.value.suit == state.mighty.suit && e.value.rank == state.mighty.rank);
+        return dmbMightyAppeared
+            ? l10n.trickEventDefenseMightySuitBaitSuccess
+            : l10n.trickEventDefenseMightySuitBait;
       case LeadIntent.friendVoidPass:
         final fvpAttackWon = trick.winnerId != null &&
             (trick.winnerId == state.declarerId || trick.winnerId == state.friendId);
@@ -4475,6 +4514,23 @@ class _GameScreenState extends State<GameScreen> {
         final wasteAttackWon = trick.winnerId != null &&
             (trick.winnerId == state.declarerId || trick.winnerId == state.friendId);
         return wasteAttackWon ? l10n.trickEventWaste : l10n.trickEventWasteAttackFailed;
+      case LeadIntent.jokerCallLead:
+        String jcDesc = l10n.trickEventJokerCallDeclared;
+        final jcLeadId = trick.leadPlayerId;
+        final jcLeadIsAttack = jcLeadId == state.declarerId || jcLeadId == state.friendId;
+        for (int i = 0; i < trick.cards.length && i < trick.playerOrder.length; i++) {
+          if (trick.cards[i].isJoker) {
+            final jokerId = trick.playerOrder[i];
+            final jokerIsAttack = jokerId == state.declarerId || jokerId == state.friendId;
+            if (jcLeadIsAttack == jokerIsAttack) {
+              jcDesc += ' → ${l10n.trickEventJokerCallAllyJoker}';
+            } else {
+              jcDesc += ' → ${l10n.trickEventJokerCallEnemyJoker}';
+            }
+            break;
+          }
+        }
+        return jcDesc;
     }
   }
 
