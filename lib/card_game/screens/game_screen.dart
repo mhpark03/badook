@@ -4124,10 +4124,17 @@ class _GameScreenState extends State<GameScreen> {
           }
         }
       }
-      if (attackCuts > 0) {
+      // 양 팀 모두 기루다 간 → 상위 기루다 역전/방어 설명
+      if (attackCuts > 0 && defenseCuts > 0) {
+        final attackWonThisTrick = trick.winnerId != null && isAttack(trick.winnerId!);
+        if (attackWonThisTrick) {
+          parts.add(l10n.trickEventDefenseCutAttackOvercut);
+        } else {
+          parts.add(l10n.trickEventAttackCutDefenseOvercut);
+        }
+      } else if (attackCuts > 0) {
         parts.add(attackCuts > 1 ? l10n.trickEventAttackGirudaCutCount(attackCuts) : l10n.trickEventAttackGirudaCut);
-      }
-      if (defenseCuts > 0) {
+      } else if (defenseCuts > 0) {
         parts.add(defenseCuts > 1 ? l10n.trickEventDefenseGirudaCutCount(defenseCuts) : l10n.trickEventDefenseGirudaCut);
         // 공격팀 기루다 소진 상태에서 수비만 기루다 보유 → 특이 상황
         bool attackHasGirudaLeft = false;

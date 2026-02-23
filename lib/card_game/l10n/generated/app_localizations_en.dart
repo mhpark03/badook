@@ -1933,6 +1933,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get trickEventDefenseCutAttackOvercut =>
+      'Defense 1st cut → Attack higher trump overcut';
+
+  @override
+  String get trickEventAttackCutDefenseOvercut =>
+      'Attack 1st cut → Defense higher trump defense';
+
+  @override
   String get trickEventAttackNoGirudaDefenseHas =>
       'Attack out of trump / Defense still has trump';
 
