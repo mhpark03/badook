@@ -1651,6 +1651,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get summaryJokerMightyLost => 'Joker/Mighty score failure';
 
   @override
+  String get summaryEarlyLeadLostLate =>
+      'Early lead loss delayed reclaim, limited Joker/Mighty impact';
+
+  @override
+  String get summaryLateLeadLostGirudaExhaust =>
+      'Early trump/friend exhaustion, lost lead in late game';
+
+  @override
   String get summaryEarlyCutMightyExtract =>
       'Early cut + mighty forced out critical loss';
 
@@ -1755,6 +1763,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trickEventMidGirudaLead => 'Mid trump lead';
 
   @override
+  String get trickEventMidGirudaExhaust => 'Trump exhaustion play';
+
+  @override
   String get trickEventSoleGirudaLeadMaintain =>
       'Attack sole trump holder, lead maintained';
 
@@ -1763,6 +1774,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventDefenseTopCardDefend => 'Defense top card point guard';
+
+  @override
+  String get trickEventDefenseHighCardDefend => 'Defense high card point guard';
+
+  @override
+  String get trickEventJokerAttackReclaim => 'Joker reclaimed lead for attack';
+
+  @override
+  String get trickEventMightyAttackReclaim =>
+      'Mighty reclaimed lead for attack';
+
+  @override
+  String get trickEventAttackReclaim => 'Attack reclaimed lead';
 
   @override
   String get trickEventDefenseTopDeclarerCutDefense =>
@@ -1794,7 +1818,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventFirstTrickFriendBait =>
-      'No lead in 1st trick / Suit depletion → Lucky friend win';
+      'No 1st trick card, waste → Fortunately friend wins';
 
   @override
   String get trickEventFirstTrickWaste => 'No lead in 1st trick / Waste';
@@ -1813,6 +1837,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventWasteAttackFailed => 'Waste attack failed';
+
+  @override
+  String get trickEventFriendPassLeadFailed => 'Lead pass failed';
 
   @override
   String get trickEventDefenseLead => 'Defense lead';

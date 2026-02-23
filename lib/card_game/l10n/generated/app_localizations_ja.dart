@@ -1631,6 +1631,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get summaryJokerMightyLost => 'ジョーカー/マイティでも得点不足';
 
   @override
+  String get summaryEarlyLeadLostLate => '序盤のリード喪失で奪還が遅れ、ジョーカー/マイティ効果制限';
+
+  @override
+  String get summaryLateLeadLostGirudaExhaust => '切り札/フレンド早期消耗で終盤リード喪失';
+
+  @override
   String get summaryEarlyCutMightyExtract => '序盤カット+マイティ強制抽出で致命的損失';
 
   @override
@@ -1733,6 +1739,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get trickEventMidGirudaLead => '切り札中位リード';
 
   @override
+  String get trickEventMidGirudaExhaust => '切り札消耗誘導';
+
+  @override
   String get trickEventSoleGirudaLeadMaintain => '攻撃単独切り札保有、先手維持';
 
   @override
@@ -1740,6 +1749,18 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get trickEventDefenseTopCardDefend => '守備最上位カード得点防御';
+
+  @override
+  String get trickEventDefenseHighCardDefend => '守備上位カード得点防御';
+
+  @override
+  String get trickEventJokerAttackReclaim => 'ジョーカーで攻撃チームがリード奪還';
+
+  @override
+  String get trickEventMightyAttackReclaim => 'マイティで攻撃チームがリード奪還';
+
+  @override
+  String get trickEventAttackReclaim => '攻撃チームがリード奪還';
 
   @override
   String get trickEventDefenseTopDeclarerCutDefense =>
@@ -1767,7 +1788,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get trickEventFirstTrickMightyBait => '初手不在 / マイティフレンド誘導';
 
   @override
-  String get trickEventFirstTrickFriendBait => '初手不在 / スート消化 → 幸運のフレンド勝利';
+  String get trickEventFirstTrickFriendBait => '初手不在で捨て札 → 幸いフレンド勝利';
 
   @override
   String get trickEventFirstTrickWaste => '初手不在 / 捨て札';
@@ -1785,6 +1806,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get trickEventWasteAttackFailed => '捨て札攻撃失敗';
+
+  @override
+  String get trickEventFriendPassLeadFailed => 'リード渡し失敗';
 
   @override
   String get trickEventDefenseLead => '守備先攻';
