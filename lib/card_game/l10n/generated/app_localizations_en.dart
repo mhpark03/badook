@@ -1648,6 +1648,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get summaryJokerMightyNoExtra => 'Joker/Mighty extra score shortage';
 
   @override
+  String get summaryJokerMightyLost => 'Joker/Mighty score failure';
+
+  @override
+  String get summaryEarlyCutMightyExtract =>
+      'Early cut + mighty forced out critical loss';
+
+  @override
   String summaryNarrative(String events, String result) {
     return 'Review: $events → $result';
   }
@@ -1794,6 +1801,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trickEventWaste => 'Passing lead with waste';
+
+  @override
+  String get trickEventWasteAttackFailed => 'Waste attack failed';
+
+  @override
+  String get trickEventDefenseLead => 'Defense lead';
 
   @override
   String trickEventWasteWithTop(String topCard) {
