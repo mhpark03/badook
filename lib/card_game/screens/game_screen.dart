@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -4613,8 +4614,11 @@ class _GameScreenState extends State<GameScreen> {
     final state = controller.state;
     final explanation = controller.lastBidExplanation;
     final screenWidth = MediaQuery.of(context).size.width;
-    final cardWidth = (screenWidth / 14).clamp(28.0, 56.0);
-    final scaleFactor = cardWidth / 28.0;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final widthScale = (screenWidth / 14 / 28.0).clamp(1.0, 2.0);
+    final heightScale = ((screenHeight - 80) / 450).clamp(1.0, 2.0);
+    final scaleFactor = min(widthScale, heightScale);
+    final cardWidth = 28.0 * scaleFactor;
 
     return SingleChildScrollView(
       padding: EdgeInsets.all((12 * scaleFactor).roundToDouble()),
