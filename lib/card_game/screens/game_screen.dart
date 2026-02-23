@@ -4540,7 +4540,7 @@ class _GameScreenState extends State<GameScreen> {
       case LeadIntent.girudaPreExchange:
         final peAttackWon = trick.winnerId != null &&
             (trick.winnerId == state.declarerId || trick.winnerId == state.friendId);
-        return peAttackWon ? l10n.trickEventWaste : l10n.trickEventWasteAttackFailed;
+        return peAttackWon ? l10n.trickEventPreExchangeKept : l10n.trickEventPreExchange;
       case LeadIntent.jokerCallLead:
         String jcDesc = l10n.trickEventJokerCallDeclared;
         final jcLeadId = trick.leadPlayerId;
@@ -4616,7 +4616,7 @@ class _GameScreenState extends State<GameScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final widthScale = (screenWidth / 14 / 28.0).clamp(1.0, 2.0);
-    final heightScale = ((screenHeight - 80) / 450).clamp(1.0, 2.0);
+    final heightScale = ((screenHeight - 80) / 540).clamp(1.0, 2.0);
     final scaleFactor = min(widthScale, heightScale);
     final cardWidth = 28.0 * scaleFactor;
 
