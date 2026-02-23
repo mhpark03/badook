@@ -1975,23 +1975,34 @@ class _GameScreenState extends State<GameScreen> {
         ),
         // 획득한 점수 카드 표시 (반응형 크기)
         if (pointCards.isNotEmpty)
-          Builder(builder: (context) {
-            final tinyCardWidth = (MediaQuery.of(context).size.width / 14).clamp(28.0, 56.0);
-            return Container(
-              margin: const EdgeInsets.only(top: 4),
-              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.black54,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Wrap(
-                spacing: 2,
-                runSpacing: 2,
-                alignment: WrapAlignment.center,
-                children: pointCards.map((card) => _buildTinyCardFixed(card, state, tinyCardWidth)).toList(),
-              ),
-            );
-          }),
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+            decoration: BoxDecoration(
+              color: Colors.amber.withValues(alpha: 0.25),
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: Colors.amber.withValues(alpha: 0.5), width: 1),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.wonCards,
+                  style: const TextStyle(color: Colors.amber, fontSize: 8, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 1),
+                Wrap(
+                  spacing: 2,
+                  runSpacing: 2,
+                  alignment: WrapAlignment.center,
+                  children: pointCards.map((card) {
+                    final tinyCardWidth = (MediaQuery.of(context).size.width / 14).clamp(28.0, 56.0);
+                    return _buildTinyCardFixed(card, state, tinyCardWidth);
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
         // auto-play: 핸드 카드 공개
         if (widget.isAutoPlay && handCards.isNotEmpty)
           Builder(builder: (context) {
@@ -2471,14 +2482,25 @@ class _GameScreenState extends State<GameScreen> {
               margin: const EdgeInsets.only(bottom: 2),
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.black54,
+                color: Colors.amber.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: Colors.amber.withValues(alpha: 0.5), width: 1),
               ),
-              child: Wrap(
-                spacing: 2,
-                runSpacing: 2,
-                alignment: WrapAlignment.center,
-                children: pointCards.map((card) => _buildTinyCardFixed(card, controller.state, 32.0)).toList(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    l10n.wonCards,
+                    style: const TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 1),
+                  Wrap(
+                    spacing: 2,
+                    runSpacing: 2,
+                    alignment: WrapAlignment.center,
+                    children: pointCards.map((card) => _buildTinyCardFixed(card, controller.state, 32.0)).toList(),
+                  ),
+                ],
               ),
             ),
           // 카드 목록 - 세로 모드: 2줄, 가로 모드: 1줄 스크롤
@@ -4514,6 +4536,10 @@ class _GameScreenState extends State<GameScreen> {
         final wasteAttackWon = trick.winnerId != null &&
             (trick.winnerId == state.declarerId || trick.winnerId == state.friendId);
         return wasteAttackWon ? l10n.trickEventWaste : l10n.trickEventWasteAttackFailed;
+      case LeadIntent.girudaPreExchange:
+        final peAttackWon = trick.winnerId != null &&
+            (trick.winnerId == state.declarerId || trick.winnerId == state.friendId);
+        return peAttackWon ? l10n.trickEventWaste : l10n.trickEventWasteAttackFailed;
       case LeadIntent.jokerCallLead:
         String jcDesc = l10n.trickEventJokerCallDeclared;
         final jcLeadId = trick.leadPlayerId;

@@ -164,6 +164,7 @@ enum LeadIntent {
   defenseHighCard,        // 수비 최상위 비기루다
   defenseLowCard,         // 수비 낮은 카드
   waste,                  // 물패
+  girudaPreExchange,      // 선교환 (기루다 보존, 비기루다 선공)
   jokerCallLead,          // 조커콜 선공
 }
 
