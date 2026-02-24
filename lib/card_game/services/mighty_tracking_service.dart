@@ -241,7 +241,7 @@ class MightyTrackingService {
         final ftaIsAttack = (int id) => id == state.declarerId || id == state.friendId;
         final ftaAttackWon = trick.winnerId != null && ftaIsAttack(trick.winnerId!);
         if (ftaAttackWon) {
-          return '초구 비기루다 최상위 → 팀 역전';
+          return '초구 비기루다 최상위 선공';
         }
         return '초구 비기루다 최상위 선공 실패';
       case LeadIntent.firstTrickMightyBait:
@@ -1074,7 +1074,13 @@ class MightyTrackingService {
       for (int i = 0; i < trick.cards.length; i++) {
         if (i == leadIdx) continue;
         if (isMighty(trick.cards[i])) {
-          parts.add('마이티 출현');
+          // 마이티 무늬가 선공 무늬와 같으면 유일 보유로 불가피하게 낸 것
+          final mightyFollowedSuit = mighty.suit != null && trick.leadSuit == mighty.suit;
+          if (mightyFollowedSuit) {
+            parts.add('마이티 유일 보유, 불가피한 출현');
+          } else {
+            parts.add('마이티 출현');
+          }
           break;
         }
       }
