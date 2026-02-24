@@ -306,12 +306,16 @@ class MightyTrackingService {
       final lastParts = <String>[];
       final pointCount = trick.cards.where((c) => !c.isJoker && c.isPointCard).length;
 
-      // 게임 결과 선계산
+      // 게임 결과 선계산 (키티 점수 포함)
       int attackPoints = 0;
       for (final t in state.tricks) {
         if (t.winnerId != null && isAttack(t.winnerId!)) {
           attackPoints += t.cards.where((c) => !c.isJoker && c.isPointCard).length;
         }
+      }
+      // 키티(버린 카드) 점수는 주공팀에 귀속
+      for (final c in state.kitty) {
+        if (c.isPointCard) attackPoints++;
       }
       final bidTricks = state.currentBid?.tricks ?? 13;
       final attackWins = attackPoints >= bidTricks;
@@ -322,8 +326,35 @@ class MightyTrackingService {
           final winIdx = trick.playerOrder.indexOf(trick.winnerId!);
           if (winIdx >= 0 && winIdx < trick.cards.length) {
             final winCard = trick.cards[winIdx];
+            final leadIsAttack = isAttack(leadId);
+            final winnerIsAttack = isAttack(trick.winnerId!);
+            final wonByOvertake = trick.winnerId != leadId;
+
             if (isMighty(winCard)) {
               lastLabel = '마이티 마지막 트릭';
+            } else if (isGiruda(winCard) && wonByOvertake) {
+              // 선공 → 상위 기루다 역전 설명
+              final leadSuitStr = leadCard.suit != null ? (_suitSymbols[leadCard.suit] ?? '') : '';
+              final leadRankStr = _rankSymbols[leadCard.rankValue] ?? '${leadCard.rankValue}';
+              final winRankStr = _rankSymbols[winCard.rankValue] ?? '${winCard.rankValue}';
+              final girudaStr = _suitSymbols[giruda] ?? '';
+              if (leadIsAttack && !winnerIsAttack) {
+                // 공격 선공 → 수비 상위 기루다 역전
+                if (isGiruda(leadCard)) {
+                  lastLabel = '공격 $girudaStr$leadRankStr 선공 → 수비 $girudaStr$winRankStr 역전';
+                } else {
+                  lastLabel = '공격 $leadSuitStr$leadRankStr 선공 → 수비 기루다 컷';
+                }
+              } else if (!leadIsAttack && winnerIsAttack) {
+                // 수비 선공 → 공격 상위 기루다 역전
+                if (isGiruda(leadCard)) {
+                  lastLabel = '수비 $girudaStr$leadRankStr 선공 → 공격 $girudaStr$winRankStr 역전';
+                } else {
+                  lastLabel = '수비 $leadSuitStr$leadRankStr 선공 → 공격 기루다 컷';
+                }
+              } else {
+                lastLabel = '기루다 마지막 트릭';
+              }
             } else if (isGiruda(winCard)) {
               lastLabel = '기루다 마지막 트릭';
             }
@@ -372,17 +403,28 @@ class MightyTrackingService {
         }
       }
 
-      // 총평
+      // 총평 - 승패 원인 분석 (점수는 화면 상단에 표시되므로 제외)
       final attackTrickWins = state.tricks.where((t) => t.winnerId != null && isAttack(t.winnerId!)).length;
       final defenseTrickWins = 10 - attackTrickWins;
+
       if (attackTrickWins == 10) {
-        lastParts.add('총평: 전승 런 $attackPoints/${bidTricks}점 대승');
+        lastParts.add('총평: 전승 런 대승');
       } else if (defenseTrickWins == 10) {
-        lastParts.add('총평: 전패 백런 0/${bidTricks}점 완패');
-      } else if (attackWins && attackPoints >= bidTricks + 5) {
-        lastParts.add('총평: ${attackTrickWins}승${defenseTrickWins}패 $attackPoints/${bidTricks}점 대승');
-      } else if (attackWins && attackPoints == bidTricks) {
+        lastParts.add('총평: 전패 백런 완패');
+      } else {
+        // 게임 흐름 분석
+        final earlyDefWins = state.tricks.where((t) =>
+            t.trickNumber <= 5 && t.winnerId != null && !isAttack(t.winnerId!)).length;
+        final lateDefWins = state.tricks.where((t) =>
+            t.trickNumber >= 7 && t.winnerId != null && !isAttack(t.winnerId!)).length;
+
         bool atkJoker = false, atkMighty = false;
+        bool defJokerWon = false;
+        int atkGirudaWins = 0;
+        int defCutCount = 0;
+        int friendWins = 0;
+        int friendScore = 0;
+
         for (final t in state.tricks) {
           for (int i = 0; i < t.cards.length && i < t.playerOrder.length; i++) {
             if (isAttack(t.playerOrder[i])) {
@@ -390,20 +432,72 @@ class MightyTrackingService {
               if (isMighty(t.cards[i])) atkMighty = true;
             }
           }
+          if (t.winnerId != null) {
+            // 수비 조커 승리
+            if (!isAttack(t.winnerId!)) {
+              final wIdx = t.playerOrder.indexOf(t.winnerId!);
+              if (wIdx >= 0 && wIdx < t.cards.length && t.cards[wIdx].isJoker) defJokerWon = true;
+              // 수비 기루다 컷
+              if (giruda != null && t.leadSuit != giruda && wIdx >= 0 && wIdx < t.cards.length && isGiruda(t.cards[wIdx])) {
+                defCutCount++;
+              }
+            }
+            // 공격 기루다 승리
+            if (isAttack(t.winnerId!) && giruda != null) {
+              final wIdx = t.playerOrder.indexOf(t.winnerId!);
+              if (wIdx >= 0 && wIdx < t.cards.length && isGiruda(t.cards[wIdx])) atkGirudaWins++;
+            }
+            // 프렌드 승리
+            if (state.friendId != null && t.winnerId == state.friendId) {
+              friendWins++;
+              friendScore += 2 + t.cards.where((c) => !c.isJoker && c.isPointCard).length;
+            } else if (state.friendId != null && isAttack(t.winnerId!)) {
+              final fIdx = t.playerOrder.indexOf(state.friendId!);
+              if (fIdx >= 0 && fIdx < t.cards.length) {
+                final fc = t.cards[fIdx];
+                if (!fc.isJoker && fc.isPointCard) friendScore++;
+              }
+            }
+          }
         }
-        if (atkJoker && atkMighty) {
-          lastParts.add('총평: 조커/마이티 보유 추가 점수 실패 → $attackPoints/${bidTricks}점 최소 점수 달성');
+
+        String summary;
+        if (attackWins) {
+          // 공격 승리 원인 분석
+          if (atkGirudaWins >= 3) {
+            summary = '기루다 지배로 공격 승리';
+          } else if (state.friendId != null && state.friendId != state.declarerId && friendScore >= 6) {
+            summary = '프렌드 활약으로 공격 승리';
+          } else if (atkJoker && atkMighty) {
+            if (attackPoints == bidTricks) {
+              summary = '조커/마이티 활용 최소 점수 달성';
+            } else {
+              summary = '조커/마이티 활용 공격 승리';
+            }
+          } else {
+            summary = '공격 승리';
+          }
         } else {
-          lastParts.add('총평: ${attackTrickWins}승${defenseTrickWins}패 $attackPoints/${bidTricks}점 최소 점수 달성');
+          // 수비 승리 원인 분석
+          if (jokerCallEvent != null) {
+            summary = '아군 조커 헌납 → 수비 승리';
+          } else if (earlyDefWins >= 3) {
+            summary = '초반 선 빼앗김 → 탈환 실패 → 수비 승리';
+          } else if (defJokerWon && defCutCount >= 2) {
+            summary = '수비 조커 반격 + 기루다 컷으로 수비 승리';
+          } else if (defJokerWon) {
+            summary = '수비 조커 반격으로 수비 승리';
+          } else if (defCutCount >= 2) {
+            summary = '수비 기루다 컷으로 수비 승리';
+          } else if (lateDefWins >= 3) {
+            summary = '후반 수비 점수 방어로 수비 승리';
+          } else if (atkJoker && atkMighty) {
+            summary = '조커/마이티 활용 실패 → 수비 승리';
+          } else {
+            summary = '수비 승리';
+          }
         }
-      } else if (attackWins) {
-        lastParts.add('총평: ${attackTrickWins}승${defenseTrickWins}패 $attackPoints/${bidTricks}점 승리');
-      } else if (attackPoints >= bidTricks - 3) {
-        final jcPrefix = jokerCallEvent != null ? '$jokerCallEvent → ' : '';
-        lastParts.add('총평: $jcPrefix${attackTrickWins}승${defenseTrickWins}패 $attackPoints/${bidTricks}점 석패');
-      } else {
-        final jcPrefix = jokerCallEvent != null ? '$jokerCallEvent → ' : '';
-        lastParts.add('총평: $jcPrefix${attackTrickWins}승${defenseTrickWins}패 $attackPoints/${bidTricks}점 대패');
+        lastParts.add('총평: $summary');
       }
 
       return lastParts.join(' / ');
@@ -870,9 +964,21 @@ class MightyTrackingService {
           parts.add('공격 1차 간 → 수비 상위 기루다 방어');
         }
       } else if (attackCuts > 0) {
-        parts.add(attackCuts > 1 ? '공격 기루다 컷 ${attackCuts}회' : '공격 기루다 컷');
+        // 선공자도 공격팀이면 같은팀 간 (기루다밖에 없어서 강제 컷)
+        final leadIsAttack = isAttack(leadId);
+        if (leadIsAttack) {
+          parts.add(attackCuts > 1 ? '공격 기루다 소진 (같은팀 간 ${attackCuts}회)' : '공격 기루다 소진 (같은팀 간)');
+        } else {
+          parts.add(attackCuts > 1 ? '공격 기루다 컷 ${attackCuts}회' : '공격 기루다 컷');
+        }
       } else if (defenseCuts > 0) {
-        parts.add(defenseCuts > 1 ? '수비 기루다 컷 ${defenseCuts}회' : '수비 기루다 컷');
+        // 선공자도 수비팀이면 같은팀 간 (기루다밖에 없어서 강제 컷)
+        final leadIsDefense = !isAttack(leadId);
+        if (leadIsDefense) {
+          parts.add(defenseCuts > 1 ? '수비 기루다 소진 (같은팀 간 ${defenseCuts}회)' : '수비 기루다 소진 (같은팀 간)');
+        } else {
+          parts.add(defenseCuts > 1 ? '수비 기루다 컷 ${defenseCuts}회' : '수비 기루다 컷');
+        }
         bool attackHasGirudaLeft = false;
         for (final ft in state.tricks) {
           if (ft.trickNumber <= trick.trickNumber) continue;
@@ -1049,7 +1155,7 @@ class MightyTrackingService {
       if (trick.trickNumber > 1 && !playedCards.contains('joker') &&
           !trick.cards.any((c) => c.isJoker) && pointCount == 0) {
         final jokerHolder = findCardHolder((c) => c.isJoker);
-        if (jokerHolder != null) {
+        if (jokerHolder != null && !isAttack(jokerHolder)) {
           final name = jokerHolder >= 0 && jokerHolder < _playerNamesKo.length ? _playerNamesKo[jokerHolder] : '?';
           parts.add('$name: 조커 보유, 무득점 트릭 스킵');
         }
