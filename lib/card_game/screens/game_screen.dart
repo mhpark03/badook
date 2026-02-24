@@ -1997,45 +1997,33 @@ class _GameScreenState extends State<GameScreen> {
                   style: const TextStyle(color: Colors.amber, fontSize: 8, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 1),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: pointCards.map((card) {
-                      final tinyCardWidth = (MediaQuery.of(context).size.width / 14).clamp(28.0, 56.0);
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 2),
-                        child: _buildTinyCardFixed(card, state, tinyCardWidth),
-                      );
-                    }).toList(),
-                  ),
+                Wrap(
+                  spacing: 2,
+                  runSpacing: 2,
+                  children: pointCards.map((card) {
+                    return _buildTinyCardFixed(card, state, 28.0);
+                  }).toList(),
                 ),
               ],
             ),
           ),
         // auto-play: 핸드 카드 공개
         if (widget.isAutoPlay && handCards.isNotEmpty)
-          Builder(builder: (context) {
-            final tinyCardWidth = (MediaQuery.of(context).size.width / 14).clamp(28.0, 56.0);
-            return Container(
-              margin: const EdgeInsets.only(top: 4),
-              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.green[900],
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: handCards.map((card) => Padding(
-                    padding: const EdgeInsets.only(right: 2),
-                    child: _buildTinyCardFixed(card, state, tinyCardWidth),
-                  )).toList(),
-                ),
-              ),
-            );
-          }),
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+            decoration: BoxDecoration(
+              color: Colors.green[900],
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Wrap(
+              spacing: 2,
+              runSpacing: 2,
+              children: handCards.map((card) {
+                return _buildTinyCardFixed(card, state, 24.0);
+              }).toList(),
+            ),
+          ),
       ],
     );
   }
