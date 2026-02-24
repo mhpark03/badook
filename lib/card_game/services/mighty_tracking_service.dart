@@ -177,6 +177,22 @@ class MightyTrackingService {
           final leaderIsAttack = trick.leadPlayerId == state.declarerId || trick.leadPlayerId == state.friendId;
           final winnerIsAttack = passWinnerId == state.declarerId || passWinnerId == state.friendId;
           if (leaderIsAttack != winnerIsAttack) {
+            // 프렌드 공개 후 수비가 이긴 경우: 선 넘김 실패가 아니라 수비 기루다 소진 물패
+            bool friendRevealed = false;
+            final fc = state.friendDeclaration?.card;
+            if (fc != null && playedCards != null) {
+              if (fc.isMightyWith(giruda)) {
+                final m = state.mighty;
+                friendRevealed = m.suit != null && playedCards.contains('${m.suit!.index}-${m.rankValue}');
+              } else if (fc.isJoker) {
+                friendRevealed = playedCards.contains('joker');
+              } else if (fc.suit != null) {
+                friendRevealed = playedCards.contains('${fc.suit!.index}-${fc.rankValue}');
+              }
+            }
+            if (friendRevealed) {
+              return '기루다 물패 (수비 기루다 소진)';
+            }
             return '기루다 중간으로 선 넘김 실패';
           }
         }
@@ -332,13 +348,11 @@ class MightyTrackingService {
         }
       }
 
-      // 게임 결과
+      // 게임 결과 (런만 별도 표기, 일반 승리는 총평에 포함되므로 생략)
       if (attackWins) {
         final isRun = state.tricks.every((t) => t.winnerId != null && isAttack(t.winnerId!));
         if (isRun) {
           lastParts.add('공격 런(풀) 대승 확정');
-        } else {
-          lastParts.add('공격 승리 확정');
         }
       }
 
@@ -883,13 +897,21 @@ class MightyTrackingService {
     }
 
     // Outcome: K/Q 소진 성공 (공격팀 승리 시만)
+    // 기루다 K가 프렌드 카드인 경우, K는 프렌드 합류이므로 소진이 아님
     final attackWonTrick = trick.winnerId != null && isAttack(trick.winnerId!);
+    final girudaKIsFriend = friendCard != null && !friendCard.isJoker &&
+        friendCard.suit == giruda && friendCard.rank == Rank.king;
     if (giruda != null && girudaKInTrick && attackWonTrick) {
       final kIdx = trick.cards.indexWhere((c) =>
           !c.isJoker && c.suit == giruda && c.rank == Rank.king);
       final qIdx = trick.cards.indexWhere((c) =>
           !c.isJoker && c.suit == giruda && c.rank == Rank.queen);
-      if (kIdx >= 0 && kIdx != leadIdx && qIdx >= 0 && qIdx != leadIdx) {
+      if (girudaKIsFriend) {
+        // K는 프렌드 합류이므로 Q 소진만 표기
+        if (qIdx >= 0 && qIdx != leadIdx) {
+          parts.add('Q 소진 성공');
+        }
+      } else if (kIdx >= 0 && kIdx != leadIdx && qIdx >= 0 && qIdx != leadIdx) {
         parts.add('K/Q 동시 소진 대성공');
       } else if (kIdx >= 0 && kIdx != leadIdx) {
         parts.add('K 소진 성공');
@@ -1036,8 +1058,8 @@ class MightyTrackingService {
       if (giruda != null && !playedCards.contains('${giruda.index}-14') &&
           !trick.cards.any((c) => !c.isJoker && c.suit == giruda && c.rank == Rank.ace)) {
         final girudaAHolder = findCardHolder((c) => !c.isJoker && c.suit == giruda && c.rank == Rank.ace);
-        // 초구에서 선공자는 기루다를 리드할 수 없으므로 제외
-        if (girudaAHolder != null && !(trick.trickNumber == 1 && girudaAHolder == leadId)) {
+        // 선공자가 A를 쓰지 않은 것은 의도적 선택이므로 제외
+        if (girudaAHolder != null && girudaAHolder != leadId) {
           // ★ 선행 무늬를 보유하여 기루다 A를 낼 수 없는 경우 제외
           // 선공자가 아니고, 선행 무늬가 기루다가 아니며, 선행 무늬를 따라냈으면
           // 기루다 A를 낼 수 있는 상황이 아니었으므로 "미사용" 표시 불필요
