@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../l10n/l10n_helper.dart';
 import '../models/game_state.dart';
 import '../services/game_controller.dart';
 import '../services/stats_service.dart';
-import '../widgets/card_game_provider.dart';
 import 'game_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -127,35 +125,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: _isLoading ? null : () async {
                         if (hasActiveGame) {
                           // 진행 중인 게임이 있으면 이어하기
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const CardGameProviderWrapper(child: GameScreen())),
-                          );
                         } else if (_hasSavedGame) {
                           // 저장된 게임이 있으면 불러오기
                           final loaded = await controller.loadGame();
-                          if (loaded && context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const CardGameProviderWrapper(child: GameScreen())),
-                            );
-                          } else {
+                          if (!loaded && context.mounted) {
                             // 불러오기 실패 시 새 게임 시작
                             controller.startNewGame();
-                            if (context.mounted) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const CardGameProviderWrapper(child: GameScreen())),
-                              );
-                            }
                           }
                         } else {
                           // 새 게임 시작
                           controller.startNewGame();
+                        }
+                        if (context.mounted) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const CardGameProviderWrapper(child: GameScreen())),
-                          );
+                            MaterialPageRoute(
+                              builder: (context) => MultiProvider(
+                                providers: [
+                                  ChangeNotifierProvider.value(value: controller),
+                                  ChangeNotifierProvider.value(value: statsService),
+                                ],
+                                child: const GameScreen(),
+                              ),
+                            ),
+                          ).then((_) {
+                            // 게임에서 돌아오면 저장 게임 상태 재확인
+                            _checkSavedGame();
+                          });
                         }
                       },
                       icon: Icon(

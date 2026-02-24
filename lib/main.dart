@@ -11,6 +11,7 @@ import 'dart:async';
 // 카드게임 import
 import 'card_game/screens/game_selection_screen.dart' as card_game;
 import 'card_game/screens/game_screen.dart' as mighty_game;
+import 'card_game/screens/home_screen.dart' as mighty_home;
 import 'card_game/models/game_state.dart' as mighty_state;
 import 'card_game/screens/hearts/hearts_home_screen.dart';
 import 'card_game/screens/hula/hula_home_screen.dart';
@@ -7507,7 +7508,7 @@ class _HelpPageState extends State<HelpPage> {
         break;
       case 'mighty':
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const CardGameProviderWrapper(child: _MightyAutoStart()),
+          builder: (context) => const CardGameProviderWrapper(child: mighty_home.HomeScreen()),
         ));
         break;
       case 'hearts':
@@ -8024,53 +8025,3 @@ class TermsOfServicePage extends StatelessWidget {
   }
 }
 
-/// 마이티 수동게임: 홈 화면 없이 바로 게임 시작
-class _MightyAutoStart extends StatefulWidget {
-  const _MightyAutoStart();
-
-  @override
-  State<_MightyAutoStart> createState() => _MightyAutoStartState();
-}
-
-class _MightyAutoStartState extends State<_MightyAutoStart> {
-  bool _initialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _initGame();
-  }
-
-  Future<void> _initGame() async {
-    final controller = Provider.of<GameController>(context, listen: false);
-    final hasActiveGame = controller.state.phase != mighty_state.GamePhase.waiting &&
-        controller.state.phase != mighty_state.GamePhase.gameEnd;
-
-    if (!hasActiveGame) {
-      final hasSaved = await GameController.hasSavedGame();
-      if (hasSaved) {
-        final loaded = await controller.loadGame();
-        if (!loaded) {
-          controller.startNewGame();
-        }
-      } else {
-        controller.startNewGame();
-      }
-    }
-
-    if (mounted) {
-      setState(() => _initialized = true);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_initialized) {
-      return Scaffold(
-        backgroundColor: Colors.green[800],
-        body: const Center(child: CircularProgressIndicator(color: Colors.white)),
-      );
-    }
-    return const mighty_game.GameScreen();
-  }
-}
