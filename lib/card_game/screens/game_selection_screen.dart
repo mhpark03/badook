@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/game_state.dart';
+import '../services/game_controller.dart';
 import '../widgets/banner_ad_widget.dart';
 import '../widgets/card_game_provider.dart';
-import 'home_screen.dart';
+import 'game_screen.dart';
 import 'seven_card/seven_card_home_screen.dart';
 import 'hi_lo/hi_lo_home_screen.dart';
 import 'hula/hula_home_screen.dart';
@@ -61,7 +63,7 @@ class GameSelectionScreen extends StatelessWidget {
         subtitle: L10n.get(currentLanguage, 'mightyDesc'),
         icon: Icons.style,
         color: Colors.green[700]!,
-        screen: const HomeScreen(),
+        onTap: () => _startMightyGame(context),
       ),
       _GameInfo(
         title: L10n.get(currentLanguage, 'sevenpoker'),
@@ -157,6 +159,15 @@ class GameSelectionScreen extends StatelessWidget {
     );
   }
 
+  void _startMightyGame(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CardGameProviderWrapper(child: _MightyAutoStart()),
+      ),
+    );
+  }
+
   Widget _buildGameTile({
     required BuildContext context,
     required _GameInfo game,
@@ -169,11 +180,11 @@ class GameSelectionScreen extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       elevation: 4,
       child: InkWell(
-        onTap: () {
+        onTap: game.onTap ?? () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CardGameProviderWrapper(child: game.screen),
+              builder: (context) => CardGameProviderWrapper(child: game.screen!),
             ),
           );
         },
@@ -253,13 +264,66 @@ class _GameInfo {
   final String subtitle;
   final IconData icon;
   final Color color;
-  final Widget screen;
+  final Widget? screen;
+  final VoidCallback? onTap;
 
   const _GameInfo({
     required this.title,
     required this.subtitle,
     required this.icon,
     required this.color,
-    required this.screen,
+    this.screen,
+    this.onTap,
   });
+}
+
+/// 마이티 수동게임: 홈 화면 없이 바로 게임 시작
+class _MightyAutoStart extends StatefulWidget {
+  const _MightyAutoStart();
+
+  @override
+  State<_MightyAutoStart> createState() => _MightyAutoStartState();
+}
+
+class _MightyAutoStartState extends State<_MightyAutoStart> {
+  bool _initialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initGame();
+  }
+
+  Future<void> _initGame() async {
+    final controller = Provider.of<GameController>(context, listen: false);
+    final hasActiveGame = controller.state.phase != GamePhase.waiting &&
+        controller.state.phase != GamePhase.gameEnd;
+
+    if (!hasActiveGame) {
+      final hasSaved = await GameController.hasSavedGame();
+      if (hasSaved) {
+        final loaded = await controller.loadGame();
+        if (!loaded) {
+          controller.startNewGame();
+        }
+      } else {
+        controller.startNewGame();
+      }
+    }
+
+    if (mounted) {
+      setState(() => _initialized = true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_initialized) {
+      return Scaffold(
+        backgroundColor: Colors.green[800],
+        body: const Center(child: CircularProgressIndicator(color: Colors.white)),
+      );
+    }
+    return const GameScreen();
+  }
 }
