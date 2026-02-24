@@ -6146,6 +6146,26 @@ class _GameScreenState extends State<GameScreen> {
     final state = controller.state;
     final isAuto = widget.isAutoPlay;
 
+    // autoPlay에서 이 화면으로 직접 올 수 있으므로 서버 전송
+    if (!_trackingSent) {
+      _trackingSent = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final descriptions = <String?>[];
+        final playedCards = <String>{};
+        for (final trick in state.tricks) {
+          descriptions.add(_describeTrick(trick, state, l10n, playedCards, isAutoPlay: widget.isAutoPlay));
+          for (final c in trick.cards) {
+            if (c.isJoker) {
+              playedCards.add('joker');
+            } else if (c.suit != null) {
+              playedCards.add('${c.suit!.index}-${c.rankValue}');
+            }
+          }
+        }
+        controller.sendTrackingWithDescriptions(descriptions);
+      });
+    }
+
     return Center(
       child: Container(
         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.95),
