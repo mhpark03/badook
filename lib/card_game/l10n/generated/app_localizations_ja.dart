@@ -1620,6 +1620,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get summaryDefenseCut => '守備切り札カット';
 
   @override
+  String get summaryDefLateWasteHighPoints => '後半捨て札攻撃で高得点集中';
+
+  @override
+  String get summaryDefFewWinsHighPoints => '守備少数トリック高得点集中';
+
+  @override
   String get summaryMightyImpact => 'マイティ活用';
 
   @override

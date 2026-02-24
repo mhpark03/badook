@@ -562,6 +562,8 @@
   "summaryFriendContrib": "Friend MVP",
   "summaryLateDefense": "Late-game defense",
   "summaryDefenseCut": "Defense trump cuts",
+  "summaryDefLateWasteHighPoints": "Late waste-card attacks yield high points",
+  "summaryDefFewWinsHighPoints": "Defense concentrates high points in few tricks",
   "summaryMightyImpact": "Mighty impact",
   "summaryJokerMightyNoExtra": "Joker/Mighty extra score shortage",
   "summaryJokerMightyLost": "Joker/Mighty score failure",

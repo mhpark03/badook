@@ -561,6 +561,8 @@
   "summaryFriendContrib": "朋友活跃",
   "summaryLateDefense": "后半防御成功",
   "summaryDefenseCut": "守方将牌切入",
+  "summaryDefLateWasteHighPoints": "后半废牌攻击高分集中",
+  "summaryDefFewWinsHighPoints": "守方少数回合高分集中",
   "summaryMightyImpact": "Mighty发挥",
   "summaryJokerMightyNoExtra": "小丑/至尊追加得分不足",
   "summaryJokerMightyLost": "小丑/至尊仍得分不足",

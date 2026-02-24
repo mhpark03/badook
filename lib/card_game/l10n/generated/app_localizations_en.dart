@@ -1640,6 +1640,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get summaryDefenseCut => 'Defense trump cuts';
 
   @override
+  String get summaryDefLateWasteHighPoints =>
+      'Late waste-card attacks yield high points';
+
+  @override
+  String get summaryDefFewWinsHighPoints =>
+      'Defense concentrates high points in few tricks';
+
+  @override
   String get summaryMightyImpact => 'Mighty impact';
 
   @override

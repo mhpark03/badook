@@ -1626,6 +1626,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get summaryDefenseCut => '수비 기루다 컷';
 
   @override
+  String get summaryDefLateWasteHighPoints => '후반 물패 공격 고득점 집중';
+
+  @override
+  String get summaryDefFewWinsHighPoints => '수비 소수 트릭 고득점 집중';
+
+  @override
   String get summaryMightyImpact => '마이티 활용';
 
   @override

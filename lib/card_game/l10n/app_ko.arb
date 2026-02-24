@@ -653,6 +653,8 @@
   "summaryFriendContrib": "프렌드 활약",
   "summaryLateDefense": "후반 방어 성공",
   "summaryDefenseCut": "수비 기루다 컷",
+  "summaryDefLateWasteHighPoints": "후반 물패 공격 고득점 집중",
+  "summaryDefFewWinsHighPoints": "수비 소수 트릭 고득점 집중",
   "summaryMightyImpact": "마이티 활용",
   "summaryJokerMightyNoExtra": "조커/마이티 추가 득점 부족",
   "summaryJokerMightyLost": "조커/마이티로도 점수 획득 실패",

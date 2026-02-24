@@ -561,6 +561,8 @@
   "summaryFriendContrib": "フレンド活躍",
   "summaryLateDefense": "後半防御成功",
   "summaryDefenseCut": "守備切り札カット",
+  "summaryDefLateWasteHighPoints": "後半捨て札攻撃で高得点集中",
+  "summaryDefFewWinsHighPoints": "守備少数トリック高得点集中",
   "summaryMightyImpact": "マイティ活用",
   "summaryJokerMightyNoExtra": "ジョーカー/マイティ追加得点不足",
   "summaryJokerMightyLost": "ジョーカー/マイティでも得点不足",

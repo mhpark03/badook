@@ -2976,6 +2976,18 @@ abstract class AppLocalizations {
   /// **'수비 기루다 컷'**
   String get summaryDefenseCut;
 
+  /// No description provided for @summaryDefLateWasteHighPoints.
+  ///
+  /// In ko, this message translates to:
+  /// **'후반 물패 공격 고득점 집중'**
+  String get summaryDefLateWasteHighPoints;
+
+  /// No description provided for @summaryDefFewWinsHighPoints.
+  ///
+  /// In ko, this message translates to:
+  /// **'수비 소수 트릭 고득점 집중'**
+  String get summaryDefFewWinsHighPoints;
+
   /// No description provided for @summaryMightyImpact.
   ///
   /// In ko, this message translates to:

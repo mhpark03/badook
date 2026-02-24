@@ -1974,7 +1974,7 @@ class _GameScreenState extends State<GameScreen> {
               ),
           ],
         ),
-        // 획득한 점수 카드 표시 (반응형 크기)
+        // 획득한 점수 카드 표시 (가로 스크롤)
         if (pointCards.isNotEmpty)
           Container(
             margin: const EdgeInsets.only(top: 4),
@@ -1988,18 +1988,22 @@ class _GameScreenState extends State<GameScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  l10n.wonCards,
+                  '${l10n.wonCards}(${pointCards.length})',
                   style: const TextStyle(color: Colors.amber, fontSize: 8, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 1),
-                Wrap(
-                  spacing: 2,
-                  runSpacing: 2,
-                  alignment: WrapAlignment.center,
-                  children: pointCards.map((card) {
-                    final tinyCardWidth = (MediaQuery.of(context).size.width / 14).clamp(28.0, 56.0);
-                    return _buildTinyCardFixed(card, state, tinyCardWidth);
-                  }).toList(),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: pointCards.map((card) {
+                      final tinyCardWidth = (MediaQuery.of(context).size.width / 14).clamp(28.0, 56.0);
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 2),
+                        child: _buildTinyCardFixed(card, state, tinyCardWidth),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ],
             ),
@@ -2015,11 +2019,15 @@ class _GameScreenState extends State<GameScreen> {
                 color: Colors.green[900],
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: Wrap(
-                spacing: 2,
-                runSpacing: 2,
-                alignment: WrapAlignment.center,
-                children: handCards.map((card) => _buildTinyCardFixed(card, state, tinyCardWidth)).toList(),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: handCards.map((card) => Padding(
+                    padding: const EdgeInsets.only(right: 2),
+                    child: _buildTinyCardFixed(card, state, tinyCardWidth),
+                  )).toList(),
+                ),
               ),
             );
           }),
@@ -2477,7 +2485,7 @@ class _GameScreenState extends State<GameScreen> {
                 ],
               ),
             ),
-          // 획득한 점수 카드 - AI와 같은 형식으로 표시
+          // 획득한 점수 카드 - 가로 스크롤
           if (pointCards.isNotEmpty && (controller.state.phase == GamePhase.playing || controller.state.phase == GamePhase.gameEnd))
             Container(
               margin: const EdgeInsets.only(bottom: 2),
@@ -2491,15 +2499,19 @@ class _GameScreenState extends State<GameScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    l10n.wonCards,
+                    '${l10n.wonCards}(${pointCards.length})',
                     style: const TextStyle(color: Colors.amber, fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 1),
-                  Wrap(
-                    spacing: 2,
-                    runSpacing: 2,
-                    alignment: WrapAlignment.center,
-                    children: pointCards.map((card) => _buildTinyCardFixed(card, controller.state, 32.0)).toList(),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: pointCards.map((card) => Padding(
+                        padding: const EdgeInsets.only(right: 2),
+                        child: _buildTinyCardFixed(card, controller.state, 32.0),
+                      )).toList(),
+                    ),
                   ),
                 ],
               ),
@@ -3469,6 +3481,26 @@ class _GameScreenState extends State<GameScreen> {
             }
           }
           if (defCutCount >= 2) keyEvents.add(l10n.summaryDefenseCut);
+        }
+
+        // 5-1. 수비 소수 트릭 고득점 집중 (수비 4승 이하, 트릭당 평균 2.5점 이상)
+        if (!attackWins && keyEvents.isEmpty) {
+          int defTricks = 0, defPoints = 0, defLatePoints = 0;
+          for (final t in state.tricks) {
+            if (t.winnerId != null && !isAttack(t.winnerId!)) {
+              defTricks++;
+              final pts = t.cards.where((c) => !c.isJoker && c.isPointCard).length;
+              defPoints += pts;
+              if (t.trickNumber >= 6) defLatePoints += pts;
+            }
+          }
+          if (defTricks > 0 && defTricks <= 4 && defPoints / defTricks >= 2.5) {
+            if (defLatePoints > defPoints * 0.5) {
+              keyEvents.add(l10n.summaryDefLateWasteHighPoints);
+            } else {
+              keyEvents.add(l10n.summaryDefFewWinsHighPoints);
+            }
+          }
         }
 
         // 6. 최소 점수 달성 시 특수 총평

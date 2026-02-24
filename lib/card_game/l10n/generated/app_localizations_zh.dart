@@ -1613,6 +1613,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get summaryDefenseCut => '守方将牌切入';
 
   @override
+  String get summaryDefLateWasteHighPoints => '后半废牌攻击高分集中';
+
+  @override
+  String get summaryDefFewWinsHighPoints => '守方少数回合高分集中';
+
+  @override
   String get summaryMightyImpact => 'Mighty发挥';
 
   @override
