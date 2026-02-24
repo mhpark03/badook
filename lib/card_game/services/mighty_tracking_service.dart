@@ -1251,6 +1251,17 @@ class MightyTrackingService {
       }
     }
 
+    // 수동게임 플레이어 선공: 선공 의도는 생략하되 트릭 결과는 표시
+    if (parts.isEmpty && skipLeadDesc && trick.winnerId != null) {
+      final leadIsAttack = isAttack(leadId);
+      final winnerIsAttack = isAttack(trick.winnerId!);
+      if (leadIsAttack) {
+        parts.add(winnerIsAttack ? '공격팀 최상위 카드로 승리' : '공격팀 선공 실패');
+      } else {
+        parts.add(winnerIsAttack ? '수비팀 선공 실패' : '수비팀 최상위 카드로 승리');
+      }
+    }
+
     return parts.isNotEmpty ? parts.join(' / ') : null;
   }
 
