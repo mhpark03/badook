@@ -1231,6 +1231,11 @@ class MightyTrackingService {
               }
             }
           }
+          // 같은팀 조커가 기루다를 호출한 경우, A를 아끼는 것은 당연한 전략이므로 제외
+          if (leadCard.isJoker && trick.leadSuit == giruda &&
+              isAttack(leadId) == isAttack(girudaAHolder)) {
+            couldPlayGirudaA = false;
+          }
           if (couldPlayGirudaA) {
             final name = girudaAHolder >= 0 && girudaAHolder < _playerNamesKo.length ? _playerNamesKo[girudaAHolder] : '?';
             final mightyPlayed = mighty.suit != null &&
