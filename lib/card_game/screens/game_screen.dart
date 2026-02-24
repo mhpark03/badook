@@ -2456,7 +2456,7 @@ class _GameScreenState extends State<GameScreen> {
     });
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
       color: Colors.black26,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -2589,9 +2589,9 @@ class _GameScreenState extends State<GameScreen> {
         ],
       );
     } else {
-      // 가로 모드: 반응형 카드 크기
+      // 가로 모드: 반응형 카드 크기 (AppBar, 게임정보 등 상단 UI 높이를 제외하여 계산)
       final screenHeight = MediaQuery.of(context).size.height;
-      final landscapeCardWidth = (screenHeight * 0.1).clamp(55.0, 100.0);
+      final landscapeCardWidth = (screenHeight * 0.085).clamp(50.0, 90.0);
       final landscapeCardHeight = landscapeCardWidth * 1.4;
 
       return SizedBox(
