@@ -35,6 +35,7 @@ class _GameScreenState extends State<GameScreen> {
   int _nextGameCountdown = 5;
   bool _showHint = false;
   bool _statsRecorded = false;
+  bool _trackingSent = false;
 
   bool _bidInitialized = false;
   bool _showGameResult = false;
@@ -85,6 +86,7 @@ class _GameScreenState extends State<GameScreen> {
           timer.cancel();
           _nextGameTimer = null;
           _statsRecorded = false;
+          _trackingSent = false;
           _showGameResult = false;
           _showTrickDetails = true;
           controller.startNextAutoGame();
@@ -186,6 +188,7 @@ class _GameScreenState extends State<GameScreen> {
             onPressed: () {
               Navigator.pop(dialogContext);
               _statsRecorded = false;
+              _trackingSent = false;
               _allPassedDialogShown = false;
               _bidInitialized = false;
               _showGameResult = true;
@@ -1283,6 +1286,7 @@ class _GameScreenState extends State<GameScreen> {
                         onPressed: () {
                           setState(() {
                             _statsRecorded = false;
+                            _trackingSent = false;
                             _showGameResult = true;
                             _showTrickDetails = false;
                             _showHint = false;
@@ -3030,8 +3034,26 @@ class _GameScreenState extends State<GameScreen> {
           );
         }
 
-        // 서버 트래킹 (allPassed 포함)
-        controller.sendTracking();
+      });
+    }
+
+    // 트릭 설명을 포함하여 서버 전송 (한 번만)
+    if (!_trackingSent) {
+      _trackingSent = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final descriptions = <String?>[];
+        final playedCards = <String>{};
+        for (final trick in state.tricks) {
+          descriptions.add(_describeTrick(trick, state, l10n, playedCards, isAutoPlay: widget.isAutoPlay));
+          for (final c in trick.cards) {
+            if (c.isJoker) {
+              playedCards.add('joker');
+            } else if (c.suit != null) {
+              playedCards.add('${c.suit!.index}-${c.rankValue}');
+            }
+          }
+        }
+        controller.sendTrackingWithDescriptions(descriptions);
       });
     }
 
@@ -3212,6 +3234,7 @@ class _GameScreenState extends State<GameScreen> {
                       _cancelNextGameTimer();
                       setState(() {
                         _statsRecorded = false;
+                        _trackingSent = false;
                         _showGameResult = false;
                         _showTrickDetails = true;
                       });
@@ -3254,6 +3277,7 @@ class _GameScreenState extends State<GameScreen> {
                     onPressed: () {
                       setState(() {
                         _statsRecorded = false;
+                        _trackingSent = false;
                         _showGameResult = true;
                         _showTrickDetails = false;
                         _showHint = false;
@@ -6213,6 +6237,7 @@ class _GameScreenState extends State<GameScreen> {
                         _cancelNextGameTimer();
                         setState(() {
                           _statsRecorded = false;
+                          _trackingSent = false;
                           _showGameResult = false;
                           _showTrickDetails = true;
                         });
@@ -6232,6 +6257,7 @@ class _GameScreenState extends State<GameScreen> {
                       onPressed: () {
                         setState(() {
                           _statsRecorded = false;
+                          _trackingSent = false;
                           _showGameResult = true;
                           _showTrickDetails = false;
                           _showHint = false;

@@ -220,7 +220,6 @@ class GameController extends ChangeNotifier {
           _processAIKittySelection();
         }
       } else if (_state.phase == GamePhase.waiting && _state.allPassed) {
-        _sendTrackingData();
         _lastBidExplanation = null;
         notifyListeners();
       }
@@ -610,7 +609,6 @@ class GameController extends ChangeNotifier {
 
     // 게임 종료
     if (_state.phase == GamePhase.gameEnd) {
-      _sendTrackingData();
       if (_isAutoPlayMode) {
         notifyListeners();
         return;
@@ -830,7 +828,6 @@ class GameController extends ChangeNotifier {
       return;
     }
     if (_state.phase == GamePhase.waiting && _state.allPassed) {
-      _sendTrackingData();
       _lastBidExplanation = null;
       notifyListeners();
       return;
@@ -1150,24 +1147,7 @@ class GameController extends ChangeNotifier {
     return strategies;
   }
 
-  void _sendTrackingData() {
-    if (_state.allPassed) return;
-    if (_state.declarerId != null) {
-      for (final snap in _bidSnapshots) {
-        if (snap.playerId == _state.declarerId) snap.isDeclarer = true;
-      }
-    }
-    MightyTrackingService.sendGameResult(
-      gameUuid: _gameUuid,
-      state: _state,
-      bidSnapshots: _bidSnapshots,
-      kittySnapshot: _kittySnapshot,
-      isAutoPlay: _isAutoPlayMode,
-    );
-  }
-
-  /// 게임 종료 시 서버로 트래킹 데이터 전송
-  void sendTracking() {
+  void sendTrackingWithDescriptions(List<String?> trickDescriptions) {
     if (_trackingSent) return;
     _trackingSent = true;
 
@@ -1189,6 +1169,7 @@ class GameController extends ChangeNotifier {
       bidSnapshots: _bidSnapshots,
       kittySnapshot: _kittySnapshot,
       isAutoPlay: _isAutoPlayMode,
+      trickDescriptions: trickDescriptions,
     );
   }
 

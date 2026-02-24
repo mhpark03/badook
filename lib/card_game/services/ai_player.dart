@@ -4121,7 +4121,7 @@ class AIPlayer {
 
           // (F-pre) 선교환: 비기루다 물패가 남아있으면 기루다 보존
           // 물패 소진 → void 생성 → 나중에 기루다 컷으로 선 탈환 + 점수 확보
-          if (nonGirudaDump.isNotEmpty && state.currentTrickNumber < 10) {
+          if (nonGirudaDump.isNotEmpty && gCount >= 1 && state.currentTrickNumber < 10) {
             // 프렌드 공개 + 조커 보유 시 우선 사용 (확실한 선 탈환)
             // 프렌드 미공개 시 조커 사용 금지 (선 유지 → 프렌드 발견 지연)
             if (state.friendRevealed && hasJokerForLead) {

@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(flutter gen-l10n:*)",
-      "Bash(flutter build:*)"
+      "Bash(flutter build:*)",
+      "Bash(pushd:*)",
+      "Bash(popd)",
+      "Bash(flutter analyze:*)",
+      "Bash(cd:*)"
     ]
   }
 }
