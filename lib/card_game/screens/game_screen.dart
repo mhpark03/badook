@@ -4605,13 +4605,19 @@ class _GameScreenState extends State<GameScreen> {
       case LeadIntent.defenseMightyExhaust:
         return l10n.trickEventDefenseMightyExhaust;
       case LeadIntent.defenseMightySuitBait:
-        // 마이티 출현 여부에 따라 성공/시도 구분
+        // 마이티 출현 여부에 따라 성공/실패 구분
         final dmbLeadIdx = trick.playerOrder.indexOf(trick.leadPlayerId);
         final dmbMightyAppeared = trick.cards.asMap().entries.any((e) =>
             e.key != dmbLeadIdx && !e.value.isJoker &&
             e.value.suit == state.mighty.suit && e.value.rank == state.mighty.rank);
-        return dmbMightyAppeared
-            ? l10n.trickEventDefenseMightySuitBaitSuccess
+        if (dmbMightyAppeared) {
+          return l10n.trickEventDefenseMightySuitBaitSuccess;
+        }
+        // 마이티 미출현 + 공격팀 선 탈환 → 유도 실패
+        final dmbAttackWon = trick.winnerId != null &&
+            (trick.winnerId == state.declarerId || trick.winnerId == state.friendId);
+        return dmbAttackWon
+            ? l10n.trickEventDefenseMightySuitBaitFailed
             : l10n.trickEventDefenseMightySuitBait;
       case LeadIntent.friendVoidPass:
         final fvpAttackWon = trick.winnerId != null &&

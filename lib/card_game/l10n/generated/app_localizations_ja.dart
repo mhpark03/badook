@@ -1946,6 +1946,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get trickEventDefenseMightySuitBaitSuccess => 'マイティスート先攻 / マイティ誘導成功';
 
   @override
+  String get trickEventDefenseMightySuitBaitFailed =>
+      'マイティスート先攻 / マイティ誘導失敗 (攻撃チーム先奪還)';
+
+  @override
   String trickEventDefenseMightyExhaustPoints(int count) {
     return '守備マイティ消耗、$count点流出';
   }

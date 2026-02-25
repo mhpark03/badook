@@ -1990,6 +1990,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Mighty suit lead / mighty bait success';
 
   @override
+  String get trickEventDefenseMightySuitBaitFailed =>
+      'Mighty suit lead / mighty bait failed (attack reclaimed)';
+
+  @override
   String trickEventDefenseMightyExhaustPoints(int count) {
     return 'Defense mighty exhaust, ${count}pts lost';
   }
