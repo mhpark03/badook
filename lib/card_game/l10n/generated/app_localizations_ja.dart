@@ -2098,6 +2098,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kingLead => 'キングリード';
 
   @override
+  String get firstTrickMighty => 'マイティでリードし初回トリックを確実に獲得';
+
+  @override
   String get firstTrickGiveUp => '初手に有利なカードなし';
 
   @override

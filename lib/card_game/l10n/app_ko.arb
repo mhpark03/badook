@@ -831,6 +831,7 @@
   "firstTrickStrategy": "초구 전략",
   "aceLead": "에이스 선공",
   "kingLead": "킹 선공",
+  "firstTrickMighty": "마이티로 확실한 초구 트릭 획득",
   "firstTrickGiveUp": "초구 유리한 카드 없음",
   "bidSummary": "배팅 결과",
   "targetTricks": "목표 점수",

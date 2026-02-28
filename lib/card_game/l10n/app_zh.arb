@@ -693,6 +693,7 @@
   "firstTrickStrategy": "首墩策略",
   "aceLead": "A先出",
   "kingLead": "K先出",
+  "firstTrickMighty": "用Mighty领出，确保获得首墩",
   "firstTrickGiveUp": "没有有利的首墩牌",
   "bidSummary": "出价结果",
   "targetTricks": "目标分数",

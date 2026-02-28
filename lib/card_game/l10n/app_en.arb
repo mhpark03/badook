@@ -694,6 +694,7 @@
   "firstTrickStrategy": "First Trick Strategy",
   "aceLead": "Ace lead",
   "kingLead": "King lead",
+  "firstTrickMighty": "Lead with Mighty for a guaranteed first trick",
   "firstTrickGiveUp": "No strong first trick card",
   "bidSummary": "Bid Summary",
   "targetTricks": "Target Points",

@@ -5747,6 +5747,7 @@ class _GameScreenState extends State<GameScreen> {
     return switch (strategy) {
       'FIRST_ACE' => '${l10n.firstTrickStrategy}: $cardText ${l10n.aceLead}',
       'FIRST_KING' => '${l10n.firstTrickStrategy}: $cardText ${l10n.kingLead}',
+      'FIRST_MIGHTY' => l10n.firstTrickMighty,
       'FIRST_GIVE_UP' => l10n.firstTrickGiveUp,
       _ => '',
     };

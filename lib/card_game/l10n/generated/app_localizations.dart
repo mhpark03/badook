@@ -3816,6 +3816,12 @@ abstract class AppLocalizations {
   /// **'킹 선공'**
   String get kingLead;
 
+  /// No description provided for @firstTrickMighty.
+  ///
+  /// In ko, this message translates to:
+  /// **'마이티로 확실한 초구 트릭 획득'**
+  String get firstTrickMighty;
+
   /// No description provided for @firstTrickGiveUp.
   ///
   /// In ko, this message translates to:
