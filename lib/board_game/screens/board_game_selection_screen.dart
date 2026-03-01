@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../l10n/board_game_strings.dart';
 import '../games/tetris/tetris_screen.dart';
+import '../games/tetris_wide/tetris_wide_screen.dart';
 import '../games/minesweeper/minesweeper_screen.dart';
 import '../games/bubble/bubble_screen.dart';
 import '../games/mole/mole_screen.dart';
@@ -65,6 +66,13 @@ class BoardGameSelectionScreen extends StatelessWidget {
         icon: Icons.grid_view_rounded,
         color: Colors.cyan[700]!,
         screen: const TetrisScreen(),
+      ),
+      _GameInfo(
+        title: 'games.tetrisWide.name'.tr(),
+        subtitle: 'games.tetrisWide.subtitle'.tr(),
+        icon: Icons.view_column_rounded,
+        color: Colors.deepPurple[700]!,
+        screen: const TetrisWideScreen(),
       ),
       _GameInfo(
         title: 'games.minesweeper.name'.tr(),
