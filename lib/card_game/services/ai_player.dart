@@ -1646,7 +1646,7 @@ class AIPlayer {
     }
 
     final double minPpt = minTricks >= 5 ? 1.8 : 1.5;
-    int minPoints = ((minTricks + minAdj) * minPpt).round().clamp(0, 20);
+    int minPoints = ((minTricks + minAdj) * minPpt).floor().clamp(0, 20);
     int maxPoints = ((maxTricks + maxAdj) * 2.0).round().clamp(0, 20);
 
     // Initiative Floor가 min을 끌어올릴 때 max도 최소한 min 이상 보장
