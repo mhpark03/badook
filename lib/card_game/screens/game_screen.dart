@@ -191,8 +191,8 @@ class _GameScreenState extends State<GameScreen> {
               _trackingSent = false;
               _allPassedDialogShown = false;
               _bidInitialized = false;
-              _showGameResult = true;
-              _showTrickDetails = false;
+              _showGameResult = false;
+              _showTrickDetails = true;
               _showHint = false;
               controller.startNewGame();
             },
@@ -1287,8 +1287,8 @@ class _GameScreenState extends State<GameScreen> {
                           setState(() {
                             _statsRecorded = false;
                             _trackingSent = false;
-                            _showGameResult = true;
-                            _showTrickDetails = false;
+                            _showGameResult = false;
+                            _showTrickDetails = true;
                             _showHint = false;
                           });
                           controller.reset();
@@ -3266,8 +3266,8 @@ class _GameScreenState extends State<GameScreen> {
                       setState(() {
                         _statsRecorded = false;
                         _trackingSent = false;
-                        _showGameResult = true;
-                        _showTrickDetails = false;
+                        _showGameResult = false;
+                        _showTrickDetails = true;
                         _showHint = false;
                       });
                       controller.reset();
@@ -6286,8 +6286,8 @@ class _GameScreenState extends State<GameScreen> {
                         setState(() {
                           _statsRecorded = false;
                           _trackingSent = false;
-                          _showGameResult = true;
-                          _showTrickDetails = false;
+                          _showGameResult = false;
+                          _showTrickDetails = true;
                           _showHint = false;
                         });
                         controller.reset();
