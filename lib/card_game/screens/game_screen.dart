@@ -3617,7 +3617,39 @@ class _GameScreenState extends State<GameScreen> {
           }
         }
 
+        // 9. 공격팀 9승: 런 달성 실패 (물패처리 실패 / 초간 여부 감지)
+        // 런(10-0)을 1트릭 차이로 놓친 상황 → 별도 총평 표시
+        bool summaryHandled = false;
+        if (attackTrickWins == 9 && attackWins) {
+          final lostTricks = state.tricks
+              .where((t) => t.winnerId != null && !isAttack(t.winnerId!))
+              .toList();
+          bool wasWasteFail = false;
+          bool wasFirstTrickCut = false;
+          if (lostTricks.length == 1) {
+            final lost = lostTricks.first;
+            final isAttackLed = isAttack(lost.leadPlayerId);
+            wasWasteFail = isAttackLed &&
+                (lost.leadIntent == LeadIntent.waste ||
+                 lost.leadIntent == LeadIntent.firstTrickWaste);
+            // 초간 감지: 트릭1에서 수비 기루다 컷 (트릭1은 항상 주공 비기루다 선공)
+            if (!wasWasteFail && lost.trickNumber == 1 && giruda != null) {
+              final winIdx = lost.playerOrder.indexOf(lost.winnerId!);
+              if (winIdx >= 0 && winIdx < lost.cards.length) {
+                wasFirstTrickCut = lost.cards[winIdx].suit == giruda;
+              }
+            }
+          }
+          lastParts.add(wasWasteFail
+              ? l10n.summaryNineWinWasteFail
+              : wasFirstTrickCut
+                  ? l10n.summaryNineWinFirstTrickCut
+                  : l10n.summaryNineWinRunMiss);
+          summaryHandled = true;
+        }
+
         // 결과 라벨
+        if (!summaryHandled) {
         final result = attackWins && attackPoints >= bidTricks + 5
             ? l10n.summaryResultBigWin
             : attackWins && attackPoints == bidTricks
@@ -3635,6 +3667,7 @@ class _GameScreenState extends State<GameScreen> {
           lastParts.add(l10n.summaryNarrative(events, result));
         } else {
           lastParts.add(l10n.summaryFallback(attackTrickWins, defenseTrickWins, attackPoints, bidTricks, result));
+        }
         }
       }
 

@@ -2207,15 +2207,20 @@ class AIPlayer {
       }
     }
 
-    // 4. 기루다 외 에이스 체크 (본인이 없는 카드만)
-    for (final suit in Suit.values) {
-      if (suit == state.giruda) continue;
-      // 마이티가 아닌 경우에만
-      if (!(state.mighty.suit == suit && state.mighty.rank == Rank.ace)) {
-        if (!_handContainsCard(hand, suit, Rank.ace)) {
-          return FriendDeclaration.byCard(PlayingCard(suit: suit, rank: Rank.ace));
-        }
-      }
+    // 4. 기루다 외 에이스 체크 (본인이 없는 카드만, 보유 카드 많은 무늬 우선)
+    // 해당 무늬를 많이 보유할수록 에이스 보유자와 시너지가 높음 (♣Q 물패→♣A 프렌드 등)
+    final candidateSuits = Suit.values.where((suit) {
+      if (suit == state.giruda) return false;
+      if (state.mighty.suit == suit && state.mighty.rank == Rank.ace) return false;
+      return !_handContainsCard(hand, suit, Rank.ace);
+    }).toList()
+      ..sort((a, b) {
+        final aCount = hand.where((c) => !c.isJoker && c.suit == a).length;
+        final bCount = hand.where((c) => !c.isJoker && c.suit == b).length;
+        return bCount.compareTo(aCount); // 보유 많은 무늬 우선
+      });
+    if (candidateSuits.isNotEmpty) {
+      return FriendDeclaration.byCard(PlayingCard(suit: candidateSuits.first, rank: Rank.ace));
     }
 
     // 5. 기루다 Q-J-10 체크 (본인이 없는 카드만)
