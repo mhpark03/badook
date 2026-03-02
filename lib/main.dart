@@ -33,6 +33,7 @@ import 'card_game/services/hearts/hearts_stats_service.dart';
 import 'board_game/screens/board_game_selection_screen.dart';
 import 'board_game/screens/escape_game_selection_screen.dart';
 import 'board_game/games/tetris/tetris_screen.dart';
+import 'board_game/games/tetris_wide/tetris_wide_screen.dart';
 import 'board_game/games/minesweeper/minesweeper_screen.dart';
 import 'board_game/games/maze/maze_screen.dart';
 import 'board_game/games/bubble/bubble_screen.dart';
@@ -375,7 +376,7 @@ class L10n {
       'help_baduk': '[게임 방법]\n흑과 백이 번갈아 빈 교차점에 돌을 놓습니다.\n상대 돌을 완전히 둘러싸면 잡을 수 있습니다.\n게임 종료 시 더 많은 영역을 차지한 쪽이 승리합니다.\n\n[기본 규칙]\n- 흑이 먼저 시작합니다\n- 백은 6.5점의 덤을 받습니다\n- 패(Ko): 직전 상태와 동일한 국면을 만드는 착수는 금지\n\n[게임 모드]\n- AI 대국: AI와 1:1 대결\n- 2인 대국: 친구와 함께 플레이\n- 사활 문제: 실전 감각을 키우는 문제 풀이',
       'help_janggi': '[게임 방법]\n각 플레이어는 16개의 기물을 움직여 상대의 왕(장/將)을 잡는 것이 목표입니다.\n\n[기물 이동]\n- 장(將): 궁 안에서 한 칸 이동\n- 차(車): 직선으로 무제한 이동\n- 포(包): 다른 기물 하나를 뛰어넘어 이동/공격 (포는 넘을 수 없음)\n- 마(馬): 날(日)자로 이동\n- 상(象): 직선 한 칸 + 대각선 두 칸 이동 (用자로 이동)\n- 사(士): 궁 안에서 대각선 한 칸 이동\n- 졸/병: 앞, 좌우로 한 칸 이동\n\n[기물 잡기]\n- 이동한 자리에 상대방 기물이 있으면 잡을 수 있습니다\n- 이동 경로에 다른 기물이 있으면 이동할 수 없습니다 (포 제외)\n\n[게임 모드]\n- AI 대국: AI와 1:1 대결\n- 2인 대국: 친구와 함께 플레이',
       'help_cardGame': '[마이티]\n5인용 트릭테이킹 게임. 주공이 되어 선언한 점수를 획득하면 승리합니다.\n여당(주공+파트너) vs 야당(나머지 3명)으로 나뉘어 플레이합니다.\n\n[하트]\n하트 카드와 스페이드Q를 피하며 최저 점수를 노리는 게임입니다.\n하트 1장당 1점, 스페이드Q는 13점입니다.\n\n[훌라]\n같은 숫자나 연속된 숫자 조합을 만들어 먼저 패를 버리면 승리합니다.\n\n[원카드]\nUNO와 유사한 게임. 같은 숫자나 무늬의 카드를 내며 먼저 패를 없애면 승리합니다.\n\n[하이로우]\n다음 카드가 현재 카드보다 높을지 낮을지 맞추는 게임입니다.\n\n[세븐포커]\n7장의 카드로 족보를 만들어 겨루는 포커 게임입니다.',
-      'help_boardGame': '[오목]\n흑과 백이 번갈아 돌을 놓아 먼저 5개를 연속으로 놓으면 승리합니다.\n가로, 세로, 대각선 모두 가능합니다.\n\n[오델로]\n상대 돌을 자신의 돌로 양쪽에서 감싸면 뒤집을 수 있습니다.\n게임 종료 시 더 많은 돌을 가진 쪽이 승리합니다.\n\n[테트리스]\n떨어지는 블록을 쌓아 가로줄을 완성하면 사라집니다.\n블록이 맨 위까지 쌓이면 게임 오버입니다.\n\n[지뢰찾기]\n숫자 힌트를 이용해 지뢰 위치를 추리합니다.\n지뢰가 아닌 모든 칸을 열면 승리합니다.\n\n[솔리테어]\n카드를 규칙에 맞게 정리하여 4개의 기초 더미를 완성하는 게임입니다.\n\n[미로]\n출구를 찾아 미로를 탈출하는 게임입니다.\n\n[버블]\n같은 색 버블 3개 이상을 맞춰 터뜨리는 게임입니다.',
+      'help_boardGame': '[오목]\n흑과 백이 번갈아 돌을 놓아 먼저 5개를 연속으로 놓으면 승리합니다.\n가로, 세로, 대각선 모두 가능합니다.\n\n[오델로]\n상대 돌을 자신의 돌로 양쪽에서 감싸면 뒤집을 수 있습니다.\n게임 종료 시 더 많은 돌을 가진 쪽이 승리합니다.\n\n[테트리스]\n떨어지는 블록을 쌓아 가로줄을 완성하면 사라집니다.\n블록이 맨 위까지 쌓이면 게임 오버입니다.\n\n[블록 크러시]\n초기 블록이 채워진 보드에서 줄을 완성하여 초기 블록(회색)을 모두 제거하면 단계 클리어입니다.\n\n[지뢰찾기]\n숫자 힌트를 이용해 지뢰 위치를 추리합니다.\n지뢰가 아닌 모든 칸을 열면 승리합니다.\n\n[솔리테어]\n카드를 규칙에 맞게 정리하여 4개의 기초 더미를 완성하는 게임입니다.\n\n[미로]\n출구를 찾아 미로를 탈출하는 게임입니다.\n\n[버블]\n같은 색 버블 3개 이상을 맞춰 터뜨리는 게임입니다.',
       'help_sudoku': '[게임 방법]\n9x9 칸에 1~9 숫자를 중복 없이 채우는 논리 퍼즐입니다.\n각 가로줄, 세로줄, 3x3 박스에 같은 숫자가 없어야 합니다.\n\n[게임 모드]\n- 클래식: 기본 스도쿠\n- 사무라이: 5개의 스도쿠가 겹쳐진 대형 퍼즐\n- 킬러: 점선 영역 내 숫자 합이 주어진 숫자와 일치해야 함\n- 숫자합: 인접한 칸의 합이 힌트로 주어지는 변형\n\n[난이도]\n초급 / 중급 / 고급 / 전문가',
       'help_yutnori': '[게임 방법]\n윷을 던져 나온 결과에 따라 말을 이동시킵니다.\n모든 말을 먼저 도착점에 들여보내면 승리합니다.\n\n[윷 결과]\n- 도: 1칸 이동\n- 개: 2칸 이동\n- 걸: 3칸 이동\n- 윷: 4칸 이동 + 한 번 더 던지기\n- 모: 5칸 이동 + 한 번 더 던지기\n\n[특수 규칙]\n- 상대 말을 잡으면 한 번 더 던질 수 있습니다\n- 같은 위치의 내 말은 업어서 함께 이동할 수 있습니다\n- 지름길을 활용하면 더 빨리 도착할 수 있습니다',
       // 하위 게임 이름
@@ -394,6 +395,7 @@ class L10n {
       'gomoku': '오목',
       'othello': '오델로',
       'tetris': '테트리스',
+      'tetrisWide': '블록 크러시',
       'minesweeper': '지뢰찾기',
       'solitaire': '솔리테어',
       'maze': '미로',
@@ -417,6 +419,7 @@ class L10n {
       'help_gomoku': '[게임 방법]\n흑과 백이 번갈아 돌을 놓아 먼저 5개를 연속으로 놓으면 승리합니다.\n\n[기본 규칙]\n- 흑이 먼저 시작\n- 가로, 세로, 대각선 모두 가능\n- 정확히 5개 연속 (6개 이상은 무효)\n\n[게임 모드]\n- AI 대전: 컴퓨터와 대결\n- 2인 대전: 친구와 함께\n\n[전략 팁]\n- 양쪽이 열린 4개 연속(열린 4)은 막기 어려움\n- 동시에 두 방향으로 4를 만드는 것이 유리\n- 상대의 3연속을 미리 차단',
       'help_othello': '[게임 방법]\n상대 돌을 자신의 돌로 양쪽에서 감싸면 뒤집을 수 있습니다.\n게임 종료 시 더 많은 돌을 가진 쪽이 승리합니다.\n\n[기본 규칙]\n- 8x8 판에서 진행\n- 흑이 먼저 시작\n- 반드시 상대 돌을 뒤집을 수 있는 곳에만 착수 가능\n- 둘 수 없으면 패스\n\n[게임 종료]\n- 판이 가득 차거나\n- 양쪽 모두 둘 곳이 없을 때\n\n[전략 팁]\n- 코너를 차지하면 유리\n- 가장자리도 중요한 위치\n- 초반에 돌이 적은 것이 오히려 유리할 수 있음',
       'help_tetris': '[게임 방법]\n떨어지는 블록을 쌓아 가로줄을 완성하면 사라집니다.\n블록이 맨 위까지 쌓이면 게임 오버입니다.\n\n[조작법]\n- 좌우: 블록 이동\n- 위: 회전\n- 아래: 빠르게 내리기\n- 스페이스: 즉시 낙하\n\n[블록 종류]\n- I, O, T, S, Z, J, L 총 7종류\n\n[점수]\n- 1줄: 100점\n- 2줄: 300점\n- 3줄: 500점\n- 4줄(테트리스): 800점\n\n[레벨]\n- 줄을 지울수록 레벨 상승\n- 레벨이 오르면 낙하 속도 증가',
+      'help_tetrisWide': '[게임 방법]\n초기 블록이 채워진 넓은 보드에서 떨어지는 블록을 배치하여 가로줄을 완성하세요.\n초기 블록(회색)을 모두 제거하면 단계가 클리어됩니다.\n\n[조작법]\n- 좌우: 블록 이동\n- 회전 버튼: 블록 90° 회전\n- 드롭 버튼: 블록 즉시 떨어뜨리기\n\n[점수]\n- 1줄: 100점\n- 2줄: 300점\n- 3줄: 500점\n- 4줄: 800점\n\n[레벨]\n- 초기 블록을 모두 제거하면 다음 레벨로\n- 레벨이 오르면 초기 블록이 늘어나고 속도가 빨라집니다',
       'help_minesweeper': '[게임 방법]\n숫자 힌트를 이용해 지뢰 위치를 추리합니다.\n지뢰가 아닌 모든 칸을 열면 승리합니다.\n\n[숫자의 의미]\n- 숫자는 주변 8칸에 있는 지뢰 개수\n- 0이면 주변에 지뢰 없음 (자동 확장)\n\n[조작법]\n- 클릭: 칸 열기\n- 오른쪽 클릭/길게 누르기: 깃발 표시\n\n[난이도]\n- 초급: 9x9, 지뢰 10개\n- 중급: 16x16, 지뢰 40개\n- 고급: 30x16, 지뢰 99개\n\n[전략 팁]\n- 모서리부터 시작하면 안전\n- 1-2-1 패턴 등 자주 나오는 패턴 익히기',
       'help_solitaire': '[게임 방법]\n카드를 규칙에 맞게 정리하여 4개의 기초 더미를 완성하는 게임입니다.\n\n[목표]\n- 4개의 기초 더미에 A부터 K까지 같은 무늬로 쌓기\n\n[규칙]\n- 테이블 카드: 빨강-검정 번갈아, 내림차순으로 쌓기\n- 기초 더미: 같은 무늬, 오름차순(A-K)으로 쌓기\n- 덱에서 카드를 뽑아 사용 가능\n\n[조작법]\n- 카드 드래그: 이동\n- 카드 더블클릭: 자동으로 기초 더미로 이동\n- 덱 클릭: 새 카드 뽑기',
       'help_maze': '[게임 방법]\n출구를 찾아 미로를 탈출하는 게임입니다.\n\n[조작법]\n- 화살표/스와이프: 이동\n- 벽은 통과 불가\n\n[게임 모드]\n- 다양한 크기의 미로\n- 시간 제한 모드\n\n[전략 팁]\n- 한쪽 벽을 계속 따라가면 출구 도달 가능\n- 분기점에서 방문한 곳 기억하기\n- 막다른 길에서는 되돌아가기',
@@ -437,7 +440,7 @@ class L10n {
       'termsOfService': '이용약관',
       'info': '정보',
       'aboutTitle': '게임 앱 소개',
-      'aboutContent': '다양한 게임을 즐길 수 있는 무료 게임 모음 앱입니다.\n\n[바둑]\n약 4,000년 역사의 전략 보드게임. 흑과 백이 번갈아 돌을 놓아 더 많은 영역을 차지하는 것이 목표입니다.\n- AI 대국, 2인 대국, 사활 문제\n\n[장기]\n한국의 전통 전략 보드게임. 각 16개의 기물을 움직여 상대편의 왕(장)을 잡는 것이 목표입니다.\n- AI 대국, 2인 대국\n\n[카드게임]\n- 마이티: 5인용 트릭테이킹 게임. 여당과 야당으로 나뉘어 점수를 겨룹니다.\n- 하트: 하트 카드와 스페이드Q를 피하며 최저 점수를 노리는 게임.\n- 훌라: 같은 숫자나 연속된 숫자 조합을 만들어 먼저 패를 버리면 승리.\n- 원카드: UNO와 유사한 게임. 같은 숫자나 무늬의 카드를 내며 먼저 패를 없애면 승리.\n- 하이로우: 다음 카드가 높을지 낮을지 맞추는 게임.\n- 세븐포커: 7장의 카드로 족보를 만들어 겨루는 포커 게임.\n\n[보드게임]\n- 오목: 먼저 5개를 연속으로 놓으면 승리.\n- 오델로: 상대 돌을 뒤집어 더 많은 돌을 확보하는 게임.\n- 테트리스: 떨어지는 블록을 쌓아 줄을 완성하면 사라지는 퍼즐 게임.\n- 지뢰찾기: 숫자 힌트로 지뢰 위치를 추리하는 게임.\n- 솔리테어: 카드를 규칙에 맞게 정리하는 1인용 카드 게임.\n- 버블: 같은 색 버블 3개 이상을 맞춰 터뜨리는 게임.\n- 두더지 잡기: 구멍에서 올라오는 두더지를 빠르게 잡는 게임.\n- 숫자야구: 3자리 숫자를 추리하는 논리 게임.\n\n[탈출게임]\n- 미로: 출구를 찾아 미로를 탈출하는 게임.\n- 화살표 미로: 화살표를 탭하여 모두 제거하는 퍼즐 게임.\n- 주차장 탈출: 막힌 차들을 탭하여 주차장에서 탈출시키는 게임.\n- 교차로 탈출: 차량 위 화살표 방향대로 교차로를 통과시켜 탈출시키는 게임.\n\n[스도쿠]\n9x9 칸에 1~9 숫자를 중복 없이 채우는 논리 퍼즐.\n- 클래식: 기본 스도쿠. 가로, 세로, 3x3 박스에 같은 숫자 금지.\n- 사무라이: 5개의 스도쿠가 겹쳐진 대형 퍼즐.\n- 킬러: 점선 영역 내 숫자 합이 주어진 숫자와 일치해야 함.\n- 숫자합: 인접한 칸의 합이 힌트로 주어지는 변형.\n\n[전통게임]\n- 윷놀이: 윷을 던져 도/개/걸/윷/모에 따라 말을 이동시켜 먼저 나오면 승리.\n\n모든 게임은 오프라인에서 무료로 즐길 수 있습니다.',
+      'aboutContent': '다양한 게임을 즐길 수 있는 무료 게임 모음 앱입니다.\n\n[바둑]\n약 4,000년 역사의 전략 보드게임. 흑과 백이 번갈아 돌을 놓아 더 많은 영역을 차지하는 것이 목표입니다.\n- AI 대국, 2인 대국, 사활 문제\n\n[장기]\n한국의 전통 전략 보드게임. 각 16개의 기물을 움직여 상대편의 왕(장)을 잡는 것이 목표입니다.\n- AI 대국, 2인 대국\n\n[카드게임]\n- 마이티: 5인용 트릭테이킹 게임. 여당과 야당으로 나뉘어 점수를 겨룹니다.\n- 하트: 하트 카드와 스페이드Q를 피하며 최저 점수를 노리는 게임.\n- 훌라: 같은 숫자나 연속된 숫자 조합을 만들어 먼저 패를 버리면 승리.\n- 원카드: UNO와 유사한 게임. 같은 숫자나 무늬의 카드를 내며 먼저 패를 없애면 승리.\n- 하이로우: 다음 카드가 높을지 낮을지 맞추는 게임.\n- 세븐포커: 7장의 카드로 족보를 만들어 겨루는 포커 게임.\n\n[보드게임]\n- 오목: 먼저 5개를 연속으로 놓으면 승리.\n- 오델로: 상대 돌을 뒤집어 더 많은 돌을 확보하는 게임.\n- 테트리스: 떨어지는 블록을 쌓아 줄을 완성하면 사라지는 퍼즐 게임.\n- 지뢰찾기: 숫자 힌트로 지뢰 위치를 추리하는 게임.\n- 솔리테어: 카드를 규칙에 맞게 정리하는 1인용 카드 게임.\n- 버블: 같은 색 버블 3개 이상을 맞춰 터뜨리는 게임.\n- 두더지 잡기: 구멍에서 올라오는 두더지를 빠르게 잡는 게임.\n- 숫자야구: 3자리 숫자를 추리하는 논리 게임.\n- 블록 크러시: 초기 블록이 채워진 보드에서 줄을 완성하여 초기 블록을 모두 제거하는 게임.\n\n[탈출게임]\n- 미로: 출구를 찾아 미로를 탈출하는 게임.\n- 화살표 미로: 화살표를 탭하여 모두 제거하는 퍼즐 게임.\n- 주차장 탈출: 막힌 차들을 탭하여 주차장에서 탈출시키는 게임.\n- 교차로 탈출: 차량 위 화살표 방향대로 교차로를 통과시켜 탈출시키는 게임.\n\n[스도쿠]\n9x9 칸에 1~9 숫자를 중복 없이 채우는 논리 퍼즐.\n- 클래식: 기본 스도쿠. 가로, 세로, 3x3 박스에 같은 숫자 금지.\n- 사무라이: 5개의 스도쿠가 겹쳐진 대형 퍼즐.\n- 킬러: 점선 영역 내 숫자 합이 주어진 숫자와 일치해야 함.\n- 숫자합: 인접한 칸의 합이 힌트로 주어지는 변형.\n\n[전통게임]\n- 윷놀이: 윷을 던져 도/개/걸/윷/모에 따라 말을 이동시켜 먼저 나오면 승리.\n\n모든 게임은 오프라인에서 무료로 즐길 수 있습니다.',
       'helpTitle': '게임 방법',
       'helpRules': '기본 규칙',
       'helpRulesContent': '• 흑이 먼저 시작합니다\n• 빈 교차점에 돌을 놓습니다\n• 상대 돌을 완전히 둘러싸면 잡을 수 있습니다\n• 더 많은 영역을 차지한 쪽이 승리합니다\n• 백은 6.5점의 덤을 받습니다',
@@ -612,7 +615,7 @@ class L10n {
       'help_baduk': '[How to Play]\nBlack and white take turns placing stones on empty intersections.\nSurround opponent stones to capture them.\nThe player with more territory at the end wins.\n\n[Basic Rules]\n- Black plays first\n- White receives 6.5 points komi\n- Ko: Cannot recreate previous board position\n\n[Game Modes]\n- AI Match: Play against AI\n- 2-Player: Play with a friend\n- Life & Death: Improve skills with problems',
       'help_janggi': '[How to Play]\nEach player moves 16 pieces to capture the opponent\'s king (Jang).\n\n[Piece Movement]\n- Jang (King): Moves one space within palace\n- Cha (Chariot): Moves any distance straight\n- Po (Cannon): Jumps over one piece to move/attack (cannot jump over another cannon)\n- Ma (Horse): Moves in L-shape\n- Sang (Elephant): Moves one straight + two diagonal steps\n- Sa (Guard): Moves one space diagonally in palace\n- Jol/Byung (Pawn): Moves forward or sideways\n\n[Capturing]\n- Capture opponent pieces by moving to their position\n- Cannot move if pieces block the path (except Cannon)\n\n[Game Modes]\n- AI Match: Play against AI\n- 2-Player: Play with a friend',
       'help_cardGame': '[Mighty]\n5-player trick-taking game. Declare points and win as the ruling party.\nRuling party (declarer + partner) vs Opposition (3 others).\n\n[Hearts]\nAvoid hearts and Queen of Spades for lowest score.\n1 point per heart, 13 points for Queen of Spades.\n\n[Hula]\nMake sets of same numbers or sequences. First to discard all cards wins.\n\n[OneCard]\nSimilar to UNO. Match numbers or suits. First to empty hand wins.\n\n[HiLo]\nGuess if the next card is higher or lower than current card.\n\n[Seven Poker]\nCreate poker hands with 7 cards to compete.',
-      'help_boardGame': '[Gomoku]\nPlace stones alternately. First to get 5 in a row wins.\nHorizontal, vertical, and diagonal lines all count.\n\n[Othello]\nFlip opponent pieces by sandwiching them with your pieces.\nPlayer with more pieces at the end wins.\n\n[Tetris]\nStack falling blocks to complete horizontal lines.\nGame over when blocks reach the top.\n\n[Minesweeper]\nUse number hints to find mines.\nOpen all non-mine cells to win.\n\n[Solitaire]\nArrange cards by rules to build 4 foundation piles.\n\n[Maze]\nFind the exit to escape the maze.\n\n[Bubble]\nMatch 3 or more same-colored bubbles to pop them.',
+      'help_boardGame': '[Gomoku]\nPlace stones alternately. First to get 5 in a row wins.\nHorizontal, vertical, and diagonal lines all count.\n\n[Othello]\nFlip opponent pieces by sandwiching them with your pieces.\nPlayer with more pieces at the end wins.\n\n[Tetris]\nStack falling blocks to complete horizontal lines.\nGame over when blocks reach the top.\n\n[Block Crush]\nComplete lines on a board pre-filled with initial blocks.\nClear all initial blocks (gray) to complete the level.\n\n[Minesweeper]\nUse number hints to find mines.\nOpen all non-mine cells to win.\n\n[Solitaire]\nArrange cards by rules to build 4 foundation piles.\n\n[Maze]\nFind the exit to escape the maze.\n\n[Bubble]\nMatch 3 or more same-colored bubbles to pop them.',
       'help_sudoku': '[How to Play]\nFill a 9x9 grid with numbers 1-9 without repetition.\nNo duplicates in any row, column, or 3x3 box.\n\n[Game Modes]\n- Classic: Standard sudoku\n- Samurai: 5 overlapping sudoku grids\n- Killer: Numbers in cages must sum to given total\n- Sum: Adjacent cell sums given as hints\n\n[Difficulty]\nEasy / Medium / Hard / Expert',
       'help_yutnori': '[How to Play]\nThrow yut sticks and move pieces based on results.\nFirst to bring all pieces to the finish wins.\n\n[Yut Results]\n- Do: Move 1 space\n- Gae: Move 2 spaces\n- Geol: Move 3 spaces\n- Yut: Move 4 spaces + throw again\n- Mo: Move 5 spaces + throw again\n\n[Special Rules]\n- Capture opponent piece = throw again\n- Stack your pieces on same spot to move together\n- Use shortcuts to reach finish faster',
       // Sub-game names
@@ -631,6 +634,7 @@ class L10n {
       'gomoku': 'Gomoku',
       'othello': 'Othello',
       'tetris': 'Tetris',
+      'tetrisWide': 'Block Crush',
       'minesweeper': 'Minesweeper',
       'solitaire': 'Solitaire',
       'maze': 'Maze',
@@ -654,6 +658,7 @@ class L10n {
       'help_gomoku': '[How to Play]\nBlack and white take turns placing stones.\nFirst to get 5 stones in a row wins.\n\n[Rules]\n- Horizontal, vertical, and diagonal all count\n- Cannot place on occupied spots\n\n[Strategy]\nBlock opponent while building your own line!',
       'help_othello': '[How to Play]\nFlip opponent pieces by sandwiching them between your pieces.\nPlayer with more pieces at the end wins.\n\n[Rules]\n- Must flip at least one piece each turn\n- Pass if no valid moves\n\n[Strategy]\nCorners are valuable - they cannot be flipped!',
       'help_tetris': '[How to Play]\nRotate and place falling blocks to complete horizontal lines.\nCompleted lines disappear for points.\n\n[Controls]\n- Move: Left/Right arrows\n- Rotate: Up arrow\n- Drop: Down arrow\n\n[Tip]\nKeep the stack low and flat!',
+      'help_tetrisWide': '[How to Play]\nPlace falling blocks on a wide board pre-filled with initial blocks to complete horizontal lines.\nClear all initial blocks (gray) to complete the level.\n\n[Controls]\n- Left/Right: Move block\n- Rotate button: Rotate block 90°\n- Drop button: Drop block instantly\n\n[Scoring]\n- 1 line: 100 points\n- 2 lines: 300 points\n- 3 lines: 500 points\n- 4 lines: 800 points\n\n[Levels]\n- Clear all initial blocks to advance\n- Higher levels have more initial blocks and faster speed',
       'help_minesweeper': '[How to Play]\nFind all mines without clicking on them.\nNumbers show how many adjacent mines there are.\n\n[Controls]\n- Click: Open cell\n- Long press: Flag mine\n\n[Tip]\nUse number patterns to deduce mine locations!',
       'help_solitaire': '[How to Play]\nArrange cards to build 4 foundation piles by suit (A to K).\n\n[Rules]\n- Tableau: Stack cards in descending order, alternating colors\n- Foundation: Build up by suit from Ace\n\n[Tip]\nReveal face-down cards as priority!',
       'help_maze': '[How to Play]\nFind the path from start to exit.\n\n[Controls]\n- Swipe or use arrows to move\n- Find the shortest path for best score\n\n[Tip]\nFollow one wall to eventually find the exit!',
@@ -674,7 +679,7 @@ class L10n {
       'termsOfService': 'Terms of Service',
       'info': 'Info',
       'aboutTitle': 'About This App',
-      'aboutContent': 'A free game collection app with various games.\n\n[Go (Baduk)]\nA strategic board game with 4,000 years of history. Players take turns placing stones to control more territory.\n- AI match, 2-player, Life & Death problems\n\n[Janggi]\nKorean traditional strategy board game. Move 16 pieces to capture the opponent\'s king.\n- AI match, 2-player mode\n\n[Card Games]\n- Mighty: 5-player trick-taking game with government vs opposition teams.\n- Hearts: Avoid hearts and Queen of Spades to get the lowest score.\n- Hula: Make sets of same numbers or sequences to discard all cards first.\n- OneCard: Similar to UNO. Match numbers or suits to empty your hand first.\n- HiLo: Guess if the next card will be higher or lower.\n- Seven Poker: Create poker hands with 7 cards.\n\n[Board Games]\n- Gomoku: First to place 5 stones in a row wins.\n- Othello: Flip opponent\'s pieces to control the board.\n- Tetris: Stack falling blocks to complete and clear lines.\n- Minesweeper: Use number hints to find hidden mines.\n- Solitaire: Single-player card game to arrange cards by rules.\n- Bubble: Match 3 or more same-colored bubbles to pop them.\n- Whack-a-Mole: Quickly hit moles as they pop up from holes.\n- Number Baseball: Logic game to guess a 3-digit number.\n\n[Escape Games]\n- Maze: Find the exit and escape the maze.\n- Arrow Maze: Puzzle game where you tap arrows to remove them all.\n- Parking Escape: Tap blocked cars to escape them from the parking lot.\n- Intersection Escape: Guide cars through intersections based on arrow directions.\n\n[Sudoku]\nFill a 9x9 grid with numbers 1-9 without repetition.\n- Classic: Standard sudoku. No duplicates in rows, columns, or 3x3 boxes.\n- Samurai: 5 overlapping sudoku grids in one large puzzle.\n- Killer: Numbers in dotted cages must sum to the given total.\n- Sum: Adjacent cells have sum hints as clues.\n\n[Traditional Games]\n- Yut Nori: Throw yut sticks and move pieces based on results (Do/Gae/Geol/Yut/Mo).\n\nAll games are free to play offline.',
+      'aboutContent': 'A free game collection app with various games.\n\n[Go (Baduk)]\nA strategic board game with 4,000 years of history. Players take turns placing stones to control more territory.\n- AI match, 2-player, Life & Death problems\n\n[Janggi]\nKorean traditional strategy board game. Move 16 pieces to capture the opponent\'s king.\n- AI match, 2-player mode\n\n[Card Games]\n- Mighty: 5-player trick-taking game with government vs opposition teams.\n- Hearts: Avoid hearts and Queen of Spades to get the lowest score.\n- Hula: Make sets of same numbers or sequences to discard all cards first.\n- OneCard: Similar to UNO. Match numbers or suits to empty your hand first.\n- HiLo: Guess if the next card will be higher or lower.\n- Seven Poker: Create poker hands with 7 cards.\n\n[Board Games]\n- Gomoku: First to place 5 stones in a row wins.\n- Othello: Flip opponent\'s pieces to control the board.\n- Tetris: Stack falling blocks to complete and clear lines.\n- Minesweeper: Use number hints to find hidden mines.\n- Solitaire: Single-player card game to arrange cards by rules.\n- Bubble: Match 3 or more same-colored bubbles to pop them.\n- Whack-a-Mole: Quickly hit moles as they pop up from holes.\n- Number Baseball: Logic game to guess a 3-digit number.\n- Block Crush: Clear all initial blocks by completing lines on a pre-filled board.\n\n[Escape Games]\n- Maze: Find the exit and escape the maze.\n- Arrow Maze: Puzzle game where you tap arrows to remove them all.\n- Parking Escape: Tap blocked cars to escape them from the parking lot.\n- Intersection Escape: Guide cars through intersections based on arrow directions.\n\n[Sudoku]\nFill a 9x9 grid with numbers 1-9 without repetition.\n- Classic: Standard sudoku. No duplicates in rows, columns, or 3x3 boxes.\n- Samurai: 5 overlapping sudoku grids in one large puzzle.\n- Killer: Numbers in dotted cages must sum to the given total.\n- Sum: Adjacent cells have sum hints as clues.\n\n[Traditional Games]\n- Yut Nori: Throw yut sticks and move pieces based on results (Do/Gae/Geol/Yut/Mo).\n\nAll games are free to play offline.',
       'helpTitle': 'How to Play',
       'helpRules': 'Basic Rules',
       'helpRulesContent': '• Black plays first\n• Place stones on empty intersections\n• Surround opponent stones to capture them\n• Control more territory to win\n• White receives 6.5 points komi',
@@ -849,7 +854,7 @@ class L10n {
       'help_baduk': '[遊び方]\n黒と白が交互に空いている交点に石を置きます。\n相手の石を完全に囲むと取れます。\n終局時、より多くの領域を確保した方が勝ちです。\n\n[基本ルール]\n- 黒が先手です\n- 白には6.5目のコミがあります\n- コウ：直前と同じ局面を作る着手は禁止\n\n[ゲームモード]\n- AI対局：AIと対戦\n- 二人対局：友達と対戦\n- 詰碁問題：問題を解いて実力アップ',
       'help_janggi': '[遊び方]\n各プレイヤーは16個の駒を動かして相手の王（将）を取ります。\n\n[駒の動き]\n- 将：宮内で一マス移動\n- 車：直線で何マスでも移動\n- 包：他の駒を一つ飛び越えて移動/攻撃（包は飛び越えられない）\n- 馬：日の字型に移動\n- 象：直線一マス＋斜め二マス移動（用の字型）\n- 士：宮内で斜め一マス移動\n- 卒/兵：前または横に一マス移動\n\n[駒を取る]\n- 移動先に相手の駒があれば取ることができます\n- 移動経路に他の駒があると移動できません（包を除く）\n\n[ゲームモード]\n- AI対局：AIと対戦\n- 二人対局：友達と対戦',
       'help_cardGame': '[マイティ]\n5人用トリックテイキングゲーム。宣言した点数を獲得すれば勝利。\n与党（主公+パートナー）vs 野党（残り3人）。\n\n[ハーツ]\nハートとスペードQを避けて最低点を目指すゲーム。\nハート1枚1点、スペードQ13点。\n\n[フラ]\n同じ数字や連続した数字の組み合わせを作り、先に手札をなくせば勝ち。\n\n[ワンカード]\nUNOに似たゲーム。同じ数字か柄のカードを出して先に手札をなくす。\n\n[ハイロー]\n次のカードが今のカードより高いか低いかを当てるゲーム。\n\n[セブンポーカー]\n7枚のカードで役を作って勝負するポーカー。',
-      'help_boardGame': '[五目並べ]\n黒と白が交互に石を置き、先に5つ並べれば勝ち。\n縦、横、斜めすべて有効。\n\n[オセロ]\n相手の石を自分の石で挟むとひっくり返せます。\n終局時、より多くの石を持つ方が勝ち。\n\n[テトリス]\n落ちてくるブロックを積み、横列を揃えて消すゲーム。\nブロックが一番上まで積まれるとゲームオーバー。\n\n[マインスイーパー]\n数字のヒントで地雷の位置を推理します。\n地雷以外のすべてのマスを開ければ勝ち。\n\n[ソリティア]\nルールに従ってカードを並べ、4つの基礎の山を完成させるゲーム。\n\n[迷路]\n出口を見つけて脱出するゲーム。\n\n[バブル]\n同じ色のバブルを3つ以上揃えて消すゲーム。',
+      'help_boardGame': '[五目並べ]\n黒と白が交互に石を置き、先に5つ並べれば勝ち。\n縦、横、斜めすべて有効。\n\n[オセロ]\n相手の石を自分の石で挟むとひっくり返せます。\n終局時、より多くの石を持つ方が勝ち。\n\n[テトリス]\n落ちてくるブロックを積み、横列を揃えて消すゲーム。\nブロックが一番上まで積まれるとゲームオーバー。\n\n[ブロッククラッシュ]\n初期ブロックが配置されたボードでラインを完成させ、初期ブロック（灰色）を全て除去するとステージクリア。\n\n[マインスイーパー]\n数字のヒントで地雷の位置を推理します。\n地雷以外のすべてのマスを開ければ勝ち。\n\n[ソリティア]\nルールに従ってカードを並べ、4つの基礎の山を完成させるゲーム。\n\n[迷路]\n出口を見つけて脱出するゲーム。\n\n[バブル]\n同じ色のバブルを3つ以上揃えて消すゲーム。',
       'help_sudoku': '[遊び方]\n9x9マスに1~9の数字を重複なく埋めるパズル。\n縦、横、3x3ボックスに同じ数字は入れません。\n\n[ゲームモード]\n- クラシック：基本の数独\n- サムライ：5つの数独が重なった大型パズル\n- キラー：点線内の数字の合計が指定された数になる\n- 数字合計：隣接するマスの合計がヒント\n\n[難易度]\n初級 / 中級 / 上級 / エキスパート',
       'help_yutnori': '[遊び方]\nユッを投げて結果に従って駒を動かします。\nすべての駒を先にゴールさせれば勝ち。\n\n[ユッの結果]\n- ド：1マス移動\n- ゲ：2マス移動\n- ゴル：3マス移動\n- ユッ：4マス移動＋もう一回投げる\n- モ：5マス移動＋もう一回投げる\n\n[特殊ルール]\n- 相手の駒を取るともう一回投げられる\n- 同じ位置の自分の駒は一緒に動かせる\n- 近道を使うとより早くゴールできる',
       // サブゲーム名
@@ -868,6 +873,7 @@ class L10n {
       'gomoku': '五目並べ',
       'othello': 'オセロ',
       'tetris': 'テトリス',
+      'tetrisWide': 'ブロッククラッシュ',
       'minesweeper': 'マインスイーパー',
       'solitaire': 'ソリティア',
       'maze': '迷路',
@@ -891,6 +897,7 @@ class L10n {
       'help_gomoku': '[遊び方]\n黒と白が交互に石を置きます。\n先に5つ並べた方が勝ち。\n\n[ルール]\n- 縦、横、斜めすべて有効\n- 既に石がある場所には置けない\n\n[戦略]\n相手を止めながら自分のラインを作ろう！',
       'help_othello': '[遊び方]\n相手の石を自分の石で挟むとひっくり返せます。\n終局時、より多くの石を持つ方が勝ち。\n\n[ルール]\n- 毎ターン最低1つ石をひっくり返す必要がある\n- 有効な手がない場合はパス\n\n[戦略]\n角は価値が高い - ひっくり返されない！',
       'help_tetris': '[遊び方]\n落ちてくるブロックを回転させて積み、横列を揃えます。\n揃った列は消えてポイントになります。\n\n[操作]\n- 移動：左右矢印\n- 回転：上矢印\n- ドロップ：下矢印\n\n[コツ]\n低く平らに積もう！',
+      'help_tetrisWide': '[遊び方]\n初期ブロックが配置された広いボードで落ちてくるブロックを使って横一列を完成させましょう。\n初期ブロック（灰色）を全て除去するとステージクリアです。\n\n[操作]\n- 左右：ブロック移動\n- 回転ボタン：ブロックを90°回転\n- ドロップボタン：ブロックを即座に落とす\n\n[スコア]\n- 1列：100点\n- 2列：300点\n- 3列：500点\n- 4列：800点\n\n[レベル]\n- 初期ブロックを全て除去すると次のレベルへ\n- レベルが上がると初期ブロックが増え、速度も速くなります',
       'help_minesweeper': '[遊び方]\n地雷をクリックせずにすべて見つけるゲーム。\n数字は隣接する地雷の数を示します。\n\n[操作]\n- クリック：マスを開く\n- 長押し：地雷にフラグを立てる\n\n[コツ]\n数字のパターンで地雷の位置を推理しよう！',
       'help_solitaire': '[遊び方]\nカードを並べて4つの基礎の山（AからK）を作ります。\n\n[ルール]\n- 場札：色を交互に降順で積む\n- 基礎：スートごとにAから昇順で積む\n\n[コツ]\n裏返しのカードを優先的に表にしよう！',
       'help_maze': '[遊び方]\nスタートから出口までの道を見つけます。\n\n[操作]\n- スワイプか矢印キーで移動\n- 最短経路で最高スコア\n\n[コツ]\n壁に沿って進めば必ず出口に辿り着く！',
@@ -911,7 +918,7 @@ class L10n {
       'termsOfService': '利用規約',
       'info': '情報',
       'aboutTitle': 'アプリ紹介',
-      'aboutContent': '様々なゲームを楽しめる無料ゲームコレクションアプリです。\n\n[囲碁]\n約4,000年の歴史を持つ戦略ボードゲーム。黒と白が交互に石を置き、より多くの領域を確保します。\n- AI対局、二人対局、詰碁問題\n\n[将棋]\n韓国の伝統的な戦略ボードゲーム。16個の駒を動かして相手の王を取ります。\n- AI対局、二人対局\n\n[カードゲーム]\n- マイティ: 5人用トリックテイキングゲーム。与党と野党に分かれて得点を競います。\n- ハーツ: ハートとスペードQを避けて最低点を目指すゲーム。\n- フラ: 同じ数字や連続した数字の組み合わせを作り、先に手札をなくせば勝ち。\n- ワンカード: UNOに似たゲーム。同じ数字か柄のカードを出して先に手札をなくす。\n- ハイロー: 次のカードが高いか低いかを当てるゲーム。\n- セブンポーカー: 7枚のカードで役を作って勝負するポーカー。\n\n[ボードゲーム]\n- 五目並べ: 先に5つ並べれば勝ち。\n- オセロ: 相手の石をひっくり返して多くの石を確保するゲーム。\n- テトリス: 落ちてくるブロックを積み、列を揃えて消すパズルゲーム。\n- マインスイーパー: 数字のヒントで地雷の位置を推理するゲーム。\n- ソリティア: ルールに従ってカードを並べる一人用カードゲーム。\n- バブル: 同じ色のバブルを3つ以上揃えて消すゲーム。\n- モグラたたき: 穴から出てくるモグラを素早く叩くゲーム。\n- ナンバーベースボール: 3桁の数字を推理するロジックゲーム。\n\n[脱出ゲーム]\n- 迷路: 出口を見つけて脱出するゲーム。\n- 矢印迷路: 矢印をタップしてすべて除去するパズルゲーム。\n- 駐車場脱出: 詰まった車をタップして駐車場から脱出させるゲーム。\n- 交差点脱出: 矢印の方向に従って交差点を通過させ車を脱出させるゲーム。\n\n[数独]\n9x9マスに1~9の数字を重複なく埋めるパズル。\n- クラシック: 基本の数独。縦、横、3x3ボックスに同じ数字は入れません。\n- サムライ: 5つの数独が重なった大型パズル。\n- キラー: 点線の領域内の数字の合計が指定された数になる必要があります。\n- 数字合計: 隣接するマスの合計がヒントとして与えられます。\n\n[伝統ゲーム]\n- ユンノリ: ユッを投げてド/ゲ/ゴル/ユッ/モに従って駒を動かし、先に出れば勝ち。\n\nすべてのゲームはオフラインで無料でプレイできます。',
+      'aboutContent': '様々なゲームを楽しめる無料ゲームコレクションアプリです。\n\n[囲碁]\n約4,000年の歴史を持つ戦略ボードゲーム。黒と白が交互に石を置き、より多くの領域を確保します。\n- AI対局、二人対局、詰碁問題\n\n[将棋]\n韓国の伝統的な戦略ボードゲーム。16個の駒を動かして相手の王を取ります。\n- AI対局、二人対局\n\n[カードゲーム]\n- マイティ: 5人用トリックテイキングゲーム。与党と野党に分かれて得点を競います。\n- ハーツ: ハートとスペードQを避けて最低点を目指すゲーム。\n- フラ: 同じ数字や連続した数字の組み合わせを作り、先に手札をなくせば勝ち。\n- ワンカード: UNOに似たゲーム。同じ数字か柄のカードを出して先に手札をなくす。\n- ハイロー: 次のカードが高いか低いかを当てるゲーム。\n- セブンポーカー: 7枚のカードで役を作って勝負するポーカー。\n\n[ボードゲーム]\n- 五目並べ: 先に5つ並べれば勝ち。\n- オセロ: 相手の石をひっくり返して多くの石を確保するゲーム。\n- テトリス: 落ちてくるブロックを積み、列を揃えて消すパズルゲーム。\n- マインスイーパー: 数字のヒントで地雷の位置を推理するゲーム。\n- ソリティア: ルールに従ってカードを並べる一人用カードゲーム。\n- バブル: 同じ色のバブルを3つ以上揃えて消すゲーム。\n- モグラたたき: 穴から出てくるモグラを素早く叩くゲーム。\n- ナンバーベースボール: 3桁の数字を推理するロジックゲーム。\n- ブロッククラッシュ: 初期ブロックが配置されたボードでラインを完成させ、初期ブロックを全て除去するゲーム。\n\n[脱出ゲーム]\n- 迷路: 出口を見つけて脱出するゲーム。\n- 矢印迷路: 矢印をタップしてすべて除去するパズルゲーム。\n- 駐車場脱出: 詰まった車をタップして駐車場から脱出させるゲーム。\n- 交差点脱出: 矢印の方向に従って交差点を通過させ車を脱出させるゲーム。\n\n[数独]\n9x9マスに1~9の数字を重複なく埋めるパズル。\n- クラシック: 基本の数独。縦、横、3x3ボックスに同じ数字は入れません。\n- サムライ: 5つの数独が重なった大型パズル。\n- キラー: 点線の領域内の数字の合計が指定された数になる必要があります。\n- 数字合計: 隣接するマスの合計がヒントとして与えられます。\n\n[伝統ゲーム]\n- ユンノリ: ユッを投げてド/ゲ/ゴル/ユッ/モに従って駒を動かし、先に出れば勝ち。\n\nすべてのゲームはオフラインで無料でプレイできます。',
       'helpTitle': '遊び方',
       'helpRules': '基本ルール',
       'helpRulesContent': '• 黒が先手です\n• 空いている交点に石を置きます\n• 相手の石を完全に囲むと取れます\n• より多くの領域を確保した方が勝ちです\n• 白には6.5目のコミがあります',
@@ -1086,7 +1093,7 @@ class L10n {
       'help_baduk': '[游戏方法]\n黑白双方交替在空的交叉点上落子。\n完全包围对方的棋子可以提子。\n终局时占领更多领地者获胜。\n\n[基本规则]\n- 黑棋先行\n- 白棋有6.5目的贴目\n- 打劫：不能立即提回刚被提走的一子\n\n[游戏模式]\n- AI对弈：与AI对战\n- 双人对弈：与朋友对战\n- 死活题：通过解题提升实力',
       'help_janggi': '[游戏方法]\n每位玩家移动16个棋子，目标是将死对方的王（将）。\n\n[棋子走法]\n- 将：在宫内移动一格\n- 车：直线无限移动\n- 炮：跳过一个棋子移动/攻击（不能跳过另一个炮）\n- 马：走日字\n- 象：直线一格+斜线两格移动（走用字）\n- 士：在宫内斜走一格\n- 卒/兵：向前或横向移动一格\n\n[吃子规则]\n- 移动到对方棋子的位置可以吃掉该棋子\n- 移动路径上有其他棋子时无法移动（炮除外）\n\n[游戏模式]\n- AI对弈：与AI对战\n- 双人对弈：与朋友对战',
       'help_cardGame': '[Mighty]\n5人墩牌游戏。宣告分数并作为执政党获胜。\n执政党（主公+搭档）vs 在野党（其他3人）。\n\n[红心大战]\n避开红心和黑桃Q争取最低分。\n每张红心1分，黑桃Q13分。\n\n[Hula]\n组成相同数字或连续数字的组合，先出完手牌者获胜。\n\n[UNO]\n出相同数字或花色的牌，先出完手牌者获胜。\n\n[高低]\n猜测下一张牌比当前牌高还是低。\n\n[七张扑克]\n用7张牌组成牌型进行比拼。',
-      'help_boardGame': '[五子棋]\n黑白双方交替落子，先连成5子者获胜。\n横、竖、斜线均可。\n\n[黑白棋]\n用自己的棋子夹住对方棋子可以翻转。\n终局时棋子多者获胜。\n\n[俄罗斯方块]\n堆叠下落的方块，完成一行即可消除。\n方块堆到顶部则游戏结束。\n\n[扫雷]\n根据数字提示推理地雷位置。\n打开所有非地雷格子即可获胜。\n\n[纸牌接龙]\n按规则整理纸牌，完成4个基础牌堆。\n\n[迷宫]\n找到出口逃离迷宫。\n\n[泡泡]\n将3个以上相同颜色的泡泡连在一起消除。',
+      'help_boardGame': '[五子棋]\n黑白双方交替落子，先连成5子者获胜。\n横、竖、斜线均可。\n\n[黑白棋]\n用自己的棋子夹住对方棋子可以翻转。\n终局时棋子多者获胜。\n\n[俄罗斯方块]\n堆叠下落的方块，完成一行即可消除。\n方块堆到顶部则游戏结束。\n\n[方块粉碎]\n在预填初始方块的棋盘上完成行，清除所有初始方块（灰色）即可通关。\n\n[扫雷]\n根据数字提示推理地雷位置。\n打开所有非地雷格子即可获胜。\n\n[纸牌接龙]\n按规则整理纸牌，完成4个基础牌堆。\n\n[迷宫]\n找到出口逃离迷宫。\n\n[泡泡]\n将3个以上相同颜色的泡泡连在一起消除。',
       'help_sudoku': '[游戏方法]\n在9x9格子中填入1-9数字，不能重复。\n每行、每列、每个3x3宫格内数字不能相同。\n\n[游戏模式]\n- 经典：基本数独\n- 武士：5个数独重叠的大型拼图\n- 杀手：虚线区域内数字之和等于指定数字\n- 数字和：相邻格子的和作为提示\n\n[难度]\n简单 / 中等 / 困难 / 专家',
       'help_yutnori': '[游戏方法]\n投掷木棒，根据结果移动棋子。\n先将所有棋子移到终点者获胜。\n\n[投掷结果]\n- 道：移动1格\n- 盖：移动2格\n- 葛：移动3格\n- 柶：移动4格+再投一次\n- 模：移动5格+再投一次\n\n[特殊规则]\n- 吃掉对方棋子可以再投一次\n- 同一位置的己方棋子可以一起移动\n- 利用捷径可以更快到达终点',
       // 子游戏名称
@@ -1105,6 +1112,7 @@ class L10n {
       'gomoku': '五子棋',
       'othello': '黑白棋',
       'tetris': '俄罗斯方块',
+      'tetrisWide': '方块粉碎',
       'minesweeper': '扫雷',
       'solitaire': '纸牌接龙',
       'maze': '迷宫',
@@ -1128,6 +1136,7 @@ class L10n {
       'help_gomoku': '[游戏方法]\n黑白双方交替落子。\n先连成5子者获胜。\n\n[规则]\n- 横、竖、斜线均可\n- 不能落在已有棋子的位置\n\n[策略]\n阻挡对手的同时构建自己的连线！',
       'help_othello': '[游戏方法]\n用己方棋子夹住对方棋子可以翻转。\n终局时棋子多者获胜。\n\n[规则]\n- 每回合必须翻转至少一个棋子\n- 无有效走法时跳过\n\n[策略]\n角落很有价值 - 无法被翻转！',
       'help_tetris': '[游戏方法]\n旋转下落的方块并堆叠，完成水平线。\n完成的行消除得分。\n\n[控制]\n- 移动：左右箭头\n- 旋转：上箭头\n- 下落：下箭头\n\n[提示]\n保持低而平整！',
+      'help_tetrisWide': '[游戏方法]\n在预填初始方块的宽棋盘上放置下落的方块完成横行。\n清除所有初始方块（灰色）即可通关。\n\n[控制]\n- 左右：移动方块\n- 旋转按钮：旋转方块90°\n- 掉落按钮：立即掉落方块\n\n[计分]\n- 消除1行：100分\n- 同时消除2行：300分\n- 同时消除3行：500分\n- 同时消除4行：800分\n\n[等级]\n- 清除所有初始方块后进入下一关\n- 等级越高，初始方块越多，速度越快',
       'help_minesweeper': '[游戏方法]\n在不点击地雷的情况下找出所有地雷。\n数字表示相邻地雷的数量。\n\n[控制]\n- 点击：打开格子\n- 长按：标记地雷\n\n[提示]\n利用数字规律推断地雷位置！',
       'help_solitaire': '[游戏方法]\n整理纸牌，按花色建立4个基础牌堆（A到K）。\n\n[规则]\n- 列牌：红黑交替降序堆叠\n- 基础：按花色从A升序堆叠\n\n[提示]\n优先翻开朝下的牌！',
       'help_maze': '[游戏方法]\n找到从起点到出口的路径。\n\n[控制]\n- 滑动或使用箭头移动\n- 找到最短路径获得最高分\n\n[提示]\n沿着墙壁走最终能找到出口！',
@@ -1148,7 +1157,7 @@ class L10n {
       'termsOfService': '服务条款',
       'info': '信息',
       'aboutTitle': '应用介绍',
-      'aboutContent': '一款包含多种游戏的免费游戏合集应用。\n\n[围棋]\n拥有约4000年历史的策略棋盘游戏。黑白双方交替落子，目标是占领更多领地。\n- AI对弈、双人对弈、死活题\n\n[象棋]\n韩国传统策略棋盘游戏。移动16个棋子，目标是将死对方的王。\n- AI对弈、双人对弈\n\n[纸牌游戏]\n- Mighty: 5人墩牌游戏，分为执政党和在野党进行得分竞争。\n- 红心大战: 避开红心和黑桃Q，争取最低分的游戏。\n- Hula: 组成相同数字或连续数字的组合，先出完手牌者获胜。\n- UNO: 出相同数字或花色的牌，先出完手牌者获胜。\n- 高低: 猜测下一张牌是高还是低的游戏。\n- 七张扑克: 用7张牌组成牌型进行比拼。\n\n[棋盘游戏]\n- 五子棋: 先连成5子者获胜。\n- 黑白棋: 翻转对方棋子，占据更多棋盘。\n- 俄罗斯方块: 堆叠下落的方块，完成一行即可消除。\n- 扫雷: 根据数字提示推理地雷位置。\n- 纸牌接龙: 按规则整理纸牌的单人游戏。\n- 泡泡: 将3个以上相同颜色的泡泡连在一起消除。\n- 打地鼠: 快速敲打从洞里冒出的地鼠。\n- 数字棒球: 猜测3位数字的逻辑游戏。\n\n[逃脱游戏]\n- 迷宫: 找到出口逃离迷宫。\n- 箭头迷宫: 点击箭头将它们全部移除的益智游戏。\n- 停车场逃脱: 点击被堵住的汽车，将它们从停车场逃脱。\n- 十字路口逃脱: 根据箭头方向引导车辆通过交叉口逃脱。\n\n[数独]\n在9x9格子中填入1-9数字，不能重复。\n- 经典: 基本数独。每行、每列、每个3x3宫格内数字不能相同。\n- 武士: 5个数独重叠的大型拼图。\n- 杀手: 虚线区域内数字之和必须等于指定数字。\n- 数字和: 相邻格子的和作为提示。\n\n[传统游戏]\n- 掷柶游戏: 投掷木棒，根据结果(道/盖/葛/柶/模)移动棋子，先出者获胜。\n\n所有游戏均可离线免费游玩。',
+      'aboutContent': '一款包含多种游戏的免费游戏合集应用。\n\n[围棋]\n拥有约4000年历史的策略棋盘游戏。黑白双方交替落子，目标是占领更多领地。\n- AI对弈、双人对弈、死活题\n\n[象棋]\n韩国传统策略棋盘游戏。移动16个棋子，目标是将死对方的王。\n- AI对弈、双人对弈\n\n[纸牌游戏]\n- Mighty: 5人墩牌游戏，分为执政党和在野党进行得分竞争。\n- 红心大战: 避开红心和黑桃Q，争取最低分的游戏。\n- Hula: 组成相同数字或连续数字的组合，先出完手牌者获胜。\n- UNO: 出相同数字或花色的牌，先出完手牌者获胜。\n- 高低: 猜测下一张牌是高还是低的游戏。\n- 七张扑克: 用7张牌组成牌型进行比拼。\n\n[棋盘游戏]\n- 五子棋: 先连成5子者获胜。\n- 黑白棋: 翻转对方棋子，占据更多棋盘。\n- 俄罗斯方块: 堆叠下落的方块，完成一行即可消除。\n- 扫雷: 根据数字提示推理地雷位置。\n- 纸牌接龙: 按规则整理纸牌的单人游戏。\n- 泡泡: 将3个以上相同颜色的泡泡连在一起消除。\n- 打地鼠: 快速敲打从洞里冒出的地鼠。\n- 数字棒球: 猜测3位数字的逻辑游戏。\n- 方块粉碎: 在预填初始方块的棋盘上完成行，清除所有初始方块的游戏。\n\n[逃脱游戏]\n- 迷宫: 找到出口逃离迷宫。\n- 箭头迷宫: 点击箭头将它们全部移除的益智游戏。\n- 停车场逃脱: 点击被堵住的汽车，将它们从停车场逃脱。\n- 十字路口逃脱: 根据箭头方向引导车辆通过交叉口逃脱。\n\n[数独]\n在9x9格子中填入1-9数字，不能重复。\n- 经典: 基本数独。每行、每列、每个3x3宫格内数字不能相同。\n- 武士: 5个数独重叠的大型拼图。\n- 杀手: 虚线区域内数字之和必须等于指定数字。\n- 数字和: 相邻格子的和作为提示。\n\n[传统游戏]\n- 掷柶游戏: 投掷木棒，根据结果(道/盖/葛/柶/模)移动棋子，先出者获胜。\n\n所有游戏均可离线免费游玩。',
       'helpTitle': '游戏方法',
       'helpRules': '基本规则',
       'helpRulesContent': '• 黑棋先行\n• 在空的交叉点上落子\n• 完全包围对方的棋子可以提子\n• 占领更多领地者获胜\n• 白棋有6.5目的贴目',
@@ -7446,6 +7455,7 @@ class _HelpPageState extends State<HelpPage> {
           {'key': 'gomoku', 'icon': Icons.circle_outlined},
           {'key': 'othello', 'icon': Icons.contrast},
           {'key': 'tetris', 'icon': Icons.view_module},
+          {'key': 'tetrisWide', 'icon': Icons.grid_view},
           {'key': 'minesweeper', 'icon': Icons.flag},
           {'key': 'solitaire', 'icon': Icons.style},
           {'key': 'bubble', 'icon': Icons.bubble_chart},
@@ -7559,6 +7569,11 @@ class _HelpPageState extends State<HelpPage> {
       case 'tetris':
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => const TetrisScreen(),
+        ));
+        break;
+      case 'tetrisWide':
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const TetrisWideScreen(),
         ));
         break;
       case 'minesweeper':
