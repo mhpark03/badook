@@ -340,10 +340,27 @@ class AIPlayer {
 
     // 추가 조건: 남은 기루다가 충분히 많으면 수비팀에도 있을 확률 높음
     final playedGirudaCount = _getPlayedGirudaCount(state);
-    final myGirudaCount = player.hand.where((c) => !c.isJoker && c.suit == state.giruda).length;
-    final remainingGiruda = 13 - playedGirudaCount - myGirudaCount;
 
-    // void가 확인되지 않은 수비팀이 있고, 남은 기루다가 있으면 → 수비팀에 있을 가능성
+    // ★ 공격팀 전체 기루다 수 계산: 본인 + 주공 + 공개된 프렌드
+    // (본인만 빼면 동료의 기루다가 포함되어 수비팀 보유 여부를 오판)
+    final Set<int> knownAttackIds = {};
+    if (state.declarerId != null) knownAttackIds.add(state.declarerId!);
+    knownAttackIds.add(player.id); // 본인 (프렌드여도 자기 패는 앎)
+    if (state.friendRevealed) {
+      for (final p in state.players) {
+        if (p.isFriend) knownAttackIds.add(p.id);
+      }
+    }
+    int attackTeamGirudaInHand = 0;
+    for (final p in state.players) {
+      if (knownAttackIds.contains(p.id)) {
+        attackTeamGirudaInHand +=
+            p.hand.where((c) => !c.isJoker && c.suit == state.giruda).length;
+      }
+    }
+    final remainingGiruda = 13 - playedGirudaCount - attackTeamGirudaInHand;
+
+    // void가 확인되지 않은 수비팀이 있고, 수비팀에 기루다가 남아있으면 → 수비팀에 있을 가능성
     return hasNonVoidDefender && remainingGiruda > 0;
   }
 
@@ -3845,18 +3862,25 @@ class AIPlayer {
       };
       // 마이티는 기루다 무늬 A이므로 제외 (별도 처리)
       final mightyRankInGiruda = 14; // Ace
+
+      // ★ 트릭 기록 기반 수비팀 기루다 보유 여부 확인
+      // 기루다 리드 트릭에서 수비팀이 기루다를 낸 적 없으면 void → opponentHighestGiruda=0
+      // (goneGirudaRanks만으로는 프렌드 보유분을 수비팀 것으로 오판할 수 있음)
+      final bool defenseHasGirudaFL = _estimateDefenseTeamHasGiruda(player, state);
       int opponentHighestGiruda = 0;
-      for (int rv = 13; rv >= 2; rv--) { // K(13)부터 2까지
-        if (!goneGirudaRanks.contains(rv)) {
-          opponentHighestGiruda = rv;
-          break;
+      if (defenseHasGirudaFL) {
+        for (int rv = 13; rv >= 2; rv--) { // K(13)부터 2까지
+          if (!goneGirudaRanks.contains(rv)) {
+            opponentHighestGiruda = rv;
+            break;
+          }
         }
-      }
-      // 마이티가 아직 안 나왔고 내가 안 갖고 있으면 상대 최고는 마이티(100급)
-      if (!goneGirudaRanks.contains(mightyRankInGiruda) &&
-          !playableCards.any((c) => c.isMightyWith(giruda))) {
-        // 상대가 마이티를 가지고 있을 수 있음 → 내 기루다 A도 마이티에 짐
-        opponentHighestGiruda = 100;
+        // 마이티가 아직 안 나왔고 내가 안 갖고 있으면 상대 최고는 마이티(100급)
+        if (!goneGirudaRanks.contains(mightyRankInGiruda) &&
+            !playableCards.any((c) => c.isMightyWith(giruda))) {
+          // 상대가 마이티를 가지고 있을 수 있음 → 내 기루다 A도 마이티에 짐
+          opponentHighestGiruda = 100;
+        }
       }
 
       // 보증 승리 카드 목록
@@ -3978,9 +4002,10 @@ class AIPlayer {
           }
         } else {
           // ★ 승리: 기루다 승리 카드 우선 (상위 카드부터), 조커는 후순위 (트릭 9 탈환용 보존)
+          // ★ 수비팀 기루다 소진 시: 기루다 리드 회피 → 기루다는 컷용 보존, fall through
           final girudaWinCards = guaranteedWinCards.where((c) =>
               !c.isJoker && !c.isMightyWith(giruda)).toList();
-          if (girudaWinCards.isNotEmpty) {
+          if (girudaWinCards.isNotEmpty && defenseHasGirudaFL) {
             girudaWinCards.sort((a, b) => b.rankValue.compareTo(a.rankValue));
             _lastLeadIntent = LeadIntent.topGirudaLead;
             return girudaWinCards.first;
