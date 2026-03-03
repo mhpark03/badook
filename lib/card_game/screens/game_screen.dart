@@ -4648,6 +4648,18 @@ class _GameScreenState extends State<GameScreen> {
       case LeadIntent.defenseMightyExhaust:
         return l10n.trickEventDefenseMightyExhaust;
       case LeadIntent.defenseMightySuitBait:
+        // ★ 공격팀 선공에 이 intent가 잘못 할당된 경우 방어적 표시
+        bool dmbIsAttack(int id) => id == state.declarerId || id == state.friendId;
+        if (trick.leadPlayerId != null && dmbIsAttack(trick.leadPlayerId!)) {
+          final dmbLeadIdxA = trick.playerOrder.indexOf(trick.leadPlayerId!);
+          final dmbLeadCardA = (dmbLeadIdxA >= 0 && dmbLeadIdxA < trick.cards.length)
+              ? trick.cards[dmbLeadIdxA] : null;
+          if (dmbLeadCardA != null && dmbLeadCardA.isMightyWith(giruda)) {
+            return l10n.trickEventMightyLead;
+          }
+          final dmbAttackWonA = trick.winnerId != null && dmbIsAttack(trick.winnerId!);
+          return dmbAttackWonA ? l10n.trickEventWaste : l10n.trickEventWasteAttackFailed;
+        }
         // 마이티 출현 여부에 따라 성공/실패 구분
         final dmbLeadIdx = trick.playerOrder.indexOf(trick.leadPlayerId);
         final dmbMightyAppeared = trick.cards.asMap().entries.any((e) =>
