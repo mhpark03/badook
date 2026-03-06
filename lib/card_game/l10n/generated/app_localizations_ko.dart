@@ -1641,6 +1641,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get summaryJokerMightyLost => '조커/마이티로도 점수 획득 실패';
 
   @override
+  String get summaryDefenseHighValueBlock => '수비 고점 트릭 선방으로 공격 점수 부족';
+
+  @override
   String get summaryEarlyLeadLostLate => '초반 선 빼앗김, 선 탈환 지연으로 조커/마이티 효과 제한';
 
   @override
@@ -1656,7 +1659,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get summaryNineWinRunMiss => '총평 : 9트릭 선방 / 런 달성 1트릭 부족';
 
   @override
-  String get summaryNineWinFirstTrickCut => '총평 : 9트릭 선방 / 초구 기루다 컷(저확률 불운)으로 런 달성 1트릭 부족';
+  String get summaryNineWinFirstTrickCut =>
+      '총평 : 9트릭 선방 / 초구 기루다 컷(저확률 불운)으로 런 달성 1트릭 부족';
 
   @override
   String get summaryDefenseJokerGirudaCounter => '수비 조커 공세 → 기루다 반격';

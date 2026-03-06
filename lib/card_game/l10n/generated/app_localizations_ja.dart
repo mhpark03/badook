@@ -1635,6 +1635,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get summaryJokerMightyLost => 'ジョーカー/マイティでも得点不足';
 
   @override
+  String get summaryDefenseHighValueBlock => '守備の高得点トリック阻止で攻撃得点不足';
+
+  @override
   String get summaryEarlyLeadLostLate => '序盤のリード喪失で奪還が遅れ、ジョーカー/マイティ効果制限';
 
   @override
@@ -1650,7 +1653,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get summaryNineWinRunMiss => '総評 : 9トリック善戦 / ランまであと1トリック';
 
   @override
-  String get summaryNineWinFirstTrickCut => '総評 : 9トリック善戦 / 初回切り札カット(低確率)でランまであと1トリック';
+  String get summaryNineWinFirstTrickCut =>
+      '総評 : 9トリック善戦 / 初回切り札カット(低確率)でランまであと1トリック';
 
   @override
   String get summaryDefenseJokerGirudaCounter => '守備ジョーカー攻勢 → 切り札反撃';
