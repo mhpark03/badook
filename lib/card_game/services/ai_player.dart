@@ -1652,7 +1652,8 @@ class AIPlayer {
       bool hasFriendChain = friendChainActive || friendAceChainActive;
       int netExtra = extraGiruda - (hasFriendChain ? 1 : 0);
       // ★ 저액 기루다만으로 2트릭 확보는 비현실적 (마이티/조커 없으면 할인)
-      final extraHighCount = gc.where((c) =>
+      final extraHighCount = hand.where((c) =>
+          !c.isJoker && c.suit == giruda &&
           c.rank != Rank.ace && c.rank != Rank.king && c.rank != Rank.queen &&
           c.rankValue >= 11).length; // J만 해당
       if (netExtra >= 2 && extraHighCount == 0 && !hasMighty && !hasJoker) {
