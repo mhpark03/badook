@@ -2535,6 +2535,26 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get adviceFirstTrickLowLead =>
+      '💡 Lead with an Ace or Mighty on the first trick to secure initiative';
+
+  @override
+  String get adviceLowLeadPointLoss =>
+      '💡 Leading with a card that can\'t win gives points to defense';
+
+  @override
+  String get adviceAceBeatenByJoker =>
+      '💡 Leading an Ace is risky when the defense Joker hasn\'t been played yet';
+
+  @override
+  String get advicePointCardToDefense =>
+      '💡 Play non-point cards when defense is winning the trick';
+
+  @override
+  String get adviceMightyHighPointLoss =>
+      '💡 When Mighty appears, minimize point cards in the trick';
+
+  @override
   String get kittyTipTitle => '💡 Kitty Exchange Tips';
 
   @override

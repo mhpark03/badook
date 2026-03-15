@@ -2473,6 +2473,22 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get adviceFirstTrickLowLead => '💡 初手はエースやマイティで確実に勝ちましょう';
+
+  @override
+  String get adviceLowLeadPointLoss => '💡 勝てないカードでリードすると得点を失います';
+
+  @override
+  String get adviceAceBeatenByJoker => '💡 守備ジョーカーが残っている時のエースリードは危険です';
+
+  @override
+  String get advicePointCardToDefense =>
+      '💡 守備が勝つトリックには得点カード(A·K·10)を出さないでください';
+
+  @override
+  String get adviceMightyHighPointLoss => '💡 マイティが出る時に得点カードが多いと大きな損失になります';
+
+  @override
   String get kittyTipTitle => '💡 キティ交換のコツ';
 
   @override

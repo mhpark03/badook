@@ -2466,6 +2466,21 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get adviceFirstTrickLowLead => '💡 首墩应用A或至尊确保先手';
+
+  @override
+  String get adviceLowLeadPointLoss => '💡 用无法获胜的牌先攻会导致失分';
+
+  @override
+  String get adviceAceBeatenByJoker => '💡 防守小丑未出时先攻A有被小丑夺取的风险';
+
+  @override
+  String get advicePointCardToDefense => '💡 防守获胜的回合不要出分数牌(A·K·10)';
+
+  @override
+  String get adviceMightyHighPointLoss => '💡 至尊出现时分数牌同时被拿走会造成巨大损失';
+
+  @override
   String get kittyTipTitle => '💡 底牌交换技巧';
 
   @override

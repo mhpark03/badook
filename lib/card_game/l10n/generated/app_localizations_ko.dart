@@ -2481,6 +2481,22 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get adviceFirstTrickLowLead => '💡 초구에는 에이스나 마이티 등 확실히 이기는 카드로 선공하세요';
+
+  @override
+  String get adviceLowLeadPointLoss => '💡 이길 수 없는 카드로 선공하면 점수를 빼앗깁니다';
+
+  @override
+  String get adviceAceBeatenByJoker => '💡 수비 조커가 남아있을 때 에이스 리드는 조커에 당할 수 있습니다';
+
+  @override
+  String get advicePointCardToDefense =>
+      '💡 수비가 이기는 트릭에는 점수카드(A·K·10) 대신 물패를 내세요';
+
+  @override
+  String get adviceMightyHighPointLoss => '💡 마이티가 나올 때 점수카드가 함께 나가면 큰 손실입니다';
+
+  @override
   String get kittyTipTitle => '💡 키티 교환 팁';
 
   @override

@@ -902,6 +902,12 @@
   "suitKeepRecommend": "{suit} +{diff} pts (keep is better considering penalty)",
   "@suitKeepRecommend": { "placeholders": { "suit": {"type": "String"}, "diff": {"type": "int"} } },
 
+  "adviceFirstTrickLowLead": "💡 Lead with an Ace or Mighty on the first trick to secure initiative",
+  "adviceLowLeadPointLoss": "💡 Leading with a card that can't win gives points to defense",
+  "adviceAceBeatenByJoker": "💡 Leading an Ace is risky when the defense Joker hasn't been played yet",
+  "advicePointCardToDefense": "💡 Play non-point cards when defense is winning the trick",
+  "adviceMightyHighPointLoss": "💡 When Mighty appears, minimize point cards in the trick",
+
   "kittyTipTitle": "💡 Kitty Exchange Tips",
   "kittyTipCreateVoid": "Void a suit to cut with giruda and steal tricks",
   "kittyTipKeepGiruda": "Keep giruda (trump) cards whenever possible",

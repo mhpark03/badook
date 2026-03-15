@@ -901,6 +901,12 @@
   "suitKeepRecommend": "{suit} +{diff}点 (変更ペナルティ考慮で維持が適切)",
   "@suitKeepRecommend": { "placeholders": { "suit": {"type": "String"}, "diff": {"type": "int"} } },
 
+  "adviceFirstTrickLowLead": "💡 初手はエースやマイティで確実に勝ちましょう",
+  "adviceLowLeadPointLoss": "💡 勝てないカードでリードすると得点を失います",
+  "adviceAceBeatenByJoker": "💡 守備ジョーカーが残っている時のエースリードは危険です",
+  "advicePointCardToDefense": "💡 守備が勝つトリックには得点カード(A·K·10)を出さないでください",
+  "adviceMightyHighPointLoss": "💡 マイティが出る時に得点カードが多いと大きな損失になります",
+
   "kittyTipTitle": "💡 キティ交換のコツ",
   "kittyTipCreateVoid": "スートを空にすると切り札で勝てます",
   "kittyTipKeepGiruda": "切り札(ギルダ)カードはできるだけ残しましょう",

@@ -901,6 +901,12 @@
   "suitKeepRecommend": "{suit} +{diff}分 (考虑罚分后维持更合适)",
   "@suitKeepRecommend": { "placeholders": { "suit": {"type": "String"}, "diff": {"type": "int"} } },
 
+  "adviceFirstTrickLowLead": "💡 首墩应用A或至尊确保先手",
+  "adviceLowLeadPointLoss": "💡 用无法获胜的牌先攻会导致失分",
+  "adviceAceBeatenByJoker": "💡 防守小丑未出时先攻A有被小丑夺取的风险",
+  "advicePointCardToDefense": "💡 防守获胜的回合不要出分数牌(A·K·10)",
+  "adviceMightyHighPointLoss": "💡 至尊出现时分数牌同时被拿走会造成巨大损失",
+
   "kittyTipTitle": "💡 底牌交换技巧",
   "kittyTipCreateVoid": "清空某花色后可以用王牌切入赢得回合",
   "kittyTipKeepGiruda": "尽量保留王牌(主花色)卡牌",
