@@ -3949,6 +3949,7 @@ class _BadukGameState extends State<BadukGame> {
   // 힌트 관련 변수
   List<int>? hintMove;
   bool showHint = false;
+  bool autoHint = true; // 초기 게임 활성화: 플레이어 턴마다 자동 힌트
 
   // 이어하기를 위한 수 기록
   List<Map<String, dynamic>> moveHistory = [];
@@ -3979,6 +3980,11 @@ class _BadukGameState extends State<BadukGame> {
     } else if (widget.vsAI && aiColor == Stone.black) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _aiMove();
+      });
+    } else if (widget.vsAI && autoHint) {
+      // 플레이어 선공 시 자동 힌트
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showHint();
       });
     }
   }
@@ -4084,6 +4090,10 @@ class _BadukGameState extends State<BadukGame> {
     if (widget.vsAI && aiColor == Stone.black) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _aiMove();
+      });
+    } else if (widget.vsAI && autoHint) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showHint();
       });
     }
   }
@@ -4781,6 +4791,14 @@ class _BadukGameState extends State<BadukGame> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(tr('gameLoaded'))),
         );
+        // 로드 후 플레이어 턴이면 자동 힌트
+        if (autoHint && widget.vsAI && !gameOver && currentPlayer == widget.playerColor) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (!gameOver && !isAIThinking) {
+              _showHint();
+            }
+          });
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -4826,6 +4844,15 @@ class _BadukGameState extends State<BadukGame> {
           gameMessage = '${tr('yourTurn')} ($colorName)';
         }
       });
+
+      // 자동 힌트: AI 수 이후 플레이어 턴에 힌트 자동 표시
+      if (autoHint && !gameOver) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          if (!gameOver && !isAIThinking) {
+            _showHint();
+          }
+        });
+      }
     });
   }
 
@@ -6935,13 +6962,33 @@ class _BadukGameState extends State<BadukGame> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                ElevatedButton.icon(
-                  onPressed: (gameOver || isAIThinking) ? null : _showHint,
-                  icon: const Icon(Icons.lightbulb_outline),
-                  label: Text(tr('hint')),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    backgroundColor: showHint ? Colors.amber.shade200 : null,
+                GestureDetector(
+                  onLongPress: () {
+                    setState(() {
+                      autoHint = !autoHint;
+                      if (!autoHint) {
+                        showHint = false;
+                        hintMove = null;
+                      }
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(autoHint ? tr('hintOn') : tr('hintOff')),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                    if (autoHint && !gameOver && !isAIThinking) {
+                      _showHint();
+                    }
+                  },
+                  child: ElevatedButton.icon(
+                    onPressed: (gameOver || isAIThinking) ? null : _showHint,
+                    icon: Icon(autoHint ? Icons.lightbulb : Icons.lightbulb_outline),
+                    label: Text(tr('hint')),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      backgroundColor: autoHint ? Colors.amber.shade200 : (showHint ? Colors.amber.shade100 : null),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
