@@ -307,7 +307,7 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
   Timer? _messageTimer;
 
   // 힌트
-  bool _showHint = false;
+  bool _showHint = true;
 
   // 애니메이션
   late AnimationController _animController;
@@ -357,7 +357,6 @@ class _HulaScreenState extends State<HulaScreen> with TickerProviderStateMixin {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              _showHint = false;
               _initGame();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),

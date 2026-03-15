@@ -68,7 +68,7 @@ class SevenCardGameScreen extends StatefulWidget {
 
 class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerProviderStateMixin {
   bool _statsRecorded = false;
-  bool _showHint = false;
+  bool _showHint = true;
   late AnimationController _fireworksController;
   late Animation<double> _fireworksAnimation;
   bool _showFireworks = false;
@@ -140,7 +140,6 @@ class _SevenCardGameScreenState extends State<SevenCardGameScreen> with TickerPr
             onPressed: () {
               Navigator.pop(dialogContext);
               _statsRecorded = false;
-              _showHint = false;
               controller.startNewGame();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),

@@ -33,7 +33,7 @@ class _GameScreenState extends State<GameScreen> {
   bool _timerRunning = false;
   Timer? _nextGameTimer;
   int _nextGameCountdown = 5;
-  bool _showHint = false;
+  bool _showHint = true;
   bool _statsRecorded = false;
   bool _trackingSent = false;
 
@@ -193,7 +193,6 @@ class _GameScreenState extends State<GameScreen> {
               _bidInitialized = false;
               _showGameResult = false;
               _showTrickDetails = true;
-              _showHint = false;
               controller.startNewGame();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
@@ -1289,7 +1288,6 @@ class _GameScreenState extends State<GameScreen> {
                             _trackingSent = false;
                             _showGameResult = false;
                             _showTrickDetails = true;
-                            _showHint = false;
                           });
                           controller.reset();
                           controller.startNewGame();
@@ -3268,7 +3266,6 @@ class _GameScreenState extends State<GameScreen> {
                         _trackingSent = false;
                         _showGameResult = false;
                         _showTrickDetails = true;
-                        _showHint = false;
                       });
                       controller.reset();
                       controller.startNewGame();
@@ -6406,7 +6403,7 @@ class _GameScreenState extends State<GameScreen> {
                           _trackingSent = false;
                           _showGameResult = false;
                           _showTrickDetails = true;
-                          _showHint = false;
+                          _showHint = true;
                         });
                         controller.reset();
                         controller.startNewGame();

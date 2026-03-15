@@ -185,7 +185,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
   // UI
   String message = '';
   Timer? _messageTimer;
-  bool _showHint = false; // 힌트 표시 여부
+  bool _showHint = true; // 힌트 표시 여부
 
   List<String> get playerNames {
     final l10n = getL10n(context);
@@ -291,7 +291,7 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
       isProcessingTrick = false;
       playedCards = []; // 플레이된 카드 초기화
       message = '';
-      _showHint = false; // 힌트 초기화
+      // _showHint 상태 유지 (새 게임에서도 이전 설정 유지)
     });
 
     _dealCards();
