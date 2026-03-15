@@ -239,12 +239,7 @@ class _KittySelectionScreenState extends State<KittySelectionScreen> {
               ),
             ),
 
-            const SizedBox(height: 6),
-
-            // 초보자 팁
-            _buildBeginnerTips(l10n),
-
-            const SizedBox(height: 6),
+            const SizedBox(height: 12),
 
             // 13장 카드 (3줄: 5+5+3)
             Expanded(

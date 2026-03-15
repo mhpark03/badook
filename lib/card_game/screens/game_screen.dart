@@ -4553,9 +4553,9 @@ class _GameScreenState extends State<GameScreen> {
       }
     }
 
-    // === 초보자 조언 (인간 플레이어 게임만) ===
+    // === 초보자 조언: 힌트를 따르지 않은 경우만 ===
     if (!isAutoPlay && parts.isNotEmpty) {
-      final advice = _getBeginnerAdvice(trick, state, l10n, playedCards);
+      final advice = _getBeginnerAdvice(trick, state, l10n);
       if (advice != null) {
         parts.add(advice);
       }
@@ -4564,78 +4564,37 @@ class _GameScreenState extends State<GameScreen> {
     return parts.isNotEmpty ? parts.join(' / ') : null;
   }
 
-  /// 초보자 조언: 인간 플레이어(player 0)의 실수를 감지하여 팁 제공
-  String? _getBeginnerAdvice(Trick trick, GameState state, AppLocalizations l10n, Set<String> playedCards) {
+  /// 초보자 조언: 초구가 있는데도 다른 카드를 낸 경우
+  String? _getBeginnerAdvice(Trick trick, GameState state, AppLocalizations l10n) {
     final mighty = state.mighty;
-    final giruda = state.giruda;
     bool isMighty(PlayingCard c) => !c.isJoker && c.suit == mighty.suit && c.rank == mighty.rank;
-    bool isAttack(int id) => id == state.declarerId || id == state.friendId;
 
-    final leadId = trick.leadPlayerId;
-    final leadIdx = trick.playerOrder.indexOf(leadId);
-    if (leadIdx < 0 || leadIdx >= trick.cards.length) return null;
-    final leadCard = trick.cards[leadIdx];
-    final winnerId = trick.winnerId;
-    if (winnerId == null) return null;
+    if (trick.trickNumber != 1) return null;
 
-    final pointCount = trick.cards.where((c) => !c.isJoker && c.isPointCard).length;
-    final attackWins = isAttack(winnerId);
+    final humanIsLeader = trick.leadPlayerId == 0;
+    if (!humanIsLeader) return null;
 
-    // 인간 플레이어(id=0)의 인덱스
     final humanIdx = trick.playerOrder.indexOf(0);
     if (humanIdx < 0 || humanIdx >= trick.cards.length) return null;
     final humanCard = trick.cards[humanIdx];
-    final humanIsLeader = leadId == 0;
 
-    // 1. 초구 물패 선공: 트릭1에서 인간이 에이스/마이티/조커가 아닌 저가 카드로 리드
-    if (trick.trickNumber == 1 && humanIsLeader) {
-      if (!humanCard.isJoker && !isMighty(humanCard) &&
-          humanCard.rank != Rank.ace && humanCard.rankValue < 11) {
-        return l10n.adviceFirstTrickLowLead;
+    // 강한 카드를 냈으면 조언 불필요
+    if (humanCard.isJoker || isMighty(humanCard) || humanCard.rank == Rank.ace) return null;
+
+    // 플레이어의 전체 핸드(10장) 복원: 모든 트릭에서 낸 카드 수집
+    final allHumanCards = <PlayingCard>[];
+    for (final t in state.tricks) {
+      final idx = t.playerOrder.indexOf(0);
+      if (idx >= 0 && idx < t.cards.length) {
+        allHumanCards.add(t.cards[idx]);
       }
     }
 
-    // 2. 물패 선공 실점: 인간이 비최상위 카드로 리드하여 수비가 승리 + 점수 유출
-    if (trick.trickNumber > 1 && humanIsLeader && !attackWins && pointCount >= 2) {
-      if (!humanCard.isJoker && !isMighty(humanCard) && humanCard.rank != Rank.ace) {
-        bool isTop = humanCard.rankValue >= 14;
-        if (!isTop && humanCard.suit != null && humanCard.suit != giruda) {
-          isTop = true;
-          for (int r = 14; r > humanCard.rankValue; r--) {
-            if (humanCard.suit == mighty.suit && r == mighty.rankValue) continue;
-            if (!playedCards.contains('${humanCard.suit!.index}-$r')) { isTop = false; break; }
-          }
-        }
-        if (!isTop) {
-          return l10n.adviceLowLeadPointLoss;
-        }
-      }
-    }
-
-    // 3. 에이스 리드 → 수비 조커에 패배
-    if (humanIsLeader && !attackWins) {
-      if (!humanCard.isJoker && humanCard.rank == Rank.ace && !isMighty(humanCard)) {
-        final winIdx = trick.playerOrder.indexOf(winnerId);
-        if (winIdx >= 0 && winIdx < trick.cards.length && trick.cards[winIdx].isJoker) {
-          return l10n.adviceAceBeatenByJoker;
-        }
-      }
-    }
-
-    // 4. 마이티 출현 시 대량 실점 (4점+)
-    if (!attackWins && pointCount >= 4) {
-      if (trick.cards.any((c) => isMighty(c))) {
-        return l10n.adviceMightyHighPointLoss;
-      }
-    }
-
-    // 5. 인간이 팔로워로 수비 트릭에 점수카드 투입
-    if (!humanIsLeader && !attackWins && isAttack(0)) {
-      if (!humanCard.isJoker && humanCard.isPointCard) {
-        if (humanCard.suit == trick.leadSuit) {
-          return l10n.advicePointCardToDefense;
-        }
-      }
+    // 에이스, 마이티, 조커가 있었는지 확인
+    final hadStrongCard = allHumanCards.any((c) =>
+        c.isJoker || isMighty(c) || c.rank == Rank.ace);
+    if (hadStrongCard) {
+      return l10n.adviceFirstTrickLowLead;
     }
 
     return null;
