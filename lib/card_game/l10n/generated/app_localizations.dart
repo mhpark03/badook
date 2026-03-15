@@ -4381,6 +4381,72 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'{suit} +{diff}점 (변경 패널티 감안 시 유지 적절)'**
   String suitKeepRecommend(String suit, int diff);
+
+  /// No description provided for @kittyTipTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'💡 키티 교환 팁'**
+  String get kittyTipTitle;
+
+  /// No description provided for @kittyTipCreateVoid.
+  ///
+  /// In ko, this message translates to:
+  /// **'무늬를 비우면 기루다로 잘라서 트릭을 가져올 수 있습니다'**
+  String get kittyTipCreateVoid;
+
+  /// No description provided for @kittyTipKeepGiruda.
+  ///
+  /// In ko, this message translates to:
+  /// **'기루다 카드는 가능한 보존하세요'**
+  String get kittyTipKeepGiruda;
+
+  /// No description provided for @kittyTipKeepTopCards.
+  ///
+  /// In ko, this message translates to:
+  /// **'최상위 카드(에이스 등)가 있는 무늬는 보존하세요'**
+  String get kittyTipKeepTopCards;
+
+  /// No description provided for @kittyTipDiscardLowSingles.
+  ///
+  /// In ko, this message translates to:
+  /// **'장수가 적은 무늬의 낮은 카드를 우선 버리세요'**
+  String get kittyTipDiscardLowSingles;
+
+  /// No description provided for @kittyTipKeepMightySuitK.
+  ///
+  /// In ko, this message translates to:
+  /// **'마이티가 없다면 마이티 무늬 K는 마이티를 잡을 수 있으니 보존하세요'**
+  String get kittyTipKeepMightySuitK;
+
+  /// No description provided for @friendTipTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'💡 프렌드 선언 팁'**
+  String get friendTipTitle;
+
+  /// No description provided for @friendTipMighty.
+  ///
+  /// In ko, this message translates to:
+  /// **'마이티 프렌드: 가장 강한 카드를 아군으로 만듭니다'**
+  String get friendTipMighty;
+
+  /// No description provided for @friendTipJoker.
+  ///
+  /// In ko, this message translates to:
+  /// **'조커 프렌드: 두 번째로 강한 카드를 아군으로 만듭니다'**
+  String get friendTipJoker;
+
+  /// No description provided for @friendTipNoFriend.
+  ///
+  /// In ko, this message translates to:
+  /// **'마이티와 조커를 모두 가지고 있으면 노프렌드를 고려하세요'**
+  String get friendTipNoFriend;
+
+  /// No description provided for @friendTipWhoIsFriend.
+  ///
+  /// In ko, this message translates to:
+  /// **'선언한 카드를 가진 플레이어가 아군이 됩니다 (본인 포함 가능)'**
+  String get friendTipWhoIsFriend;
 }
 
 class _AppLocalizationsDelegate

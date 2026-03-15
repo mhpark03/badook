@@ -2479,4 +2479,38 @@ class AppLocalizationsKo extends AppLocalizations {
   String suitKeepRecommend(String suit, int diff) {
     return '$suit +$diff점 (변경 패널티 감안 시 유지 적절)';
   }
+
+  @override
+  String get kittyTipTitle => '💡 키티 교환 팁';
+
+  @override
+  String get kittyTipCreateVoid => '무늬를 비우면 기루다로 잘라서 트릭을 가져올 수 있습니다';
+
+  @override
+  String get kittyTipKeepGiruda => '기루다 카드는 가능한 보존하세요';
+
+  @override
+  String get kittyTipKeepTopCards => '최상위 카드(에이스 등)가 있는 무늬는 보존하세요';
+
+  @override
+  String get kittyTipDiscardLowSingles => '장수가 적은 무늬의 낮은 카드를 우선 버리세요';
+
+  @override
+  String get kittyTipKeepMightySuitK =>
+      '마이티가 없다면 마이티 무늬 K는 마이티를 잡을 수 있으니 보존하세요';
+
+  @override
+  String get friendTipTitle => '💡 프렌드 선언 팁';
+
+  @override
+  String get friendTipMighty => '마이티 프렌드: 가장 강한 카드를 아군으로 만듭니다';
+
+  @override
+  String get friendTipJoker => '조커 프렌드: 두 번째로 강한 카드를 아군으로 만듭니다';
+
+  @override
+  String get friendTipNoFriend => '마이티와 조커를 모두 가지고 있으면 노프렌드를 고려하세요';
+
+  @override
+  String get friendTipWhoIsFriend => '선언한 카드를 가진 플레이어가 아군이 됩니다 (본인 포함 가능)';
 }

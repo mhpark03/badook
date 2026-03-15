@@ -900,5 +900,18 @@
   "suitChangeRecommend": "{suit} +{diff} pts (penalty +2 on change)",
   "@suitChangeRecommend": { "placeholders": { "suit": {"type": "String"}, "diff": {"type": "int"} } },
   "suitKeepRecommend": "{suit} +{diff} pts (keep is better considering penalty)",
-  "@suitKeepRecommend": { "placeholders": { "suit": {"type": "String"}, "diff": {"type": "int"} } }
+  "@suitKeepRecommend": { "placeholders": { "suit": {"type": "String"}, "diff": {"type": "int"} } },
+
+  "kittyTipTitle": "💡 Kitty Exchange Tips",
+  "kittyTipCreateVoid": "Void a suit to cut with giruda and steal tricks",
+  "kittyTipKeepGiruda": "Keep giruda (trump) cards whenever possible",
+  "kittyTipKeepTopCards": "Keep suits where you hold the top card (e.g. Ace)",
+  "kittyTipDiscardLowSingles": "Discard low cards from short suits first",
+  "kittyTipKeepMightySuitK": "Without Mighty, keep Mighty-suit K — it can beat Mighty",
+
+  "friendTipTitle": "💡 Friend Declaration Tips",
+  "friendTipMighty": "Mighty friend: makes the strongest card your ally",
+  "friendTipJoker": "Joker friend: makes the second strongest card your ally",
+  "friendTipNoFriend": "If you hold both Mighty and Joker, consider No Friend",
+  "friendTipWhoIsFriend": "The player holding the declared card becomes your ally"
 }

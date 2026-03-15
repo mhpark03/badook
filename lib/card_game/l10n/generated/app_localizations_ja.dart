@@ -2471,4 +2471,37 @@ class AppLocalizationsJa extends AppLocalizations {
   String suitKeepRecommend(String suit, int diff) {
     return '$suit +$diff点 (変更ペナルティ考慮で維持が適切)';
   }
+
+  @override
+  String get kittyTipTitle => '💡 キティ交換のコツ';
+
+  @override
+  String get kittyTipCreateVoid => 'スートを空にすると切り札で勝てます';
+
+  @override
+  String get kittyTipKeepGiruda => '切り札(ギルダ)カードはできるだけ残しましょう';
+
+  @override
+  String get kittyTipKeepTopCards => '最上位カード(エースなど)があるスートは残しましょう';
+
+  @override
+  String get kittyTipDiscardLowSingles => '枚数の少ないスートの低いカードから捨てましょう';
+
+  @override
+  String get kittyTipKeepMightySuitK => 'マイティがなければマイティスートのKはマイティに勝てるので残しましょう';
+
+  @override
+  String get friendTipTitle => '💡 フレンド宣言のコツ';
+
+  @override
+  String get friendTipMighty => 'マイティフレンド：最強カードを味方にします';
+
+  @override
+  String get friendTipJoker => 'ジョーカーフレンド：2番目に強いカードを味方にします';
+
+  @override
+  String get friendTipNoFriend => 'マイティとジョーカーを両方持っていればノーフレンドを検討しましょう';
+
+  @override
+  String get friendTipWhoIsFriend => '宣言したカードを持つプレイヤーが味方になります';
 }

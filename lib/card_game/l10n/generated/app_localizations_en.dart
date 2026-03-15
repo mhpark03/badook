@@ -2533,4 +2533,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String suitKeepRecommend(String suit, int diff) {
     return '$suit +$diff pts (keep is better considering penalty)';
   }
+
+  @override
+  String get kittyTipTitle => '💡 Kitty Exchange Tips';
+
+  @override
+  String get kittyTipCreateVoid =>
+      'Void a suit to cut with giruda and steal tricks';
+
+  @override
+  String get kittyTipKeepGiruda =>
+      'Keep giruda (trump) cards whenever possible';
+
+  @override
+  String get kittyTipKeepTopCards =>
+      'Keep suits where you hold the top card (e.g. Ace)';
+
+  @override
+  String get kittyTipDiscardLowSingles =>
+      'Discard low cards from short suits first';
+
+  @override
+  String get kittyTipKeepMightySuitK =>
+      'Without Mighty, keep Mighty-suit K — it can beat Mighty';
+
+  @override
+  String get friendTipTitle => '💡 Friend Declaration Tips';
+
+  @override
+  String get friendTipMighty =>
+      'Mighty friend: makes the strongest card your ally';
+
+  @override
+  String get friendTipJoker =>
+      'Joker friend: makes the second strongest card your ally';
+
+  @override
+  String get friendTipNoFriend =>
+      'If you hold both Mighty and Joker, consider No Friend';
+
+  @override
+  String get friendTipWhoIsFriend =>
+      'The player holding the declared card becomes your ally';
 }

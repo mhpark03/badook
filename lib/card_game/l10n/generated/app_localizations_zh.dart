@@ -2464,4 +2464,37 @@ class AppLocalizationsZh extends AppLocalizations {
   String suitKeepRecommend(String suit, int diff) {
     return '$suit +$diff分 (考虑罚分后维持更合适)';
   }
+
+  @override
+  String get kittyTipTitle => '💡 底牌交换技巧';
+
+  @override
+  String get kittyTipCreateVoid => '清空某花色后可以用王牌切入赢得回合';
+
+  @override
+  String get kittyTipKeepGiruda => '尽量保留王牌(主花色)卡牌';
+
+  @override
+  String get kittyTipKeepTopCards => '保留拥有最大牌(如A)的花色';
+
+  @override
+  String get kittyTipDiscardLowSingles => '优先丢弃张数少的花色的低牌';
+
+  @override
+  String get kittyTipKeepMightySuitK => '没有至尊时保留至尊花色K——它能击败至尊';
+
+  @override
+  String get friendTipTitle => '💡 朋友宣言技巧';
+
+  @override
+  String get friendTipMighty => '至尊朋友：让最强的牌成为你的盟友';
+
+  @override
+  String get friendTipJoker => '小丑朋友：让第二强的牌成为你的盟友';
+
+  @override
+  String get friendTipNoFriend => '同时拥有至尊和小丑时可以考虑无朋友';
+
+  @override
+  String get friendTipWhoIsFriend => '持有所宣言卡牌的玩家将成为你的盟友';
 }
