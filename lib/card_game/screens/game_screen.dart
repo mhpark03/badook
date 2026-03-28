@@ -564,20 +564,26 @@ class _GameScreenState extends State<GameScreen> {
     }
 
     final screenHeight = MediaQuery.of(context).size.height;
-    final maxBiddingHeight = screenHeight * 0.45; // 화면 높이의 45%로 제한
+    final compact = screenHeight < 700;
+    final maxBiddingHeight = compact ? screenHeight * 0.52 : screenHeight * 0.45;
 
     return Container(
       constraints: BoxConstraints(maxHeight: maxBiddingHeight),
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(compact ? 8 : 12),
       decoration: BoxDecoration(
         color: Colors.green[800],
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.green[600]!, width: 2),
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 스크롤 가능 영역: 제목 + AI 추천 + 트릭/기루다 선택
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
             Text(
               isHumanTurn
                   ? l10n.currentBidder(l10n.you)
@@ -617,42 +623,56 @@ class _GameScreenState extends State<GameScreen> {
               ),
             ),
           ],
-          const SizedBox(height: 8),
+          SizedBox(height: compact ? 4 : 8),
           if (isHumanTurn) ...[
             // 트릭 수 선택
             Text(
               l10n.tricks,
-              style: TextStyle(color: Colors.white70, fontSize: 11),
+              style: TextStyle(color: Colors.white70, fontSize: compact ? 10 : 11),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: compact ? 2 : 4),
             Wrap(
-              spacing: 4,
-              runSpacing: 4,
+              spacing: compact ? 2 : 4,
+              runSpacing: compact ? 2 : 4,
               children: [
                 for (int i = 13; i <= 20; i++)
-                  _buildBidChip(i, state, l10n),
+                  _buildBidChip(i, state, l10n, compact: compact),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: compact ? 4 : 8),
             // 기루다 선택
             Text(
               l10n.giruda,
-              style: TextStyle(color: Colors.white70, fontSize: 11),
+              style: TextStyle(color: Colors.white70, fontSize: compact ? 10 : 11),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: compact ? 2 : 4),
             Wrap(
-              spacing: 6,
-              runSpacing: 4,
+              spacing: compact ? 4 : 6,
+              runSpacing: compact ? 2 : 4,
               children: [
-                _buildSuitChip(Suit.spade, '♠', l10n.spadeName),
-                _buildSuitChip(Suit.diamond, '♦', l10n.diamondName),
-                _buildSuitChip(Suit.heart, '♥', l10n.heartName),
-                _buildSuitChip(Suit.club, '♣', l10n.clubName),
-                _buildSuitChip(null, '✕', l10n.noGiruda),
+                _buildSuitChip(Suit.spade, '♠', l10n.spadeName, compact: compact),
+                _buildSuitChip(Suit.diamond, '♦', l10n.diamondName, compact: compact),
+                _buildSuitChip(Suit.heart, '♥', l10n.heartName, compact: compact),
+                _buildSuitChip(Suit.club, '♣', l10n.clubName, compact: compact),
+                _buildSuitChip(null, '✕', l10n.noGiruda, compact: compact),
               ],
             ),
-            const SizedBox(height: 10),
-            // 버튼들
+          ] else ...[
+            if (controller.isProcessing)
+              const CircularProgressIndicator(color: Colors.white)
+            else
+              Text(
+                l10n.otherPlayerTurn,
+                style: const TextStyle(color: Colors.white70),
+              ),
+          ],
+                ],
+              ),
+            ),
+          ),
+          // 버튼 영역: 스크롤 밖에 고정
+          if (isHumanTurn) ...[
+            SizedBox(height: compact ? 6 : 10),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -660,7 +680,7 @@ class _GameScreenState extends State<GameScreen> {
                   onPressed: () => controller.humanPass(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 24, vertical: compact ? 4 : 8),
                   ),
                   child: Text(l10n.pass, style: const TextStyle(color: Colors.white)),
                 ),
@@ -669,7 +689,7 @@ class _GameScreenState extends State<GameScreen> {
                   onPressed: _canBid(state) ? () => _submitBid(controller) : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 24, vertical: compact ? 4 : 8),
                   ),
                   child: Text(
                     l10n.bidWithAmount(_selectedBidAmount),
@@ -680,12 +700,12 @@ class _GameScreenState extends State<GameScreen> {
             ),
             // 딜 미스 버튼
             if (controller.canHumanDeclareDealMiss) ...[
-              const SizedBox(height: 12),
+              SizedBox(height: compact ? 4 : 8),
               ElevatedButton(
                 onPressed: () => _showDealMissDialog(controller),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 24, vertical: compact ? 4 : 8),
                 ),
                 child: Text(
                   l10n.dealMiss,
@@ -693,17 +713,8 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
             ],
-          ] else ...[
-            if (controller.isProcessing)
-              const CircularProgressIndicator(color: Colors.white)
-            else
-              Text(
-                l10n.otherPlayerTurn,
-                style: const TextStyle(color: Colors.white70),
-              ),
           ],
         ],
-      ),
       ),
     );
   }
@@ -712,7 +723,7 @@ class _GameScreenState extends State<GameScreen> {
   Suit? _selectedBidSuit = Suit.spade;
   bool _suitManuallySelected = false;  // 사용자가 직접 기루다를 선택했는지
 
-  Widget _buildBidChip(int amount, GameState state, AppLocalizations l10n) {
+  Widget _buildBidChip(int amount, GameState state, AppLocalizations l10n, {bool compact = false}) {
     final minBid = (state.currentBid?.tricks ?? 12) + 1;
     final isEnabled = amount >= minBid;
     final isSelected = _selectedBidAmount == amount;
@@ -724,7 +735,7 @@ class _GameScreenState extends State<GameScreen> {
       child: Opacity(
         opacity: isEnabled ? 1.0 : 0.4,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: compact ? 9 : 12, vertical: compact ? 5 : 8),
           decoration: BoxDecoration(
             color: isSelected
                 ? Colors.amber
@@ -740,7 +751,7 @@ class _GameScreenState extends State<GameScreen> {
               color: isSelected
                   ? Colors.black
                   : (isEnabled ? Colors.white : Colors.grey[600]),
-              fontSize: 16,
+              fontSize: compact ? 14 : 16,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               decoration: isEnabled ? null : TextDecoration.lineThrough,
               decorationColor: Colors.grey[500],
@@ -751,7 +762,7 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  Widget _buildSuitChip(Suit? suit, String symbol, String name) {
+  Widget _buildSuitChip(Suit? suit, String symbol, String name, {bool compact = false}) {
     // 사용자가 직접 선택했거나 AI가 배팅을 추천한 경우에만 선택 표시
     final isSelected = _suitManuallySelected && _selectedBidSuit == suit;
     final isRed = suit == Suit.diamond || suit == Suit.heart;
@@ -771,7 +782,7 @@ class _GameScreenState extends State<GameScreen> {
         _suitManuallySelected = true;
       }),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 12, vertical: compact ? 5 : 8),
         decoration: BoxDecoration(
           color: isSelected ? Colors.amber : Colors.white24,
           borderRadius: BorderRadius.circular(8),
@@ -785,18 +796,18 @@ class _GameScreenState extends State<GameScreen> {
                 symbol,
                 style: TextStyle(
                   color: symbolColor,
-                  fontSize: 20,
+                  fontSize: compact ? 16 : 20,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Roboto',
                 ),
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: compact ? 2 : 4),
             ],
             Text(
               name,
               style: TextStyle(
                 color: isSelected ? Colors.black : Colors.white,
-                fontSize: 12,
+                fontSize: compact ? 11 : 12,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),
