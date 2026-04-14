@@ -128,12 +128,12 @@ class _HeartsResponsiveSizes {
     final baseCardHeight = baseCardWidth * 1.35;
 
     // 플레이어 카드 (기준 크기)
-    playerCardHeight = baseCardHeight.clamp(40.0, maxCardHeightFromScreen);
+    playerCardHeight = baseCardHeight.clamp(40.0, maxCardHeightFromScreen * 0.8);
     playerCardWidth = playerCardHeight / 1.35;
 
-    // 중앙 트릭 카드 (플레이어 카드의 85%)
-    centerCardWidth = playerCardWidth * 0.85;
-    centerCardHeight = playerCardHeight * 0.85;
+    // 중앙 트릭 카드 (플레이어 카드보다 크게)
+    centerCardWidth = playerCardWidth * 1.15;
+    centerCardHeight = playerCardHeight * 1.15;
 
     // AI 카드 (플레이어 카드의 55%)
     aiCardWidth = playerCardWidth * 0.55;
@@ -2073,25 +2073,31 @@ class _HeartsScreenState extends State<HeartsScreen> with TickerProviderStateMix
               ),
             ],
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                card.suitSymbol,
-                style: TextStyle(
-                  color: card.color,
-                  fontSize: width * 0.4,
-                ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    card.suitSymbol,
+                    style: TextStyle(
+                      color: card.color,
+                      fontSize: width * 0.4,
+                    ),
+                  ),
+                  Text(
+                    card.rankSymbol,
+                    style: TextStyle(
+                      color: card.color,
+                      fontSize: width * 0.35,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                card.rankSymbol,
-                style: TextStyle(
-                  color: card.color,
-                  fontSize: width * 0.35,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
         // ★ 추천 카드 표시

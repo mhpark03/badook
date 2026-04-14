@@ -450,12 +450,20 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
 
   Widget _buildCardSymbolWidget(PlayingCard card, bool isDisabled, {bool forceBlack = false}) {
     if (card.isJoker) {
-      return Text(
-        '🃏',
-        style: TextStyle(
-          fontSize: 13,
-          color: isDisabled ? Colors.grey[500] : Colors.white,
-        ),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.auto_awesome, color: isDisabled ? Colors.grey[500] : Colors.yellowAccent, size: 12),
+          const SizedBox(width: 2),
+          Text(
+            'JK',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: isDisabled ? Colors.grey[500] : Colors.white,
+            ),
+          ),
+        ],
       );
     }
     final suit = card.suit!;
@@ -591,7 +599,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
         width: 55,
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.2),
+          color: isSelected ? Colors.white : Colors.white54,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected ? Colors.amber : Colors.transparent,
@@ -603,9 +611,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
             symbol,
             style: TextStyle(
               fontSize: 20,
-              color: isSelected
-                  ? (isRed ? Colors.red : Colors.black)
-                  : (isRed ? Colors.red[300] : Colors.white70),
+              color: isRed ? Colors.red : Colors.black,
               fontWeight: FontWeight.bold,
               fontFamily: 'Roboto',
             ),
@@ -732,7 +738,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
 
   String _getMightySymbol() {
     final mighty = widget.mighty;
-    if (mighty.isJoker) return '🃏';
+    if (mighty.isJoker) return '★JK';
     return '${mighty.suitSymbol}${mighty.rankSymbol}';
   }
 
@@ -756,7 +762,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
     }
   }
 
-  // 선택 설명 위젯 (무늬 색상 적용)
+  // 선택 설명 위젯 (무늬 색상 검정)
   Widget _buildSelectionDescriptionWidget(AppLocalizations l10n) {
     PlayingCard? card;
     String? prefix;
@@ -796,9 +802,8 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
 
     if (card == null) return const SizedBox.shrink();
 
-    final suitSymbol = card.isJoker ? '🃏' : card.suitSymbol;
+    final suitSymbol = card.isJoker ? '★JK' : card.suitSymbol;
     final rankSymbol = card.isJoker ? '' : card.rankSymbol;
-    final cardColor = card.isRed ? Colors.red : Colors.black;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -815,8 +820,8 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
         ],
         Text(
           suitSymbol,
-          style: TextStyle(
-            color: cardColor,
+          style: const TextStyle(
+            color: Colors.black,
             fontWeight: FontWeight.bold,
             fontSize: 16,
             fontFamily: 'Roboto',  // 이모지 폰트 대신 텍스트 폰트 사용
@@ -824,7 +829,7 @@ class _FriendSelectionScreenState extends State<FriendSelectionScreen> {
         ),
         Text(
           rankSymbol,
-          style: TextStyle(color: cardColor, fontWeight: FontWeight.bold, fontSize: 16),
+          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ],
     );

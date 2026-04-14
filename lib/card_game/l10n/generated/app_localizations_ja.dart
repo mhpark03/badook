@@ -603,6 +603,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get multiplierBackRun => 'バックラン ×2';
 
   @override
+  String get multiplierFullRun => 'フルラン ×2';
+
+  @override
   String get multiplierLabel => '倍率';
 
   @override

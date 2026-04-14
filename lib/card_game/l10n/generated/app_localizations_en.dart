@@ -605,6 +605,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get multiplierBackRun => 'Back Run ×2';
 
   @override
+  String get multiplierFullRun => 'Full Run ×2';
+
+  @override
   String get multiplierLabel => 'Multiplier';
 
   @override
